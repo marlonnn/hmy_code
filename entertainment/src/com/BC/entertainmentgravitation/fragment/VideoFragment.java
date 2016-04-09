@@ -1,22 +1,23 @@
 package com.BC.entertainmentgravitation.fragment;
 
-import java.io.IOException;
-
 import com.BC.entertainmentgravitation.R;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
-import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.RelativeLayout;
 
 import com.netease.neliveplayer.NELivePlayer;
 import com.netease.neliveplayer.NELivePlayer.OnPreparedListener;
 import com.netease.neliveplayer.NEMediaPlayer;
 import com.summer.fragment.BaseFragment;
+import com.summer.logger.XLog;
 
 
 public class VideoFragment extends BaseFragment implements SurfaceHolder.Callback, OnPreparedListener{
@@ -34,6 +35,41 @@ public class VideoFragment extends BaseFragment implements SurfaceHolder.Callbac
 	private View rootView;
 	
 	private boolean pauseInBackgroud = true;
+	
+    private ScrollListener listener;
+
+    public ScrollListener CreateScrollListener() {
+        listener = new ScrollListener() {
+            @Override
+            public void onScroll(final float transY, final boolean goUp) {
+                XLog.i("transY " + transY);
+                if (VideoFragment.this.isVisible() && null != rootView) {
+                    if (goUp) 
+                    {
+                        rootView.setTranslationY(-transY);
+                    } 
+                    else 
+                    {
+                        rootView.setTranslationY(getDeviceHeight(getActivity()) - transY);
+                    }
+
+                    if(transY == 0)
+                    {
+                        rootView.setTranslationY(0);
+                    }
+                }
+            }
+        };
+
+        return listener;
+    }
+    
+    private int getDeviceHeight(Context context) {
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        DisplayMetrics mDisplayMetrics = new DisplayMetrics();
+        wm.getDefaultDisplay().getMetrics(mDisplayMetrics);
+        return mDisplayMetrics.heightPixels;
+    }
 
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -69,6 +105,7 @@ public class VideoFragment extends BaseFragment implements SurfaceHolder.Callbac
 		mVideoView.setMediaType("livestream");
 		
 		mVideoView.setVideoPath("http://v1.live.126.net/live/e054ebd2a4b949b68d6fc6ab484e126b.flv");
+//		mVideoView.setVideoPath("http://v1.live.126.net/live/fc260c829d4f415493869afbd96d3ef2.flv");
 		
 		SurfaceHolder holder = mVideoView.getHolder();
 		

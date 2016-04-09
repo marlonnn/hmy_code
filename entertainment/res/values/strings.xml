@@ -3,5 +3,7 @@
 
     <string name="app_name">entertainment</string>
     <string name="hello_world">Hello world!</string>
+    
+    <string name="fragment_total_value">价值211个娱币</string>
 
 </resources>
