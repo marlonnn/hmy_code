@@ -17,4 +17,21 @@
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
     </style>
 
+    <!-- 网易直播 -->
+    <style name="MediaController_SeekBar" parent="android:Widget.SeekBar">
+        <item name="android:progressDrawable">@drawable/nemediacontroller_progressbar</item>
+        <item name="android:indeterminateDrawable">@drawable/nemediacontroller_progressbar</item>
+        <item name="android:minHeight">5dip</item>
+        <item name="android:maxHeight">5dip</item>
+        <item name="android:thumb">@drawable/nemediacontroller_progressbar_thumb</item>
+        <item name="android:thumbOffset">8dip</item>
+        <item name="android:paddingLeft">8dip</item>
+        <item name="android:paddingRight">8dip</item>
+    </style>
+    
+    <style name="MediaController_Text">
+        <item name="android:textColor">#bfbfbf</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
 </resources>
