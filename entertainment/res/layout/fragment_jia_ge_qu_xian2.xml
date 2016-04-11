@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@drawable/home10"
+        android:orientation="vertical"
+        android:padding="4dp" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/Stage_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Angelababy"
+                    android:textColor="@color/red2" />
+
+                <LinearLayout
+                    android:layout_marginLeft="10dip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" >
+
+                    <TextView
+                        android:id="@+id/textView5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="职业："
+                        android:visibility="gone"
+                        android:textColor="@color/white" />
+
+                    <TextView
+                        android:id="@+id/professional"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:textColor="@color/white" />
+                </LinearLayout>
+                <TextView
+                    android:id="@+id/Different_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="昨日涨跌0点"
+                    android:textColor="@color/white" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" >
+
+            <!--
+                         <ImageView
+                        android:id="@+id/imageView3"
+                        android:layout_width="162dip"
+                        android:layout_height="70dip"
+                        android:src="@drawable/line_graph" />
+            -->
+
+
+            <!--
+                 <ImageView
+                android:id="@+id/imageView3"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:scaleType="fitStart"
+                android:src="@drawable/line_graph" />
+            -->
+
+            <HorizontalScrollView
+                android:id="@+id/horizontalScrollView1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal" >
+
+                    <com.BC.entertainment.view.CoordinateSystemView
+                        android:id="@+id/coordinateSystemView"
+                        android:layout_width="960dip"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="10dip"
+                        android:layout_marginRight="10dip" />
+                </LinearLayout>
+            </HorizontalScrollView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/prices"
+                android:layout_width="wrap_content"
+                android:layout_height="40dip"
+                android:background="@drawable/home4"
+                android:gravity="center"
+                android:text="当前指数：\n点击查看大图"
+                android:textColor="@color/white" />
+
+            <FrameLayout
+                android:layout_width="50dp"
+                android:layout_height="50dp" >
+
+                <ImageButton
+                    android:id="@+id/applause"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_margin="5dip"
+                    android:background="@drawable/home1_button"
+                    android:padding="10dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/home7" />
+
+                <!--
+                     <ImageView
+                    android:id="@+id/applauseAn"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/circle"
+                    android:visibility="gone" />
+                -->
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="50dp"
+                android:layout_height="50dp" >
+
+                <ImageButton
+                    android:id="@+id/bigbird"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_margin="5dip"
+                    android:background="@drawable/home1_button"
+                    android:padding="10dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/home6" />
+
+                <!--
+                     <ImageView
+                    android:id="@+id/bigbirdAn"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/circle"
+                    android:visibility="gone" />
+                -->
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="50dp"
+                android:layout_height="50dp" >
+
+                <ImageButton
+                    android:id="@+id/FocusOn"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_margin="5dip"
+                    android:background="@drawable/home1_button"
+                    android:padding="10dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/home8" />
+
+                <!--
+                     <ImageView
+                    android:id="@+id/FocusOnAn"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/circle"
+                    android:visibility="gone" />
+                -->
+
+            </FrameLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

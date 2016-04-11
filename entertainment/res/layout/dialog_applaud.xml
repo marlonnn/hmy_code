@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:clickable="true"
+    android:orientation="vertical"
+    android:padding="20.0dip" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@color/black"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/title"
+            style="@style/text_18_ffffff"
+            android:layout_width="300dip"
+            android:layout_height="40.0dip"
+            android:gravity="center"
+            android:text="鼓掌次数"
+            android:textColor="@color/white"
+            android:visibility="visible" />
+
+        <LinearLayout
+            android:layout_width="300dip"
+            android:layout_height="wrap_content"
+            android:gravity="center" >
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="需要花费娱币数量："
+                android:textColor="@color/white" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textColor="@color/red2" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="300dip"
+            android:layout_height="wrap_content"
+            android:gravity="center" >
+
+            <TextView
+                android:id="@+id/TextView04"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="能兑换红包数量："
+                android:textColor="@color/white" />
+
+            <TextView
+                android:id="@+id/TextView03"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textColor="@color/red2" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/content"
+            android:layout_width="300dip"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="300dip"
+                android:layout_height="wrap_content" >
+
+                <Button
+                    android:id="@+id/button1"
+                    android:layout_width="30dip"
+                    android:layout_height="30dip"
+                    android:background="@color/red2"
+                    android:text="-"
+                    android:textColor="@color/white"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/shuliang"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="数量：" />
+
+                <EditText
+                    android:id="@+id/message"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:ems="10"
+                    android:inputType="number"
+                    android:textColor="@color/white" >
+                </EditText>
+
+                <Button
+                    android:id="@+id/button2"
+                    android:layout_width="30dip"
+                    android:layout_height="30dip"
+                    android:background="@color/white"
+                    android:text="+"
+                    android:textColor="@color/red2"
+                    android:visibility="gone" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1.0px"
+            android:background="#ffd0d0d0" />
+
+        <include
+            android:layout_width="300dip"
+            android:layout_height="140dip"
+            layout="@layout/wheel_select4" />
+
+        <LinearLayout
+            android:layout_width="300dip"
+            android:layout_height="60.0dip"
+            android:layout_gravity="bottom"
+            android:background="@color/blackcover"
+            android:gravity="center"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/positiveButton"
+                style="@style/text_15_ffffff_sdw"
+                android:layout_width="114.0dip"
+                android:layout_height="40.0dip"
+                android:background="@color/white"
+                android:gravity="center"
+                android:text="确定"
+                android:textColor="@color/red2" />
+
+            <Button
+                android:id="@+id/negativeButton"
+                style="@style/text_15_666666_sdw"
+                android:layout_width="114.0dip"
+                android:layout_height="40.0dip"
+                android:layout_marginLeft="20.0dip"
+                android:background="@color/red2"
+                android:gravity="center"
+                android:text="取消"
+                android:textColor="@color/white" />
+        </LinearLayout>
+    </LinearLayout>
+
+</FrameLayout>

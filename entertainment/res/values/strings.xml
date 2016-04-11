@@ -50,4 +50,13 @@
     <string name="dialog_warning_title">输入赠送好友金额</string>
     <string name="dialog_warning_ok">确    定</string>
     <string name="dialog_warning_cancel">取    消</string>
+    
+    <string name="mainactivity_login_invalidate">登录已失效</string>
+    <string name="mainactivity_get_user_info">获取用户基本信息...</string>
+    <string name="mainactivity_get_start_info">获取明星基本信息...</string>
+    <string name="mainactivity_get_sart_info">获取明星排行信息...</string>
+    <string name="mainactivity_kline_graphc">获取价值曲线</string>
+    <string name="mainactivity_fail_get_sart_info">无法获取明星排行信息</string>
+    <string name="mainactivity_have_no_data">没有更多数据了</string>
+    <string name="mainactivity_have_no_search_data">没有搜索结果</string>
 </resources>
