@@ -337,7 +337,134 @@ public class MainActivity extends BaseActivity implements OnClickListener, Updat
     
 	@Override
 	public void onClick(View v) {
-		
+		Intent intent;
+		switch (v.getId()) 
+		{
+		/**
+		 * 个人中心
+		 */
+		case R.id.Center:
+			break;
+		/**
+		 * 签到
+		 */
+		case R.id.SignIn:
+			break;
+		/**
+		 * 充值
+		 */
+		case R.id.topUp:
+			intent = new Intent(this, RechargeActivity.class);
+			startActivity(intent);
+			break;
+		/**
+		 * 活动
+		 */
+		case R.id.activitys:
+			break;
+		/**
+		 * 好友
+		 */
+		case R.id.friends:
+//			intent = new Intent(this, FriendsActivity.class);
+//			startActivity(intent);
+			break;
+		/**
+		 * 消息
+		 */
+		case R.id.information:
+//			intent = new Intent(this, InformationActivity.class);
+//			startActivity(intent);
+			break;
+		/**
+		 * 点赞排行
+		 */
+		case R.id.level:
+//			intent = new Intent(this, LevelAcitivity.class);
+//			startActivity(intent);
+			break;
+		/**
+		 * 申请
+		 */
+		case R.id.ToApplyFor:
+//			if (!user.getPermission().equals("2")) {
+//				intent = new Intent(this, ToApplyForActivity.class);
+//				startActivity(intent);
+//			} else {
+//				ToastUtil.show(this, "您已出道成为明星了");
+//			}
+			break;
+		/**
+		 * 礼品
+		 */
+		case R.id.gift:
+//			intent = new Intent(this, GiftActivity2.class);
+//			startActivity(intent);
+			break;
+		/**
+		 * 红包
+		 */
+		case R.id.redEnvelope:
+//			intent = new Intent(this, RedEnvelopeActivity.class);
+//			startActivity(intent);
+			break;
+		/**
+		 * 抽奖
+		 */
+		case R.id.LuckyDraw:
+//			intent = new Intent(this, LuckyDrawActivity.class);
+//			startActivity(intent);
+			break;
+		/**
+		 * 上一个明星
+		 */
+		case R.id.previous:
+			lastOne();
+			break;
+		/**
+		 * 下一个明星
+		 */
+		case R.id.next:
+			nextOne();
+			break;
+		/**
+		 * 排行榜
+		 */
+		case R.id.toLevel:
+//			intent = new Intent(this, ToLevelActivity.class);
+//			startActivity(intent);
+			break;
+		/**
+		 * 明星详情
+		 */
+		case R.id.details:
+//			intent = new Intent(this, DetailsActivity.class);
+//			startActivity(intent);
+			break;
+		/**
+		 * 查询娱币交易信息
+		 */
+		case R.id.account:
+			intent = new Intent(this, AccountActivity.class);
+			startActivity(intent);
+			break;
+		/**
+		 * 搜索
+		 */
+		case R.id.searchButton:
+//			String search = searchEdit.getText().toString();
+//			selectIndex = 0;
+//			if (search.equals("")) {
+//				searchs = null;
+//				sendReqConnect();
+//			} else {
+//				sendReqSearch(search);
+//			}
+			break;
+
+		default:
+			break;
+		}
 	}
 
 	@Override

@@ -63,4 +63,5 @@
     <color name="gray_funney">#979696</color>
     <color name="menuTitle">#444444</color>
     <color name="menuContent">#bcbaba</color>
+    <color name="navpage">#ffffffff</color>
 </resources>

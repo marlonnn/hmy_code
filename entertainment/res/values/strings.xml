@@ -2,6 +2,24 @@
 <resources>
 
     <string name="app_name">海绵娱</string>
+    <string name="app_tip">提示</string>
+    <!--支付方式选择对话框  -->
+    <string name="dialog_choose_pay">请选择支付方式</string>
+    <string name="pay_wx">微信支付</string>
+    <string name="pay_alipay">支付宝支付</string>
+    
+    <!-- 微信支付 -->
+    <string name="wx_tip">提示</string>
+    <string name="wx_getting_prepayid">正在获取预支付订单...</string>
+    <string name="activity_recharge_pay_cancel">支付已取消，支付失败</string>
+    <string name="activity_recharge_pay_exception">微信支付失败，支付异常</string>
+    <string name="activity_recharge_get_user_fail">无法获取信息</string>
+    <string name="activity_recharge_get_charging">正在充值中...</string>
+    <string name="activity_recharge_pay_success">支付成功</string>
+    
+    <!-- WXPayEntryActivity -->
+	<string name="pay_result_tip">这个界面用于显示第三方app通过微信支付的结果</string>
+	<string name="pay_result_callback_msg" formatted="false">微信支付结果：%s</string>
     
     <!-- 直播相关 -->
     <string name="fragment_total_value">价值211个娱币</string>
@@ -51,6 +69,7 @@
     <string name="dialog_warning_ok">确    定</string>
     <string name="dialog_warning_cancel">取    消</string>
     
+   <!--  主界面相关 -->
     <string name="mainactivity_login_invalidate">登录已失效</string>
     <string name="mainactivity_get_user_info">获取用户基本信息...</string>
     <string name="mainactivity_get_start_info">获取明星基本信息...</string>
@@ -59,4 +78,71 @@
     <string name="mainactivity_fail_get_sart_info">无法获取明星排行信息</string>
     <string name="mainactivity_have_no_data">没有更多数据了</string>
     <string name="mainactivity_have_no_search_data">没有搜索结果</string>
+    
+    <!-- 历史账户界面 -->
+    <string name="fragment_account_description">说明</string>
+    <string name="fragment_account_amount">数量</string>
+    <string name="fragment_account_type">类型</string>
+    <string name="fragment_account_remain">余额</string>
+    <string name="fragment_account_time">时间</string>
+    <string name="fragment_account_fail_data">获取数据失败</string>
+    <string name="fragment_account_refresh_now">正在刷新</string>
+    <string name="fragment_account_pull_down">下拉刷新</string>
+    <string name="fragment_account_release_refresh">释放开始刷新</string>
+    <string name="fragment_account_last_update_time">最后更新时间：</string>
+    <string name="fragment_account_loading">正在加载</string>
+    <string name="fragment_account_pull_up">上拉翻页</string>
+    <string name="fragment_account_release_loading">释放开始加载</string>
+    <string name="fragment_account_last_loading_time">最后加载时间：</string>
+    <string name="fragment_account_item_publish_name">范彬彬</string>
+    <string name="fragment_account_item_publish_income">收入</string>
+    <string name="fragment_account_item_publish_payout">支出</string>
+    
+	<!--明星出道协议 -->
+	<string name="applay_for_start_protocol">
+	    声明\n
+	    海绵娱移动应用端软件（以下简称“海绵娱”）系一款基于创造一个明星与粉丝双赢的价值共享的愿景而创建的平台，海绵娱出道功能系为具有专业的歌唱、表演等方面才艺、认同海绵娱理念、希望在海绵娱展现自我以实现与粉丝双赢互动目的的用户打造的才艺展示平台，《海绵娱移动端用户申请出道协议》（以下简称为“协议”）系海绵娱（北京）网络科技有限公司（以下简称为“海绵娱科技”）与在海绵娱申请出道的用户之间就使用海绵娱达成的协议，用户一旦点击“同意”或“接受”本协议，本协议即自动生效，对双方均具有法律约束力。\n
+	    一、定义\n
+      1、海绵娱：海绵娱（北京）网络科技有限公司拥有和运营的服务产品，包括但不限于手机端APP软件、网站。\n
+      2、用户：注册成海绵娱用户后申请出道的艺人\n
+      3、开播：即在海绵娱APP的平台、网站上通过包括但不限于语言、行为等方式播出的行为。\n
+            二、协议的范围\n
+            协议由海绵娱科技和您用户签订。\n
+	    三、协议的期限\n
+            自用户在海绵娱出道注册之日起至注销之日止。\n
+            四、海绵娱权利义务\n
+	  1、出道用户即为海绵娱科技的签约用户，海绵娱科技即为出道用户的互联网移动演出平台。\n
+	  2、海绵娱科技有权对出道用户行为实施监督、管理。\n
+	  3、在同等条件下，海绵娱科技投资的影视剧中优先启用出道用户饰演剧中角色。\n
+	  4、海绵娱科技有权制定出道用户的管理规定，相关规定对本协议有影响的，出道用户同意该管理规定自发布之日起成为协议的有效组成部分，用户违反前述规定，海绵娱有权按照规定处理并取消用户在本平台的出道资格。\n
+	  5、海绵娱科技有权对用户实行定期或不定期地复审，复审发现用户不符合出道条件或有其他违规行为的，海绵娱科技有权取消该用户出道资格，如因此给海绵娱科技造成损失的，均由用户承担。\n
+	  6、海绵娱科技负责设备维护、提供用户正常使用软件工具的工作环境。\n
+	  7、海绵娱科技可根据市场的需求，负责对用户进行包装、推广和宣传。\n
+	    五、用户的权利义务\n
+	  1、享有按照协议约定获取收益的权利。\n
+	  2、只能在海绵娱所有或有权开播的平台进行表演或才艺展示等。\n
+	  3、同等条件下，享有在海绵娱科技投资拍摄的影视剧中优先饰演角色的权利。\n
+	  4、协议有效期内，须配合海绵娱科技各项要求，服从海绵娱科技安排。\n
+      5、表演、言词、行为以及上传的图片等都应遵守法律法规及海绵娱科技及《海绵娱用户服务协议》的要求，保证不涉黄、不涉赌，不涉及发表反党反政府的言论或做出侮辱诋毁党和国家行为等政治问题、不欺骗用户，不挂录像、不双开外站，否则海绵娱科技有权终止协议，并要求该用户承担因此造成的所有损失。\n
+      6、应为海绵娱提供的平台发展出谋划策，维护声誉与利益，且不得作任何有损海绵娱科技利益及名誉的行为，否则海绵娱科技有权终止协议并主张损失赔偿。\n
+      7、应向海绵娱提供有效的联系方式，包括但不限于电话、手机、电子邮件等，如联系方式变更的，应在1个工作日内以书面或短信的形式通知海绵娱科技，否则因此造成的损失由用户自行承担；超过一周无法与该用户取得联系的，海绵娱科技有权取消该用户高端区主播资格，如因此给海绵娱科技造成损失的，由该用户承担赔偿责任。\n
+      8、赢保证个人信息的真实性，因提供虚假个人信息而导致本协议无效的，海绵娱科技有权随时解除协议并主张损失赔偿。\n
+      9、应遵守海绵娱的管理规定，包括但不限于对用户有约束性的规定。\n
+           六、违约责任\n
+      1、签约期内，未经海绵娱科技允许，用户不得以任何形式在海绵娱以外的其他类似的平台、网站进行开播／演出。\n
+      2、任何一方出现违约行为，违约方应立即停止其违约行为并采取补救措施，给守约方造成损失的，应在7日内赔偿守约方因此受到的所有损失（包括直接损失和间接损失），守约方有权自知道违约行为发生之日起向违约方发送要求其纠正违约的书面通知。如违约方自违约行为发生之日起满15天或自收到守约方要求其纠正违约的书面通知之日起满7日仍继续进行违约行为或仍不履行其义务的，守约方有权终止本协议，并要求违约方支付违约金伍万元，并赔偿甲方因此所受到的所有直接损失和间接损失。\n
+	   七、不可抗力\n
+	  1、本协议双方中的任何一方在履行本协议的过程中因遭遇不可抗力而无法全部或部分履行本协议的，不视其为违约，但遭遇不可抗力的一方应及时通知对方。\n
+      2、前述不可抗力事件系指海绵娱科技和用户双方无法预见、即使预见亦无法避免或合理控制的事件，且该等事件对遭遇不可抗力的一方履行本协议的行为发生实质性妨碍，包括但不限于地震、台风、洪水、战争、暴动、罢工、火灾、政府政策变更、黑客攻击、电脑病毒、网络故障、电信/联通管制、带宽或其他网络设备或通讯运营商服务延迟及技术故障等类似事件。\n
+	   八、保密条款\n
+           用户在协议期内获取的关于海绵娱科技的技术秘密和商业秘密，包括但不限于文档、计划、策略、合同、客户资料，不得泄露给任何第三方。该保密义务不因协议期满或因其他原因提前终止而终止。
+           九、协议的变更\n
+           协议依法签订后，双方必须全面履行协议规定的义务，海绵娱科技如单方变更本协议的，应及时将变更后的协议上传并发布至海绵娱。\n
+           十、其他\n
+	  1、本协议履行过程中如有争议，双方应协商解决，协商不成的，任何一方可向甲方所在地人民法院起诉。\n
+	  2、本协议中每条的标题仅为方便阅读，不影响协议内容的解释。\n
+	  3、本协议自用户注册并申请出道即为生效。\n
+	  5、本协议因市场环境等因素会有调整，始终以修正版为准。\n
+            海绵娱科技\n
+	</string>
 </resources>
