@@ -7,7 +7,6 @@ import org.apache.http.NameValuePair;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
@@ -207,6 +206,15 @@ public class JiaGeQuXianFragment2 extends BaseFragment implements
     	ShowProgressDialog("获取折线图...");
     	addToThreadPool(Config.k_line_graph, "send kLine request", params);
 	}
+	
+    private void addToThreadPool(int taskType, String Tag, List<NameValuePair> params)
+    {
+    	HttpBaseTask httpTask = new HttpBaseTask(ThreadPoolConst.THREAD_TYPE_WORK, Tag, params, UrlUtil.GetUrl(taskType));
+    	httpTask.setTaskType(taskType);
+    	InfoHandler handler = new InfoHandler(this);
+    	httpTask.setInfoHandler(handler);
+    	ThreadPoolFactory.getThreadPoolManager().addTask(httpTask);
+    }
 
 	private void showWarningDialog(String title, String message) {
 		final PromptDialog.Builder builder = new PromptDialog.Builder(
@@ -241,7 +249,52 @@ public class JiaGeQuXianFragment2 extends BaseFragment implements
 		}
 	}
 
-	public void requestSuccessful(String jsonString, int taskType) {
+	/**
+	 * 获取明星信息
+	 */
+	public void getStarInfoRequest() {
+		if (MainActivity.starInformation == null) {
+			ToastUtil.show(getActivity(), "无法获取数据");
+			return;
+		}
+		HashMap<String, String> entity = new HashMap<String, String>();
+
+		entity.put("clientID", Config.User.getClientID());
+		entity.put("Star_ID", MainActivity.starInformation.getStar_ID());
+    	List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
+    	ShowProgressDialog(this.getString(R.string.mainactivity_get_start_info));
+    	addToThreadPool(Config.star_information, "get user info", params);
+	}
+
+	@Override
+	public void onClick(View v) {
+		if (applauseGiveConcern == null) {
+			return;
+		}
+		switch (v.getId()) {
+		/**
+		 * 鼓掌
+		 */
+		case R.id.applause:
+			applauseGiveConcern.showApplaudDialog(1);
+			break;
+		/**
+		 * 倒彩
+		 */
+		case R.id.bigbird:
+			applauseGiveConcern.showApplaudDialog(2);
+			break;
+		/**
+		 * 关注
+		 */
+		case R.id.FocusOn:
+			applauseGiveConcern.sendFocusRequest();
+			break;
+		}
+	}
+
+	@Override
+	public void RequestSuccessful(String jsonString, int taskType) {
 		XLog.i("taskType: " + taskType + " jsonString: " + jsonString);
 		Gson gson = new Gson();
 		switch (taskType) {
@@ -285,6 +338,7 @@ public class JiaGeQuXianFragment2 extends BaseFragment implements
 			initStarInformation();
 			break;
 		case Config.k_line_graph:
+			XLog.i("get k line success");
 			Entity<KLink> baseEntity3 = gson.fromJson(jsonString,
 					new TypeToken<Entity<KLink>>() {
 					}.getType());
@@ -305,60 +359,7 @@ public class JiaGeQuXianFragment2 extends BaseFragment implements
 			builder.setSpan(colorSpan, 4, difflength, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 			tv_Difference.setText(builder);
 			initPrice_movements();
-			
-			break;
-		}
-	}
-
-	/**
-	 * 获取明星信息
-	 */
-	public void getStarInfoRequest() {
-		if (MainActivity.starInformation == null) {
-			ToastUtil.show(getActivity(), "无法获取数据");
-			return;
-		}
-		HashMap<String, String> entity = new HashMap<String, String>();
-
-		entity.put("clientID", Config.User.getClientID());
-		entity.put("Star_ID", MainActivity.starInformation.getStar_ID());
-    	List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
-    	ShowProgressDialog(this.getString(R.string.mainactivity_get_start_info));
-    	addToThreadPool(Config.star_information, "get user info", params);
-	}
-	
-    private void addToThreadPool(int taskType, String Tag, List<NameValuePair> params)
-    {
-    	HttpBaseTask httpTask = new HttpBaseTask(ThreadPoolConst.THREAD_TYPE_WORK, Tag, params, UrlUtil.GetUrl(taskType));
-    	httpTask.setTaskType(taskType);
-    	InfoHandler handler = new InfoHandler(this);
-    	httpTask.setInfoHandler(handler);
-    	ThreadPoolFactory.getThreadPoolManager().addTask(httpTask);
-    }
-
-	@Override
-	public void onClick(View v) {
-		if (applauseGiveConcern == null) {
-			return;
-		}
-		switch (v.getId()) {
-		/**
-		 * 鼓掌
-		 */
-		case R.id.applause:
-			applauseGiveConcern.showApplaudDialog(1);
-			break;
-		/**
-		 * 倒彩
-		 */
-		case R.id.bigbird:
-			applauseGiveConcern.showApplaudDialog(2);
-			break;
-		/**
-		 * 关注
-		 */
-		case R.id.FocusOn:
-			applauseGiveConcern.sendFocusRequest();
+			XLog.i(kLink.toString());
 			break;
 		}
 	}

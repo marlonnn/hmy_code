@@ -18,7 +18,6 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.summer.activity.BaseActivity;
 import com.summer.config.Config;
-import com.summer.entity.User;
 import com.summer.factory.ThreadPoolFactory;
 import com.summer.handler.InfoHandler;
 import com.summer.json.Entity;
@@ -141,13 +140,29 @@ public class MainActivity extends BaseActivity implements OnClickListener, Updat
 		next.setOnClickListener(this);
 
 		account.setOnClickListener(this);
-
-		getUserInfoRequest();
-		getStartRankInfoRequest();
-		getAdvertiseInfoRequest();
 		jiaGeQuXianFragment.setUpdataMainActivity(this);
     }
     
+    
+    
+	@Override
+	protected void onResume() {
+		super.onResume();
+	}
+
+
+
+	@Override
+	protected void onStart() {
+		super.onStart();
+		
+		getUserInfoRequest();
+		getStartRankInfoRequest();
+		getAdvertiseInfoRequest();
+	}
+
+
+
 	/**
 	 * Õº∆¨ª¨∂Ø«–ªª”√ªß
 	 */
@@ -478,11 +493,11 @@ public class MainActivity extends BaseActivity implements OnClickListener, Updat
 					new TypeToken<Entity<EditPersonal>>() {
 					}.getType());
 			personalInformation = baseEntity.getData();
-			personalInformation = baseEntity.getData();
 			if (personalInformation != null) {
 				personalInformation.getBirthday();
 				nickname.setText(personalInformation.getNickname());
 				levelText.setText("Lv." + personalInformation.getLevel());
+				
 				UpdateDallorTask task = new UpdateDallorTask(this,
 						Long.valueOf(personalInformation.getEntertainment_dollar()));
 				task.execute();
@@ -522,7 +537,6 @@ public class MainActivity extends BaseActivity implements OnClickListener, Updat
 
 					@Override
 					public void onClick(View v) {
-						// TODO Auto-generated method stub
 						Intent intent = new Intent(v.getContext(),
 								BrowserAcitvity.class);
 						intent.putExtra("url", authoritativeInformation

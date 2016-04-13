@@ -116,7 +116,6 @@ public class AccountFragment extends BaseFragment{
 	
 	@Override
 	public void RequestSuccessful(String jsonString, int taskType) {
-		super.RequestSuccessful(jsonString, taskType);
 		Gson gson = new Gson();
 		switch (taskType) {
 		case Config.account:

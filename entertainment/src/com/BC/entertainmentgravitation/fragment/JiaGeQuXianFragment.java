@@ -263,57 +263,6 @@ public class JiaGeQuXianFragment extends BaseFragment implements
 		}
 	}
 
-	public void requestSuccessful(String jsonString, int taskType) {
-		Gson gson = new Gson();
-		switch (taskType) {
-		case Config.give_applause_booed:
-			ToastUtil.show(getActivity(), "提交成功");
-			if (updataMainActivity != null) {
-				updataMainActivity.updataMainActivity();
-			}
-			sendReqStarInformation();
-			switch (applauseGiveConcern.getType()) {
-			case 1:
-				applauseGiveConcern.showAnimationDialog(R.drawable.circle4,
-						R.raw.applaud);
-				break;
-			case 2:
-				applauseGiveConcern.showAnimationDialog(R.drawable.circle5,
-						R.raw.give_back);
-				break;
-			default:
-				applauseGiveConcern.showAnimationDialog(R.drawable.circle4,
-						R.raw.applaud);
-				break;
-			}
-
-			break;
-		case Config.and_attention:
-			ToastUtil.show(getActivity(), "提交成功");
-			applauseGiveConcern.showAnimationDialog(R.drawable.circle6,
-					R.raw.concern);
-			if (updataMainActivity != null) {
-				updataMainActivity.updataMainActivity();
-			}
-			sendReqStarInformation();
-			break;
-		case Config.star_information:
-			Entity<StarInformation> baseEntity2 = gson.fromJson(jsonString,
-					new TypeToken<Entity<StarInformation>>() {
-					}.getType());
-			starInformation = baseEntity2.getData();
-			initStarInformation();
-			break;
-		case Config.k_line_graph:
-			Entity<KLink> baseEntity3 = gson.fromJson(jsonString,
-					new TypeToken<Entity<KLink>>() {
-					}.getType());
-			kLink = baseEntity3.getData();
-			initPrice_movements();
-			break;
-		}
-	}
-
 	/**
 	 * 获取明星信息
 	 */
@@ -380,6 +329,58 @@ public class JiaGeQuXianFragment extends BaseFragment implements
 		 */
 		case R.id.FocusOn:
 			applauseGiveConcern.sendFocusRequest();
+			break;
+		}
+	}
+
+	@Override
+	public void RequestSuccessful(String jsonString, int taskType) {
+		Gson gson = new Gson();
+		switch (taskType) {
+		case Config.give_applause_booed:
+			ToastUtil.show(getActivity(), "提交成功");
+			if (updataMainActivity != null) {
+				updataMainActivity.updataMainActivity();
+			}
+			sendReqStarInformation();
+			switch (applauseGiveConcern.getType()) {
+			case 1:
+				applauseGiveConcern.showAnimationDialog(R.drawable.circle4,
+						R.raw.applaud);
+				break;
+			case 2:
+				applauseGiveConcern.showAnimationDialog(R.drawable.circle5,
+						R.raw.give_back);
+				break;
+			default:
+				applauseGiveConcern.showAnimationDialog(R.drawable.circle4,
+						R.raw.applaud);
+				break;
+			}
+
+			break;
+		case Config.and_attention:
+			ToastUtil.show(getActivity(), "提交成功");
+			applauseGiveConcern.showAnimationDialog(R.drawable.circle6,
+					R.raw.concern);
+			if (updataMainActivity != null) {
+				updataMainActivity.updataMainActivity();
+			}
+			sendReqStarInformation();
+			break;
+		case Config.star_information:
+			Entity<StarInformation> baseEntity2 = gson.fromJson(jsonString,
+					new TypeToken<Entity<StarInformation>>() {
+					}.getType());
+			starInformation = baseEntity2.getData();
+			initStarInformation();
+			break;
+		case Config.k_line_graph:
+			Entity<KLink> baseEntity3 = gson.fromJson(jsonString,
+					new TypeToken<Entity<KLink>>() {
+					}.getType());
+			kLink = baseEntity3.getData();
+			initPrice_movements();
 			break;
 		}
 	}

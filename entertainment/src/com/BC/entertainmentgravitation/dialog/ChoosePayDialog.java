@@ -3,7 +3,6 @@ package com.BC.entertainmentgravitation.dialog;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.BC.entertainment.adapter.ChoosePayAdapter;
 import com.BC.entertainmentgravitation.R;
 import com.BC.entertainmentgravitation.entity.PayWays;
 import com.summer.adapter.CommonAdapter;
@@ -12,7 +11,6 @@ import com.summer.config.Config;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Handler;
-import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -42,17 +40,17 @@ public class ChoosePayDialog {
 		listView = (ListView) dialog.findViewById(R.id.dialog_pay_listView);
 		
 		List<PayWays> list = getPayWays();
-		ChoosePayAdapter adapter = new ChoosePayAdapter(context, list);
-//		CommonAdapter<PayWays> adapter = new CommonAdapter<PayWays>(context, 
-//				R.layout.dialog_choose_pay_item, list){
-//
-//			@Override
-//			public void convert(
-//					com.summer.adapter.CommonAdapter.ViewHolder helper,
-//					PayWays item) {
-//				helper.setText(R.id.text_pay, item.getName() + "");
-//				helper.setImageResource(R.id.image_pay, item.getImageResource());
-//			}};
+//		ChoosePayAdapter adapter = new ChoosePayAdapter(context, list);
+		CommonAdapter<PayWays> adapter = new CommonAdapter<PayWays>(context, 
+				R.layout.dialog_choose_pay_item, list){
+
+			@Override
+			public void convert(
+					ViewHolder helper,
+					PayWays item) {
+				helper.setText(R.id.text_pay, item.getName() + "");
+				helper.setImageResource(R.id.image_pay, item.getImageResource());
+			}};
 		listView.setAdapter(adapter);
 		
 		listView.setOnItemClickListener(new OnItemClickListener() {

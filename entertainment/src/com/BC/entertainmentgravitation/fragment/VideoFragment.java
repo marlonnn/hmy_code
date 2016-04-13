@@ -192,5 +192,10 @@ public class VideoFragment extends BaseFragment implements SurfaceHolder.Callbac
 		
 	}
 
+	@Override
+	public void RequestSuccessful(String jsonString, int taskType) {
+		
+	}
+
 	
 }

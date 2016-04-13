@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
     
-    <com.summer.views.BaseWebView
+    <com.summer.view.BaseWebView
         android:id="@+id/webView1"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

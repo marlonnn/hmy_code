@@ -13,10 +13,17 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.BC.entertainment.config.Preferences;
 import com.BC.entertainmentgravitation.dialog.PromptDialog;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.netease.nimlib.sdk.AbortableFuture;
+import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.RequestCallback;
+import com.netease.nimlib.sdk.auth.AuthService;
+import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.summer.activity.BaseActivity;
 import com.summer.config.Config;
 import com.summer.entity.User;
@@ -24,6 +31,7 @@ import com.summer.factory.ThreadPoolFactory;
 import com.summer.handler.InfoHandler;
 import com.summer.handler.InfoHandler.InfoReceiver;
 import com.summer.json.Entity;
+import com.summer.logger.XLog;
 import com.summer.task.HttpBaseTask;
 import com.summer.treadpool.ThreadPoolConst;
 import com.summer.utils.JsonUtil;
@@ -66,6 +74,8 @@ import org.apache.http.NameValuePair;
 	private View view2;
 	private Button cancelButton;
 	private TextView readProtocolText;
+	
+	private AbortableFuture<LoginInfo> loginRequest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,6 +115,7 @@ import org.apache.http.NameValuePair;
 			public void onClick(View v) {
 				if (checkData()) {
 					ShowProgressDialog(getResources().getString(R.string.loginIsLogining));
+					logingNimServer();
 					logingToServer();
 				}
 			}
@@ -295,6 +306,46 @@ import org.apache.http.NameValuePair;
 		}
     }
     
+    @SuppressWarnings("unchecked")
+	private void logingNimServer()
+    {
+    	final String account = Preferences.getUserAccount();
+    	final String token = Preferences.getUserToken();
+    	if (account != null && token != null)
+    	{
+        	loginRequest = NIMClient.getService(AuthService.class).login(new LoginInfo(account, token));
+        	loginRequest.setCallback(new RequestCallback<LoginInfo>() {
+
+				@Override
+				public void onException(Throwable arg0) {
+					XLog.i("login to Nim server exception: " + arg0);
+				}
+
+				@Override
+				public void onFailed(int arg0) {
+					XLog.i("login to Nim server failed: " + arg0);
+	                if (arg0 == 302 || arg0 == 404) {
+	                    Toast.makeText(LoginActivity.this, "µÇÂ½Ê§°Ü", Toast.LENGTH_SHORT).show();
+	                } else {
+	                    Toast.makeText(LoginActivity.this, "µÇÂ¼Ê§°Ü: " + arg0, Toast.LENGTH_SHORT).show();
+	                }
+				}
+
+				@Override
+				public void onSuccess(LoginInfo loginInfo) {
+					XLog.i("login to Nim server seccuss: ");
+					XLog.i("loginInfo: " + loginInfo.getAccount());
+					saveLoginInfo(account, token);
+				}
+			});
+    	}
+    }
+    
+    private void saveLoginInfo(final String account, final String token) {
+        Preferences.saveUserAccount(account);
+        Preferences.saveUserToken(token);
+    }
+    
     private List<NameValuePair> getLogingParams(String name, String passWord, String pos)
     {
     	HashMap<String, String> entity = new HashMap<String, String>();
@@ -365,6 +416,7 @@ import org.apache.http.NameValuePair;
     		Entity<User> entity = gson.fromJson(jsonString, 
     				new TypeToken<Entity<User>>() {}.getType());
     		Config.User = entity.getData();
+    		saveNimAccount(Config.User);
 			intent = new Intent(this, MainActivity.class);
 			startActivity(intent);
     		break;
@@ -387,6 +439,21 @@ import org.apache.http.NameValuePair;
     		break;
     	}
     }
+    
+	private void saveNimAccount(User user)
+	{
+		if (user != null)
+		{
+			if (user.getUserName() != null)
+			{
+				Preferences.saveUserAccount(user.getUserName());
+			}
+			if (user.getToken() != null)
+			{
+				Preferences.saveUserToken(user.getToken());
+			}
+		}
+	}
     
     /**
      * Exchange login and sign up view
