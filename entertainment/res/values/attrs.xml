@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="MyRadioButton">
+        <attr name="drawableSize" format="dimension" />
+        <attr name="drawableTop" format="reference" />
+        <attr name="drawableLeft" format="reference" />
+        <attr name="drawableRight" format="reference" />
+        <attr name="drawableBottom" format="reference" />
+        <attr name="drawablePadding" format="dimension" />
+    </declare-styleable>
+    <declare-styleable name="BaseSelectItem">
+        <attr name="title" format="string" />
+        <attr name="content" format="string" />
+        <attr name="dialogContent" format="reference" />
+        <attr name="textSize" format="dimension" />
+    </declare-styleable>
+    <declare-styleable name="BaseDetailsItem">
+        <attr name="detailsTitle" format="string" />
+        <attr name="detailsSelected" format="boolean" />
+        <attr name="detailsContentLayout" format="reference" />
+    </declare-styleable>
+    <declare-styleable name="BaseCenterItem">
+        <attr name="centerTitle" format="string" />
+        <attr name="titleImage" format="reference" />
+        <attr name="buttonId" format="reference" />
+    </declare-styleable>
+    <declare-styleable name="BaseTrackingItem">
+        <attr name="trackingTitle" format="string" />
+        <attr name="trackingContent" format="string" />
+        <attr name="trackingImage" format="reference" />
+        <attr name="trackingShowPoint" format="boolean" />
+    </declare-styleable>
+
+</resources>

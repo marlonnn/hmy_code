@@ -230,7 +230,7 @@
                                 android:layout_weight="1" >
 
                                 <TextView
-                                    android:id="@+id/textView2"
+                                    android:id="@+id/txtView_gender"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="性别    ："
@@ -252,7 +252,7 @@
                                 android:layout_weight="1" >
 
                                 <TextView
-                                    android:id="@+id/textView2"
+                                    android:id="@+id/txtView_language"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="语言    ："
@@ -274,7 +274,7 @@
                                 android:layout_weight="1" >
 
                                 <TextView
-                                    android:id="@+id/textView2"
+                                    android:id="@+id/txtView_age"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="年龄    ："
@@ -296,7 +296,7 @@
                                 android:layout_weight="1" >
 
                                 <TextView
-                                    android:id="@+id/textView2"
+                                    android:id="@+id/txtView_nationality"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="国籍    ："
@@ -318,7 +318,7 @@
                                 android:layout_weight="1" >
 
                                 <TextView
-                                    android:id="@+id/textView2"
+                                    android:id="@+id/txtView_constellation"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="星座    ："
@@ -340,7 +340,7 @@
                                 android:layout_weight="1" >
 
                                 <TextView
-                                    android:id="@+id/textView2"
+                                    android:id="@+id/txtView_height"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="体型    ："
@@ -362,7 +362,7 @@
                                 android:layout_weight="1" >
 
                                 <TextView
-                                    android:id="@+id/textView2"
+                                    android:id="@+id/txtView_region"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="地区    ："
@@ -389,7 +389,7 @@
                                     android:layout_weight="1" >
 
                                     <TextView
-                                        android:id="@+id/textView2"
+                                        android:id="@+id/txtView_agent"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:text="经纪人 ："
@@ -411,7 +411,7 @@
                                     android:layout_weight="1" >
 
                                     <TextView
-                                        android:id="@+id/textView2"
+                                        android:id="@+id/textView_phone"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:text="电话    ："
@@ -433,7 +433,7 @@
                                     android:layout_weight="1" >
 
                                     <TextView
-                                        android:id="@+id/textView2"
+                                        android:id="@+id/textView_wechat"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:text="微信    ："
@@ -455,7 +455,7 @@
                                     android:layout_weight="1" >
 
                                     <TextView
-                                        android:id="@+id/textView2"
+                                        android:id="@+id/textView_qq"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:text="QQ      ："
@@ -477,7 +477,7 @@
                                     android:layout_weight="1" >
 
                                     <TextView
-                                        android:id="@+id/textView2"
+                                        android:id="@+id/textView_mail"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:text="邮箱    ："
@@ -499,7 +499,7 @@
                                     android:layout_weight="1" >
 
                                     <TextView
-                                        android:id="@+id/textView2"
+                                        android:id="@+id/textView_address"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:text="地址    ："
@@ -521,7 +521,7 @@
                                     android:orientation="horizontal">
 
                                     <TextView
-                                        android:id="@+id/textView2"
+                                        android:id="@+id/textView_describe"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:text="演艺经历："
@@ -708,7 +708,7 @@
                         android:padding="10dip" />
 
                     <TextView
-                        android:id="@+id/imageView1"
+                        android:id="@+id/textView_more"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1"

@@ -3,6 +3,15 @@
 
     <string name="app_name">海绵娱</string>
     <string name="app_tip">提示</string>
+    
+    <!-- 个人中心 职业选择 -->
+    <string name="base_select_item_title">出发地</string>
+    <string name="base_select_item_content">广东省 广州市 天河区</string>
+    <string name="base_select_item_content2">请输入</string>
+    <string name="dialog_alert_select_select">请选择</string>
+    <string name="dialog_alert_select_ok">确    定</string>
+    <string name="dialog_alert_select_cancel">取    消</string>
+    
     <!--支付方式选择对话框  -->
     <string name="dialog_choose_pay">请选择支付方式</string>
     <string name="pay_wx">微信支付</string>

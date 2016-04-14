@@ -11,6 +11,7 @@ import com.BC.entertainmentgravitation.entity.EditPersonal;
 import com.BC.entertainmentgravitation.entity.Ranking;
 import com.BC.entertainmentgravitation.entity.Search;
 import com.BC.entertainmentgravitation.entity.StarInformation;
+import com.BC.entertainmentgravitation.entity.StarLiveVideoInfo;
 import com.BC.entertainmentgravitation.fragment.JiaGeQuXianFragment2;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -340,6 +341,19 @@ public class MainActivity extends BaseActivity implements OnClickListener, Updat
 		List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
 		addToThreadPool(Config.in_comparison_to_listApply_to_be_a_platform_star_, "send search request", params);
 	}
+	
+	private void createLiveVideoRequest()
+	{
+    	if (Config.User == null)
+    	{
+			ToastUtil.show(this, StringUtil.getXmlResource(this, R.string.mainactivity_fail_get_sart_info));
+			return;
+    	}
+    	HashMap<String, String> entity = new HashMap<String, String>();
+    	entity.put("username", Config.User.getUserName());
+		List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
+		addToThreadPool(Config.create_video, "send search request", params);
+	}
     
     private void addToThreadPool(int taskType, String Tag, List<NameValuePair> params)
     {
@@ -408,6 +422,7 @@ public class MainActivity extends BaseActivity implements OnClickListener, Updat
 //			} else {
 //				ToastUtil.show(this, "您已出道成为明星了");
 //			}
+			createLiveVideoRequest();
 			break;
 		/**
 		 * 礼品
@@ -575,7 +590,55 @@ public class MainActivity extends BaseActivity implements OnClickListener, Updat
 				ToastUtil.show(this, this.getString(R.string.mainactivity_have_no_search_data));
 			}
 			break;
+		case Config.create_video:
+			Entity<StarLiveVideoInfo> starLiveInfoEntity = gson.fromJson(jsonString,
+					new TypeToken<Entity<StarLiveVideoInfo>>() {
+					}.getType());
+			StarLiveVideoInfo startLiveVideoInfo = starLiveInfoEntity.getData();
+			XLog.i(startLiveVideoInfo.getChatroomid());
+			XLog.i(startLiveVideoInfo.getPushUrl());
+			XLog.i(startLiveVideoInfo.getCid());
+//			startLiveVideo(startLiveVideoInfo);
+				break;
+		case Config.query_video:
+			Entity<StarLiveVideoInfo> watchVideoEntity = gson.fromJson(jsonString,
+					new TypeToken<Entity<StarLiveVideoInfo>>() {
+					}.getType());
+			StarLiveVideoInfo watchVideo = watchVideoEntity.getData();
+			startWatchVideo(watchVideo);
+			break;
 		}
+		
+	}
+	
+	/**
+	 * 明星直播
+	 * @param startLiveVideoInfo
+	 */
+	private void startLiveVideo(StarLiveVideoInfo startLiveVideoInfo)
+	{
+		Intent intent = new Intent(MainActivity.this, LiveVideoActivity.class);
+		Bundle bundle=new Bundle();
+		bundle.putString("cid", startLiveVideoInfo.getCid());
+		bundle.putString("pushUrl", startLiveVideoInfo.getPushUrl());
+		bundle.putString("chatroomid", startLiveVideoInfo.getChatroomid());
+		intent.putExtras(bundle);
+		startActivity(intent); 
+	}
+	
+	/**
+	 * 群众看直播
+	 * @param startLiveVideoInfo
+	 */
+	private void startWatchVideo(StarLiveVideoInfo startLiveVideoInfo)
+	{
+		Intent intent = new Intent(MainActivity.this, WatchVideoActivity.class);
+		Bundle bundle=new Bundle();
+		bundle.putString("cid", startLiveVideoInfo.getCid());
+		bundle.putString("pushUrl", startLiveVideoInfo.getPushUrl());
+		bundle.putString("chatroomid", startLiveVideoInfo.getChatroomid());
+		intent.putExtras(bundle);
+		startActivity(intent); 
 	}
 	
 	class UpdateDallorTask extends AsyncTask<Void, Integer, Integer> {

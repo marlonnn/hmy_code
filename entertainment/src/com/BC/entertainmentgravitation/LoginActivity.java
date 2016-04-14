@@ -390,6 +390,19 @@ import org.apache.http.NameValuePair;
     	ThreadPoolFactory.getThreadPoolManager().addTask(httpTask);
     }
     
+    
+    
+    @Override
+	protected void onDestroy() {
+		super.onDestroy();
+		stopAllThreadPool();
+	}
+
+	private void stopAllThreadPool()
+    {
+    	ThreadPoolFactory.getThreadPoolManager().stopAllTask();
+    }
+    
     @Override
     public void onInfoReceived(int errorCode, HashMap<String, Object> items) {
         super.onInfoReceived(errorCode, items);

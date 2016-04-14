@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.BC.entertainmentgravitation.view.CitySelectWheel xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/selectWheel"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal" >
+
+    <kankan.wheel.widget.WheelView
+        android:id="@+id/country"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1" />
+
+    <kankan.wheel.widget.WheelView
+        android:id="@+id/city"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="1dp"
+        android:layout_weight="1" />
+
+    <kankan.wheel.widget.WheelView
+        android:id="@+id/county"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="1dp"
+        android:layout_weight="1" />
+
+
+</com.BC.entertainmentgravitation.view.CitySelectWheel>

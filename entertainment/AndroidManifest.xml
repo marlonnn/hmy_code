@@ -133,7 +133,17 @@
             android:name=".BrowserAcitvity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="landscape" >
-        </activity>        
+        </activity>    
+        <activity
+            android:name=".LiveVideoAcitvity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" >
+        </activity> 
+        <activity
+            android:name=".WatchVideoAcitvity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" >
+        </activity>       
     </application>
 
 </manifest>
