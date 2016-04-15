@@ -4,6 +4,17 @@
     <string name="app_name">海绵娱</string>
     <string name="app_tip">提示</string>
     
+    <string name="fragment_base_info_nickname">昵称</string>
+    <string name="fragment_base_info_copy">点击复制分享码</string>
+    <string name="fragment_base_info_select">请点击选择</string>
+    <string name="fragment_base_info_gender">性别</string>
+    <string name="fragment_base_info_weight">体重</string>
+    <string name="fragment_base_info_phone">手机    </string>
+    <string name="fragment_base_info_phone_hint">请输入手机号</string>
+    <string name="fragment_base_info_change">更改</string>
+    <string name="fragment_base_info_exit">退出</string>
+    
+    
     <!-- 个人中心 职业选择 -->
     <string name="base_select_item_title">出发地</string>
     <string name="base_select_item_content">广东省 广州市 天河区</string>

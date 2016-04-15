@@ -52,7 +52,7 @@
 	                                android:layout_weight="1"
 	                                android:background="@null"
 	                                android:ems="10"
-	                                android:hint="昵称"
+	                                android:hint="@string/fragment_base_info_nickname"
 	                                android:textColor="@color/white"
 	                                android:textSize="14dip" >
 	
@@ -78,7 +78,7 @@
 	                                android:layout_weight="1"
 	                                android:background="@null"
 	                                android:layout_gravity="center"
-	                                android:text="点击复制分享码"
+	                                android:text="@string/fragment_base_info_copy"
 	                                android:textColor="@color/white"
 	                                android:textSize="10dip"/>
                         </LinearLayout>
@@ -104,9 +104,9 @@
                                 android:id="@+id/gender"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                select:content="请点击选择"
+                                select:content="@string/fragment_base_info_select"
                                 select:dialogContent="@layout/wheel_select"
-                                select:title="性别" >
+                                select:title="@string/fragment_base_info_gender" >
                             </com.BC.entertainmentgravitation.view.BaseSelectItem>
                             <!--
                             <TextView
@@ -148,7 +148,7 @@
                                 android:id="@+id/professional"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                select:content="请点击选择"
+                                select:content="@string/fragment_base_info_select"
                                 select:dialogContent="@layout/wheel_select"
                                 select:title="职业" >
                             </com.BC.entertainmentgravitation.view.BaseSelectItem>
@@ -193,7 +193,7 @@
                                 android:id="@+id/nationality"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                select:content="请点击选择"
+                                select:content="@string/fragment_base_info_select"
                                 select:dialogContent="@layout/wheel_select"
                                 select:title="国籍" >
                             </com.BC.entertainmentgravitation.view.BaseSelectItem>
@@ -220,7 +220,7 @@
                                 android:id="@+id/region"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                select:content="请点击选择"
+                                select:content="@string/fragment_base_info_select"
                                 select:dialogContent="@layout/wheel_city"
                                 select:title="地区" >
                             </com.BC.entertainmentgravitation.view.BaseSelectItem>
@@ -247,7 +247,7 @@
                                 android:id="@+id/language"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                select:content="请点击选择"
+                                select:content="@string/fragment_base_info_select"
                                 select:dialogContent="@layout/wheel_select"
                                 select:title="语言" >
                             </com.BC.entertainmentgravitation.view.BaseSelectItem>
@@ -392,7 +392,7 @@
                                 android:id="@+id/constellation"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                select:content="请点击选择"
+                                select:content="@string/fragment_base_info_select"
                                 select:dialogContent="@layout/wheel_select"
                                 select:title="星座" >
                             </com.BC.entertainmentgravitation.view.BaseSelectItem>
@@ -419,7 +419,7 @@
                                 android:id="@+id/national"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                select:content="请点击选择"
+                                select:content="@string/fragment_base_info_select"
                                 select:dialogContent="@layout/wheel_select"
                                 select:title="民族" >
                             </com.BC.entertainmentgravitation.view.BaseSelectItem>
@@ -464,7 +464,7 @@
                                 android:id="@+id/height"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                select:content="请点击选择"
+                                select:content="@string/fragment_base_info_select"
                                 select:dialogContent="@layout/wheel_select3"
                                 select:title="身高" >
                             </com.BC.entertainmentgravitation.view.BaseSelectItem>
@@ -491,9 +491,9 @@
                                 android:id="@+id/weight"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                select:content="请点击选择"
+                                select:content="@string/fragment_base_info_select"
                                 select:dialogContent="@layout/wheel_select2"
-                                select:title="体重" >
+                                select:title="@string/fragment_base_info_weight" >
                             </com.BC.entertainmentgravitation.view.BaseSelectItem>
                             <!--
                             <TextView
@@ -536,7 +536,7 @@
                                 android:id="@+id/TextView01"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="手机    "
+                                android:text="@string/fragment_base_info_phone"
                                 android:textColor="@color/white" />
 
                             <EditText
@@ -545,7 +545,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:background="@null"
-                                android:hint="请输入手机号"
+                                android:hint="@string/fragment_base_info_phone_hint"
                                 android:textColor="@color/white" />
                         </LinearLayout>
                     </LinearLayout>
@@ -574,7 +574,7 @@
             android:layout_height="30dip"
             android:layout_marginLeft="10dip"
             android:background="@color/white"
-            android:text="更改"
+            android:text="@string/fragment_base_info_change"
             android:textColor="#e1157f" />
 
         <Button
@@ -583,7 +583,7 @@
             android:layout_height="30dip"
             android:layout_marginLeft="10dip"
             android:background="#e1157f"
-            android:text="退出"
+            android:text="@string/fragment_base_info_exit"
             android:textColor="@color/white" />
     </LinearLayout>
 
