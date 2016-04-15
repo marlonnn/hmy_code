@@ -605,7 +605,7 @@ public class MainActivity extends BaseActivity implements OnClickListener, Updat
 					new TypeToken<Entity<StarLiveVideoInfo>>() {
 					}.getType());
 			StarLiveVideoInfo watchVideo = watchVideoEntity.getData();
-			startWatchVideo(watchVideo);
+//			startWatchVideo(watchVideo);
 			break;
 		}
 		
@@ -617,7 +617,7 @@ public class MainActivity extends BaseActivity implements OnClickListener, Updat
 	 */
 	private void startLiveVideo(StarLiveVideoInfo startLiveVideoInfo)
 	{
-		Intent intent = new Intent(MainActivity.this, LiveVideoActivity.class);
+		Intent intent = new Intent(MainActivity.this, PushVideoActivity.class);
 		Bundle bundle=new Bundle();
 		bundle.putString("cid", startLiveVideoInfo.getCid());
 		bundle.putString("pushUrl", startLiveVideoInfo.getPushUrl());

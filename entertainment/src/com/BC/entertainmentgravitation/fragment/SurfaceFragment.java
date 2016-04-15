@@ -1,6 +1,8 @@
 package com.BC.entertainmentgravitation.fragment;
 
 import com.BC.entertainmentgravitation.R;
+import com.BC.entertainmentgravitation.entity.ChatRoom;
+import com.BC.entertainmentgravitation.entity.StarLiveVideoInfo;
 import com.summer.logger.XLog;
 
 import android.app.Dialog;
@@ -22,9 +24,12 @@ public class SurfaceFragment extends DialogFragment {
 	
 	private ScrollListener listener;
 	
-	public SurfaceFragment(ScrollListener listener)
+	private ChatRoom chatRoom;
+	
+	public SurfaceFragment(ScrollListener listener, ChatRoom chatRoom)
 	{
 		this.listener = listener;
+		this.chatRoom = chatRoom;
 	}
 
 	@Override
@@ -49,7 +54,7 @@ public class SurfaceFragment extends DialogFragment {
                 else if (position == 1)
                 {
                 	XLog.i("position == 1");
-                	return new TopSurfaceFragment();
+                	return new TopSurfaceFragment(chatRoom);
                 }
                 return null;
             }

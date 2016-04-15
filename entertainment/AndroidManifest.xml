@@ -135,7 +135,7 @@
             android:screenOrientation="landscape" >
         </activity>    
         <activity
-            android:name=".LiveVideoAcitvity"
+            android:name=".PushVideoActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait" >
         </activity> 
