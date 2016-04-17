@@ -64,4 +64,10 @@
     <color name="menuTitle">#444444</color>
     <color name="menuContent">#bcbaba</color>
     <color name="navpage">#ffffffff</color>
+    
+    <!-- setting -->
+    <color name="color_black_ff333333">#ff333333</color>
+    <color name="color_black_ff666666">#ff666666</color>
+    <color name="color_black_ff999999">#ff999999</color>
+    <color name="color_gray_bfc2c5">#bfc2c5</color>
 </resources>

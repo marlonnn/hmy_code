@@ -1,10 +1,10 @@
 package com.BC.entertainmentgravitation.fragment;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 
 import android.content.Context;
-import android.content.Intent;
 import android.hardware.Camera;
 import android.hardware.Camera.Parameters;
 import android.media.AudioFormat;
@@ -13,32 +13,39 @@ import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.View.OnClickListener;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
+import com.BC.entertainment.config.Preferences;
 import com.BC.entertainment.view.LiveSurfaceView;
-import com.BC.entertainmentgravitation.PushVideoActivity;
-import com.BC.entertainmentgravitation.PushVideoActivity.TouchListener;
 import com.BC.entertainmentgravitation.R;
 import com.BC.entertainmentgravitation.entity.ChatRoom;
 import com.netease.LSMediaCapture.lsMediaCapture;
-import com.netease.LSMediaCapture.lsMessageHandler;
 import com.netease.LSMediaCapture.lsMediaCapture.LSLiveStreamingParaCtx;
 import com.netease.LSMediaCapture.lsMediaCapture.Statistics;
-import com.netease.LSMediaCapture.lsMediaCapture.LSLiveStreamingParaCtx.HardWareEncEnable;
-import com.netease.LSMediaCapture.lsMediaCapture.LSLiveStreamingParaCtx.LSAudioParaCtx;
-import com.netease.LSMediaCapture.lsMediaCapture.LSLiveStreamingParaCtx.LSVideoParaCtx;
-import com.netease.LSMediaCapture.lsMediaCapture.LSLiveStreamingParaCtx.OutputFormatType;
-import com.netease.LSMediaCapture.lsMediaCapture.LSLiveStreamingParaCtx.OutputStreamType;
-import com.netease.LSMediaCapture.lsMediaCapture.LSLiveStreamingParaCtx.LSAudioParaCtx.LSAudioCodecType;
-import com.netease.LSMediaCapture.lsMediaCapture.LSLiveStreamingParaCtx.LSVideoParaCtx.CameraOrientation;
-import com.netease.LSMediaCapture.lsMediaCapture.LSLiveStreamingParaCtx.LSVideoParaCtx.CameraPosition;
-import com.netease.LSMediaCapture.lsMediaCapture.LSLiveStreamingParaCtx.LSVideoParaCtx.LSVideoCodecType;
+import com.netease.LSMediaCapture.lsMessageHandler;
 import com.netease.livestreamingFilter.view.CameraSurfaceView;
+import com.netease.nimlib.sdk.AbortableFuture;
+import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.Observer;
+import com.netease.nimlib.sdk.RequestCallback;
+import com.netease.nimlib.sdk.ResponseCode;
+import com.netease.nimlib.sdk.StatusCode;
+import com.netease.nimlib.sdk.auth.AuthService;
+import com.netease.nimlib.sdk.auth.LoginInfo;
+import com.netease.nimlib.sdk.chatroom.ChatRoomService;
+import com.netease.nimlib.sdk.chatroom.ChatRoomServiceObserver;
+import com.netease.nimlib.sdk.chatroom.model.ChatRoomInfo;
+import com.netease.nimlib.sdk.chatroom.model.ChatRoomKickOutEvent;
+import com.netease.nimlib.sdk.chatroom.model.ChatRoomMember;
+import com.netease.nimlib.sdk.chatroom.model.ChatRoomStatusChangeData;
+import com.netease.nimlib.sdk.chatroom.model.EnterChatRoomData;
+import com.netease.nimlib.sdk.chatroom.model.EnterChatRoomResultData;
+import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.summer.fragment.BaseFragment;
 import com.summer.logger.XLog;
 
@@ -111,6 +118,16 @@ public class PushVideoFragment extends BaseFragment implements View.OnClickListe
 	private final int LS_AUDIO_CODEC_G711A = 3;
 	private final int LS_AUDIO_CODEC_G711U = 4;
 	
+	private final int LS_LOG_QUIET       = 0x00;            //!< log输出模式：不输出
+    private final int LS_LOG_ERROR       = 1 << 0;          //!< log输出模式：输出错误
+    private final int LS_LOG_WARNING     = 1 << 1;          //!< log输出模式：输出警告
+    private final int LS_LOG_INFO        = 1 << 2;          //!< log输出模式：输出信息
+    private final int LS_LOG_DEBUG       = 1 << 3;          //!< log输出模式：输出调试信息
+    private final int LS_LOG_DETAIL      = 1 << 4;          //!< log输出模式：输出详细
+    private final int LS_LOG_RESV        = 1 << 5;          //!< log输出模式：保留
+    private final int LS_LOG_LEVEL_COUNT = 6;
+    private final int LS_LOG_DEFAULT     = LS_LOG_WARNING;	//!< log输出模式：默认输出警告
+	
 	private float mCurrentDistance;
 	
 	private float mLastDistance;
@@ -118,7 +135,7 @@ public class PushVideoFragment extends BaseFragment implements View.OnClickListe
 	private ChatRoom chatRoom;
 	
     private ScrollListener listener;
-	
+    
 	public PushVideoFragment(ChatRoom chatRoom)
 	{
 		this.chatRoom = chatRoom;
@@ -165,82 +182,13 @@ public class PushVideoFragment extends BaseFragment implements View.OnClickListe
 		
     	cid = chatRoom.getCid();
     	mliveStreamingURL = chatRoom.getPushUrl();
+//    	mliveStreamingURL = "rtmp://p1.live.126.net/live/e054ebd2a4b949b68d6fc6ab484e126b?wsSecret=171f37be58efac70d65544b2c457c639&wsTime=1460725500";
     	chatroomid = chatRoom.getChatroomid();
     	mHardWareEncEnable = chatRoom.isFilter();
-		
-//        Bundle bundle = getArguments();
-//        
-//        if (bundle != null)
-//        {
-//        	cid = bundle.getString("cid");
-//        	mliveStreamingURL = bundle.getString("pushUrl");
-//        	chatroomid = bundle.getString("chatroomid");
-//        	mHardWareEncEnable = bundle.getBoolean("filter", false);
-//        }
-        
-		TouchListener myTouchListener = new TouchListener() {
-
-			@Override
-			public boolean onTouchEvent(MotionEvent event) {
-				switch (event.getAction()) {
-				case MotionEvent.ACTION_DOWN:
-					// Log.i(TAG, "test: down!!!");
-					break;
-				case MotionEvent.ACTION_MOVE:
-					// Log.i(TAG, "test: move!!!");
-					/**
-					 * 首先判断按下手指的个数是不是大于两个。 如果大于两个则执行以下操作（即图片的缩放操作）。
-					 */
-					if (event.getPointerCount() >= 2) {
-
-						float offsetX = event.getX(0) - event.getX(1);
-						float offsetY = event.getY(0) - event.getY(1);
-						/**
-						 * 原点和滑动后点的距离差
-						 */
-						mCurrentDistance = (float) Math.sqrt(offsetX * offsetX
-								+ offsetY * offsetY);
-						if (mLastDistance < 0) {
-							mLastDistance = mCurrentDistance;
-						} else {
-							/**
-							 * 如果当前滑动的距离（currentDistance）比最后一次记录的距离（lastDistance
-							 * ）相比大于5英寸（也可以为其他尺寸）， 那么现实图片放大
-							 */
-							if (mCurrentDistance - mLastDistance > 5) {
-								// Log.i(TAG, "test: 放大！！！");
-								if (mLSMediaCapture != null) {
-									mLSMediaCapture.setCameraZoomPara(true);
-								}
-
-								mLastDistance = mCurrentDistance;
-								/**
-								 * 如果最后的一次记录的距离（lastDistance）与当前的滑动距离（
-								 * currentDistance）相比小于5英寸， 那么图片缩小。
-								 */
-							} else if (mLastDistance - mCurrentDistance > 5) {
-								// Log.i(TAG, "test: 缩小！！！");
-								if (mLSMediaCapture != null) {
-									mLSMediaCapture.setCameraZoomPara(false);
-								}
-
-								mLastDistance = mCurrentDistance;
-							}
-						}
-					}
-					break;
-				case MotionEvent.ACTION_UP:
-					// Log.i(TAG, "test: up!!!");
-					break;
-				default:
-					break;
-				}
-				return true;
-			}
-		};
-		
-		// 将myTouchListener注册到分发列表  
-		((PushVideoActivity) getActivity()).registerMyTouchListener(myTouchListener);    
+    	XLog.i("cid: " + cid);
+    	XLog.i("mliveStreamingURL: " + mliveStreamingURL);
+    	XLog.i("chatroomid: " + chatroomid);
+    	XLog.i("mHardWareEncEnable: " + mHardWareEncEnable);
 	}
 
 	@Override
@@ -262,7 +210,6 @@ public class PushVideoFragment extends BaseFragment implements View.OnClickListe
 	public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 		initializeView(view);
-		initializeLive();
 	}
 	
 	public void initializeView(View view)
@@ -338,7 +285,7 @@ public class PushVideoFragment extends BaseFragment implements View.OnClickListe
             paraSet();
             
             //设置日志级别
-//        	mLSMediaCapture.setTraceLevel(mLogLevel);
+        	mLSMediaCapture.setTraceLevel(LS_LOG_ERROR);
         	
             //初始化直播推流
 	        ret = mLSMediaCapture.initLiveStream(mliveStreamingURL, mLSLiveStreamingParaCtx);
@@ -346,6 +293,7 @@ public class PushVideoFragment extends BaseFragment implements View.OnClickListe
 	        if(ret) {
 	        	m_liveStreamingInit = true;
 	        	m_liveStreamingInitFinished = true;
+	        	XLog.i("-----------liveStreamingInitFinished------------");
 	        }
 	        else {
 	        	m_liveStreamingInit = true;
@@ -355,12 +303,7 @@ public class PushVideoFragment extends BaseFragment implements View.OnClickListe
 	}
 	
 	//音视频参数设置
-	public void paraSet(){	
-
-//        //滤镜模式下不开视频水印
-//		if(!mLSLiveStreamingParaCtx.eHaraWareEncType.hardWareEncEnable && mWaterMarkOn) {
-//		    waterMark();
-//		}
+	public void paraSet(){
 		
 		//输出格式：视频、音频和音视频
 		mLSLiveStreamingParaCtx.eOutStreamType.outputStreamType = HAVE_AV;
@@ -429,6 +372,7 @@ public class PushVideoFragment extends BaseFragment implements View.OnClickListe
 	private void startAV(){
 		if(mLSMediaCapture != null && m_liveStreamingInitFinished) {
 		    mLSMediaCapture.startLiveStreaming();
+		    XLog.i("========================startAV=======================");
 		    m_liveStreamingOn = true;
 		}
 	}
@@ -513,19 +457,7 @@ public class PushVideoFragment extends BaseFragment implements View.OnClickListe
 //        }
 		mLSMediaCapture.resumeVideoEncode();
         super.onPause(); 
-    }  
-      
-//    public void onRestart(){  
-//    	super.onRestart(); 
-//        if(mLSMediaCapture != null) {
-//        	//关闭推流固定图像
-//        	mLSMediaCapture.stopVideoEncode();
-//            
-//            //关闭推流静音帧
-//            //mLSMediaCapture.stopAudioEncode();
-//        }        
-//        
-//    }  
+    }
       
     @Override
 	public void onResume(){   
@@ -535,38 +467,28 @@ public class PushVideoFragment extends BaseFragment implements View.OnClickListe
     @Override
 	public void onStart(){  
         super.onStart();  
+		initializeLive();
     }  
       
     @Override
 	public void onStop(){  
-        super.onStop();  
+        super.onStop();
     }
+    
     
 	
 	@Override
+	public void onDetach() {
+		super.onDetach();
+	}
+
+	@Override
 	public void onDestroy() {
+		super.onDestroy();
+        
 		if(m_liveStreamingInit) {
 			m_liveStreamingInit = false;
 		}
-		
-//		//Demo层网络信息显示操作的销毁
-//        if(mNetworkInfoServiceOn) {       	
-//            mNetInfoIntent.putExtra("frameRate", 0);  
-//        	mNetInfoIntent.putExtra("bitRate", 0);
-//      	    mNetInfoIntent.putExtra("resolution", 2);
-//         
-//            sendBroadcast(mNetInfoIntent);  
-//
-//            stopService(mNetinfoIntent); 
-//            mNetworkInfoServiceOn = false;
-//        }
-//        
-//        //Demo层报警信息操作的销毁
-//        if(mAlertServiceOn) {
-//        	mAlertServiceIntent = new Intent(MediaPreviewActivity.this, AlertService.class);
-//            stopService(mAlertServiceIntent); 
-//            mAlertServiceOn = false;
-//        }
         
         //停止直播调用相关API接口
 		if(mLSMediaCapture != null && m_liveStreamingInitFinished && m_liveStreamingOn) {		
@@ -585,8 +507,6 @@ public class PushVideoFragment extends BaseFragment implements View.OnClickListe
 		if(m_liveStreamingOn) {
 		    m_liveStreamingOn = false;
 		}
-		
-		super.onDestroy();
 	}
 	
 //	@Override  
@@ -600,13 +520,277 @@ public class PushVideoFragment extends BaseFragment implements View.OnClickListe
 	}
 
 	@Override
-	public void handleMessage(int arg0, Object arg1) {
-		
-	}
-
-	@Override
 	public void onClick(View v) {
 		
 	}
 
+	   //处理SDK抛上来的异常和事件，用户需要在这里监听各种消息，进行相应的处理。
+    //例如监听断网消息，用户根据断网消息进行直播重连
+	@Override
+	public void handleMessage(int msg, Object object) {
+		  switch (msg) {
+		      case MSG_INIT_LIVESTREAMING_OUTFILE_ERROR://初始化直播出错
+		      case MSG_INIT_LIVESTREAMING_VIDEO_ERROR:	
+		      case MSG_INIT_LIVESTREAMING_AUDIO_ERROR:
+		      {
+		    	  if(m_liveStreamingInit)
+		    	  {
+//	      		      Bundle bundle = new Bundle();
+//	                  bundle.putString("alert", "MSG_INIT_LIVESTREAMING_ERROR");
+//	          	      Intent intent = new Intent(MediaPreviewActivity.this, AlertService.class);
+//	          	      intent.putExtras(bundle);
+//	      		      startService(intent);
+//	      		      mAlertServiceOn = true;
+	      		      XLog.i("MSG_INIT_LIVESTREAMING_AUDIO_ERROR");
+		    	  }
+		    	  break;
+		      }
+		      case MSG_START_LIVESTREAMING_ERROR://开始直播出错
+		      {
+		    	  XLog.i("MSG_START_LIVESTREAMING_ERROR");
+		    	  break;
+		      }
+		      case MSG_STOP_LIVESTREAMING_ERROR://停止直播出错
+		      {
+		    	  if(m_liveStreamingOn)
+		    	  {
+//	      		      Bundle bundle = new Bundle();
+//	                  bundle.putString("alert", "MSG_STOP_LIVESTREAMING_ERROR");
+//	          	      Intent intent = new Intent(MediaPreviewActivity.this, AlertService.class);
+//	          	      intent.putExtras(bundle);
+//	      		      startService(intent);
+//	      		      mAlertServiceOn = true;
+	      		    XLog.i("MSG_STOP_LIVESTREAMING_ERROR");
+		    	  }
+		    	  break;
+		      }
+		      case MSG_AUDIO_PROCESS_ERROR://音频处理出错
+		      {
+//		    	  if(m_liveStreamingOn && System.currentTimeMillis() - mLastAudioProcessErrorAlertTime >= 10000)
+//		    	  {
+//	      		      Bundle bundle = new Bundle();
+//	                  bundle.putString("alert", "MSG_AUDIO_PROCESS_ERROR");
+//	          	      Intent intent = new Intent(MediaPreviewActivity.this, AlertService.class);
+//	          	      intent.putExtras(bundle);
+//	      		      startService(intent);
+//	      		      mAlertServiceOn = true;
+//	      		      mLastAudioProcessErrorAlertTime = System.currentTimeMillis();
+//		    	  }
+		    	  XLog.i("MSG_AUDIO_PROCESS_ERROR");
+		    	  break;
+		      }
+		      case MSG_VIDEO_PROCESS_ERROR://视频处理出错
+		      {
+//		    	  if(m_liveStreamingOn && System.currentTimeMillis() - mLastVideoProcessErrorAlertTime >= 10000)
+//		    	  {
+//	      		      Bundle bundle = new Bundle();
+//	                  bundle.putString("alert", "MSG_VIDEO_PROCESS_ERROR");
+//	          	      Intent intent = new Intent(MediaPreviewActivity.this, AlertService.class);
+//	          	      intent.putExtras(bundle);
+//	      		      startService(intent);
+//	      		      mAlertServiceOn = true;
+//	      		      mLastVideoProcessErrorAlertTime = System.currentTimeMillis();
+//		    	  }
+		    	  XLog.i("MSG_VIDEO_PROCESS_ERROR");
+		    	  break;
+		      }
+		      case MSG_RTMP_URL_ERROR://断网消息
+		      {
+		    	  //Log.i(TAG, "test: in handleMessage, MSG_RTMP_URL_ERROR");
+		    	  XLog.i("MSG_RTMP_URL_ERROR");
+		    	  break;
+		      }
+		      case MSG_URL_NOT_AUTH://直播URL非法
+		      {
+//		    	  if(m_liveStreamingInit)
+//		    	  {
+//	      		      Bundle bundle = new Bundle();
+//	                  bundle.putString("alert", "MSG_URL_NOT_AUTH");
+//	          	      Intent intent = new Intent(MediaPreviewActivity.this, AlertService.class);
+//	          	      intent.putExtras(bundle);
+//	      		      startService(intent);
+//	      		      mAlertServiceOn = true;
+//		    	  }
+		    	  XLog.i("MSG_URL_NOT_AUTH");
+		    	  break;
+		      }
+		      case MSG_SEND_STATICS_LOG_ERROR://发送统计信息出错
+		      {
+		    	  //Log.i(TAG, "test: in handleMessage, MSG_SEND_STATICS_LOG_ERROR");
+		    	  XLog.i("MSG_SEND_STATICS_LOG_ERROR");
+		    	  break;
+		      }
+		      case MSG_SEND_HEARTBEAT_LOG_ERROR://发送心跳信息出错
+		      {
+		    	  //Log.i(TAG, "test: in handleMessage, MSG_SEND_HEARTBEAT_LOG_ERROR");
+		    	  XLog.i("MSG_SEND_HEARTBEAT_LOG_ERROR");
+		    	  break;
+		      }
+		      case MSG_AUDIO_SAMPLE_RATE_NOT_SUPPORT_ERROR://音频采集参数不支持
+		      {
+		    	  //Log.i(TAG, "test: in handleMessage, MSG_AUDIO_SAMPLE_RATE_NOT_SUPPORT_ERROR");
+		    	  XLog.i("MSG_AUDIO_SAMPLE_RATE_NOT_SUPPORT_ERROR");
+		    	  break;
+		      }
+		      case MSG_AUDIO_PARAMETER_NOT_SUPPORT_BY_HARDWARE_ERROR://音频参数不支持
+		      {
+		    	  XLog.i("MSG_AUDIO_PARAMETER_NOT_SUPPORT_BY_HARDWARE_ERROR");
+		    	  break;
+		      }
+		      case MSG_NEW_AUDIORECORD_INSTANCE_ERROR://音频实例初始化出错
+		      {
+		    	  XLog.i("MSG_NEW_AUDIORECORD_INSTANCE_ERROR");
+		    	  break;
+		      }
+		      case MSG_AUDIO_START_RECORDING_ERROR://音频采集出错
+		      {
+		    	  XLog.i("MSG_AUDIO_START_RECORDING_ERROR");
+		    	  break;
+		      }
+		      case MSG_OTHER_AUDIO_PROCESS_ERROR://音频操作的其他错误
+		      {
+		    	  XLog.i("MSG_OTHER_AUDIO_PROCESS_ERROR");
+		    	  break;
+		      }
+		      case MSG_QOS_TO_STOP_LIVESTREAMING://网络QoS极差，码率档次降到最低
+		      {
+		    	  XLog.i("MSG_QOS_TO_STOP_LIVESTREAMING");
+//		    	  m_tryToStopLivestreaming = true;
+//		    	  m_QoSToStopLivestreaming = true;
+//		  		  mLSMediaCapture.stopLiveStreaming();
+		    	  break;
+		      }
+		      case MSG_HW_VIDEO_PACKET_ERROR:
+		      {
+		    	  if(m_liveStreamingOn)
+		    	  {
+//		    	      Bundle bundle = new Bundle();
+//	                  bundle.putString("alert", "MSG_HW_VIDEO_PACKET_ERROR");
+//	          	      Intent intent = new Intent(MediaPreviewActivity.this, AlertService.class);
+//	          	      intent.putExtras(bundle);
+//	      		      startService(intent);
+//	      		      mAlertServiceOn = true;
+	      		    XLog.i("MSG_HW_VIDEO_PACKET_ERROR");
+		    	  }
+		    	  break;
+		      }
+		      case MSG_WATERMARK_INIT_ERROR://视频水印操作初始化出错
+		      {
+		    	  XLog.i("MSG_WATERMARK_INIT_ERROR");
+		    	  break;
+		      }
+		      case MSG_WATERMARK_PIC_OUT_OF_VIDEO_ERROR://视频水印图像超出原始视频出错
+		      {
+		    	  XLog.i("MSG_WATERMARK_PIC_OUT_OF_VIDEO_ERROR");
+		    	  break;
+		      }
+		      case MSG_WATERMARK_PARA_ERROR://视频水印参数设置出错
+		      {
+		    	  XLog.i("MSG_WATERMARK_PARA_ERROR");
+		    	  break;
+		      }
+		      case MSG_CAMERA_PREVIEW_SIZE_NOT_SUPPORT_ERROR://camera采集分辨率不支持
+		      {
+		    	  XLog.i("MSG_CAMERA_PREVIEW_SIZE_NOT_SUPPORT_ERROR");
+		    	  break;
+		      }
+		      case MSG_START_PREVIEW_FINISHED://camera采集预览完成
+		      {
+		    	  XLog.i("MSG_START_PREVIEW_FINISHED");
+		    	  startAV();
+		    	  break;
+		      }
+		      case MSG_START_LIVESTREAMING_FINISHED://开始直播完成
+		      {
+		    	  XLog.i("MSG_START_LIVESTREAMING_FINISHED");
+		    	  break;
+		      }
+		      case MSG_STOP_LIVESTREAMING_FINISHED://停止直播完成
+		      {
+		    	  XLog.i("MSG_STOP_LIVESTREAMING_FINISHED");
+//		          {
+//		        	  mIntentLiveStreamingStopFinished.putExtra("LiveStreamingStopFinished", 1);  
+//	                  sendBroadcast(mIntentLiveStreamingStopFinished); 
+//		          }
+		          
+	              break;
+		      }
+		      case MSG_STOP_VIDEO_CAPTURE_FINISHED:
+		      {
+		    	  XLog.i("MSG_STOP_VIDEO_CAPTURE_FINISHED");
+		    	  if(mLSMediaCapture != null)
+		    	  {
+		    	      //继续视频推流，推最后一帧图像
+		    	      mLSMediaCapture.resumeVideoEncode();
+		    	  }
+//		    	  if(!m_tryToStopLivestreaming && mLSMediaCapture != null)
+//		    	  {
+//		    	      //继续视频推流，推最后一帧图像
+//		    	      mLSMediaCapture.resumeVideoEncode();
+//		    	  }
+		    	  break;
+		      }
+		      case MSG_STOP_RESUME_VIDEO_CAPTURE_FINISHED:
+		      {
+		    	  XLog.i("MSG_STOP_RESUME_VIDEO_CAPTURE_FINISHED");
+		    	  //开启视频preview
+		    	  if(mLSMediaCapture != null)
+		    	  {
+		              mLSMediaCapture.resumeVideoPreview();
+		              m_liveStreamingOn = true;
+		    	      //开启视频推流，推正常帧
+		              mLSMediaCapture.startVideoLiveStream();
+		    	  }
+		    	  break;
+		      }
+		      case MSG_STOP_AUDIO_CAPTURE_FINISHED:
+		      {
+		    	  XLog.i("MSG_STOP_AUDIO_CAPTURE_FINISHED");
+//		    	  if(!m_tryToStopLivestreaming && mLSMediaCapture != null)
+//		    	  {
+//		    	      //继续音频推流，推静音帧
+//		    	      mLSMediaCapture.resumeAudioEncode();
+//		    	  }
+		    	  break;
+		      }
+		      case MSG_STOP_RESUME_AUDIO_CAPTURE_FINISHED:
+		      {
+		    	  XLog.i("MSG_STOP_RESUME_AUDIO_CAPTURE_FINISHED");
+		    	  //开启音频推流，推正常帧
+		          mLSMediaCapture.startAudioLiveStream();
+		    	  break;
+		      }
+		      case MSG_SWITCH_CAMERA_FINISHED://切换摄像头完成
+		      {
+		    	  XLog.i("MSG_SWITCH_CAMERA_FINISHED");
+		    	  int cameraId = (Integer) object;//切换之后的camera id
+		    	  break;
+		      }
+		      case MSG_SEND_STATICS_LOG_FINISHED://发送统计信息完成
+		      {
+		    	  XLog.i("MSG_SEND_STATICS_LOG_FINISHED");
+		    	  break;
+		      }
+		      case MSG_SERVER_COMMAND_STOP_LIVESTREAMING:
+		      {
+		    	  XLog.i("MSG_SERVER_COMMAND_STOP_LIVESTREAMING");
+		    	  break;
+		      }
+		      case MSG_GET_STATICS_INFO:
+		      {
+		    	  XLog.i("MSG_GET_STATICS_INFO");
+//				  Message message = new Message();
+//				  mStatistics = (Statistics) object;
+//				    			      			  
+//	              Bundle bundle = new Bundle();  
+//	              bundle.putInt("FR", mStatistics.videoSendFrameRate);  
+//	              bundle.putInt("VBR", mStatistics.videoSendBitRate);  
+//	              bundle.putInt("ABR", mStatistics.audioSendBitRate);   
+//	              bundle.putInt("TBR", mStatistics.totalRealSendBitRate);   
+//	              message.setData(bundle);  
+//	                  
+//	              mHandler.sendMessage(message);
+		      }
+		  }
+	}	
 }

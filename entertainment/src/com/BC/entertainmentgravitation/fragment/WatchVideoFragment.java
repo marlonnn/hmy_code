@@ -1,6 +1,7 @@
 package com.BC.entertainmentgravitation.fragment;
 
 import com.BC.entertainmentgravitation.R;
+import com.BC.entertainmentgravitation.entity.ChatRoom;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -37,6 +38,12 @@ public class WatchVideoFragment extends BaseFragment implements SurfaceHolder.Ca
 	private boolean pauseInBackgroud = true;
 	
     private ScrollListener listener;
+    private ChatRoom chatRoom;
+    
+    public WatchVideoFragment(ChatRoom chatRoom)
+    {
+    	this.chatRoom = chatRoom;
+    }
 
     public ScrollListener CreateScrollListener() {
         listener = new ScrollListener() {
@@ -104,7 +111,7 @@ public class WatchVideoFragment extends BaseFragment implements SurfaceHolder.Ca
 		
 		mVideoView.setMediaType("livestream");
 		
-		mVideoView.setVideoPath("http://v1.live.126.net/live/e054ebd2a4b949b68d6fc6ab484e126b.flv");
+		mVideoView.setVideoPath(chatRoom.getHttpPullUrl());
 //		mVideoView.setVideoPath("http://v1.live.126.net/live/fc260c829d4f415493869afbd96d3ef2.flv");
 		
 		SurfaceHolder holder = mVideoView.getHolder();

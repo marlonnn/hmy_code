@@ -243,11 +243,11 @@ import org.apache.http.NameValuePair;
 			return;
 		}
 		if (!signUpPassword.getText().toString()
-				.equals(signUpPasswordAgain.getText().toString())) {
+				.contains(signUpPasswordAgain.getText().toString())) {
 			ToastUtil.show(this, this.getString(R.string.signUpPasswordDifferent));
 			return;
 		}
-		if (!signUpValidate.getText().toString().equals(verifyString)) {
+		if (!signUpValidate.getText().toString().contains(verifyString)) {
 			ToastUtil.show(this, this.getString(R.string.signUpValidateError));
 			return;
 		}

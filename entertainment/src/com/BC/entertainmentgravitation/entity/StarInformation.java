@@ -4,6 +4,8 @@ import java.util.List;
 
 public class StarInformation {
 	private String Star_ID;
+	
+	private String user_name;
 
 	private String Head_portrait;
 	private String First_album;
@@ -47,6 +49,16 @@ public class StarInformation {
 	private String email;
 	private String address;
 	private String Describe_the_text;
+	
+	
+
+	public String getUser_name() {
+		return user_name;
+	}
+
+	public void setUser_name(String user_name) {
+		this.user_name = user_name;
+	}
 
 	public String getDescribe_the_text() {
 		return Describe_the_text;

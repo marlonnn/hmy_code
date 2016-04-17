@@ -10,7 +10,7 @@
         <attr name="drawablePadding" format="dimension" />
     </declare-styleable>
     <declare-styleable name="BaseSelectItem">
-        <attr name="title" format="string" />
+        <attr name="basetitle" format="string" />
         <attr name="content" format="string" />
         <attr name="dialogContent" format="reference" />
         <attr name="textSize" format="dimension" />
@@ -31,5 +31,9 @@
         <attr name="trackingImage" format="reference" />
         <attr name="trackingShowPoint" format="boolean" />
     </declare-styleable>
+	<declare-styleable name="PullToRefresh">
+	    <attr name="dividerHeight" format="dimension"></attr>
+	    <attr name="scrollbars" format="boolean"></attr>
+	</declare-styleable>
 
 </resources>

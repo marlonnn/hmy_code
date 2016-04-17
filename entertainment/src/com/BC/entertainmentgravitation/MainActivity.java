@@ -63,7 +63,7 @@ public class MainActivity extends BaseActivity implements OnClickListener, Updat
 			+ PACKAGE_NAME;
 
 	private TextView nickname, levelText, Entertainment_dollar, Stage_name,
-			star_information, professional, prices;
+			star_information, professional, prices, aplayOrLive;
 	private int pageIndex = 1;
 	private int selectIndex = 0;
 	private CircularImage Head_portrait;
@@ -79,6 +79,9 @@ public class MainActivity extends BaseActivity implements OnClickListener, Updat
 	private float mCurrentPosX;
 	private boolean isSlipping = false;
 
+    /* (non-Javadoc)
+     * @see com.summer.activity.BaseActivity#onCreate(android.os.Bundle)
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,6 +93,7 @@ public class MainActivity extends BaseActivity implements OnClickListener, Updat
 		star_information = (TextView) findViewById(R.id.star_information);
 		professional = (TextView) findViewById(R.id.professional);
 		prices = (TextView) findViewById(R.id.prices);
+		aplayOrLive = (TextView) findViewById(R.id.main_aplay);
 		searchEdit = (EditText) findViewById(R.id.searchEdit);
 		Head_portrait = (CircularImage) findViewById(R.id.Head_portrait);
 		star_Head_portrait = (ImageView) findViewById(R.id.star_Head_portrait);
@@ -142,6 +146,15 @@ public class MainActivity extends BaseActivity implements OnClickListener, Updat
 
 		account.setOnClickListener(this);
 		jiaGeQuXianFragment.setUpdataMainActivity(this);
+		
+		if (Config.User != null && Config.User.getPermission().contains("2"))
+		{
+			aplayOrLive.setText("直播");
+		}
+		else
+		{
+			aplayOrLive.setText("申请");
+		}
     }
     
     
@@ -200,8 +213,9 @@ public class MainActivity extends BaseActivity implements OnClickListener, Updat
 				// 拿起
 				case MotionEvent.ACTION_UP:
 					if(isSlipping){
-						Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
-						startActivity(intent);
+//						Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
+//						startActivity(intent);
+						watchLiveVideoRequest(MainActivity.starInformation.getUser_name());
 					}
 					break;
 				default:
@@ -352,7 +366,21 @@ public class MainActivity extends BaseActivity implements OnClickListener, Updat
     	HashMap<String, String> entity = new HashMap<String, String>();
     	entity.put("username", Config.User.getUserName());
 		List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
-		addToThreadPool(Config.create_video, "send search request", params);
+		addToThreadPool(Config.create_video, "send create live video request", params);
+	}
+	
+	private void watchLiveVideoRequest(String starName)
+	{
+		XLog.i("star id : " + starName);
+    	if (Config.User == null)
+    	{
+			ToastUtil.show(this, StringUtil.getXmlResource(this, R.string.mainactivity_fail_get_sart_info));
+			return;
+    	}
+    	HashMap<String, String> entity = new HashMap<String, String>();
+    	entity.put("username", starName);
+		List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
+		addToThreadPool(Config.query_video, "send watch video request", params);
 	}
     
     private void addToThreadPool(int taskType, String Tag, List<NameValuePair> params)
@@ -422,7 +450,15 @@ public class MainActivity extends BaseActivity implements OnClickListener, Updat
 //			} else {
 //				ToastUtil.show(this, "您已出道成为明星了");
 //			}
-			createLiveVideoRequest();
+			if (Config.User.getPermission().equals("2")) 
+			{
+				createLiveVideoRequest();
+			}
+			else
+			{
+//				intent = new Intent(this, ToApplyForActivity.class);
+//				startActivity(intent);
+			}
 			break;
 		/**
 		 * 礼品
@@ -470,6 +506,7 @@ public class MainActivity extends BaseActivity implements OnClickListener, Updat
 		case R.id.details:
 //			intent = new Intent(this, DetailsActivity.class);
 //			startActivity(intent);
+//			watchLiveVideoRequest();
 			break;
 		/**
 		 * 查询娱币交易信息
@@ -598,14 +635,14 @@ public class MainActivity extends BaseActivity implements OnClickListener, Updat
 			XLog.i(startLiveVideoInfo.getChatroomid());
 			XLog.i(startLiveVideoInfo.getPushUrl());
 			XLog.i(startLiveVideoInfo.getCid());
-//			startLiveVideo(startLiveVideoInfo);
-				break;
+			startLiveVideo(startLiveVideoInfo);
+			break;
 		case Config.query_video:
 			Entity<StarLiveVideoInfo> watchVideoEntity = gson.fromJson(jsonString,
 					new TypeToken<Entity<StarLiveVideoInfo>>() {
 					}.getType());
 			StarLiveVideoInfo watchVideo = watchVideoEntity.getData();
-//			startWatchVideo(watchVideo);
+			startWatchVideo(watchVideo);
 			break;
 		}
 		
@@ -632,13 +669,21 @@ public class MainActivity extends BaseActivity implements OnClickListener, Updat
 	 */
 	private void startWatchVideo(StarLiveVideoInfo startLiveVideoInfo)
 	{
-		Intent intent = new Intent(MainActivity.this, WatchVideoActivity.class);
-		Bundle bundle=new Bundle();
-		bundle.putString("cid", startLiveVideoInfo.getCid());
-		bundle.putString("pushUrl", startLiveVideoInfo.getPushUrl());
-		bundle.putString("chatroomid", startLiveVideoInfo.getChatroomid());
-		intent.putExtras(bundle);
-		startActivity(intent); 
+		if(startLiveVideoInfo != null && startLiveVideoInfo.getHttpPullUrl() != null && !startLiveVideoInfo.getHttpPullUrl().isEmpty())
+		{
+			Intent intent = new Intent(MainActivity.this, WatchVideoActivity.class);
+			Bundle bundle=new Bundle();
+			bundle.putString("cid", startLiveVideoInfo.getCid());
+			bundle.putString("httpPullUrl", startLiveVideoInfo.getHttpPullUrl());
+			bundle.putString("chatroomid", startLiveVideoInfo.getChatroomid());
+			intent.putExtras(bundle);
+			startActivity(intent); 
+		}
+		else
+		{
+			ToastUtil.show(this, "该直播暂未开始！");
+		}
+
 	}
 	
 	class UpdateDallorTask extends AsyncTask<Void, Integer, Integer> {

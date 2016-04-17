@@ -213,8 +213,8 @@ public class BaseSelectItem extends LinearLayout implements OnClickListener {
 		for (int i = 0; i < n; i++) {
 			int attr = a.getIndex(i);
 			switch (attr) {
-			case R.styleable.BaseSelectItem_title:
-				title.setText(a.getString(R.styleable.BaseSelectItem_title));
+			case R.styleable.BaseSelectItem_basetitle:
+				title.setText(a.getString(R.styleable.BaseSelectItem_basetitle));
 				break;
 			case R.styleable.BaseSelectItem_content:
 				content.setText(a.getString(R.styleable.BaseSelectItem_content));
