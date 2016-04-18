@@ -1,14 +1,19 @@
 package com.BC.entertainmentgravitation.fragment;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
+import com.BC.entertainment.chatroom.helper.ChatRoomMemberCache;
 import com.BC.entertainmentgravitation.R;
 import com.BC.entertainmentgravitation.entity.ChatMessage;
 import com.BC.entertainmentgravitation.entity.ChatRoom;
+import com.netease.nim.uikit.cache.SimpleCallback;
 import com.netease.nim.uikit.common.ui.listview.ListViewUtil.ScrollToPositionListener;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
@@ -17,9 +22,13 @@ import com.netease.nimlib.sdk.ResponseCode;
 import com.netease.nimlib.sdk.chatroom.ChatRoomMessageBuilder;
 import com.netease.nimlib.sdk.chatroom.ChatRoomService;
 import com.netease.nimlib.sdk.chatroom.ChatRoomServiceObserver;
+import com.netease.nimlib.sdk.chatroom.constant.MemberQueryType;
+import com.netease.nimlib.sdk.chatroom.constant.MemberType;
+import com.netease.nimlib.sdk.chatroom.model.ChatRoomMember;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomMessage;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.summer.adapter.CommonAdapter;
+import com.summer.config.Config;
 import com.summer.logger.XLog;
 
 import android.annotation.SuppressLint;
@@ -42,6 +51,8 @@ public class TopSurfaceFragment extends Fragment implements OnClickListener{
 	
 	private final int MESSAGE_CAPACITY = 500;
 	
+	private final int LIMIT = 100;
+	
 	private ChatRoom chatRoom;
 	private View view;
 	
@@ -62,7 +73,14 @@ public class TopSurfaceFragment extends Fragment implements OnClickListener{
 	private CommonAdapter adapter;
     
     private ListView messageListView;
-	
+    
+    private boolean isNormalEmpty = false; // 固定成员是否拉取完
+    
+    private long updateTime = 0; // 非游客的updateTime
+    private long enterTime = 0; // 游客的enterTime
+    
+    private Map<String, ChatRoomMember> memberCache = new ConcurrentHashMap<String, ChatRoomMember>();//聊天室在线人数
+    
 	public TopSurfaceFragment(ChatRoom chatRoom)
 	{
 		this.chatRoom = chatRoom;
@@ -70,6 +88,7 @@ public class TopSurfaceFragment extends Fragment implements OnClickListener{
 		items = new LinkedList<ChatMessage>();
 		registerObservers(true);
 		registerRecMessageObservers(true);
+		registerChatMemberObservers(true);
 	}
 
 	@Override
@@ -173,6 +192,7 @@ public class TopSurfaceFragment extends Fragment implements OnClickListener{
 		super.onDestroy();
 		registerObservers(false);
 		registerRecMessageObservers(false);
+		registerChatMemberObservers(false);
 	}
 	
     // 发送消息后，更新本地消息列表
@@ -208,6 +228,116 @@ public class TopSurfaceFragment extends Fragment implements OnClickListener{
 			}
 		});			
 	}
+	
+
+	@Override
+	public void onClick(View v) {
+		
+		switch(v.getId())
+		{
+		case R.id.imageView_chart:
+			if (layoutInput.isShown())
+			{
+				layoutInput.setVisibility(View.GONE);
+			}
+			else
+			{
+				layoutInput.setVisibility(View.VISIBLE);
+			}
+			break;
+		case R.id.btnSend:
+			sendMessage();
+			break;
+		}
+	}
+	
+	private void sendMessage()
+	{
+		ChatRoomMessage message = ChatRoomMessageBuilder.createChatRoomTextMessage(
+				chatRoom.getChatroomid(),
+				edtInput.getText().toString());
+		sendMessage(message, null);
+	}
+
+	public boolean sendMessage(IMMessage msg, String type) {
+		
+        ChatRoomMessage message = (ChatRoomMessage) msg;
+
+        Map<String, Object> ext = new HashMap<>();
+        ChatRoomMember chatRoomMember = ChatRoomMemberCache.getInstance().getChatRoomMember(chatRoom.getChatroomid(), Config.User.getUserName());
+        if (chatRoomMember != null && chatRoomMember.getMemberType() != null) {
+//            ext.put("type", chatRoomMember.getMemberType().getValue());
+            ext.put("nickname", Config.User.getNickName());
+            message.setRemoteExtension(ext);
+        }
+		
+//		if (type != null)
+//		{
+//			Map<String, Object> ext = new HashMap<String, Object>();
+//			ext.put("type", type);
+//			message.setRemoteExtension(ext);
+//		}
+
+		NIMClient.getService(ChatRoomService.class).sendMessage(message, false)
+				.setCallback(new RequestCallback<Void>() {
+					@Override
+					public void onSuccess(Void param) {
+						XLog.i("send messsage success");
+					}
+
+					@Override
+					public void onFailed(int code) {
+						if (code == ResponseCode.RES_CHATROOM_MUTED) {
+							Toast.makeText(getActivity(), "用户被禁言",
+									Toast.LENGTH_SHORT).show();
+						} else {
+							Toast.makeText(getActivity(),
+									"消息发送失败：code:" + code, Toast.LENGTH_SHORT)
+									.show();
+						}
+					}
+
+					@Override
+					public void onException(Throwable exception) {
+						Toast.makeText(getActivity(), "消息发送失败！",
+								Toast.LENGTH_SHORT).show();
+					}
+				});
+		onMsgSend(msg);
+		return true;
+    }
+	
+	
+    /**
+     * *************************** 成员操作监听 ****************************
+     */
+    private void registerChatMemberObservers(boolean register) {
+        ChatRoomMemberCache.getInstance().registerRoomMemberChangedObserver(roomMemberChangedObserver, register);
+//        ChatRoomMemberCache.getInstance().registerObservers(register);
+    }
+
+    ChatRoomMemberCache.RoomMemberChangedObserver roomMemberChangedObserver = new ChatRoomMemberCache.RoomMemberChangedObserver() {
+        @Override
+        public void onRoomMemberIn(ChatRoomMember member) {
+        	//some one room in
+        	ChatRoomMemberCache.getInstance().saveMyMember(member);
+        	memberCache = ChatRoomMemberCache.getInstance().GetOnLineMember(member.getRoomId());
+        	//data notified
+        }
+
+        @Override
+        public void onRoomMemberExit(ChatRoomMember member) {
+        	//some one room out
+        	ChatRoomMemberCache.getInstance().removeMyMember(member);
+        }
+    };
+    
+    private void notifyDataSetChanged(ChatRoomMember member, CommonAdapter adapter)
+    {
+    	memberCache = ChatRoomMemberCache.getInstance().GetOnLineMember(member.getRoomId());
+    	adapter.notifyDataSetChanged();
+    	
+    }
 	
     /**
      * ************************* 观察者 ********************************
@@ -248,6 +378,7 @@ public class TopSurfaceFragment extends Fragment implements OnClickListener{
             	if (message.getContent() == null || message.getContent().equals("") || message.getContent().isEmpty())
             	{
             		ChatMessage msg = new ChatMessage();
+            		XLog.i("nickname----->" + message.getRemoteExtension().get("nickname"));
             		msg.setAccount(message.getFromAccount());
             		msg.setContent(String.format("系统消息：欢迎%s进入聊天室", message.getFromAccount()));
             		items.add(0, msg);
@@ -267,74 +398,5 @@ public class TopSurfaceFragment extends Fragment implements OnClickListener{
             }
         }
     };
-
-	@Override
-	public void onClick(View v) {
-		
-		switch(v.getId())
-		{
-		case R.id.imageView_chart:
-			if (layoutInput.isShown())
-			{
-				layoutInput.setVisibility(View.GONE);
-			}
-			else
-			{
-				layoutInput.setVisibility(View.VISIBLE);
-			}
-			break;
-		case R.id.btnSend:
-			sendMessage();
-			break;
-		}
-	}
-	
-	private void sendMessage()
-	{
-		ChatRoomMessage message = ChatRoomMessageBuilder.createChatRoomTextMessage(
-				chatRoom.getChatroomid(),
-				edtInput.getText().toString());
-		sendMessage(message, null);
-	}
-
-	public boolean sendMessage(IMMessage msg, String type) {
-		ChatRoomMessage message = (ChatRoomMessage) msg;
-		
-		if (type != null)
-		{
-			Map<String, Object> ext = new HashMap<String, Object>();
-			ext.put("type", type);
-			message.setRemoteExtension(ext);
-		}
-
-		NIMClient.getService(ChatRoomService.class).sendMessage(message, false)
-				.setCallback(new RequestCallback<Void>() {
-					@Override
-					public void onSuccess(Void param) {
-						XLog.i("send messsage success");
-					}
-
-					@Override
-					public void onFailed(int code) {
-						if (code == ResponseCode.RES_CHATROOM_MUTED) {
-							Toast.makeText(getActivity(), "用户被禁言",
-									Toast.LENGTH_SHORT).show();
-						} else {
-							Toast.makeText(getActivity(),
-									"消息发送失败：code:" + code, Toast.LENGTH_SHORT)
-									.show();
-						}
-					}
-
-					@Override
-					public void onException(Throwable exception) {
-						Toast.makeText(getActivity(), "消息发送失败！",
-								Toast.LENGTH_SHORT).show();
-					}
-				});
-		onMsgSend(msg);
-		return true;
-	}
-
 	
 }

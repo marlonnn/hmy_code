@@ -33,6 +33,7 @@ import com.summer.logger.XLog;
  */
 public class ChatRoomMemberCache {
 	
+	    //roomId(聊天室id),account(用户云信账号)
 	private Map<String, Map<String, ChatRoomMember>> cache = new HashMap<String, Map<String, ChatRoomMember>>();
 	
 	private List<RoomMemberChangedObserver> roomMemberChangedObservers = new ArrayList<RoomMemberChangedObserver>();
@@ -47,6 +48,17 @@ public class ChatRoomMemberCache {
         return InstanceHolder.instance;
     }
     
+    public Map<String, ChatRoomMember> GetOnLineMember(String chatRoomId)
+    {
+    	if (cache.containsKey(chatRoomId))
+    	{
+    		return cache.get(chatRoomId);
+    	}
+    	else
+    	{
+    		return null;
+    	}
+    }
     /**
      * 根据聊天室id和用户id获取聊天室成员ChatRoomMember
      * @param roomId 聊天室id
@@ -75,6 +87,18 @@ public class ChatRoomMemberCache {
     
     public void saveMyMember(ChatRoomMember chatRoomMember) {
         saveMember(chatRoomMember);
+    }
+    
+    public void removeMyMember(ChatRoomMember member)
+    {
+    	if (member != null && !TextUtils.isEmpty(member.getRoomId()) && !TextUtils.isEmpty(member.getAccount()))
+    	{
+    		Map<String, ChatRoomMember> members = cache.get(member.getRoomId());
+    		if (members != null)
+    		{
+    			members.remove(member.getAccount());
+    		}
+    	}
     }
     
     private void saveMembers(List<ChatRoomMember> members) {
