@@ -314,9 +314,13 @@ public class MainActivity extends BaseActivity implements OnClickListener, Updat
     private void getAdvertiseInfoRequest()
     {
     	HashMap<String, String> entity = new HashMap<String, String>();
-    	entity.put("clientID", Config.User.getClientID());
-    	List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
-    	addToThreadPool(Config.activities, "get advertisement info", params);
+    	if(Config.User != null && Config.User.getClientID() != null)
+    	{
+        	entity.put("clientID", Config.User.getClientID());
+        	List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
+        	addToThreadPool(Config.activities, "get advertisement info", params);
+    	}
+
     }
     
 	/**

@@ -63,6 +63,7 @@
         android:smallScreens="true" />
 
     <application
+        android:largeHeap="true"
         android:name=".NimApplication"
         android:allowBackup="true"
         android:icon="@drawable/app_logo"

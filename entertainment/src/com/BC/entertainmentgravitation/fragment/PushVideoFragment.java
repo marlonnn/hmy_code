@@ -70,7 +70,7 @@ public class PushVideoFragment extends BaseFragment implements View.OnClickListe
     
     private Looper mCameraLooper;
     
-    private int mCameraID = CAMERA_POSITION_BACK;//默认查询的是后置摄像头
+    private int mCameraID = CAMERA_POSITION_FRONT;//默认查询的是后置摄像头
     
     private Camera mCamera;
     
@@ -228,16 +228,6 @@ public class PushVideoFragment extends BaseFragment implements View.OnClickListe
 		{
             mVideoView = (LiveSurfaceView) view.findViewById(R.id.videoview);
         }
-	}
-	
-	private void initializeLiveDelay()
-	{
-		 handler.postDelayed(new Runnable(){
-
-			@Override
-			public void run() {
-				initializeLive();
-			}}, 50);
 	}
 	
 	private void initializeLive()
@@ -450,11 +440,16 @@ public class PushVideoFragment extends BaseFragment implements View.OnClickListe
 		  
 	@Override
     public void onPause(){  
+
+        super.onPause(); 
+    }
+	
+	public void Pause()
+	{
         if(mLSMediaCapture != null) {
         	mLSMediaCapture.resumeVideoEncode();
         }
-        super.onPause(); 
-    }
+	}
       
     @Override
 	public void onResume(){   
@@ -464,7 +459,7 @@ public class PushVideoFragment extends BaseFragment implements View.OnClickListe
     @Override
 	public void onStart(){  
         super.onStart();  
-		initializeLiveDelay();
+		initializeLive();
     }  
       
     @Override
@@ -482,6 +477,11 @@ public class PushVideoFragment extends BaseFragment implements View.OnClickListe
 	public void onDestroy() {
 		super.onDestroy();
         
+
+	}
+	
+	public void Destory()
+	{
 		if(m_liveStreamingInit) {
 			m_liveStreamingInit = false;
 		}

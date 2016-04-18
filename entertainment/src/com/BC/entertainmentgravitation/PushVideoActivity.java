@@ -143,11 +143,13 @@ public class PushVideoActivity extends FragmentActivity implements ExitFragmentL
     @Override
 	protected void onPause() {
 		super.onPause();
+		fragment.Pause();
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
+
 	}
 
 	@Override
@@ -243,6 +245,7 @@ public class PushVideoActivity extends FragmentActivity implements ExitFragmentL
 		super.onDestroy();
 		registerObservers(false);
 		logoutChatRoom();
+		fragment.Destory();
 	}
 
 	private boolean checkVideoResolution()

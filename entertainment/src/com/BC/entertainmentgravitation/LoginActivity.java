@@ -5,6 +5,8 @@ import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.animation.AlphaAnimation;
@@ -83,7 +85,9 @@ import org.apache.http.NameValuePair;
         setContentView(R.layout.activity_login);
         initializeLoginView();
         initializeSignUpView();
-        initialView(true);
+//        initialView(true);
+        signUpView.setVisibility(View.GONE);
+        
     }
 
     /**
@@ -108,6 +112,24 @@ import org.apache.http.NameValuePair;
 		if (Config.getPassword() != null) {
 			loginPassword.setText(Config.getPassword());
 		}
+		
+		loginPhoneNumber.addTextChangedListener(new TextWatcher() {
+			
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				XLog.i("CharSequence: " + s);
+			}
+			
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+				
+			}
+			
+			@Override
+			public void afterTextChanged(Editable s) {
+			}
+		});
 		//login
         btnLogin.setOnClickListener(new OnClickListener() {
 
@@ -284,6 +306,7 @@ import org.apache.http.NameValuePair;
     private boolean checkData()
     {
 		boolean checked = false;
+		
 		checked = (!ValidateUtil.isEmpty(loginPhoneNumber, this.getString(R.string.loginName)) && !ValidateUtil
 				.isEmpty(loginPassword, this.getString(R.string.loginPassword)));
 		return checked;
@@ -295,15 +318,11 @@ import org.apache.http.NameValuePair;
     private void logingToServer()
     {
 		final String name = loginPhoneNumber.getText().toString();
-		Config.setPhoneNum(name);
-		Config.saveConfig();
+//		Config.setPhoneNum(name);
+//		Config.saveConfig();
 		final String psw = loginPassword.getText().toString();
 		List<NameValuePair> params = getLogingParams(name, psw, Config.POS + "");
 		addToThreadPool(Config.LOGIN_TYPE, "loginTask", params);
-		if (chBoxRememberPassword.isChecked()) {
-			Config.setPassword(psw);
-			Config.saveConfig();
-		}
     }
     
     @SuppressWarnings("unchecked")
@@ -425,6 +444,11 @@ import org.apache.http.NameValuePair;
     	switch (taskType)
     	{
     	case Config.LOGIN_TYPE:
+    		if (chBoxRememberPassword.isChecked()) {
+    			Config.setPhoneNum(loginPhoneNumber.getText().toString());
+    			Config.setPassword(loginPassword.getText().toString());
+    			Config.saveConfig();
+    		}
     		ToastUtil.show(this, this.getString(R.string.loginSuccess));
     		Entity<User> entity = gson.fromJson(jsonString, 
     				new TypeToken<Entity<User>>() {}.getType());

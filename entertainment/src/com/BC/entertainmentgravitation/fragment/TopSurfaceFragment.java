@@ -10,14 +10,19 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.BC.entertainment.chatroom.helper.ChatRoomMemberCache;
+import com.BC.entertainment.chatroom.helper.ChatRoomMemberCache.RoomMemberChangedObserver;
+import com.BC.entertainmentgravitation.MainActivity;
 import com.BC.entertainmentgravitation.R;
 import com.BC.entertainmentgravitation.entity.ChatMessage;
 import com.BC.entertainmentgravitation.entity.ChatRoom;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.netease.nim.uikit.cache.SimpleCallback;
 import com.netease.nim.uikit.common.ui.listview.ListViewUtil.ScrollToPositionListener;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.RequestCallback;
+import com.netease.nimlib.sdk.RequestCallbackWrapper;
 import com.netease.nimlib.sdk.ResponseCode;
 import com.netease.nimlib.sdk.chatroom.ChatRoomMessageBuilder;
 import com.netease.nimlib.sdk.chatroom.ChatRoomService;
@@ -26,16 +31,21 @@ import com.netease.nimlib.sdk.chatroom.constant.MemberQueryType;
 import com.netease.nimlib.sdk.chatroom.constant.MemberType;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomMember;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomMessage;
+import com.netease.nimlib.sdk.chatroom.model.ChatRoomNotificationAttachment;
+import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum;
+import com.netease.nimlib.sdk.msg.constant.NotificationType;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.summer.adapter.CommonAdapter;
 import com.summer.config.Config;
 import com.summer.logger.XLog;
+import com.summer.view.CircularImage;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -79,8 +89,17 @@ public class TopSurfaceFragment extends Fragment implements OnClickListener{
     private long updateTime = 0; // 非游客的updateTime
     private long enterTime = 0; // 游客的enterTime
     
+    private CircularImage headPortrait;
+    
     private Map<String, ChatRoomMember> memberCache = new ConcurrentHashMap<String, ChatRoomMember>();//聊天室在线人数
     
+    private List<RoomMemberChangedObserver> roomMemberChangedObservers = new ArrayList<RoomMemberChangedObserver>();
+    
+    //roomId(聊天室id),account(用户云信账号)
+	private Map<String, Map<String, ChatRoomMember>> cache = new HashMap<String, Map<String, ChatRoomMember>>();
+	
+	private Map<String, List<SimpleCallback<ChatRoomMember>>> frequencyLimitCache = new HashMap<String, List<SimpleCallback<ChatRoomMember>>>(); // 重复请求处理
+	
 	public TopSurfaceFragment(ChatRoom chatRoom)
 	{
 		this.chatRoom = chatRoom;
@@ -122,6 +141,8 @@ public class TopSurfaceFragment extends Fragment implements OnClickListener{
 		
 		messageListView = (ListView)view.findViewById(R.id.messageListView);
 		
+		headPortrait = (CircularImage) view.findViewById(R.id.portrait);
+		
 		imageViewChart.setOnClickListener(this);
 		
 		edtInput.setOnClickListener(this);
@@ -140,6 +161,11 @@ public class TopSurfaceFragment extends Fragment implements OnClickListener{
 					}
 		};
 		messageListView.setAdapter(adapter);
+		
+		Glide.with(getActivity())
+		.load(MainActivity.personalInformation.getHead_portrait())
+		.centerCrop().diskCacheStrategy(DiskCacheStrategy.ALL)
+		.placeholder(R.drawable.home_image).into(headPortrait);
 	}
 	
     // 刷新消息列表
@@ -307,28 +333,278 @@ public class TopSurfaceFragment extends Fragment implements OnClickListener{
 		return true;
     }
 	
+    public Map<String, ChatRoomMember> GetOnLineMember(String chatRoomId)
+    {
+    	if (cache.containsKey(chatRoomId))
+    	{
+    		return cache.get(chatRoomId);
+    	}
+    	else
+    	{
+    		return null;
+    	}
+    }
+    /**
+     * 根据聊天室id和用户id获取聊天室成员ChatRoomMember
+     * @param roomId 聊天室id
+     * @param account 用户云信账号
+     * @return
+     */
+    public ChatRoomMember getChatRoomMember(String roomId, String account) {
+        if (cache.containsKey(roomId)) {
+            return cache.get(roomId).get(account);
+        }
+
+        return null;
+    }
+    
+    public void clearRoomCache(String roomId) {
+        if (cache.containsKey(roomId)) {
+            cache.remove(roomId);
+        }
+    }
+    
+    public void clear() {
+        cache.clear();
+//        frequencyLimitCache.clear();
+        roomMemberChangedObservers.clear();
+    }
+    
+    public void saveMyMember(ChatRoomMember chatRoomMember) {
+        saveMember(chatRoomMember);
+    }
+    
+    public void removeMyMember(ChatRoomMember member)
+    {
+    	if (member != null && !TextUtils.isEmpty(member.getRoomId()) && !TextUtils.isEmpty(member.getAccount()))
+    	{
+    		Map<String, ChatRoomMember> members = cache.get(member.getRoomId());
+    		if (members != null)
+    		{
+    			members.remove(member.getAccount());
+    		}
+    	}
+    }
+    
+    private void saveMembers(List<ChatRoomMember> members) {
+        if (members == null || members.isEmpty()) {
+            return;
+        }
+
+        for (ChatRoomMember m : members) {
+            saveMember(m);
+        }
+    }
+    
+    private void saveMember(ChatRoomMember member)
+    {
+    	if (member != null && !TextUtils.isEmpty(member.getRoomId()) && !TextUtils.isEmpty(member.getAccount()))
+    	{
+    		Map<String, ChatRoomMember> members = cache.get(member.getRoomId());
+            if (members == null) {
+                members = new HashMap<String, ChatRoomMember>();
+                cache.put(member.getRoomId(), members);
+            }
+            members.put(member.getAccount(), member);
+    	}
+    }
 	
+    private void handleNotification(IMMessage message) {
+        if (message.getAttachment() == null) {
+            return;
+        }
+
+        String roomId = message.getSessionId();
+        ChatRoomNotificationAttachment attachment = (ChatRoomNotificationAttachment) message.getAttachment();
+        List<String> targets = attachment.getTargets();
+        if (targets != null) {
+            for (String target : targets) {
+                ChatRoomMember member = getChatRoomMember(roomId, target);
+                handleMemberChanged(attachment.getType(), member);
+                XLog.i("attachment.getType(): " + attachment.getType());
+                if(member != null)
+                {
+                	XLog.i("member: ");
+                	if(member.getAccount() != null)
+                	{
+                		XLog.i("member get account: " + member.getAccount());
+                	}
+                }
+                XLog.i("attachment.getType(): " + attachment.getType());
+            }
+        }
+    }
+    
+    private void handleMemberChanged(NotificationType type, ChatRoomMember member) {
+        if (member == null) {
+            return;
+        }
+
+        switch (type) {
+            case ChatRoomMemberIn:
+                for (RoomMemberChangedObserver o : roomMemberChangedObservers) {
+                    o.onRoomMemberIn(member);
+                }
+                XLog.i("ChatRoomMemberIn");
+                break;
+            case ChatRoomMemberExit:
+                for (RoomMemberChangedObserver o : roomMemberChangedObservers) {
+                    o.onRoomMemberExit(member);
+                }
+                XLog.i("ChatRoomMemberExit");
+                break;
+            case ChatRoomManagerAdd:
+                member.setMemberType(MemberType.ADMIN);
+                break;
+            case ChatRoomManagerRemove:
+                member.setMemberType(MemberType.NORMAL);
+                break;
+            case ChatRoomMemberBlackAdd:
+                member.setInBlackList(true);
+                break;
+            case ChatRoomMemberBlackRemove:
+                member.setInBlackList(false);
+                break;
+            case ChatRoomMemberMuteAdd:
+                member.setMuted(true);
+                break;
+            case ChatRoomMemberMuteRemove:
+                member.setMuted(false);
+                member.setMemberType(MemberType.GUEST);
+                break;
+            case ChatRoomCommonAdd:
+                member.setMemberType(MemberType.NORMAL);
+                break;
+            case ChatRoomCommonRemove:
+                member.setMemberType(MemberType.GUEST);
+                break;
+            default:
+                break;
+        }
+
+        saveMember(member);
+    }
+	
+    /**
+     * 从服务器获取聊天室成员资料（去重处理）（异步）
+     * @param roomId 聊天室id
+     * @param account 用户云信账号
+     * @param callback 回调函数
+     */
+    public void fetchMember(final String roomId, final String account, final SimpleCallback<ChatRoomMember> callback)
+    {
+        if (TextUtils.isEmpty(roomId) || TextUtils.isEmpty(account)) {
+            callback.onResult(false, null);
+            return;
+        }
+        // 频率控制
+        if (frequencyLimitCache.containsKey(account)) {
+            if (callback != null) {
+                frequencyLimitCache.get(account).add(callback);
+            }
+            return; // 已经在请求中，不要重复请求
+        }
+        else
+        {
+        	List<SimpleCallback<ChatRoomMember>> cbs = new ArrayList<SimpleCallback<ChatRoomMember>>();
+            if (callback != null) {
+                cbs.add(callback);
+            }
+            frequencyLimitCache.put(account, cbs);
+        }
+        // fetch
+        List<String> accounts = new ArrayList<>(1);
+        accounts.add(account);
+        NIMClient.getService(ChatRoomService.class).fetchRoomMembersByIds(roomId, accounts).
+        	setCallback(new RequestCallbackWrapper<List<ChatRoomMember>>(){
+
+				@Override
+				public void onResult(int code, List<ChatRoomMember> members, Throwable exception) {
+	                ChatRoomMember member = null;
+	                boolean hasCallback = !frequencyLimitCache.get(account).isEmpty();
+	                boolean success = code == ResponseCode.RES_SUCCESS && members != null && !members.isEmpty();
+	                
+	                // cache
+	                if (success) {
+	                    saveMembers(members);
+	                    member = members.get(0);
+	                } else {
+	                    XLog.i("fetch chat room member failed, code=" + code);
+	                }
+
+	                // callback
+	                if (hasCallback) {
+	                    List<SimpleCallback<ChatRoomMember>> cbs = frequencyLimitCache.get(account);
+	                    for (SimpleCallback<ChatRoomMember> cb : cbs) {
+	                        cb.onResult(success, member);
+	                    }
+	                }
+
+	                frequencyLimitCache.remove(account);
+				}});
+    }
+    
+    /**
+     * 从服务器获取聊天室成员资料（去重处理）（异步）
+     * @param roomId 聊天室ID
+     * @param memberQueryType 分页获取成员查询类型
+     * @param time 固定成员列表用updateTime, 游客列表用进入enterTime， 填0会使用当前服务器最新时间开始查询，即第一页，单位毫秒
+     * @param limit 条数限制
+     * @param callback
+     */
+	public void fetchRoomMembers(String roomId, MemberQueryType memberQueryType, long time, int limit, 
+			final SimpleCallback<List<ChatRoomMember>> callback) {
+		if (TextUtils.isEmpty(roomId)) {
+			callback.onResult(false, null);
+			return;
+		}
+
+		NIMClient.getService(ChatRoomService.class).fetchRoomMembers(roomId, memberQueryType, time, limit)
+				.setCallback(
+						new RequestCallbackWrapper<List<ChatRoomMember>>() {
+							@Override
+							public void onResult(int code,
+									List<ChatRoomMember> result,
+									Throwable exception) {
+								boolean success = code == ResponseCode.RES_SUCCESS;
+
+								if (success) {
+									saveMembers(result);
+								} else {
+									XLog.i("fetch members by page failed, code:"+ code);
+								}
+
+								if (callback != null) {
+									callback.onResult(success, result);
+								}
+							}
+						});
+	}
+    
     /**
      * *************************** 成员操作监听 ****************************
      */
     private void registerChatMemberObservers(boolean register) {
-        ChatRoomMemberCache.getInstance().registerRoomMemberChangedObserver(roomMemberChangedObserver, register);
-//        ChatRoomMemberCache.getInstance().registerObservers(register);
+    	registerRoomMemberChangedObserver(roomMemberChangedObserver, register);
     }
 
-    ChatRoomMemberCache.RoomMemberChangedObserver roomMemberChangedObserver = new ChatRoomMemberCache.RoomMemberChangedObserver() {
+    RoomMemberChangedObserver roomMemberChangedObserver = new RoomMemberChangedObserver() {
         @Override
         public void onRoomMemberIn(ChatRoomMember member) {
         	//some one room in
-        	ChatRoomMemberCache.getInstance().saveMyMember(member);
-        	memberCache = ChatRoomMemberCache.getInstance().GetOnLineMember(member.getRoomId());
+//        	ChatRoomMemberCache.getInstance().saveMyMember(member);
+//        	memberCache = ChatRoomMemberCache.getInstance().GetOnLineMember(member.getRoomId());
         	//data notified
+        	XLog.i("---on room member in-----" + member.getAccount());
+        	XLog.i("---on room member in size-----" + memberCache.size());
         }
 
         @Override
         public void onRoomMemberExit(ChatRoomMember member) {
         	//some one room out
-        	ChatRoomMemberCache.getInstance().removeMyMember(member);
+//        	ChatRoomMemberCache.getInstance().removeMyMember(member);
+        	XLog.i("---on room member exit-----" + member.getAccount());
+        	XLog.i("---on room member  size-----" + memberCache.size());
         }
     };
     
@@ -375,18 +651,33 @@ public class TopSurfaceFragment extends Fragment implements OnClickListener{
         public void onEvent(List<ChatRoomMessage> messages) {
             
             for (IMMessage message : messages) {
-            	if (message.getContent() == null || message.getContent().equals("") || message.getContent().isEmpty())
-            	{
-            		ChatMessage msg = new ChatMessage();
-            		XLog.i("nickname----->" + message.getRemoteExtension().get("nickname"));
-            		msg.setAccount(message.getFromAccount());
-            		msg.setContent(String.format("系统消息：欢迎%s进入聊天室", message.getFromAccount()));
-            		items.add(0, msg);
-            	}
-            	else
-            	{
+//            	if (message.getContent() == null || message.getContent().equals("") || message.getContent().isEmpty())
+//            	{
+//            		ChatMessage msg = new ChatMessage();
+//            		if(message != null && message.getRemoteExtension() != null && message.getRemoteExtension().get("nickname") != null)
+//            		{
+//            			XLog.i("nickname----->" + message.getRemoteExtension().get("nickname"));
+//            		}
+//            		
+//            		msg.setAccount(message.getFromAccount());
+//            		msg.setContent(String.format("系统消息：欢迎%s进入聊天室", message.getFromAccount()));
+//            		items.add(0, msg);
+//            	}
+//            	else
+//            	{
+//                	saveMessage(message, false);
+//            	}
+                if (messages == null || messages.isEmpty()) {
+                    return;
+                }
+                if (message.getMsgType() == MsgTypeEnum.notification) {
+                    handleNotification(message);
+                }
+                else if(message.getMsgType() == MsgTypeEnum.text)
+                {
                 	saveMessage(message, false);
-            	}
+                }
+                
 
             	adapter.notifyDataSetChanged();
             	XLog.i("message content: " + message.getContent());
@@ -399,4 +690,34 @@ public class TopSurfaceFragment extends Fragment implements OnClickListener{
         }
     };
 	
+    
+    /**
+     * ************************** 在线用户变化通知 ****************************
+     */
+
+    public interface RoomMemberChangedObserver {
+        void onRoomMemberIn(ChatRoomMember member);
+
+        void onRoomMemberExit(ChatRoomMember member);
+    }
+    
+    /**
+     * 注册在线用户变化通知观察者
+     * @param o
+     * @param register 注册和反注册标志位
+     */
+    public void registerRoomMemberChangedObserver(RoomMemberChangedObserver o, boolean register) {
+        if (o == null) {
+            return;
+        }
+
+        if (register) {
+            if (!roomMemberChangedObservers.contains(o)) {
+                roomMemberChangedObservers.add(o);
+                XLog.i("roomMemberChangedObservers.add");
+            }
+        } else {
+            roomMemberChangedObservers.remove(o);
+        }
+    }
 }
