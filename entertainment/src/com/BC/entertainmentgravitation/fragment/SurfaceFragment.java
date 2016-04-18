@@ -5,6 +5,7 @@ import com.BC.entertainmentgravitation.entity.ChatRoom;
 import com.BC.entertainmentgravitation.entity.StarLiveVideoInfo;
 import com.summer.logger.XLog;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -26,11 +27,33 @@ public class SurfaceFragment extends DialogFragment {
 	
 	private ChatRoom chatRoom;
 	
+	private ExitFragmentListener exitListener;
+	
 	public SurfaceFragment(ScrollListener listener, ChatRoom chatRoom)
 	{
 		this.listener = listener;
 		this.chatRoom = chatRoom;
 	}
+	
+	
+
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		if (getActivity() instanceof ExitFragmentListener)
+		{
+			this.exitListener = (ExitFragmentListener) getActivity();
+		}
+	}
+
+
+
+	@Override
+	public void onCreate(@Nullable Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+	}
+
+
 
 	@Override
 	@Nullable
@@ -77,6 +100,7 @@ public class SurfaceFragment extends DialogFragment {
             public void onBackPressed() {
                 XLog.e("onBackPressed");
                 super.onBackPressed();
+                exitListener.isExit(true);
             }
         };
         return dialog;

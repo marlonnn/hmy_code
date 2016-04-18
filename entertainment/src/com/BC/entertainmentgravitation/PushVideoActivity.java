@@ -5,15 +5,21 @@ import java.util.ArrayList;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.FragmentActivity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
+import com.BC.entertainment.chatroom.helper.ChatRoomMemberCache;
 import com.BC.entertainmentgravitation.entity.ChatRoom;
+import com.BC.entertainmentgravitation.fragment.ExitFragmentListener;
 import com.BC.entertainmentgravitation.fragment.PushVideoFragment;
 import com.BC.entertainmentgravitation.fragment.ScrollListener;
 import com.BC.entertainmentgravitation.fragment.SurfaceFragment;
+import com.netease.LSMediaCapture.lsMessageHandler;
+import com.netease.nim.uikit.common.ui.dialog.DialogMaker;
 import com.netease.nimlib.sdk.AbortableFuture;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
@@ -29,13 +35,15 @@ import com.netease.nimlib.sdk.chatroom.model.ChatRoomStatusChangeData;
 import com.netease.nimlib.sdk.chatroom.model.EnterChatRoomData;
 import com.netease.nimlib.sdk.chatroom.model.EnterChatRoomResultData;
 import com.summer.logger.XLog;
+import com.summer.utils.StringUtil;
+import com.summer.utils.ToastUtil;
 
 /**
  * 明星直播
  * @author zhongwen
  *
  */
-public class PushVideoActivity extends FragmentActivity {
+public class PushVideoActivity extends FragmentActivity implements ExitFragmentListener {
 	
 	private View rootView;
 	
@@ -48,6 +56,8 @@ public class PushVideoActivity extends FragmentActivity {
     private AbortableFuture<EnterChatRoomResultData> enterRequest;//聊天室
     
     private ChatRoomInfo roomInfo;
+    
+	private Handler handler;
 	
 	public interface TouchListener
 	{
@@ -105,46 +115,6 @@ public class PushVideoActivity extends FragmentActivity {
     	private int mApi;
     }
     
-    private void registerObservers(boolean register) {
-        NIMClient.getService(ChatRoomServiceObserver.class).observeOnlineStatus(onlineStatus, register);
-        NIMClient.getService(ChatRoomServiceObserver.class).observeKickOutEvent(kickOutObserver, register);
-    }
-    
-    @SuppressWarnings("serial")
-	Observer<ChatRoomStatusChangeData> onlineStatus = new Observer<ChatRoomStatusChangeData>() {
-        @Override
-        public void onEvent(ChatRoomStatusChangeData chatRoomStatusChangeData) {
-            if (chatRoomStatusChangeData.status == StatusCode.CONNECTING) {
-//                DialogMaker.updateLoadingMessage("连接中...");
-            } else if (chatRoomStatusChangeData.status == StatusCode.UNLOGIN) {
-//                Toast.makeText(ChatRoomActivity.this, R.string.nim_status_unlogin, Toast.LENGTH_SHORT).show();
-            } else if (chatRoomStatusChangeData.status == StatusCode.LOGINING) {
-//                DialogMaker.updateLoadingMessage("登录中...");
-            } else if (chatRoomStatusChangeData.status == StatusCode.LOGINED) {
-//                if (fragment != null) {
-//                    fragment.updateOnlineStatus(true);
-//                }
-            } else if (chatRoomStatusChangeData.status.wontAutoLogin()) {
-            } else if (chatRoomStatusChangeData.status == StatusCode.NET_BROKEN) {
-//                if (fragment != null) {
-//                    fragment.updateOnlineStatus(false);
-//                }
-//                Toast.makeText(ChatRoomActivity.this, R.string.net_broken, Toast.LENGTH_SHORT).show();
-            }
-            XLog.i("Chat Room Online Status:" + chatRoomStatusChangeData.status.name());
-//            LogUtil.i(TAG, "Chat Room Online Status:" + chatRoomStatusChangeData.status.name());
-        }
-    };
-
-    @SuppressWarnings("serial")
-	Observer<ChatRoomKickOutEvent> kickOutObserver = new Observer<ChatRoomKickOutEvent>() {
-        @Override
-        public void onEvent(ChatRoomKickOutEvent chatRoomKickOutEvent) {
-            Toast.makeText(PushVideoActivity.this, "被踢出聊天室，原因:" + chatRoomKickOutEvent.getReason(), Toast.LENGTH_SHORT).show();
-            clearChatRoom();
-        }
-    };
-    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -163,16 +133,50 @@ public class PushVideoActivity extends FragmentActivity {
         	chatRoom.setChatroomid(chatroomid);
         	chatRoom.setPushUrl(pushUrl);
         	chatRoom.setFilter(checkVideoResolution());
-            fragment = new PushVideoFragment(chatRoom);
         }
         enterChatRoom();
         registerObservers(true);
+        
+        handler = getHandler();
+    }
+    
+    @Override
+	protected void onPause() {
+		super.onPause();
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+	}
+
+	@Override
+	protected void onStart() {
+		super.onStart();
+	}
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+	}
+
+	@Override
+	protected void onRestart() {
+		super.onRestart();
+		fragment.StopVideoEncode();
+	}
+
+	private void initializePushVideoFragment()
+    {
+    	fragment = new PushVideoFragment(chatRoom);
+    	fragment.setHandler(handler);
         listener = fragment.CreateScrollListener();
         getSupportFragmentManager()
                 .beginTransaction()
                 .add(R.id.layout_video_play, fragment)
                 .commit();
         new SurfaceFragment(listener, chatRoom).show(getSupportFragmentManager(), "push video");
+    	
     }
     
     @SuppressWarnings("unchecked")
@@ -186,18 +190,24 @@ public class PushVideoActivity extends FragmentActivity {
 			public void onException(Throwable exception) {
 				 onLoginDone();
 				 XLog.i("enter chat room exception, e=" + exception.getMessage());
-	             Toast.makeText(PushVideoActivity.this, "enter chat room exception, e=" + exception.getMessage(), Toast.LENGTH_SHORT).show();
+	             Toast.makeText(PushVideoActivity.this, 
+	            		 StringUtil.getXmlResource(PushVideoActivity.this, R.string.push_video_nim_login_exception) + exception.getMessage(),
+	            		 Toast.LENGTH_SHORT).show();
+	             finish();
 			}
 
 			@Override
 			public void onFailed(int code) {
                 onLoginDone();
                 if (code == ResponseCode.RES_CHATROOM_BLACKLIST) {
-                    Toast.makeText(PushVideoActivity.this, "你已被拉入黑名单，不能再进入", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PushVideoActivity.this, 
+                    		StringUtil.getXmlResource(PushVideoActivity.this, R.string.push_video_nim_black_list), 
+                    		Toast.LENGTH_SHORT).show();
                 } else {
                 	XLog.i("enter chat room failed, code=" + code);
                     Toast.makeText(PushVideoActivity.this, "enter chat room failed, code=" + code, Toast.LENGTH_SHORT).show();
                 }
+                finish();
 			}
 
 			@Override
@@ -205,12 +215,15 @@ public class PushVideoActivity extends FragmentActivity {
 				roomInfo = result.getRoomInfo();
                 ChatRoomMember member = result.getMember();
                 member.setRoomId(roomInfo.getRoomId());
+                ChatRoomMemberCache.getInstance().saveMyMember(member);
+                initializePushVideoFragment();
                 XLog.i("enter chat room success" + roomInfo.getRoomId());
 			}});
     }
     
     private void onLoginDone() {
         enterRequest = null;
+        DialogMaker.dismissProgressDialog();
     }
     
     private void logoutChatRoom() {
@@ -219,8 +232,8 @@ public class PushVideoActivity extends FragmentActivity {
     }
     
     public void clearChatRoom() {
-//        ChatRoomMemberCache.getInstance().clearRoomCache(roomId);
-//        finish();
+        ChatRoomMemberCache.getInstance().clearRoomCache(chatRoom.getChatroomid());
+        finish();
     }
     
     
@@ -269,7 +282,139 @@ public class PushVideoActivity extends FragmentActivity {
 		super.onBackPressed();
 		finish();
 	}
+	
+	/************************** 注册 ***************************/
+    private void registerObservers(boolean register) {
+        NIMClient.getService(ChatRoomServiceObserver.class).observeOnlineStatus(onlineStatus, register);
+        NIMClient.getService(ChatRoomServiceObserver.class).observeKickOutEvent(kickOutObserver, register);
+    }
     
+    @SuppressWarnings("serial")
+	Observer<ChatRoomStatusChangeData> onlineStatus = new Observer<ChatRoomStatusChangeData>() {
+        @Override
+        public void onEvent(ChatRoomStatusChangeData chatRoomStatusChangeData) {
+            if (chatRoomStatusChangeData.status == StatusCode.CONNECTING) {
+                DialogMaker.updateLoadingMessage(StringUtil.getXmlResource(PushVideoActivity.this, R.string.push_video_nim_status_connecting));
+            } else if (chatRoomStatusChangeData.status == StatusCode.UNLOGIN) {
+                Toast.makeText(PushVideoActivity.this, R.string.push_video_nim_status_unlogin, Toast.LENGTH_SHORT).show();
+            } else if (chatRoomStatusChangeData.status == StatusCode.LOGINING) {
+                DialogMaker.updateLoadingMessage(StringUtil.getXmlResource(PushVideoActivity.this, R.string.push_video_nim_status_logining));
+            } else if (chatRoomStatusChangeData.status == StatusCode.LOGINED) {
+//                if (fragment != null) {
+//                    fragment.updateOnlineStatus(true);
+//                }
+            } else if (chatRoomStatusChangeData.status.wontAutoLogin()) {
+            } else if (chatRoomStatusChangeData.status == StatusCode.NET_BROKEN) {
+//                if (fragment != null) {
+//                    fragment.updateOnlineStatus(false);
+//                }
+                Toast.makeText(PushVideoActivity.this, R.string.push_video_net_broken, Toast.LENGTH_SHORT).show();
+            }
+            XLog.i("Chat Room Online Status:" + chatRoomStatusChangeData.status.name());
+        }
+    };
+
+    @SuppressWarnings("serial")
+	Observer<ChatRoomKickOutEvent> kickOutObserver = new Observer<ChatRoomKickOutEvent>() {
+        @Override
+        public void onEvent(ChatRoomKickOutEvent chatRoomKickOutEvent) {
+            Toast.makeText(PushVideoActivity.this, 
+            		StringUtil.getXmlResource(PushVideoActivity.this, R.string.push_video_kick_out) + chatRoomKickOutEvent.getReason(), 
+            		Toast.LENGTH_SHORT).show();
+            clearChatRoom();
+        }
+    };
+	
+    /**
+     * 处理直播过程中的异常
+     * @return
+     */
+    protected final Handler getHandler() {
+        if (handler == null) {
+            handler = new Handler(getMainLooper()){
+
+				@Override
+				public void handleMessage(Message msg) {
+//					super.handleMessage(msg);
+					switch(msg.what)
+					{
+				      case lsMessageHandler.MSG_INIT_LIVESTREAMING_OUTFILE_ERROR://初始化直播出错
+				      case lsMessageHandler.MSG_INIT_LIVESTREAMING_VIDEO_ERROR:	
+				      case lsMessageHandler.MSG_INIT_LIVESTREAMING_AUDIO_ERROR:
+				    	  toastAndExit("初始化直播出错");
+				    	  break;
+				      case lsMessageHandler.MSG_START_LIVESTREAMING_ERROR://开始直播出错
+				    	  toastAndExit("开始直播出错");
+				    	  break;
+				      case lsMessageHandler.MSG_STOP_LIVESTREAMING_ERROR://停止直播出错
+				    	  toastAndExit("停止直播出错");
+				    	  break;
+				      case lsMessageHandler.MSG_AUDIO_PROCESS_ERROR://音频处理出错
+				    	  toastAndExit("音频处理出错");
+				    	  break;
+				      case lsMessageHandler.MSG_VIDEO_PROCESS_ERROR://视频处理出错
+				    	  toastAndExit("视频处理出错");
+				    	  break;
+				      case lsMessageHandler.MSG_RTMP_URL_ERROR://断网消息
+				    	  toastAndExit("断网了，请检查网络连接");
+				    	  break;
+				      case lsMessageHandler.MSG_URL_NOT_AUTH://直播URL非法
+				    	  toastAndExit("直播地址URL非法，请检查");
+				    	  break;
+				      case lsMessageHandler.MSG_SEND_STATICS_LOG_ERROR://发送统计信息出错
+				    	  toastAndExit("发送统计信息出错");
+				    	  break;
+				      case lsMessageHandler.MSG_SEND_HEARTBEAT_LOG_ERROR://发送心跳信息出错
+				    	  toastAndExit("发送心跳信息出错");
+				    	  break;
+				      case lsMessageHandler.MSG_AUDIO_SAMPLE_RATE_NOT_SUPPORT_ERROR://音频采集参数不支持
+				    	  toastAndExit("音频采集参数不支持");
+				    	  break;
+				      case lsMessageHandler.MSG_AUDIO_PARAMETER_NOT_SUPPORT_BY_HARDWARE_ERROR://音频参数不支持
+				    	  toastAndExit("音频参数不支持");
+				    	  break;
+				      case lsMessageHandler.MSG_NEW_AUDIORECORD_INSTANCE_ERROR://音频实例初始化出错
+				    	  toastAndExit("音频实例初始化出错");
+				    	  break;
+				      case lsMessageHandler.MSG_AUDIO_START_RECORDING_ERROR://音频采集出错
+				    	  toastAndExit("音频采集出错");
+				    	  break;
+				      case lsMessageHandler.MSG_OTHER_AUDIO_PROCESS_ERROR://音频操作的其他错误
+				    	  toastAndExit("音频操作的其他错误");
+				    	  break;
+				      case lsMessageHandler.MSG_QOS_TO_STOP_LIVESTREAMING://网络QoS极差，码率档次降到最低
+				    	  break;
+				      case lsMessageHandler.MSG_HW_VIDEO_PACKET_ERROR://视频硬件编码出错
+				    	  toastAndExit("视频硬件编码出错");
+				    	  break;
+				      case lsMessageHandler.MSG_CAMERA_PREVIEW_SIZE_NOT_SUPPORT_ERROR://camera采集分辨率不支持
+				    	  toastAndExit("采集分辨率不支持");
+				    	  break;
+				      case lsMessageHandler.MSG_START_LIVESTREAMING_FINISHED://开始直播完成
+				    	  break;
+				      case lsMessageHandler.MSG_STOP_LIVESTREAMING_FINISHED://停止直播完成
+				    	  toastAndExit("停止直播完成");
+			              break;
+					}
+				}
+            	
+            };
+        }
+        return handler;
+    }
     
+    private void toastAndExit(String message)
+    {
+  	  ToastUtil.show(PushVideoActivity.this, message);
+  	  finish();
+    }
+
+	@Override
+	public void isExit(boolean exit) {
+		if (exit)
+		{
+			finish();
+		}
+	}
 }
 

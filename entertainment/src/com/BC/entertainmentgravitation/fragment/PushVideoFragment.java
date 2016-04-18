@@ -1,6 +1,5 @@
 package com.BC.entertainmentgravitation.fragment;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 
@@ -9,7 +8,9 @@ import android.hardware.Camera;
 import android.hardware.Camera.Parameters;
 import android.media.AudioFormat;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Looper;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
@@ -18,9 +19,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
-import com.BC.entertainment.config.Preferences;
 import com.BC.entertainment.view.LiveSurfaceView;
 import com.BC.entertainmentgravitation.R;
 import com.BC.entertainmentgravitation.entity.ChatRoom;
@@ -29,23 +28,6 @@ import com.netease.LSMediaCapture.lsMediaCapture.LSLiveStreamingParaCtx;
 import com.netease.LSMediaCapture.lsMediaCapture.Statistics;
 import com.netease.LSMediaCapture.lsMessageHandler;
 import com.netease.livestreamingFilter.view.CameraSurfaceView;
-import com.netease.nimlib.sdk.AbortableFuture;
-import com.netease.nimlib.sdk.NIMClient;
-import com.netease.nimlib.sdk.Observer;
-import com.netease.nimlib.sdk.RequestCallback;
-import com.netease.nimlib.sdk.ResponseCode;
-import com.netease.nimlib.sdk.StatusCode;
-import com.netease.nimlib.sdk.auth.AuthService;
-import com.netease.nimlib.sdk.auth.LoginInfo;
-import com.netease.nimlib.sdk.chatroom.ChatRoomService;
-import com.netease.nimlib.sdk.chatroom.ChatRoomServiceObserver;
-import com.netease.nimlib.sdk.chatroom.model.ChatRoomInfo;
-import com.netease.nimlib.sdk.chatroom.model.ChatRoomKickOutEvent;
-import com.netease.nimlib.sdk.chatroom.model.ChatRoomMember;
-import com.netease.nimlib.sdk.chatroom.model.ChatRoomStatusChangeData;
-import com.netease.nimlib.sdk.chatroom.model.EnterChatRoomData;
-import com.netease.nimlib.sdk.chatroom.model.EnterChatRoomResultData;
-import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.summer.fragment.BaseFragment;
 import com.summer.logger.XLog;
 
@@ -136,6 +118,20 @@ public class PushVideoFragment extends BaseFragment implements View.OnClickListe
 	
     private ScrollListener listener;
     
+    private Handler handler;
+
+	private long mLastAudioProcessErrorAlertTime = 0;
+
+	private long mLastVideoProcessErrorAlertTime = 0;
+    
+	public Handler getHandler() {
+		return handler;
+	}
+
+	public void setHandler(Handler handler) {
+		this.handler = handler;
+	}
+
 	public PushVideoFragment(ChatRoom chatRoom)
 	{
 		this.chatRoom = chatRoom;
@@ -182,7 +178,6 @@ public class PushVideoFragment extends BaseFragment implements View.OnClickListe
 		
     	cid = chatRoom.getCid();
     	mliveStreamingURL = chatRoom.getPushUrl();
-//    	mliveStreamingURL = "rtmp://p1.live.126.net/live/e054ebd2a4b949b68d6fc6ab484e126b?wsSecret=171f37be58efac70d65544b2c457c639&wsTime=1460725500";
     	chatroomid = chatRoom.getChatroomid();
     	mHardWareEncEnable = chatRoom.isFilter();
     	XLog.i("cid: " + cid);
@@ -233,6 +228,16 @@ public class PushVideoFragment extends BaseFragment implements View.OnClickListe
 		{
             mVideoView = (LiveSurfaceView) view.findViewById(R.id.videoview);
         }
+	}
+	
+	private void initializeLiveDelay()
+	{
+		 handler.postDelayed(new Runnable(){
+
+			@Override
+			public void run() {
+				initializeLive();
+			}}, 50);
 	}
 	
 	private void initializeLive()
@@ -445,17 +450,9 @@ public class PushVideoFragment extends BaseFragment implements View.OnClickListe
 		  
 	@Override
     public void onPause(){  
-//        if(mLSMediaCapture != null) {  		
-//    		if(!m_tryToStopLivestreaming)
-//    		{  			
-//        		//继续视频推流，推固定图像
-//        		mLSMediaCapture.resumeVideoEncode();
-//        		
-//        		//释放音频采集资源
-//        		//mLSMediaCapture.stopAudioRecord();
-//    		}
-//        }
-		mLSMediaCapture.resumeVideoEncode();
+        if(mLSMediaCapture != null) {
+        	mLSMediaCapture.resumeVideoEncode();
+        }
         super.onPause(); 
     }
       
@@ -467,14 +464,13 @@ public class PushVideoFragment extends BaseFragment implements View.OnClickListe
     @Override
 	public void onStart(){  
         super.onStart();  
-		initializeLive();
+		initializeLiveDelay();
     }  
       
     @Override
 	public void onStop(){  
         super.onStop();
     }
-    
     
 	
 	@Override
@@ -509,11 +505,14 @@ public class PushVideoFragment extends BaseFragment implements View.OnClickListe
 		}
 	}
 	
-//	@Override  
-//    public void onBackPressed() {  
-//        super.onBackPressed();  
-//        m_tryToStopLivestreaming = true;      
-//    }  
+	//程序切回前台后恢复视频编码  需要在activity onRestart()方法调用
+	public void StopVideoEncode()
+	{
+        if(mLSMediaCapture != null) {
+        	//关闭推流固定图像
+        	mLSMediaCapture.stopVideoEncode();
+        }  
+	}
 	
 	@Override
 	public void RequestSuccessful(String jsonString, int taskType) {
@@ -532,206 +531,124 @@ public class PushVideoFragment extends BaseFragment implements View.OnClickListe
 		      case MSG_INIT_LIVESTREAMING_OUTFILE_ERROR://初始化直播出错
 		      case MSG_INIT_LIVESTREAMING_VIDEO_ERROR:	
 		      case MSG_INIT_LIVESTREAMING_AUDIO_ERROR:
-		      {
 		    	  if(m_liveStreamingInit)
 		    	  {
-//	      		      Bundle bundle = new Bundle();
-//	                  bundle.putString("alert", "MSG_INIT_LIVESTREAMING_ERROR");
-//	          	      Intent intent = new Intent(MediaPreviewActivity.this, AlertService.class);
-//	          	      intent.putExtras(bundle);
-//	      		      startService(intent);
-//	      		      mAlertServiceOn = true;
+		    		  sendMessage(MSG_INIT_LIVESTREAMING_OUTFILE_ERROR);
 	      		      XLog.i("MSG_INIT_LIVESTREAMING_AUDIO_ERROR");
 		    	  }
 		    	  break;
-		      }
 		      case MSG_START_LIVESTREAMING_ERROR://开始直播出错
-		      {
+		    	  sendMessage(MSG_START_LIVESTREAMING_ERROR);
 		    	  XLog.i("MSG_START_LIVESTREAMING_ERROR");
 		    	  break;
-		      }
 		      case MSG_STOP_LIVESTREAMING_ERROR://停止直播出错
-		      {
 		    	  if(m_liveStreamingOn)
 		    	  {
-//	      		      Bundle bundle = new Bundle();
-//	                  bundle.putString("alert", "MSG_STOP_LIVESTREAMING_ERROR");
-//	          	      Intent intent = new Intent(MediaPreviewActivity.this, AlertService.class);
-//	          	      intent.putExtras(bundle);
-//	      		      startService(intent);
-//	      		      mAlertServiceOn = true;
+		    		  sendMessage(MSG_STOP_LIVESTREAMING_ERROR);
 	      		    XLog.i("MSG_STOP_LIVESTREAMING_ERROR");
 		    	  }
 		    	  break;
-		      }
 		      case MSG_AUDIO_PROCESS_ERROR://音频处理出错
-		      {
-//		    	  if(m_liveStreamingOn && System.currentTimeMillis() - mLastAudioProcessErrorAlertTime >= 10000)
-//		    	  {
-//	      		      Bundle bundle = new Bundle();
-//	                  bundle.putString("alert", "MSG_AUDIO_PROCESS_ERROR");
-//	          	      Intent intent = new Intent(MediaPreviewActivity.this, AlertService.class);
-//	          	      intent.putExtras(bundle);
-//	      		      startService(intent);
-//	      		      mAlertServiceOn = true;
-//	      		      mLastAudioProcessErrorAlertTime = System.currentTimeMillis();
-//		    	  }
+		    	  if(m_liveStreamingOn && System.currentTimeMillis() - mLastAudioProcessErrorAlertTime  >= 10000)
+		    	  {
+	      		      mLastAudioProcessErrorAlertTime = System.currentTimeMillis();
+	      		      sendMessage(MSG_AUDIO_PROCESS_ERROR);
+		    	  }
+
 		    	  XLog.i("MSG_AUDIO_PROCESS_ERROR");
+		    	  
 		    	  break;
-		      }
 		      case MSG_VIDEO_PROCESS_ERROR://视频处理出错
 		      {
-//		    	  if(m_liveStreamingOn && System.currentTimeMillis() - mLastVideoProcessErrorAlertTime >= 10000)
-//		    	  {
-//	      		      Bundle bundle = new Bundle();
-//	                  bundle.putString("alert", "MSG_VIDEO_PROCESS_ERROR");
-//	          	      Intent intent = new Intent(MediaPreviewActivity.this, AlertService.class);
-//	          	      intent.putExtras(bundle);
-//	      		      startService(intent);
-//	      		      mAlertServiceOn = true;
-//	      		      mLastVideoProcessErrorAlertTime = System.currentTimeMillis();
-//		    	  }
+		    	  if(m_liveStreamingOn && System.currentTimeMillis() - mLastVideoProcessErrorAlertTime  >= 10000)
+		    	  {
+	      		      mLastVideoProcessErrorAlertTime = System.currentTimeMillis();
+	      		      sendMessage(MSG_VIDEO_PROCESS_ERROR);
+		    	  }
 		    	  XLog.i("MSG_VIDEO_PROCESS_ERROR");
 		    	  break;
 		      }
 		      case MSG_RTMP_URL_ERROR://断网消息
-		      {
-		    	  //Log.i(TAG, "test: in handleMessage, MSG_RTMP_URL_ERROR");
+		    	  if (mLSMediaCapture != null)
+		    	  {
+			    	  mLSMediaCapture.stopLiveStreaming();
+			    	  sendMessage(MSG_RTMP_URL_ERROR);
+		    	  }
 		    	  XLog.i("MSG_RTMP_URL_ERROR");
 		    	  break;
-		      }
 		      case MSG_URL_NOT_AUTH://直播URL非法
-		      {
-//		    	  if(m_liveStreamingInit)
-//		    	  {
-//	      		      Bundle bundle = new Bundle();
-//	                  bundle.putString("alert", "MSG_URL_NOT_AUTH");
-//	          	      Intent intent = new Intent(MediaPreviewActivity.this, AlertService.class);
-//	          	      intent.putExtras(bundle);
-//	      		      startService(intent);
-//	      		      mAlertServiceOn = true;
-//		    	  }
+		    	  if(m_liveStreamingInit)
+		    	  {
+			    	  sendMessage(MSG_URL_NOT_AUTH);
+		    	  }
 		    	  XLog.i("MSG_URL_NOT_AUTH");
 		    	  break;
-		      }
 		      case MSG_SEND_STATICS_LOG_ERROR://发送统计信息出错
-		      {
-		    	  //Log.i(TAG, "test: in handleMessage, MSG_SEND_STATICS_LOG_ERROR");
+		    	  sendMessage(MSG_SEND_STATICS_LOG_ERROR);
 		    	  XLog.i("MSG_SEND_STATICS_LOG_ERROR");
 		    	  break;
-		      }
 		      case MSG_SEND_HEARTBEAT_LOG_ERROR://发送心跳信息出错
-		      {
-		    	  //Log.i(TAG, "test: in handleMessage, MSG_SEND_HEARTBEAT_LOG_ERROR");
+		    	  sendMessage(MSG_SEND_HEARTBEAT_LOG_ERROR);
 		    	  XLog.i("MSG_SEND_HEARTBEAT_LOG_ERROR");
 		    	  break;
-		      }
 		      case MSG_AUDIO_SAMPLE_RATE_NOT_SUPPORT_ERROR://音频采集参数不支持
-		      {
+		    	  sendMessage(MSG_AUDIO_SAMPLE_RATE_NOT_SUPPORT_ERROR);
 		    	  //Log.i(TAG, "test: in handleMessage, MSG_AUDIO_SAMPLE_RATE_NOT_SUPPORT_ERROR");
 		    	  XLog.i("MSG_AUDIO_SAMPLE_RATE_NOT_SUPPORT_ERROR");
 		    	  break;
-		      }
 		      case MSG_AUDIO_PARAMETER_NOT_SUPPORT_BY_HARDWARE_ERROR://音频参数不支持
-		      {
+		    	  sendMessage(MSG_AUDIO_PARAMETER_NOT_SUPPORT_BY_HARDWARE_ERROR);
 		    	  XLog.i("MSG_AUDIO_PARAMETER_NOT_SUPPORT_BY_HARDWARE_ERROR");
 		    	  break;
-		      }
 		      case MSG_NEW_AUDIORECORD_INSTANCE_ERROR://音频实例初始化出错
-		      {
+		    	  sendMessage(MSG_NEW_AUDIORECORD_INSTANCE_ERROR);
 		    	  XLog.i("MSG_NEW_AUDIORECORD_INSTANCE_ERROR");
 		    	  break;
-		      }
 		      case MSG_AUDIO_START_RECORDING_ERROR://音频采集出错
-		      {
+		    	  sendMessage(MSG_AUDIO_START_RECORDING_ERROR);
 		    	  XLog.i("MSG_AUDIO_START_RECORDING_ERROR");
 		    	  break;
-		      }
 		      case MSG_OTHER_AUDIO_PROCESS_ERROR://音频操作的其他错误
-		      {
+		    	  sendMessage(MSG_OTHER_AUDIO_PROCESS_ERROR);
 		    	  XLog.i("MSG_OTHER_AUDIO_PROCESS_ERROR");
 		    	  break;
-		      }
 		      case MSG_QOS_TO_STOP_LIVESTREAMING://网络QoS极差，码率档次降到最低
-		      {
 		    	  XLog.i("MSG_QOS_TO_STOP_LIVESTREAMING");
 //		    	  m_tryToStopLivestreaming = true;
 //		    	  m_QoSToStopLivestreaming = true;
 //		  		  mLSMediaCapture.stopLiveStreaming();
 		    	  break;
-		      }
-		      case MSG_HW_VIDEO_PACKET_ERROR:
-		      {
+		      case MSG_HW_VIDEO_PACKET_ERROR://视频硬件编码出错
 		    	  if(m_liveStreamingOn)
 		    	  {
-//		    	      Bundle bundle = new Bundle();
-//	                  bundle.putString("alert", "MSG_HW_VIDEO_PACKET_ERROR");
-//	          	      Intent intent = new Intent(MediaPreviewActivity.this, AlertService.class);
-//	          	      intent.putExtras(bundle);
-//	      		      startService(intent);
-//	      		      mAlertServiceOn = true;
-	      		    XLog.i("MSG_HW_VIDEO_PACKET_ERROR");
+		    		  sendMessage(MSG_HW_VIDEO_PACKET_ERROR);
+		    		  XLog.i("MSG_HW_VIDEO_PACKET_ERROR");
 		    	  }
 		    	  break;
-		      }
-		      case MSG_WATERMARK_INIT_ERROR://视频水印操作初始化出错
-		      {
-		    	  XLog.i("MSG_WATERMARK_INIT_ERROR");
-		    	  break;
-		      }
-		      case MSG_WATERMARK_PIC_OUT_OF_VIDEO_ERROR://视频水印图像超出原始视频出错
-		      {
-		    	  XLog.i("MSG_WATERMARK_PIC_OUT_OF_VIDEO_ERROR");
-		    	  break;
-		      }
-		      case MSG_WATERMARK_PARA_ERROR://视频水印参数设置出错
-		      {
-		    	  XLog.i("MSG_WATERMARK_PARA_ERROR");
-		    	  break;
-		      }
 		      case MSG_CAMERA_PREVIEW_SIZE_NOT_SUPPORT_ERROR://camera采集分辨率不支持
-		      {
+		    	  sendMessage(MSG_CAMERA_PREVIEW_SIZE_NOT_SUPPORT_ERROR);
 		    	  XLog.i("MSG_CAMERA_PREVIEW_SIZE_NOT_SUPPORT_ERROR");
 		    	  break;
-		      }
 		      case MSG_START_PREVIEW_FINISHED://camera采集预览完成
-		      {
 		    	  XLog.i("MSG_START_PREVIEW_FINISHED");
 		    	  startAV();
 		    	  break;
-		      }
 		      case MSG_START_LIVESTREAMING_FINISHED://开始直播完成
-		      {
 		    	  XLog.i("MSG_START_LIVESTREAMING_FINISHED");
 		    	  break;
-		      }
 		      case MSG_STOP_LIVESTREAMING_FINISHED://停止直播完成
-		      {
 		    	  XLog.i("MSG_STOP_LIVESTREAMING_FINISHED");
-//		          {
-//		        	  mIntentLiveStreamingStopFinished.putExtra("LiveStreamingStopFinished", 1);  
-//	                  sendBroadcast(mIntentLiveStreamingStopFinished); 
-//		          }
-		          
+		    	  sendMessage(MSG_STOP_LIVESTREAMING_FINISHED);
 	              break;
-		      }
 		      case MSG_STOP_VIDEO_CAPTURE_FINISHED:
-		      {
 		    	  XLog.i("MSG_STOP_VIDEO_CAPTURE_FINISHED");
 		    	  if(mLSMediaCapture != null)
 		    	  {
 		    	      //继续视频推流，推最后一帧图像
 		    	      mLSMediaCapture.resumeVideoEncode();
 		    	  }
-//		    	  if(!m_tryToStopLivestreaming && mLSMediaCapture != null)
-//		    	  {
-//		    	      //继续视频推流，推最后一帧图像
-//		    	      mLSMediaCapture.resumeVideoEncode();
-//		    	  }
 		    	  break;
-		      }
 		      case MSG_STOP_RESUME_VIDEO_CAPTURE_FINISHED:
-		      {
 		    	  XLog.i("MSG_STOP_RESUME_VIDEO_CAPTURE_FINISHED");
 		    	  //开启视频preview
 		    	  if(mLSMediaCapture != null)
@@ -742,55 +659,38 @@ public class PushVideoFragment extends BaseFragment implements View.OnClickListe
 		              mLSMediaCapture.startVideoLiveStream();
 		    	  }
 		    	  break;
-		      }
 		      case MSG_STOP_AUDIO_CAPTURE_FINISHED:
-		      {
 		    	  XLog.i("MSG_STOP_AUDIO_CAPTURE_FINISHED");
-//		    	  if(!m_tryToStopLivestreaming && mLSMediaCapture != null)
-//		    	  {
-//		    	      //继续音频推流，推静音帧
-//		    	      mLSMediaCapture.resumeAudioEncode();
-//		    	  }
+		    	  if( mLSMediaCapture != null)
+		    	  {
+		    	      //继续音频推流，推静音帧
+		    	      mLSMediaCapture.resumeAudioEncode();
+		    	  }
 		    	  break;
-		      }
 		      case MSG_STOP_RESUME_AUDIO_CAPTURE_FINISHED:
-		      {
 		    	  XLog.i("MSG_STOP_RESUME_AUDIO_CAPTURE_FINISHED");
 		    	  //开启音频推流，推正常帧
 		          mLSMediaCapture.startAudioLiveStream();
 		    	  break;
-		      }
 		      case MSG_SWITCH_CAMERA_FINISHED://切换摄像头完成
-		      {
 		    	  XLog.i("MSG_SWITCH_CAMERA_FINISHED");
 		    	  int cameraId = (Integer) object;//切换之后的camera id
 		    	  break;
-		      }
 		      case MSG_SEND_STATICS_LOG_FINISHED://发送统计信息完成
-		      {
 		    	  XLog.i("MSG_SEND_STATICS_LOG_FINISHED");
 		    	  break;
-		      }
 		      case MSG_SERVER_COMMAND_STOP_LIVESTREAMING:
-		      {
 		    	  XLog.i("MSG_SERVER_COMMAND_STOP_LIVESTREAMING");
 		    	  break;
-		      }
 		      case MSG_GET_STATICS_INFO:
-		      {
 		    	  XLog.i("MSG_GET_STATICS_INFO");
-//				  Message message = new Message();
-//				  mStatistics = (Statistics) object;
-//				    			      			  
-//	              Bundle bundle = new Bundle();  
-//	              bundle.putInt("FR", mStatistics.videoSendFrameRate);  
-//	              bundle.putInt("VBR", mStatistics.videoSendBitRate);  
-//	              bundle.putInt("ABR", mStatistics.audioSendBitRate);   
-//	              bundle.putInt("TBR", mStatistics.totalRealSendBitRate);   
-//	              message.setData(bundle);  
-//	                  
-//	              mHandler.sendMessage(message);
-		      }
 		  }
-	}	
+	}
+	
+	private void sendMessage(int what)
+	{
+		Message msg = new Message();
+		msg.what = what;
+		handler.sendMessageDelayed(msg, 50);
+	}
 }
