@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import android.text.TextUtils;
 
 import com.netease.nim.uikit.cache.SimpleCallback;
-import com.netease.nim.uikit.common.util.log.LogUtil;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.RequestCallbackWrapper;
@@ -23,6 +23,7 @@ import com.netease.nimlib.sdk.chatroom.model.ChatRoomNotificationAttachment;
 import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum;
 import com.netease.nimlib.sdk.msg.constant.NotificationType;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
+import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
 import com.summer.logger.XLog;
 
 
@@ -32,6 +33,9 @@ import com.summer.logger.XLog;
  *
  */
 public class ChatRoomMemberCache {
+	
+	//成员信息
+	private Map<String, NimUserInfo> account2UserMap = new ConcurrentHashMap<>();
 	
 	    //roomId(聊天室id),account(用户云信账号)
 	private Map<String, Map<String, ChatRoomMember>> cache = new HashMap<String, Map<String, ChatRoomMember>>();
@@ -228,22 +232,30 @@ public class ChatRoomMemberCache {
         NIMClient.getService(ChatRoomServiceObserver.class).observeReceiveMessage(incomingChatRoomMsg, register);
     }
 
-    private Observer<List<ChatRoomMessage>> incomingChatRoomMsg = new Observer<List<ChatRoomMessage>>() {
+    @SuppressWarnings("serial")
+	private Observer<List<ChatRoomMessage>> incomingChatRoomMsg = new Observer<List<ChatRoomMessage>>() {
         @Override
         public void onEvent(List<ChatRoomMessage> messages) {
             if (messages == null || messages.isEmpty()) {
                 return;
             }
 
-            for (IMMessage msg : messages) {
-                if (msg == null) {
+            for (IMMessage message : messages) {
+                if (message == null) {
                     XLog.i("receive chat room message null");
                     continue;
                 }
 
-                if (msg.getMsgType() == MsgTypeEnum.notification) {
-                    handleNotification(msg);
+                if (message.getMsgType() == MsgTypeEnum.notification) {
+                    handleNotification(message);
                 }
+                
+            	XLog.i("message content: " + message.getContent());
+            	XLog.i("message uid: " + message.getUuid());
+            	XLog.i("message account: " + message.getFromAccount());
+            	XLog.i("messsage session id" + message.getSessionId());
+            	XLog.i("messsage msg type" + message.getMsgType());
+            	XLog.i("messsage session type" + message.getSessionType());
             }
         }
     };
@@ -260,6 +272,17 @@ public class ChatRoomMemberCache {
             for (String target : targets) {
                 ChatRoomMember member = getChatRoomMember(roomId, target);
                 handleMemberChanged(attachment.getType(), member);
+                
+                XLog.i("attachment.getType(): " + attachment.getType());
+                if(member != null)
+                {
+                	XLog.i("member: ");
+                	if(member.getAccount() != null)
+                	{
+                		XLog.i("member get account: " + member.getAccount());
+                	}
+                }
+                XLog.i("attachment.getType(): " + attachment.getType());
             }
         }
     }

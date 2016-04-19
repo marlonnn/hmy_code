@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <LinearLayout
+<!--     <LinearLayout
         android:id="@+id/controlsLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -43,13 +43,12 @@
             android:text="滤镜切换"
             android:gravity="center_horizontal"/>    
  
-    </LinearLayout>
+    </LinearLayout> -->
             
         
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/controlsLayout"
         android:background="#000000" >
 
         <com.netease.livestreamingFilter.view.CameraSurfaceView

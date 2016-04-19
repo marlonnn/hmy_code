@@ -211,14 +211,14 @@ public class PushVideoFragment extends BaseFragment implements View.OnClickListe
 	{
 		rootView = view.findViewById(R.id.layout_root);
 		
-        //切换前后摄像头按钮初始化
-        switchBtn = (ImageButton)view.findViewById(R.id.switchBtn);	      
-        switchBtn.setOnClickListener(new OnClickListener() {
- 			@Override
- 			public void onClick(View v) {
- 				switchCamera();
- 			}
- 		});
+//        //切换前后摄像头按钮初始化
+//        switchBtn = (ImageButton)view.findViewById(R.id.switchBtn);	      
+//        switchBtn.setOnClickListener(new OnClickListener() {
+// 			@Override
+// 			public void onClick(View v) {
+// 				switchCamera();
+// 			}
+// 		});
         
 		if(mHardWareEncEnable)
 		{
