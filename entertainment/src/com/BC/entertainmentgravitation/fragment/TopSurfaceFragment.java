@@ -7,13 +7,17 @@ import java.util.List;
 import java.util.Map;
 
 import com.BC.entertainment.chatroom.helper.ChatRoomMemberCache;
+import com.BC.entertainment.chatroom.helper.ChatRoomNotificationHelper;
+import com.BC.entertainment.chatroom.helper.MessageType;
 import com.BC.entertainment.chatroom.helper.ChatRoomMemberCache.RoomMemberChangedObserver;
 import com.BC.entertainmentgravitation.MainActivity;
+import com.BC.entertainmentgravitation.NotifyDataSetChanged;
 import com.BC.entertainmentgravitation.R;
 import com.BC.entertainmentgravitation.entity.ChatMessage;
 import com.BC.entertainmentgravitation.entity.ChatRoom;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.netease.nim.uikit.cache.NimUserInfoCache;
 import com.netease.nim.uikit.cache.SimpleCallback;
 import com.netease.nim.uikit.common.ui.listview.ListViewUtil.ScrollToPositionListener;
 import com.netease.nimlib.sdk.NIMClient;
@@ -25,6 +29,8 @@ import com.netease.nimlib.sdk.chatroom.ChatRoomService;
 import com.netease.nimlib.sdk.chatroom.ChatRoomServiceObserver;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomMember;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomMessage;
+import com.netease.nimlib.sdk.chatroom.model.ChatRoomNotificationAttachment;
+import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.summer.adapter.CommonAdapter;
 import com.summer.config.Config;
@@ -79,12 +85,28 @@ public class TopSurfaceFragment extends Fragment implements OnClickListener{
 		this.chatRoom = chatRoom;
 		this.uiHandler = new Handler();
 		items = new LinkedList<ChatMessage>();
-		register(true);
+	}
+	
+	private void addMessage(ChatMessage chatMessage, boolean addFirst)
+	{
+		if (chatMessage != null)
+		{
+			if (items.size() >= MESSAGE_CAPACITY)
+			{
+				items.poll();
+			}
+	        if (addFirst) {
+	        	items.add(0, chatMessage);
+	        } else {
+	        	items.add(chatMessage);
+	        }
+		}
 	}
 
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		register(true);
 	}
 	
 	@SuppressLint("InflateParams") @Override
@@ -128,8 +150,18 @@ public class TopSurfaceFragment extends Fragment implements OnClickListener{
 					public void convert(
 							ViewHolder holder,
 							ChatMessage item) {
-						holder.setText(R.id.txtName, item.getAccount() + ": ");
-						holder.setText(R.id.txtContent, item.getContent());
+//						holder.setImageResource(R.id.imageViewMessage, drawableId)
+						if (item.getType() == MessageType.notificatijon)
+						{
+							holder.setText(R.id.txtName, "系统消息：");
+							holder.setText(R.id.txtContent, item.getContent());
+						}
+						else
+						{
+							holder.setText(R.id.txtName, item.getNickName() + ": ");
+							holder.setText(R.id.txtContent, item.getContent());
+						}
+
 					}
 		};
 		messageListView.setAdapter(adapter);
@@ -159,32 +191,6 @@ public class TopSurfaceFragment extends Fragment implements OnClickListener{
         }, 200);
     }
 
-    public void saveMessage(final IMMessage message, boolean addFirst) {
-        if (message == null) {
-            return;
-        }
-
-        if (items.size() >= MESSAGE_CAPACITY) {
-            items.poll();
-        }
-
-        if (addFirst) {
-        	
-            items.add(0, createChatMessage(message));
-        } else {
-            items.add(createChatMessage(message));
-        }
-    }
-    
-    private ChatMessage createChatMessage(IMMessage message)
-    {
-    	ChatMessage chatMessage = new ChatMessage();
-    	chatMessage.setAccount(message.getFromAccount());
-    	chatMessage.setChatRoomId(message.getSessionId());
-    	chatMessage.setContent(message.getContent());
-    	return chatMessage;
-    }
-
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
@@ -194,7 +200,7 @@ public class TopSurfaceFragment extends Fragment implements OnClickListener{
     // 发送消息后，更新本地消息列表
     public void onMsgSend(IMMessage message) {
         // add to listView and refresh
-        saveMessage(message, false);
+//        saveMessage(message, false);
         List<IMMessage> addedListItems = new ArrayList<IMMessage>(1);
         addedListItems.add(message);
         
@@ -259,21 +265,6 @@ public class TopSurfaceFragment extends Fragment implements OnClickListener{
 		
         ChatRoomMessage message = (ChatRoomMessage) msg;
 
-        Map<String, Object> ext = new HashMap<>();
-        ChatRoomMember chatRoomMember = ChatRoomMemberCache.getInstance().getChatRoomMember(chatRoom.getChatroomid(), Config.User.getUserName());
-        if (chatRoomMember != null && chatRoomMember.getMemberType() != null) {
-//            ext.put("type", chatRoomMember.getMemberType().getValue());
-            ext.put("nickname", Config.User.getNickName());
-            message.setRemoteExtension(ext);
-        }
-		
-//		if (type != null)
-//		{
-//			Map<String, Object> ext = new HashMap<String, Object>();
-//			ext.put("type", type);
-//			message.setRemoteExtension(ext);
-//		}
-
 		NIMClient.getService(ChatRoomService.class).sendMessage(message, false)
 				.setCallback(new RequestCallback<Void>() {
 					@Override
@@ -315,24 +306,120 @@ public class TopSurfaceFragment extends Fragment implements OnClickListener{
 				if (result != null && result.getNick() != null)
 				    XLog.i("fetch member success: " + result.getNick());
 			}});
+    	registerRecObservers(register);
     	registerObservers(register);
-    	ChatRoomMemberCache.getInstance().registerObservers(register);
-    	ChatRoomMemberCache.getInstance().registerRoomMemberChangedObserver(roomMemberChangedObserver, register);
     }
 
-    RoomMemberChangedObserver roomMemberChangedObserver = new RoomMemberChangedObserver() {
-        @Override
-        public void onRoomMemberIn(ChatRoomMember member) {
-        	//data notified
-        	XLog.i("---on room member in-----" + member.getAccount());
-        }
+	private void createChatMessage(IMMessage message, String nickname)
+	{
+		XLog.i("createChatMessage text" );
+		if (message == null || nickname == null)
+		{
+			return;
+		}
+		ChatMessage chatMessage = new ChatMessage();
+		chatMessage.setType(MessageType.text);
+		chatMessage.setAccount(message.getFromAccount());
+		chatMessage.setChatRoomId(message.getSessionId());
+		chatMessage.setContent(message.getContent());
+		chatMessage.setNickName(nickname);
+		
+    	addMessage(chatMessage, false);
+		adapter.notifyDataSetChanged();
+	}
+	
+	private void createChatMessage(ChatRoomMember chatMember, String content)
+	{
+		XLog.i("createChatMessage notification" );
+		if (chatMember == null || content == null)
+		{
+			return;
+		}
+		ChatMessage chatMessage = new ChatMessage();
+		chatMessage.setType(MessageType.notificatijon);
+		chatMessage.setAccount(chatMember.getAccount());
+		chatMessage.setChatRoomId(chatMember.getRoomId());
+		chatMessage.setContent(content);
+		chatMessage.setNickName(chatMember.getNick());
+    	addMessage(chatMessage, false);
+		adapter.notifyDataSetChanged();
+	}
+    
+    public void registerRecObservers(boolean register) {
+        NIMClient.getService(ChatRoomServiceObserver.class).observeReceiveMessage(incomingChatRoomMsg, register);
+    }
 
+    @SuppressWarnings("serial")
+	private Observer<List<ChatRoomMessage>> incomingChatRoomMsg = new Observer<List<ChatRoomMessage>>() {
         @Override
-        public void onRoomMemberExit(ChatRoomMember member) {
-        	//some one room out
-        	XLog.i("---on room member exit-----" + member.getAccount());
+        public void onEvent(List<ChatRoomMessage> messages) {
+        	XLog.i("incomingChatRoomMsg");
+            if (messages == null || messages.isEmpty()) {
+                return;
+            }
+
+            for (IMMessage message : messages) {
+                if (message == null) {
+                    XLog.i("receive chat room message null");
+                    continue;
+                }
+
+                if (message.getMsgType() == MsgTypeEnum.notification) {
+                	handleNotification(message);
+                }
+                else if(message.getMsgType() == MsgTypeEnum.text)
+                {
+                	createChatMessage(message, NimUserInfoCache.getInstance().getUserDisplayName(message.getFromAccount()));
+                }
+            	XLog.i("message content: " + message.getContent());
+            	XLog.i("message uid: " + message.getUuid());
+            	XLog.i("message account: " + message.getFromAccount());
+            	XLog.i("messsage session id" + message.getSessionId());
+            	XLog.i("messsage msg type" + message.getMsgType());
+            	XLog.i("messsage session type" + message.getSessionType());
+            }
         }
     };
+    
+	private void handleNotification(IMMessage message) {
+		if (message.getAttachment() == null) {
+			return;
+		}
+
+		String roomId = message.getSessionId();
+		ChatRoomNotificationAttachment attachment = (ChatRoomNotificationAttachment) message
+				.getAttachment();
+		List<String> targets = attachment.getTargets();
+
+		if (targets != null) {
+			for (String target : targets) {
+				ChatRoomMember member = ChatRoomMemberCache.getInstance().getChatRoomMember(roomId, target);
+				if (member != null) {
+					if (member.getAccount() != null) {
+						XLog.i("member get account: " + member.getAccount());
+						XLog.i("member get nickname: " + member.getNick());
+					}
+				}
+				XLog.i("attachment.getType(): " + attachment.getType());
+				switch (attachment.getType()) 
+				{
+				case ChatRoomMemberIn:
+					XLog.i("---on room member in-----" );
+		        	String notificatioinIn = ChatRoomNotificationHelper.buildText("欢迎", member.getNick(), "进入直播间");
+		            createChatMessage(member, notificatioinIn);
+					break;
+				case ChatRoomMemberExit:
+					XLog.i("---on room member exit-----");
+		        	String notificatioinExit = ChatRoomNotificationHelper.buildText("", member.getNick(), "离开了直播间");
+		        	createChatMessage(member, notificatioinExit);
+					break;
+
+	            default:
+	                break;
+				}
+			}
+		}
+	}
 	
     /**
      * ************************* 观察者 ********************************
@@ -360,5 +447,5 @@ public class TopSurfaceFragment extends Fragment implements OnClickListener{
         	XLog.i("messsage session type" + message.getSessionType());
         }
     };
-	
+
 }

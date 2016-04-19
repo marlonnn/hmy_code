@@ -2,6 +2,7 @@ package com.BC.entertainment.chatroom.helper;
 
 import android.text.TextUtils;
 
+import com.netease.nimlib.sdk.chatroom.model.ChatRoomMember;
 //import com.netease.nim.demo.DemoCache;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomNotificationAttachment;
 
@@ -11,6 +12,7 @@ import java.util.List;
  * Created by huangjun on 2016/1/13.
  */
 public class ChatRoomNotificationHelper {
+	
     public static String getNotificationText(ChatRoomNotificationAttachment attachment) {
         if (attachment == null) {
             return "";
@@ -81,7 +83,7 @@ public class ChatRoomNotificationHelper {
         return sb.toString();
     }
 
-    private static String buildText(String pre, String targets, String operate) {
+    public static String buildText(String pre, String targets, String operate) {
         StringBuilder sb = new StringBuilder();
         if (!TextUtils.isEmpty(pre)) {
             sb.append(pre);

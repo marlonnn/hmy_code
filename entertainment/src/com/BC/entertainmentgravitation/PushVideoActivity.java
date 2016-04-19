@@ -143,7 +143,11 @@ public class PushVideoActivity extends FragmentActivity implements ExitFragmentL
     @Override
 	protected void onPause() {
 		super.onPause();
-		fragment.Pause();
+		if (fragment != null)
+		{
+			fragment.Pause();
+		}
+
 	}
 
 	@Override

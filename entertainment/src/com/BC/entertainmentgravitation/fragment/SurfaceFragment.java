@@ -40,7 +40,7 @@ public class SurfaceFragment extends DialogFragment {
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
-		if (getActivity() instanceof ExitFragmentListener)
+		if (activity instanceof ExitFragmentListener)
 		{
 			this.exitListener = (ExitFragmentListener) getActivity();
 		}
@@ -99,8 +99,11 @@ public class SurfaceFragment extends DialogFragment {
             @Override
             public void onBackPressed() {
                 XLog.e("onBackPressed");
+                if(exitListener != null)
+                {
+                    exitListener.isExit(true);
+                }
                 super.onBackPressed();
-                exitListener.isExit(true);
             }
         };
         return dialog;
