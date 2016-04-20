@@ -218,6 +218,7 @@ public class PushVideoActivity extends FragmentActivity implements ExitFragmentL
 
 			@Override
 			public void onSuccess(EnterChatRoomResultData result) {
+				onLoginDone();
 				roomInfo = result.getRoomInfo();
                 ChatRoomMember member = result.getMember();
                 member.setRoomId(roomInfo.getRoomId());

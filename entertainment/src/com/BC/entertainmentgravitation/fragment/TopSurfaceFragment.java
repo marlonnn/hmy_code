@@ -1,45 +1,29 @@
 package com.BC.entertainmentgravitation.fragment;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 import com.BC.entertainment.chatroom.helper.ChatRoomMemberCache;
-import com.BC.entertainment.chatroom.helper.ChatRoomNotificationHelper;
-import com.BC.entertainment.chatroom.helper.MessageType;
-import com.BC.entertainment.chatroom.helper.ChatRoomMemberCache.RoomMemberChangedObserver;
-import com.BC.entertainmentgravitation.MainActivity;
-import com.BC.entertainmentgravitation.NotifyDataSetChanged;
+import com.BC.entertainment.chatroom.module.ChatRoomMsgListPanel;
+import com.BC.entertainment.config.Cache;
 import com.BC.entertainmentgravitation.R;
-import com.BC.entertainmentgravitation.entity.ChatMessage;
 import com.BC.entertainmentgravitation.entity.ChatRoom;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.netease.nim.uikit.cache.NimUserInfoCache;
-import com.netease.nim.uikit.cache.SimpleCallback;
-import com.netease.nim.uikit.common.ui.listview.ListViewUtil.ScrollToPositionListener;
+import com.netease.nim.uikit.session.module.Container;
+import com.netease.nim.uikit.session.module.ModuleProxy;
 import com.netease.nimlib.sdk.NIMClient;
-import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.ResponseCode;
 import com.netease.nimlib.sdk.chatroom.ChatRoomMessageBuilder;
 import com.netease.nimlib.sdk.chatroom.ChatRoomService;
-import com.netease.nimlib.sdk.chatroom.ChatRoomServiceObserver;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomMember;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomMessage;
-import com.netease.nimlib.sdk.chatroom.model.ChatRoomNotificationAttachment;
-import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum;
+import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
-import com.summer.adapter.CommonAdapter;
 import com.summer.config.Config;
 import com.summer.logger.XLog;
-import com.summer.view.CircularImage;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -50,17 +34,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.Toast;
 
-public class TopSurfaceFragment extends Fragment implements OnClickListener{
-	
-	private final int MESSAGE_CAPACITY = 500;
+public class TopSurfaceFragment extends Fragment implements OnClickListener, ModuleProxy{
 	
 	private ChatRoom chatRoom;
-	private View view;
 	
-	private Handler uiHandler;
+	private View view;
 	
 	private Button btnSend;
 	
@@ -69,44 +49,18 @@ public class TopSurfaceFragment extends Fragment implements OnClickListener{
 	private ImageView imageViewChart;
 	
 	private LinearLayout layoutInput;
-	
-    // message list view
-    private LinkedList<ChatMessage> items;
     
-    @SuppressWarnings("rawtypes")
-	private CommonAdapter adapter;
-    
-    private ListView messageListView;
-    
-    private CircularImage headPortrait;
+    //module
+    protected ChatRoomMsgListPanel messageListPanel;
 	
 	public TopSurfaceFragment(ChatRoom chatRoom)
 	{
 		this.chatRoom = chatRoom;
-		this.uiHandler = new Handler();
-		items = new LinkedList<ChatMessage>();
 	}
 	
-	private void addMessage(ChatMessage chatMessage, boolean addFirst)
-	{
-		if (chatMessage != null)
-		{
-			if (items.size() >= MESSAGE_CAPACITY)
-			{
-				items.poll();
-			}
-	        if (addFirst) {
-	        	items.add(0, chatMessage);
-	        } else {
-	        	items.add(chatMessage);
-	        }
-		}
-	}
-
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		register(true);
 	}
 	
 	@SuppressLint("InflateParams") @Override
@@ -125,6 +79,13 @@ public class TopSurfaceFragment extends Fragment implements OnClickListener{
 	
 	private void initializeView()
 	{
+        Container container = new Container(getActivity(), chatRoom.getChatroomid(), SessionTypeEnum.ChatRoom, this);
+        if (messageListPanel == null) {
+            messageListPanel = new ChatRoomMsgListPanel(container, view);
+        }
+        
+		messageListPanel.registerObservers(true);
+        
 		layoutInput = (LinearLayout) view.findViewById(R.id.layout_input);
 		
 		edtInput = (EditText)view.findViewById(R.id.edtInput);
@@ -133,108 +94,22 @@ public class TopSurfaceFragment extends Fragment implements OnClickListener{
 		
 		imageViewChart = (ImageView)view.findViewById(R.id.imageView_chart);
 		
-		messageListView = (ListView)view.findViewById(R.id.messageListView);
-		
-		headPortrait = (CircularImage) view.findViewById(R.id.portrait);
-		
 		imageViewChart.setOnClickListener(this);
 		
 		edtInput.setOnClickListener(this);
 		
 		btnSend.setOnClickListener(this);
 		
-		adapter = new CommonAdapter<ChatMessage>(getActivity().getBaseContext(), R.layout.fragment_message_item, 
-				items) {
-
-					@Override
-					public void convert(
-							ViewHolder holder,
-							ChatMessage item) {
-//						holder.setImageResource(R.id.imageViewMessage, drawableId)
-						if (item.getType() == MessageType.notificatijon)
-						{
-							holder.setText(R.id.txtName, "系统消息：");
-							holder.setText(R.id.txtContent, item.getContent());
-						}
-						else
-						{
-							holder.setText(R.id.txtName, item.getNickName() + ": ");
-							holder.setText(R.id.txtContent, item.getContent());
-						}
-
-					}
-		};
-		messageListView.setAdapter(adapter);
-		
-		Glide.with(getActivity())
-		.load(MainActivity.personalInformation.getHead_portrait())
-		.centerCrop().diskCacheStrategy(DiskCacheStrategy.ALL)
-		.placeholder(R.drawable.home_image).into(headPortrait);
 	}
-	
-    // 刷新消息列表
-    public void refreshMessageList() {
-        getActivity().runOnUiThread(new Runnable() {
-
-            @Override
-            public void run() {
-            }
-        });
-    }
-    
-    public void scrollToBottom() {
-        uiHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-//                ListViewUtil.scrollToBottom(messageListView);
-            }
-        }, 200);
-    }
 
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		register(false);
+		messageListPanel.registerObservers(false);
 	}
-	
-    // 发送消息后，更新本地消息列表
-    public void onMsgSend(IMMessage message) {
-        // add to listView and refresh
-//        saveMessage(message, false);
-        List<IMMessage> addedListItems = new ArrayList<IMMessage>(1);
-        addedListItems.add(message);
-        
-        adapter.notifyDataSetChanged();
-        
-        scrollToBottom(messageListView);
-    }
-    
-    private void scrollToBottom(ListView listView) {
-	    scrollToPosition(listView, listView.getAdapter().getCount() - 1, 0);
-	}
-    
-    private void scrollToPosition(ListView messageListView, int position, int y) {
-		scrollToPosition(messageListView, position, y, null);
-	}
-    
-	private void scrollToPosition(final ListView messageListView, final int position, final int y, final ScrollToPositionListener listener) {
-		messageListView.post(new Runnable() {
-			
-			@Override
-			public void run() {				
-				messageListView.setSelectionFromTop(position, y);
-				
-				if (listener != null) {
-					listener.onScrollEnd();
-				}
-			}
-		});			
-	}
-	
 
 	@Override
 	public void onClick(View v) {
-		
 		switch(v.getId())
 		{
 		case R.id.imageView_chart:
@@ -264,6 +139,14 @@ public class TopSurfaceFragment extends Fragment implements OnClickListener{
 	public boolean sendMessage(IMMessage msg, String type) {
 		
         ChatRoomMessage message = (ChatRoomMessage) msg;
+        
+        Map<String, Object> ext = new HashMap<>();
+        ChatRoomMember chatRoomMember = ChatRoomMemberCache.getInstance().getChatRoomMember(chatRoom.getChatroomid(), Cache.getAccount());
+        if (chatRoomMember != null && chatRoomMember.getMemberType() != null) {
+            ext.put("type", chatRoomMember.getMemberType().getValue());
+            ext.put("nickname", Config.User.getNickName() == null ? "" : Config.User.getNickName());
+            message.setRemoteExtension(ext);
+        }
 
 		NIMClient.getService(ChatRoomService.class).sendMessage(message, false)
 				.setCallback(new RequestCallback<Void>() {
@@ -275,12 +158,9 @@ public class TopSurfaceFragment extends Fragment implements OnClickListener{
 					@Override
 					public void onFailed(int code) {
 						if (code == ResponseCode.RES_CHATROOM_MUTED) {
-							Toast.makeText(getActivity(), "用户被禁言",
-									Toast.LENGTH_SHORT).show();
+							Toast.makeText(getActivity(), "用户被禁言",Toast.LENGTH_SHORT).show();
 						} else {
-							Toast.makeText(getActivity(),
-									"消息发送失败：code:" + code, Toast.LENGTH_SHORT)
-									.show();
+							Toast.makeText(getActivity(),"消息发送失败：code:" + code, Toast.LENGTH_SHORT).show();
 						}
 					}
 
@@ -290,162 +170,25 @@ public class TopSurfaceFragment extends Fragment implements OnClickListener{
 								Toast.LENGTH_SHORT).show();
 					}
 				});
-		onMsgSend(msg);
+		messageListPanel.onMsgSend(msg);
 		return true;
     }
-    
-    /**
-     * *************************** 成员操作监听 ****************************
-     */
-    private void register(boolean register) {
-    	//先去服务器获取所有的聊天室成员信息
-    	ChatRoomMemberCache.getInstance().fetchMember(chatRoom.getChatroomid(), Config.User.getUserName(), new SimpleCallback<ChatRoomMember>(){
 
-			@Override
-			public void onResult(boolean success, ChatRoomMember result) {
-				if (result != null && result.getNick() != null)
-				    XLog.i("fetch member success: " + result.getNick());
-			}});
-    	registerRecObservers(register);
-    	registerObservers(register);
-    }
-
-	private void createChatMessage(IMMessage message, String nickname)
-	{
-		XLog.i("createChatMessage text" );
-		if (message == null || nickname == null)
-		{
-			return;
-		}
-		ChatMessage chatMessage = new ChatMessage();
-		chatMessage.setType(MessageType.text);
-		chatMessage.setAccount(message.getFromAccount());
-		chatMessage.setChatRoomId(message.getSessionId());
-		chatMessage.setContent(message.getContent());
-		chatMessage.setNickName(nickname);
-		
-    	addMessage(chatMessage, false);
-		adapter.notifyDataSetChanged();
+	@Override
+	public boolean sendMessage(IMMessage msg) {
+		return false;
 	}
-	
-	private void createChatMessage(ChatRoomMember chatMember, String content)
-	{
-		XLog.i("createChatMessage notification" );
-		if (chatMember == null || content == null)
-		{
-			return;
-		}
-		ChatMessage chatMessage = new ChatMessage();
-		chatMessage.setType(MessageType.notificatijon);
-		chatMessage.setAccount(chatMember.getAccount());
-		chatMessage.setChatRoomId(chatMember.getRoomId());
-		chatMessage.setContent(content);
-		chatMessage.setNickName(chatMember.getNick());
-    	addMessage(chatMessage, false);
-		adapter.notifyDataSetChanged();
+
+	@Override
+	public void onInputPanelExpand() {
 	}
-    
-    public void registerRecObservers(boolean register) {
-        NIMClient.getService(ChatRoomServiceObserver.class).observeReceiveMessage(incomingChatRoomMsg, register);
-    }
 
-    @SuppressWarnings("serial")
-	private Observer<List<ChatRoomMessage>> incomingChatRoomMsg = new Observer<List<ChatRoomMessage>>() {
-        @Override
-        public void onEvent(List<ChatRoomMessage> messages) {
-        	XLog.i("incomingChatRoomMsg");
-            if (messages == null || messages.isEmpty()) {
-                return;
-            }
-
-            for (IMMessage message : messages) {
-                if (message == null) {
-                    XLog.i("receive chat room message null");
-                    continue;
-                }
-
-                if (message.getMsgType() == MsgTypeEnum.notification) {
-                	handleNotification(message);
-                }
-                else if(message.getMsgType() == MsgTypeEnum.text)
-                {
-                	createChatMessage(message, NimUserInfoCache.getInstance().getUserDisplayName(message.getFromAccount()));
-                }
-            	XLog.i("message content: " + message.getContent());
-            	XLog.i("message uid: " + message.getUuid());
-            	XLog.i("message account: " + message.getFromAccount());
-            	XLog.i("messsage session id" + message.getSessionId());
-            	XLog.i("messsage msg type" + message.getMsgType());
-            	XLog.i("messsage session type" + message.getSessionType());
-            }
-        }
-    };
-    
-	private void handleNotification(IMMessage message) {
-		if (message.getAttachment() == null) {
-			return;
-		}
-
-		String roomId = message.getSessionId();
-		ChatRoomNotificationAttachment attachment = (ChatRoomNotificationAttachment) message
-				.getAttachment();
-		List<String> targets = attachment.getTargets();
-
-		if (targets != null) {
-			for (String target : targets) {
-				ChatRoomMember member = ChatRoomMemberCache.getInstance().getChatRoomMember(roomId, target);
-				if (member != null) {
-					if (member.getAccount() != null) {
-						XLog.i("member get account: " + member.getAccount());
-						XLog.i("member get nickname: " + member.getNick());
-					}
-				}
-				XLog.i("attachment.getType(): " + attachment.getType());
-				switch (attachment.getType()) 
-				{
-				case ChatRoomMemberIn:
-					XLog.i("---on room member in-----" );
-		        	String notificatioinIn = ChatRoomNotificationHelper.buildText("欢迎", member.getNick(), "进入直播间");
-		            createChatMessage(member, notificatioinIn);
-					break;
-				case ChatRoomMemberExit:
-					XLog.i("---on room member exit-----");
-		        	String notificatioinExit = ChatRoomNotificationHelper.buildText("", member.getNick(), "离开了直播间");
-		        	createChatMessage(member, notificatioinExit);
-					break;
-
-	            default:
-	                break;
-				}
-			}
-		}
+	@Override
+	public void shouldCollapseInputPanel() {
 	}
-	
-    /**
-     * ************************* 观察者 ********************************
-     */
-    private void registerObservers(boolean register) {
-        ChatRoomServiceObserver service = NIMClient.getService(ChatRoomServiceObserver.class);
-        service.observeMsgStatus(messageStatusObserver, register);
-    }
 
-    /**
-     * 消息状态变化观察者
-     */
-    @SuppressWarnings("serial")
-	Observer<ChatRoomMessage> messageStatusObserver = new Observer<ChatRoomMessage>() {
-        @Override
-        public void onEvent(ChatRoomMessage message) {
-        	XLog.i("message status event: " + message.getContent());
-        	XLog.i("message status event: " + message.getStatus());
-        	
-//        	XLog.i("message content: " + message.getContent());
-        	XLog.i("message uid: " + message.getUuid());
-        	XLog.i("message account: " + message.getFromAccount());
-        	XLog.i("messsage session id" + message.getSessionId());
-        	XLog.i("messsage msg type" + message.getMsgType());
-        	XLog.i("messsage session type" + message.getSessionType());
-        }
-    };
-
+	@Override
+	public boolean isLongClickEnabled() {
+		return false;
+	}
 }
