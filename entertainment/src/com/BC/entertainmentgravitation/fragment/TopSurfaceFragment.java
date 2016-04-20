@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.BC.entertainment.chatroom.helper.ChatRoomMemberCache;
 import com.BC.entertainment.chatroom.module.ChatRoomMsgListPanel;
+import com.BC.entertainment.chatroom.module.OnlinePeoplePanel;
 import com.BC.entertainment.config.Cache;
 import com.BC.entertainmentgravitation.R;
 import com.BC.entertainmentgravitation.entity.ChatRoom;
@@ -52,6 +53,8 @@ public class TopSurfaceFragment extends Fragment implements OnClickListener, Mod
     
     //module
     protected ChatRoomMsgListPanel messageListPanel;
+    
+    protected OnlinePeoplePanel onlinePeoplePanel;
 	
 	public TopSurfaceFragment(ChatRoom chatRoom)
 	{
@@ -84,7 +87,13 @@ public class TopSurfaceFragment extends Fragment implements OnClickListener, Mod
             messageListPanel = new ChatRoomMsgListPanel(container, view);
         }
         
+        if (onlinePeoplePanel == null)
+        {
+        	onlinePeoplePanel = new OnlinePeoplePanel(container, view);
+        }
+        
 		messageListPanel.registerObservers(true);
+		onlinePeoplePanel.registerObservers(true);
         
 		layoutInput = (LinearLayout) view.findViewById(R.id.layout_input);
 		
@@ -105,7 +114,16 @@ public class TopSurfaceFragment extends Fragment implements OnClickListener, Mod
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		messageListPanel.registerObservers(false);
+		if (messageListPanel != null)
+		{
+			messageListPanel.registerObservers(false);
+		}
+
+		if(onlinePeoplePanel != null)
+		{
+			onlinePeoplePanel.registerObservers(false);	
+		}
+
 	}
 
 	@Override

@@ -2,16 +2,11 @@ package com.BC.entertainment.chatroom.helper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import android.text.TextUtils;
 
-import com.BC.entertainmentgravitation.NotifyDataSetChanged;
-import com.BC.entertainmentgravitation.entity.ChatMessage;
-import com.netease.nim.uikit.cache.NimUserInfoCache;
 import com.netease.nim.uikit.cache.SimpleCallback;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
@@ -27,7 +22,6 @@ import com.netease.nimlib.sdk.chatroom.model.ChatRoomNotificationAttachment;
 import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum;
 import com.netease.nimlib.sdk.msg.constant.NotificationType;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
-import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
 import com.summer.logger.XLog;
 
 
@@ -37,11 +31,6 @@ import com.summer.logger.XLog;
  *
  */
 public class ChatRoomMemberCache {
-	
-	private final int MESSAGE_CAPACITY = 500;
-	
-	//成员信息
-	private Map<String, NimUserInfo> account2UserMap = new ConcurrentHashMap<>();
 	
 	    //roomId(聊天室id),account(用户云信账号)
 	private Map<String, Map<String, ChatRoomMember>> cache = new HashMap<String, Map<String, ChatRoomMember>>();
@@ -256,16 +245,6 @@ public class ChatRoomMemberCache {
                 if (message.getMsgType() == MsgTypeEnum.notification) {
                     handleNotification(message);
                 }
-                else
-                {
-//                	ChatMessage chatMessage = CreateChatMessage(message, NimUserInfoCache.getInstance().getUserDisplayName(message.getFromAccount()));
-//                	addMessage(chatMessage, false); 
-//                    if (notifyDataSetChanged != null)
-//                    {
-//                    	notifyDataSetChanged.dataSetChanged(chatMessages);
-//                    	XLog.i("notifyDataSetChanged.dataSetChanged(chatMessages)");
-//                    }
-                }
             	XLog.i("message content: " + message.getContent());
             	XLog.i("message uid: " + message.getUuid());
             	XLog.i("message account: " + message.getFromAccount());
@@ -284,30 +263,10 @@ public class ChatRoomMemberCache {
         String roomId = message.getSessionId();
         ChatRoomNotificationAttachment attachment = (ChatRoomNotificationAttachment) message.getAttachment();
         List<String> targets = attachment.getTargets();
-//        String notificatioinText = ChatRoomNotificationHelper.getNotificationText(attachment);
-//        XLog.i("notificatioinText: " + notificatioinText);
-
         if (targets != null) {
             for (String target : targets) {
                 ChatRoomMember member = getChatRoomMember(roomId, target);
                 handleMemberChanged(attachment.getType(), member);
-//                ChatMessage chatMessage = CreateChatMessage(member, notificatioinText);
-//                addMessage(chatMessage, false);
-//                if (notifyDataSetChanged != null)
-//                {
-//                	notifyDataSetChanged.dataSetChanged(chatMessages);
-//                	XLog.i("notificatioinText  chatMessages: " + chatMessages.size());
-//                }
-                XLog.i("attachment.getType(): " + attachment.getType());
-                if(member != null)
-                {
-                	if(member.getAccount() != null)
-                	{
-                		XLog.i("member get account: " + member.getAccount());
-                		XLog.i("member get nickname: " + member.getNick());
-                	}
-                }
-                XLog.i("attachment.getType(): " + attachment.getType());
             }
         }
     }

@@ -3,6 +3,7 @@ package com.BC.entertainment.chatroom.module;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import android.os.Handler;
 import android.view.View;
@@ -13,6 +14,7 @@ import com.BC.entertainmentgravitation.MainActivity;
 import com.BC.entertainmentgravitation.R;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.netease.nim.uikit.cache.NimUserInfoCache;
 import com.netease.nim.uikit.cache.SimpleCallback;
 import com.netease.nim.uikit.common.ui.listview.ListViewUtil;
 import com.netease.nim.uikit.session.module.Container;
@@ -225,6 +227,7 @@ public class ChatRoomMsgListPanel {
 		.load(master.getAvatar())
 		.centerCrop().diskCacheStrategy(DiskCacheStrategy.ALL)
 		.placeholder(R.drawable.avatar_def).into(headPortrait);
+		XLog.i("fetch master portrait seccuss");
     }
     
     public void registerObservers(boolean register) {
@@ -245,12 +248,23 @@ public class ChatRoomMsgListPanel {
                      XLog.i("receive chat room message null");
                      continue;
                  }
+                 try {
+					XLog.i(message.getRemoteExtension().get("nickname"));
+				} catch (Exception e) {
+					XLog.i("get nick name error");
+					e.printStackTrace();
+				}
 
                  if (message.getMsgType() == MsgTypeEnum.notification) {
                  	handleNotification(message);
                  }
                  else if(message.getMsgType() == MsgTypeEnum.text)
                  {
+                	 if(message.getRemoteExtension() != null)
+                	 {
+       					XLog.i(message.getRemoteExtension().get("nickname"));
+                	 }
+
                  }
              	XLog.i("message content: " + message.getContent());
              	XLog.i("message uid: " + message.getUuid());
@@ -272,12 +286,21 @@ public class ChatRoomMsgListPanel {
  		ChatRoomNotificationAttachment attachment = (ChatRoomNotificationAttachment) message
  				.getAttachment();
  		List<String> targets = attachment.getTargets();
+ 		
+ 		try {
+ 			Map<String, Object> map = attachment.getExtension();
+ 			XLog.i("chat room user name: " + attachment.getExtension().get("nickname").toString());
+		} catch (Exception e1) {
+			XLog.i("---chat room user name exception-----" );
+//			XLog.i(e1.getMessage().toString(), e1);
+			e1.printStackTrace();
+		}
 
  		if (targets != null) {
  			for (String target : targets) {
  				ChatRoomMember member = ChatRoomMemberCache.getInstance().getChatRoomMember(roomId, target);
  				if (member != null) {
- 					XLog.i(message.getRemoteExtension().get("nickname"));
+// 					XLog.i(message.getRemoteExtension().get("nickname"));
  					if (member.getAccount() != null) {
  						XLog.i("member get account: " + member.getAccount());
  						XLog.i("member get nickname: " + member.getNick());
@@ -288,8 +311,25 @@ public class ChatRoomMsgListPanel {
  				{
  				case ChatRoomMemberIn:
  					XLog.i("---on room member in-----" );
+ 					try {
+ 						XLog.i(member.getExtension().get("nickname"));
+// 						XLog.i(NimUserInfoCache.getInstance().getUserDisplayName(member.getAccount()));
+// 						XLog.i(ChatRoomMemberCache.getInstance().GetChatMemberMap(member.getRoomId()).get(member.getAccount()).getNick());
+// 						XLog.i(ChatRoomMemberCache.getInstance().GetChatMemberMap(member.getRoomId()).get(member.getAccount()).getAvatar());
+// 						XLog.i(ChatRoomMemberCache.getInstance().GetChatMemberMap(member.getRoomId()).size());
+					} catch (Exception e) {
+						XLog.i("---on room member in exception-----" );
+						e.printStackTrace();
+					}
  					break;
  				case ChatRoomMemberExit:
+ 					try {
+ 						XLog.i(NimUserInfoCache.getInstance().getUserDisplayName(member.getAccount()));
+// 						XLog.i(ChatRoomMemberCache.getInstance().GetChatMemberMap(member.getRoomId()).get(member.getAccount()).getNick());
+					} catch (Exception e) {
+						XLog.i("---on room member exit exception-----" );
+						e.printStackTrace();
+					}
  					XLog.i("---on room member exit-----");
  					break;
  	            default:

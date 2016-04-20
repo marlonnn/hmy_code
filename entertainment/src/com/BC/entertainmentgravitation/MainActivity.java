@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import com.BC.entertainment.chatroom.helper.ChatRoomHelper;
+import com.BC.entertainment.chatroom.helper.LogoutHelper;
 import com.BC.entertainmentgravitation.R;
 import org.apache.http.NameValuePair;
 
@@ -155,6 +157,9 @@ public class MainActivity extends BaseActivity implements OnClickListener, Updat
 		{
 			aplayOrLive.setText("申请");
 		}
+		
+        // 聊天室初始化
+        ChatRoomHelper.init();
     }
     
     
@@ -173,6 +178,15 @@ public class MainActivity extends BaseActivity implements OnClickListener, Updat
 		getUserInfoRequest();
 		getStartRankInfoRequest();
 		getAdvertiseInfoRequest();
+	}
+
+
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+        // 清理缓存&注销监听
+        LogoutHelper.logout();
 	}
 
 

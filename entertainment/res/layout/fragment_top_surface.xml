@@ -36,13 +36,20 @@
             android:text="直播Live" />
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/txtViewOnlinePeople"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/portrait"
             android:layout_alignLeft="@+id/textView1"
             android:textColor="@color/white"
             android:text="99999999" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="50dip"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/imageView4" />
 
     </RelativeLayout>
 

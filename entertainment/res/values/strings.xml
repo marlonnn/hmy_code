@@ -51,7 +51,7 @@
 	<string name="pay_result_callback_msg" formatted="false">微信支付结果：%s</string>
     
     <!-- 直播相关 -->
-    <string name="fragment_total_value">价值211个娱币</string>
+    <string name="fragment_total_value">99999999999</string>
     
     <!--引导页相关-->
     <string name="guidePagePoint">小圆点</string>

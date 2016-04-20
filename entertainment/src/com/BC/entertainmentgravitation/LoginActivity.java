@@ -21,6 +21,7 @@ import com.BC.entertainment.config.Preferences;
 import com.BC.entertainmentgravitation.dialog.PromptDialog;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.netease.nim.uikit.cache.DataCacheManager;
 import com.netease.nimlib.sdk.AbortableFuture;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.RequestCallback;
@@ -137,7 +138,6 @@ import org.apache.http.NameValuePair;
 			public void onClick(View v) {
 				if (checkData()) {
 					ShowProgressDialog(getResources().getString(R.string.loginIsLogining));
-					logingNimServer();
 					logingToServer();
 				}
 			}
@@ -334,7 +334,6 @@ import org.apache.http.NameValuePair;
     	{
         	loginRequest = NIMClient.getService(AuthService.class).login(new LoginInfo(account, token));
         	loginRequest.setCallback(new RequestCallback<LoginInfo>() {
-
 				@Override
 				public void onException(Throwable arg0) {
 					XLog.i("login to Nim server exception: " + arg0);
@@ -355,6 +354,10 @@ import org.apache.http.NameValuePair;
 					XLog.i("login to Nim server seccuss: ");
 					XLog.i("loginInfo: " + loginInfo.getAccount());
 					saveLoginInfo(account, token);
+	                DataCacheManager.buildDataCacheAsync();
+	        		saveNimAccount(Config.User);
+	    			Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+	    			startActivity(intent);
 				}
 			});
     	}
@@ -440,7 +443,6 @@ import org.apache.http.NameValuePair;
     @Override
     public void RequestSuccessful(String jsonString, int taskType) {
     	Gson gson = new Gson();
-    	Intent intent;
     	switch (taskType)
     	{
     	case Config.LOGIN_TYPE:
@@ -453,9 +455,8 @@ import org.apache.http.NameValuePair;
     		Entity<User> entity = gson.fromJson(jsonString, 
     				new TypeToken<Entity<User>>() {}.getType());
     		Config.User = entity.getData();
-    		saveNimAccount(Config.User);
-			intent = new Intent(this, MainActivity.class);
-			startActivity(intent);
+			logingNimServer();
+
     		break;
     		
     	case Config.REGISTER:

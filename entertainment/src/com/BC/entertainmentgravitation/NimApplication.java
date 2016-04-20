@@ -112,7 +112,7 @@ public class NimApplication extends Application {
         @Override
         public UserInfo getUserInfo(String account) {
         	//¹¹½¨»º´æ
-        	NimUserInfoCache.getInstance().buildCache();
+//        	NimUserInfoCache.getInstance().buildCache();
             UserInfo user = NimUserInfoCache.getInstance().getUserInfo(account);
             if (user == null) {
                 NimUserInfoCache.getInstance().getUserInfoFromRemote(account, null);

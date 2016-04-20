@@ -1,5 +1,8 @@
 package com.BC.entertainmentgravitation;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.BC.entertainment.chatroom.helper.ChatRoomMemberCache;
 import com.BC.entertainmentgravitation.entity.ChatRoom;
 import com.BC.entertainmentgravitation.fragment.PushVideoFragment;
@@ -21,6 +24,7 @@ import com.netease.nimlib.sdk.chatroom.model.ChatRoomMember;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomStatusChangeData;
 import com.netease.nimlib.sdk.chatroom.model.EnterChatRoomData;
 import com.netease.nimlib.sdk.chatroom.model.EnterChatRoomResultData;
+import com.summer.config.Config;
 import com.summer.logger.XLog;
 import com.summer.utils.StringUtil;
 
@@ -155,6 +159,10 @@ public class WatchVideoActivity extends FragmentActivity {
 	@SuppressWarnings("unchecked")
 	private void enterChatRoom() {
 		EnterChatRoomData data = new EnterChatRoomData(chatRoom.getChatroomid());
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("nickname", Config.User.getNickName());
+//		data.setExtension(map);
+		data.setNotifyExtension(map);
 		enterRequest = NIMClient.getService(ChatRoomService.class).enterChatRoom(data);
 		enterRequest.setCallback(new RequestCallback<EnterChatRoomResultData>() {
 
@@ -185,6 +193,8 @@ public class WatchVideoActivity extends FragmentActivity {
 					public void onSuccess(EnterChatRoomResultData result) {
 						roomInfo = result.getRoomInfo();
 						ChatRoomMember member = result.getMember();
+						member.setExtension(roomInfo.getExtension());
+						XLog.i("extension: " + roomInfo.getExtension());
 						member.setRoomId(roomInfo.getRoomId());
 						XLog.i("enter chat room success" + roomInfo.getRoomId());
 						initializeWatchVideoFragment();
