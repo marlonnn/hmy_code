@@ -326,10 +326,10 @@ import org.apache.http.NameValuePair;
     }
     
     @SuppressWarnings("unchecked")
-	private void logingNimServer()
+	private void logingNimServer(User user)
     {
-    	final String account = Preferences.getUserAccount();
-    	final String token = Preferences.getUserToken();
+    	final String account = user.getUserName();
+    	final String token = user.getToken();
     	if (account != null && token != null)
     	{
         	loginRequest = NIMClient.getService(AuthService.class).login(new LoginInfo(account, token));
@@ -352,14 +352,25 @@ import org.apache.http.NameValuePair;
 				@Override
 				public void onSuccess(LoginInfo loginInfo) {
 					XLog.i("login to Nim server seccuss: ");
+		    		if (chBoxRememberPassword.isChecked()) {
+		    			Config.setPhoneNum(loginPhoneNumber.getText().toString());
+		    			Config.setPassword(loginPassword.getText().toString());
+		    			Config.saveConfig();
+		    		}
+		    		
 					XLog.i("loginInfo: " + loginInfo.getAccount());
 					saveLoginInfo(account, token);
 	                DataCacheManager.buildDataCacheAsync();
 	        		saveNimAccount(Config.User);
 	    			Intent intent = new Intent(LoginActivity.this, MainActivity.class);
 	    			startActivity(intent);
+	        		ToastUtil.show(LoginActivity.this, LoginActivity.this.getString(R.string.loginSuccess));
 				}
 			});
+    	}
+    	else
+    	{
+    		Toast.makeText(LoginActivity.this, "µÇÂ½Ê§°Ü", Toast.LENGTH_SHORT).show();
     	}
     }
     
@@ -446,16 +457,10 @@ import org.apache.http.NameValuePair;
     	switch (taskType)
     	{
     	case Config.LOGIN_TYPE:
-    		if (chBoxRememberPassword.isChecked()) {
-    			Config.setPhoneNum(loginPhoneNumber.getText().toString());
-    			Config.setPassword(loginPassword.getText().toString());
-    			Config.saveConfig();
-    		}
-    		ToastUtil.show(this, this.getString(R.string.loginSuccess));
     		Entity<User> entity = gson.fromJson(jsonString, 
     				new TypeToken<Entity<User>>() {}.getType());
     		Config.User = entity.getData();
-			logingNimServer();
+			logingNimServer(Config.User);
 
     		break;
     		

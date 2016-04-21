@@ -18,12 +18,9 @@ import com.netease.nimlib.sdk.chatroom.model.ChatRoomMember;
 
 public class OnlinePeoplePanel {
 	
-    private static final int MESSAGE_CAPACITY = 20;
-
     // container
     private Container container;
     private View rootView;
-    private Handler uiHandler;
 
 	private RecyclerView recycleView;
 	
@@ -43,7 +40,6 @@ public class OnlinePeoplePanel {
     
     private void init() {
     	initRecycleView();
-        this.uiHandler = new Handler();
     }
     
     public void registerObservers(boolean register)
@@ -52,17 +48,6 @@ public class OnlinePeoplePanel {
     	{
     		onlinePeopleCache.registerObservers(register);
     	}
-    }
-    
-    private void postInitRercycleView()
-    {
-        container.activity.runOnUiThread(new Runnable() {
-
-            @Override
-            public void run() {
-            	initRecycleView();
-            }
-        });
     }
     
     private void initRecycleView(){

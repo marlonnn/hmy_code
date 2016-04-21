@@ -1,6 +1,5 @@
 package com.BC.entertainment.chatroom.helper;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -16,7 +15,6 @@ import com.netease.nim.uikit.cache.SimpleCallback;
 import com.netease.nimlib.sdk.chatroom.constant.MemberQueryType;
 import com.netease.nimlib.sdk.chatroom.constant.MemberType;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomMember;
-import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.summer.logger.XLog;
 
 /**
