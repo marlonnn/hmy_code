@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import com.BC.entertainment.chatroom.helper.ChatRoomHelper;
 import com.BC.entertainment.chatroom.helper.LogoutHelper;
 import com.BC.entertainmentgravitation.R;
 import org.apache.http.NameValuePair;
@@ -157,9 +156,6 @@ public class MainActivity extends BaseActivity implements OnClickListener, Updat
 		{
 			aplayOrLive.setText("…Í«Î");
 		}
-		
-        // ¡ƒÃÏ “≥ı ºªØ
-        ChatRoomHelper.init();
     }
     
     

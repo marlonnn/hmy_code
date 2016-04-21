@@ -3,7 +3,6 @@ package com.BC.entertainmentgravitation;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.BC.entertainment.chatroom.helper.ChatRoomMemberCache;
 import com.BC.entertainmentgravitation.entity.ChatRoom;
 import com.BC.entertainmentgravitation.fragment.PushVideoFragment;
 import com.BC.entertainmentgravitation.fragment.ScrollListener;
@@ -214,7 +213,7 @@ public class WatchVideoActivity extends FragmentActivity {
 	}
 
 	public void clearChatRoom() {
-		 ChatRoomMemberCache.getInstance().clearRoomCache(chatRoom.getChatroomid());
+//		 ChatRoomMemberCache.getInstance().clearRoomCache(chatRoom.getChatroomid());
 		 finish();
 	}
 }

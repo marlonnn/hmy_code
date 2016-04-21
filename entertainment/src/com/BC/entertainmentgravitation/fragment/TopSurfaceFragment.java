@@ -1,12 +1,6 @@
 package com.BC.entertainmentgravitation.fragment;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import com.BC.entertainment.chatroom.helper.ChatRoomMemberCache;
-import com.BC.entertainment.chatroom.module.ChatRoomMsgListPanel;
-import com.BC.entertainment.chatroom.module.OnlinePeoplePanel;
-import com.BC.entertainment.config.Cache;
+import com.BC.entertainment.chatroom.module.ChatRoomPanel;
 import com.BC.entertainmentgravitation.R;
 import com.BC.entertainmentgravitation.entity.ChatRoom;
 import com.netease.nim.uikit.session.module.Container;
@@ -16,25 +10,27 @@ import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.ResponseCode;
 import com.netease.nimlib.sdk.chatroom.ChatRoomMessageBuilder;
 import com.netease.nimlib.sdk.chatroom.ChatRoomService;
-import com.netease.nimlib.sdk.chatroom.model.ChatRoomMember;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomMessage;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
-import com.summer.config.Config;
 import com.summer.logger.XLog;
 
 import android.annotation.SuppressLint;
+import android.app.Notification.Action;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 public class TopSurfaceFragment extends Fragment implements OnClickListener, ModuleProxy{
@@ -50,12 +46,12 @@ public class TopSurfaceFragment extends Fragment implements OnClickListener, Mod
 	private ImageView imageViewChart;
 	
 	private LinearLayout layoutInput;
+	
+	private RelativeLayout rootView;
     
     //module
-    protected ChatRoomMsgListPanel messageListPanel;
+    protected ChatRoomPanel messageListPanel;
     
-    protected OnlinePeoplePanel onlinePeoplePanel;
-	
 	public TopSurfaceFragment(ChatRoom chatRoom)
 	{
 		this.chatRoom = chatRoom;
@@ -84,16 +80,10 @@ public class TopSurfaceFragment extends Fragment implements OnClickListener, Mod
 	{
         Container container = new Container(getActivity(), chatRoom.getChatroomid(), SessionTypeEnum.ChatRoom, this);
         if (messageListPanel == null) {
-            messageListPanel = new ChatRoomMsgListPanel(container, view);
-        }
-        
-        if (onlinePeoplePanel == null)
-        {
-        	onlinePeoplePanel = new OnlinePeoplePanel(container, view);
+            messageListPanel = new ChatRoomPanel(container, view);
         }
         
 		messageListPanel.registerObservers(true);
-		onlinePeoplePanel.registerObservers(true);
         
 		layoutInput = (LinearLayout) view.findViewById(R.id.layout_input);
 		
@@ -109,6 +99,17 @@ public class TopSurfaceFragment extends Fragment implements OnClickListener, Mod
 		
 		btnSend.setOnClickListener(this);
 		
+		layoutInput.setVisibility(View.GONE);
+		
+        view.setOnTouchListener(new OnTouchListener() {
+			
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				layoutInput.setVisibility(View.GONE);
+				return false;
+			}
+		});
+		
 	}
 
 	@Override
@@ -117,11 +118,6 @@ public class TopSurfaceFragment extends Fragment implements OnClickListener, Mod
 		if (messageListPanel != null)
 		{
 			messageListPanel.registerObservers(false);
-		}
-
-		if(onlinePeoplePanel != null)
-		{
-			onlinePeoplePanel.registerObservers(false);	
 		}
 
 	}
@@ -157,14 +153,6 @@ public class TopSurfaceFragment extends Fragment implements OnClickListener, Mod
 	public boolean sendMessage(IMMessage msg, String type) {
 		
         ChatRoomMessage message = (ChatRoomMessage) msg;
-        
-        Map<String, Object> ext = new HashMap<>();
-        ChatRoomMember chatRoomMember = ChatRoomMemberCache.getInstance().getChatRoomMember(chatRoom.getChatroomid(), Cache.getAccount());
-        if (chatRoomMember != null && chatRoomMember.getMemberType() != null) {
-            ext.put("type", chatRoomMember.getMemberType().getValue());
-            ext.put("nickname", Config.User.getNickName() == null ? "" : Config.User.getNickName());
-            message.setRemoteExtension(ext);
-        }
 
 		NIMClient.getService(ChatRoomService.class).sendMessage(message, false)
 				.setCallback(new RequestCallback<Void>() {

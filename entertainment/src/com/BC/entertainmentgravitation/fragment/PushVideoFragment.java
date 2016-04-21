@@ -15,10 +15,8 @@ import android.support.annotation.Nullable;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.ImageButton;
 
 import com.BC.entertainment.view.LiveSurfaceView;
 import com.BC.entertainmentgravitation.R;
@@ -41,8 +39,6 @@ public class PushVideoFragment extends BaseFragment implements View.OnClickListe
 	private View rootView;
 	
 	private lsMediaCapture mLSMediaCapture = null;
-	
-	private ImageButton switchBtn;
 	
 	private boolean m_liveStreamingOn = false;
 	private boolean m_liveStreamingPause = false;
@@ -523,7 +519,7 @@ public class PushVideoFragment extends BaseFragment implements View.OnClickListe
 		
 	}
 
-	   //处理SDK抛上来的异常和事件，用户需要在这里监听各种消息，进行相应的处理。
+	//处理SDK抛上来的异常和事件，用户需要在这里监听各种消息，进行相应的处理。
     //例如监听断网消息，用户根据断网消息进行直播重连
 	@Override
 	public void handleMessage(int msg, Object object) {

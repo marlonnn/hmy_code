@@ -12,7 +12,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
-import com.BC.entertainment.chatroom.helper.ChatRoomMemberCache;
 import com.BC.entertainmentgravitation.entity.ChatRoom;
 import com.BC.entertainmentgravitation.fragment.ExitFragmentListener;
 import com.BC.entertainmentgravitation.fragment.PushVideoFragment;
@@ -222,7 +221,7 @@ public class PushVideoActivity extends FragmentActivity implements ExitFragmentL
 				roomInfo = result.getRoomInfo();
                 ChatRoomMember member = result.getMember();
                 member.setRoomId(roomInfo.getRoomId());
-                ChatRoomMemberCache.getInstance().saveMyMember(member);
+//                ChatRoomMemberCache.getInstance().saveMyMember(member);
                 initializePushVideoFragment();
                 XLog.i("enter chat room success" + roomInfo.getRoomId());
 			}});
@@ -234,12 +233,11 @@ public class PushVideoActivity extends FragmentActivity implements ExitFragmentL
     }
     
     private void logoutChatRoom() {
-        NIMClient.getService(ChatRoomService.class).exitChatRoom(chatRoom.getChatroomid());
+    	
         clearChatRoom();
     }
     
     public void clearChatRoom() {
-        ChatRoomMemberCache.getInstance().clearRoomCache(chatRoom.getChatroomid());
         finish();
     }
     
