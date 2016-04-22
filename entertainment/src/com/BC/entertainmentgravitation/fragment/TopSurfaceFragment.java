@@ -1,6 +1,8 @@
 package com.BC.entertainmentgravitation.fragment;
 
 import com.BC.entertainment.chatroom.module.ChatRoomPanel;
+import com.BC.entertainment.chatroom.module.GiftCache;
+import com.BC.entertainment.chatroom.module.InputPanel;
 import com.BC.entertainmentgravitation.R;
 import com.BC.entertainmentgravitation.entity.ChatRoom;
 import com.netease.nim.uikit.session.module.Container;
@@ -8,7 +10,6 @@ import com.netease.nim.uikit.session.module.ModuleProxy;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.ResponseCode;
-import com.netease.nimlib.sdk.chatroom.ChatRoomMessageBuilder;
 import com.netease.nimlib.sdk.chatroom.ChatRoomService;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomMessage;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
@@ -16,7 +17,6 @@ import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.summer.logger.XLog;
 
 import android.annotation.SuppressLint;
-import android.app.Notification.Action;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -26,8 +26,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -39,18 +37,26 @@ public class TopSurfaceFragment extends Fragment implements OnClickListener, Mod
 	
 	private View view;
 	
-	private Button btnSend;
+	private ImageView btnChat;//聊天
 	
-	private EditText edtInput;
+	private ImageView btnShare;//分享
 	
-	private ImageView imageViewChart;
+	private ImageView btnFocus;//关注
+	
+	private ImageView btnBoos;//喝倒彩
+	
+	private ImageView btnApplaud;//鼓掌
 	
 	private LinearLayout layoutInput;
 	
 	private RelativeLayout rootView;
+	
+	private RelativeLayout functionView;//底部功能键根布局
     
     //module
-    protected ChatRoomPanel messageListPanel;
+	private ChatRoomPanel messageListPanel;
+    
+    private InputPanel inputPanel;
     
 	public TopSurfaceFragment(ChatRoom chatRoom)
 	{
@@ -82,22 +88,30 @@ public class TopSurfaceFragment extends Fragment implements OnClickListener, Mod
         if (messageListPanel == null) {
             messageListPanel = new ChatRoomPanel(container, view);
         }
-        
 		messageListPanel.registerObservers(true);
+		
+		if (inputPanel == null)
+		{
+			
+			inputPanel = new InputPanel(container, view, GiftCache.getInstance().getListGifts());
+		}
         
 		layoutInput = (LinearLayout) view.findViewById(R.id.layout_input);
 		
-		edtInput = (EditText)view.findViewById(R.id.edtInput);
+		functionView = (RelativeLayout) view.findViewById(R.id.layout_bottom);
 		
-		btnSend = (Button) view.findViewById(R.id.btnSend);
+		btnChat = (ImageView)view.findViewById(R.id.imageView_chart);
 		
-		imageViewChart = (ImageView)view.findViewById(R.id.imageView_chart);
+		btnShare = (ImageView)view.findViewById(R.id.imageView_share);
+		btnFocus = (ImageView)view.findViewById(R.id.imageView_focus);
+		btnBoos = (ImageView)view.findViewById(R.id.imageView_boos);
+		btnApplaud = (ImageView)view.findViewById(R.id.imageView);
 		
-		imageViewChart.setOnClickListener(this);
-		
-		edtInput.setOnClickListener(this);
-		
-		btnSend.setOnClickListener(this);
+		btnChat.setOnClickListener(this);
+		btnShare.setOnClickListener(this);
+		btnFocus.setOnClickListener(this);
+		btnBoos.setOnClickListener(this);
+		btnApplaud.setOnClickListener(this);
 		
 		layoutInput.setVisibility(View.GONE);
 		
@@ -106,10 +120,23 @@ public class TopSurfaceFragment extends Fragment implements OnClickListener, Mod
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 				layoutInput.setVisibility(View.GONE);
+				showFunctionView(true);
 				return false;
 			}
 		});
 		
+	}
+	
+	private void showFunctionView(boolean isShow)
+	{
+		if (isShow)
+		{
+			functionView.setVisibility(View.VISIBLE);
+		}
+		else
+		{
+			functionView.setVisibility(View.GONE);
+		}
 	}
 
 	@Override
@@ -124,34 +151,22 @@ public class TopSurfaceFragment extends Fragment implements OnClickListener, Mod
 
 	@Override
 	public void onClick(View v) {
+		showFunctionView(false);
 		switch(v.getId())
 		{
 		case R.id.imageView_chart:
-			if (layoutInput.isShown())
-			{
-				layoutInput.setVisibility(View.GONE);
-			}
-			else
-			{
-				layoutInput.setVisibility(View.VISIBLE);
-			}
+			layoutInput.setVisibility(View.VISIBLE);
+			inputPanel.init(false);
 			break;
-		case R.id.btnSend:
-			sendMessage();
+		case R.id.imageView:
+			layoutInput.setVisibility(View.VISIBLE);
+			inputPanel.init(true);
 			break;
 		}
 	}
-	
-	private void sendMessage()
-	{
-		ChatRoomMessage message = ChatRoomMessageBuilder.createChatRoomTextMessage(
-				chatRoom.getChatroomid(),
-				edtInput.getText().toString());
-		sendMessage(message, null);
-	}
 
-	public boolean sendMessage(IMMessage msg, String type) {
-		
+	@Override
+	public boolean sendMessage(IMMessage msg) {
         ChatRoomMessage message = (ChatRoomMessage) msg;
 
 		NIMClient.getService(ChatRoomService.class).sendMessage(message, false)
@@ -178,11 +193,6 @@ public class TopSurfaceFragment extends Fragment implements OnClickListener, Mod
 				});
 		messageListPanel.onMsgSend(msg);
 		return true;
-    }
-
-	@Override
-	public boolean sendMessage(IMMessage msg) {
-		return false;
 	}
 
 	@Override
