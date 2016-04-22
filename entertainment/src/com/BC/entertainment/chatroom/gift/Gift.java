@@ -16,7 +16,7 @@ public class Gift extends BaseGift{
 
 	@Override
 	public void onClick() {
-		
+		//先发送消息到聊天室，再播放动画
 	}
 
 }

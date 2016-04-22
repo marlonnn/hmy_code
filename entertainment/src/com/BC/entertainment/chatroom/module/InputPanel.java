@@ -14,9 +14,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import com.BC.entertainment.chatroom.gift.Gift;
+import com.BC.entertainment.adapter.GiftPagerAdapter;
+import com.BC.entertainment.chatroom.gift.BaseGift;
 import com.BC.entertainmentgravitation.R;
 import com.netease.nim.uikit.common.util.string.StringUtil;
 import com.netease.nim.uikit.session.module.Container;
@@ -43,7 +45,7 @@ public class InputPanel {
     
     private boolean giftBottomLayoutHasSetup = false;// 礼物布局状态
     
-    private List<Gift> gifts;//赠送的礼物
+    private List<BaseGift> gifts;//赠送的礼物
 
 	private LinearLayout messageActivityBottomLayout;//输入框和礼物整体根布局
 	
@@ -53,7 +55,7 @@ public class InputPanel {
 
 	private ViewGroup indicator;//滚动点
 	
-    public InputPanel(Container container, View view, List<Gift> gifts) {
+    public InputPanel(Container container, View view, List<BaseGift> gifts) {
         this.container = container;
         this.view = view;
         this.gifts = gifts;
@@ -61,7 +63,70 @@ public class InputPanel {
         initViews();
     	initInputBarListener();
     	initTextEdit();//初始化输入框控件
+    	initgiftViewPage();
     	
+    }
+    
+    /**
+     * 初始化礼物滑动页面
+     */
+    private void initgiftViewPage()
+    {
+    	GiftPagerAdapter adapter = new GiftPagerAdapter(viewPager, gifts);
+        viewPager.setAdapter(adapter);
+        initPageListener(indicator, adapter.getCount(), viewPager);
+    }
+    
+    /**
+     * 初始化礼物布局PageListener
+     * @param indicator
+     * @param count
+     * @param viewPager
+     */
+    @SuppressWarnings("deprecation")
+	private void initPageListener(final ViewGroup indicator, final int count, final ViewPager viewPager) {
+        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+
+            @Override
+            public void onPageSelected(int position) {
+                setIndicator(indicator, count, position);
+            }
+
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+        setIndicator(indicator, count, 0);
+    }
+    
+    /**
+     * 设置页码
+     */
+    private void setIndicator(ViewGroup indicator, int total, int current) {
+        if (total <= 1) {
+            indicator.removeAllViews();
+        } else {
+            indicator.removeAllViews();
+            for (int i = 0; i < total; i++) {
+                ImageView imgCur = new ImageView(indicator.getContext());
+                imgCur.setId(i);
+                // 判断当前页码来更新
+                if (i == current) {
+                    imgCur.setBackgroundResource(R.drawable.nim_moon_page_selected);
+                } else {
+                    imgCur.setBackgroundResource(R.drawable.nim_moon_page_unselected);
+                }
+
+                indicator.addView(imgCur);
+            }
+        }
     }
     
     /**

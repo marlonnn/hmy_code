@@ -3,8 +3,11 @@ package com.BC.entertainment.adapter;
 import java.util.List;
 
 import com.BC.entertainment.chatroom.gift.BaseGift;
+import com.BC.entertainmentgravitation.R;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -15,21 +18,21 @@ public class GiftGridviewAdapter extends BaseAdapter{
 	
 	private Context context;
 
-	private List<BaseGift> baseActions;
+	private List<BaseGift> baseGifts;
 
-	public GiftGridviewAdapter(Context context, List<BaseGift> baseActions) {
+	public GiftGridviewAdapter(Context context, List<BaseGift> baseGifts) {
 		this.context = context;
-		this.baseActions = baseActions;
+		this.baseGifts = baseGifts;
 	}
 
 	@Override
 	public int getCount() {
-		return baseActions.size();
+		return baseGifts.size();
 	}
 
 	@Override
 	public Object getItem(int position) {
-		return baseActions.get(position);
+		return baseGifts.get(position);
 	}
 
 	@Override
@@ -37,19 +40,22 @@ public class GiftGridviewAdapter extends BaseAdapter{
 		return position;
 	}
 
+	@SuppressLint("InflateParams")
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View itemlayout;
-//		if (convertView == null) {
-//			itemlayout = LayoutInflater.from(context).inflate(R.layout.nim_actions_item_layout, null);
-//		} else {
-//			itemlayout = convertView;
-//		}
-//
-//		BaseAction viewHolder = baseActions.get(position);
-//		((ImageView) itemlayout.findViewById(R.id.imageView)).setBackgroundResource(viewHolder.getIconResId());
-//		((TextView) itemlayout.findViewById(R.id.textView)).setText(context.getString(viewHolder.getTitleId()));
-		return null;
+		if (convertView == null) {
+			itemlayout = LayoutInflater.from(context).inflate(R.layout.fragment_top_surface_gift_item, null);
+		} else {
+			itemlayout = convertView;
+		}
+		
+		BaseGift viewHolder = baseGifts.get(position);
+		
+		((ImageView) itemlayout.findViewById(R.id.imageView_gift_icon)).setBackgroundResource(viewHolder.getIconResId());
+		((TextView) itemlayout.findViewById(R.id.textView_value)).setText(context.getString(viewHolder.getValue()));
+		((TextView) itemlayout.findViewById(R.id.textView_experient_points)).setText("+" + context.getString(viewHolder.getExPoints()) + "点经验值");
+		return itemlayout;
 	}
 
 }
