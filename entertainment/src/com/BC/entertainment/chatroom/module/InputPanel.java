@@ -3,6 +3,7 @@ package com.BC.entertainment.chatroom.module;
 import java.util.List;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Handler;
 import android.support.v4.view.ViewPager;
 import android.text.Editable;
@@ -63,7 +64,8 @@ public class InputPanel {
         initViews();
     	initInputBarListener();
     	initTextEdit();//初始化输入框控件
-    	initgiftViewPage();
+//    	showGiftLayout();
+//    	showInputBar();
     	
     }
     
@@ -157,8 +159,8 @@ public class InputPanel {
         sendMessageButtonInInputBar = view.findViewById(R.id.buttonSendMessage);
         messageEditText = (EditText) view.findViewById(R.id.editTextMessage);
         
-        viewPager = (ViewPager) view.findViewById(R.id.viewPager);
-        indicator = (ViewGroup) view.findViewById(R.id.actions_page_indicator);
+        viewPager = (ViewPager) view.findViewById(R.id.gift_viewPager);
+        indicator = (ViewGroup) view.findViewById(R.id.gift_page_indicator);
     }
     
     private void initInputBarListener()
@@ -246,7 +248,7 @@ public class InputPanel {
         if (giftBottomLayoutHasSetup) {
             return;
         }
-
+        initgiftViewPage();
 //        ActionsPanel.init(view, gifts);
         giftBottomLayoutHasSetup = true;
     }
@@ -289,7 +291,7 @@ public class InputPanel {
     }
     
     // 隐藏键盘布局
-    private void hideInputMethod() {
+    public void hideInputMethod() {
         isKeyboardShowed = false;
         uiHandler.removeCallbacks(showTextRunnable);
         InputMethodManager imm = (InputMethodManager) container.activity.getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -298,7 +300,7 @@ public class InputPanel {
     }
     
     // 显示礼物布局
-    private void showGiftLayout() {
+    public void showGiftLayout() {
         addGiftLayout();
         hideInputMethod();
 
@@ -306,7 +308,7 @@ public class InputPanel {
     }
     
     // 隐藏礼物布局
-    private void hideGiftLayout() {
+    public void hideGiftLayout() {
         uiHandler.removeCallbacks(showGiftFuncRunnable);
         if (giftBottomLayout != null) {
             giftBottomLayout.setVisibility(View.GONE);
@@ -314,7 +316,7 @@ public class InputPanel {
     }
     
     //显示输入条
-    private void showInputBar()
+    public void showInputBar()
     {
     	if (messageInputBar != null)
     	{
@@ -323,7 +325,7 @@ public class InputPanel {
     }
     
     //隐藏输入条
-    private void hideInputBar()
+    public void hideInputBar()
     {
     	if (messageInputBar != null)
     	{

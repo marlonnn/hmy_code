@@ -52,9 +52,13 @@ public class GiftGridviewAdapter extends BaseAdapter{
 		
 		BaseGift viewHolder = baseGifts.get(position);
 		
-		((ImageView) itemlayout.findViewById(R.id.imageView_gift_icon)).setBackgroundResource(viewHolder.getIconResId());
-		((TextView) itemlayout.findViewById(R.id.textView_value)).setText(context.getString(viewHolder.getValue()));
-		((TextView) itemlayout.findViewById(R.id.textView_experient_points)).setText("+" + context.getString(viewHolder.getExPoints()) + "点经验值");
+		if(viewHolder != null)
+		{
+			((ImageView) itemlayout.findViewById(R.id.imageView_gift_icon)).setBackgroundResource(viewHolder.getIconResId());
+			((TextView) itemlayout.findViewById(R.id.textView_gift_value)).setText(viewHolder.getValue() + "");
+			((TextView) itemlayout.findViewById(R.id.textView_gift_experient_points)).setText("+" + viewHolder.getExPoints() + "点经验值");
+		}
+
 		return itemlayout;
 	}
 

@@ -4,9 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.BC.entertainment.chatroom.gift.BaseGift;
-import com.netease.nim.uikit.R;
+import com.BC.entertainmentgravitation.R;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.Gravity;
@@ -97,5 +98,10 @@ public class GiftPagerAdapter extends PagerAdapter{
 	public boolean isViewFromObject(View view, Object object) {
         return view == object;
 	}
+	
+    @Override
+    public int getItemPosition(Object object) {
+        return POSITION_NONE;
+    }
 
 }

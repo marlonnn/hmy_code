@@ -87,6 +87,7 @@ public class TopSurfaceFragment extends Fragment implements OnClickListener, Mod
         Container container = new Container(getActivity(), chatRoom.getChatroomid(), SessionTypeEnum.ChatRoom, this);
         if (messageListPanel == null) {
             messageListPanel = new ChatRoomPanel(container, view);
+            messageListPanel.showMessageListView(true);
         }
 		messageListPanel.registerObservers(true);
 		
@@ -113,14 +114,18 @@ public class TopSurfaceFragment extends Fragment implements OnClickListener, Mod
 		btnBoos.setOnClickListener(this);
 		btnApplaud.setOnClickListener(this);
 		
-		layoutInput.setVisibility(View.GONE);
+//		layoutInput.setVisibility(View.INVISIBLE);
 		
         view.setOnTouchListener(new OnTouchListener() {
 			
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
-				layoutInput.setVisibility(View.GONE);
+//				layoutInput.setVisibility(View.INVISIBLE);
+				messageListPanel.showMessageListView(true);
 				showFunctionView(true);
+				inputPanel.hideInputMethod();
+				inputPanel.hideInputBar();
+				inputPanel.hideGiftLayout();
 				return false;
 			}
 		});
@@ -155,12 +160,19 @@ public class TopSurfaceFragment extends Fragment implements OnClickListener, Mod
 		switch(v.getId())
 		{
 		case R.id.imageView_chart:
+			messageListPanel.showMessageListView(true);
 			layoutInput.setVisibility(View.VISIBLE);
-			inputPanel.init(false);
+//			inputPanel.init(false);
+			inputPanel.showInputBar();
+			inputPanel.hideGiftLayout();
 			break;
 		case R.id.imageView:
+			messageListPanel.showMessageListView(false);
 			layoutInput.setVisibility(View.VISIBLE);
-			inputPanel.init(true);
+//			inputPanel.ToggleGiftLayout();
+//			inputPanel.init(true);
+			inputPanel.hideInputBar();
+			inputPanel.showGiftLayout();
 			break;
 		}
 	}

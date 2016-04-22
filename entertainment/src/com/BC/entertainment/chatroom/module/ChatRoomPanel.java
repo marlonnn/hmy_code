@@ -137,6 +137,18 @@ public class ChatRoomPanel {
         fetchOnlinePeople();
     }
     
+    public void showMessageListView(boolean isShow)
+    {
+    	if (isShow)
+    	{
+    		messageListView.setVisibility(View.VISIBLE);
+    	}
+    	else
+    	{
+    		messageListView.setVisibility(View.GONE);
+    	}
+    }
+    
     /**
      * 聊天室消息列表
      */
