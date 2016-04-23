@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.BC.entertainmentgravitation.entity.ChatRoom;
+import com.BC.entertainmentgravitation.fragment.ExitFragmentListener;
 import com.BC.entertainmentgravitation.fragment.PushVideoFragment;
 import com.BC.entertainmentgravitation.fragment.ScrollListener;
 import com.BC.entertainmentgravitation.fragment.SurfaceFragment;
@@ -40,7 +41,7 @@ import android.widget.Toast;
  * @author zhongwen
  *
  */
-public class WatchVideoActivity extends FragmentActivity {
+public class WatchVideoActivity extends FragmentActivity implements ExitFragmentListener{
 	
 	public View rootView;
 	private ScrollListener listener;
@@ -87,10 +88,10 @@ public class WatchVideoActivity extends FragmentActivity {
         	chatRoom.setChatroomid(chatroomid);
         	chatRoom.setHttpPullUrl(httpPullUrl);
         }
-        handler = getHandler();
-        
         enterChatRoom();
         registerObservers(true);
+        
+        handler = getHandler();
 
     }
     
@@ -109,8 +110,8 @@ public class WatchVideoActivity extends FragmentActivity {
     @Override
 	protected void onDestroy() {
 		super.onDestroy();
-		registerObservers(false);
 		logoutChatRoom();
+		registerObservers(false);
 	}
     
 	private void registerObservers(boolean register) {
@@ -158,10 +159,9 @@ public class WatchVideoActivity extends FragmentActivity {
 	@SuppressWarnings("unchecked")
 	private void enterChatRoom() {
 		EnterChatRoomData data = new EnterChatRoomData(chatRoom.getChatroomid());
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("nickname", Config.User.getNickName());
-//		data.setExtension(map);
-		data.setNotifyExtension(map);
+//		Map<String, Object> map = new HashMap<String, Object>();
+//		map.put("nickname", Config.User.getNickName());
+//		data.setNotifyExtension(map);
 		enterRequest = NIMClient.getService(ChatRoomService.class).enterChatRoom(data);
 		enterRequest.setCallback(new RequestCallback<EnterChatRoomResultData>() {
 
@@ -215,5 +215,20 @@ public class WatchVideoActivity extends FragmentActivity {
 	public void clearChatRoom() {
 //		 ChatRoomMemberCache.getInstance().clearRoomCache(chatRoom.getChatroomid());
 		 finish();
+	}
+	
+	@Override
+	public void onBackPressed() {
+		super.onBackPressed();
+		finish();
+	}
+	
+	@Override
+	public void isExit(boolean exit) {
+		if (exit)
+		{
+			finish();
+		}
+		
 	}
 }

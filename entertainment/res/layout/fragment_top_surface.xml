@@ -9,6 +9,8 @@
         android:id="@+id/relativelayout_head"
         android:layout_width="120dp"
         android:layout_height="40dip"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
         android:background="@drawable/fragment_top_head_bg" >
 
         <com.summer.view.CircularImage
@@ -48,7 +50,7 @@
 
         <ImageView
             android:id="@+id/imageView2"
-            android:layout_width="150dp"
+            android:layout_width="160dp"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
@@ -108,7 +110,7 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="35dip"
+        android:layout_height="40dip"
         android:layout_marginLeft="5dp"
         android:layout_above="@+id/relativeLayout1"
         android:layout_alignParentRight="true"

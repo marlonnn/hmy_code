@@ -105,7 +105,7 @@ public class NimApplication extends Application {
     
     private void initUIKit() {
         // 初始化，需要传入用户信息提供者
-        NimUIKit.init(this, infoProvider, contactProvider);
+        NimUIKit.init(this, infoProvider, null);
     }
     
     private UserInfoProvider infoProvider = new UserInfoProvider() {

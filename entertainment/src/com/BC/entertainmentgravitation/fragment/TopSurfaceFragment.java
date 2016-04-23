@@ -17,6 +17,7 @@ import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.summer.logger.XLog;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -58,11 +59,35 @@ public class TopSurfaceFragment extends Fragment implements OnClickListener, Mod
     
     private InputPanel inputPanel;
     
+    private SwitchCamera switchCamera;
+    
 	public TopSurfaceFragment(ChatRoom chatRoom)
 	{
 		this.chatRoom = chatRoom;
 	}
 	
+	/**
+	 * 直播推流时切换摄像头接口
+	 * @author zhongwen
+	 *
+	 */
+	public interface SwitchCamera
+	{
+		void onSwitchCamera();
+	}
+	
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		
+		try {
+			switchCamera = (SwitchCamera)activity;
+		} catch (Exception e) {
+			e.printStackTrace();
+			XLog.e("get switch camera exception");
+		}
+	}
+
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -156,23 +181,30 @@ public class TopSurfaceFragment extends Fragment implements OnClickListener, Mod
 
 	@Override
 	public void onClick(View v) {
-		showFunctionView(false);
 		switch(v.getId())
 		{
 		case R.id.imageView_chart:
+			showFunctionView(false);
 			messageListPanel.showMessageListView(true);
 			layoutInput.setVisibility(View.VISIBLE);
-//			inputPanel.init(false);
 			inputPanel.showInputBar();
 			inputPanel.hideGiftLayout();
 			break;
 		case R.id.imageView:
+			//暂时用鼓掌来测试礼物
+			showFunctionView(false);
 			messageListPanel.showMessageListView(false);
 			layoutInput.setVisibility(View.VISIBLE);
-//			inputPanel.ToggleGiftLayout();
-//			inputPanel.init(true);
 			inputPanel.hideInputBar();
 			inputPanel.showGiftLayout();
+			break;
+			
+		case R.id.imageView_share:
+			//暂时用分享按钮来切换摄像头
+			if( switchCamera != null)
+			{
+				switchCamera.onSwitchCamera();
+			}
 			break;
 		}
 	}

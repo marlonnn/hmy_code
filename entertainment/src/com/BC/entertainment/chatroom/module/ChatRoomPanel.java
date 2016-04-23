@@ -43,6 +43,7 @@ import com.netease.nimlib.sdk.chatroom.model.ChatRoomMessage;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomNotificationAttachment;
 import com.netease.nimlib.sdk.msg.constant.MsgDirectionEnum;
 import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum;
+import com.netease.nimlib.sdk.msg.constant.NotificationType;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.summer.adapter.CommonAdapter;
 import com.summer.config.Config;
@@ -69,7 +70,7 @@ public class ChatRoomPanel {
 
     // message list view
     private ListView messageListView;
-    private LinkedList<IMMessage> items;
+    private LinkedList<IMMessage> items;//聊天室消息列表
     
     private LinkedList<ChatRoomMember> onlinePeopleitems;
     
@@ -170,11 +171,11 @@ public class ChatRoomPanel {
 								ChatRoomNotificationAttachment attachment = (ChatRoomNotificationAttachment) item
 										.getAttachment();
 								holder.setText(R.id.txtName, "系统消息：");
-								if( item.getDirect() == MsgDirectionEnum.In )
+								if (attachment.getType() == NotificationType.ChatRoomMemberIn)
 								{
 									holder.setText(R.id.txtContent, "欢迎"+ attachment.getOperatorNick() + "进入直播间");
 								}
-								else if( item.getDirect() == MsgDirectionEnum.Out )
+								else if (attachment.getType() == NotificationType.ChatRoomMemberExit)
 								{
 									holder.setText(R.id.txtContent, (attachment.getOperatorNick() == null ? "" : attachment.getOperatorNick()) + "离开了直播间");
 								}
@@ -311,7 +312,16 @@ public class ChatRoomPanel {
         boolean needRefresh = false;
         List<IMMessage> addedListItems = new ArrayList<>(messages.size());
         for (IMMessage message : messages) {
+        	
+        	 try {
+        		 XLog.i("sessioon type: " + message.getSessionType());
+        		 XLog.i("message type: " + message.getMsgType());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+        	
             if (isMyMessage(message)) {
+            	//保存消息到聊天室消息列表中
                 saveMessage(message, false);
                 if (message.getMsgType() == MsgTypeEnum.notification)
                 {
@@ -339,19 +349,34 @@ public class ChatRoomPanel {
         }
 
         String roomId = message.getSessionId();
+        String account = message.getFromAccount();
         ChatRoomNotificationAttachment attachment = (ChatRoomNotificationAttachment) message.getAttachment();
         List<String> targets = attachment.getTargets();
         if (targets != null) {
             for (String target : targets) {
                 ChatRoomMember member = getChatRoomMember(roomId, target);
-            	if (message.getDirect() == MsgDirectionEnum.In)
-            	{
+                if (attachment.getType() == NotificationType.ChatRoomMemberIn)
+                {
+                	//进入聊天室
             		addMembers(member, false);
-            	}
-            	else if(message.getDirect() == MsgDirectionEnum.Out)
-            	{
-            	    removeMembers(member);	
-            	}
+            		fetchMember(roomId, account, new SimpleCallback<ChatRoomMember>() {
+
+						@Override
+						public void onResult(boolean success,
+								ChatRoomMember result) {
+							try {
+								addMembers(result, false);
+								XLog.i("fetch room member success: " + result.getNick());
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+						}
+					});
+                }
+                else if(attachment.getType() == NotificationType.ChatRoomMemberExit)
+                {
+                	 removeMembers(member);	
+                }
             }
         }
     }
@@ -500,7 +525,8 @@ public class ChatRoomPanel {
             onlinePeopleitems.add(member);
         }
         Collections.sort(onlinePeopleitems, comp);
-        recycleAdapter.notifyDataSetChanged();
+//        recycleAdapter.notifyDataSetChanged();
+        recycleAdapter.UpdateData();
         if (onlinePeople != null)
         {
         	onlinePeople.setText(String.valueOf(items == null ? 0 : items.size()));
@@ -520,6 +546,8 @@ public class ChatRoomPanel {
             if (memberCache.containsKey(member.getAccount())) {
             	onlinePeopleitems.remove(memberCache.get(member.getAccount()));
                 memberCache.remove(member.getAccount());
+//                recycleAdapter.notifyDataSetChanged();
+                recycleAdapter.UpdateData();
                 if (onlinePeople != null)
                 {
                 	onlinePeople.setText(String.valueOf(onlinePeopleitems == null ? 0 : onlinePeopleitems.size()));
@@ -556,7 +584,10 @@ public class ChatRoomPanel {
             onlinePeopleitems.add(member);
         }
         Collections.sort(onlinePeopleitems, comp);
-        recycleAdapter.notifyDataSetChanged();
+//        recycleAdapter.notifyDataSetChanged();
+        recycleAdapter.UpdateData();
+        XLog.i("have notifiy data set changed");
+        XLog.i("amount people: " + onlinePeopleitems.size());
         if (onlinePeople != null)
         {
         	onlinePeople.setText(String.valueOf(onlinePeopleitems == null ? 0 : onlinePeopleitems.size()));

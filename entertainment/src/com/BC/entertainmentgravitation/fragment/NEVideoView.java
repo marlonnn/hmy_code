@@ -1,7 +1,6 @@
 /*
  * Copyright (C) 2006 The Android Open Source Project
  * Copyright (C) 2015 netease
- * @auther biwei
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +16,7 @@
  */
 
 package com.BC.entertainmentgravitation.fragment;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -72,7 +72,6 @@ import android.widget.Toast;
 public class NEVideoView extends SurfaceView implements NEMediaController.MediaPlayerControl{
     private static final String TAG = "NELivePlayer/NEVideoView";
     
-    //states refer to MediaPlayer
     private static final int IDLE = 0;
     private static final int INITIALIZED = 1;
     private static final int PREPARING = 2;
@@ -88,10 +87,12 @@ public class NEVideoView extends SurfaceView implements NEMediaController.MediaP
     private int mCurrState = IDLE;
     private int mNextState = IDLE;
 
-    private int mVideoScalingMode = VIDEO_SCALING_MODE_NONE;
+    private int mVideoScalingMode = VIDEO_SCALING_MODE_FIT;
     public static final int VIDEO_SCALING_MODE_NONE = 0;
-    public static final int VIDEO_SCALING_MODE_FIT = 1;
+    public static final int VIDEO_SCALING_MODE_FIT  = 1;
     public static final int VIDEO_SCALING_MODE_FILL = 2;
+    public static final int VIDEO_SCALING_MODE_FULL = 3;
+    
 
     private Uri mUri;
     private long mDuration = 0 ;
@@ -115,7 +116,7 @@ public class NEVideoView extends SurfaceView implements NEMediaController.MediaP
     private OnBufferingUpdateListener mOnBufferingUpdateListener;
     private int mCurrentBufferPercentage;
     private long mSeekWhenPrepared;
-    private int mBufferStrategy = 0; //直播低延时
+    private int mBufferStrategy = 0; //鐩存挱浣庡欢鏃?
     private boolean mHardwareDecoder = false;
     private boolean mPauseInBackground = false;
     private static Context mContext;
@@ -124,6 +125,7 @@ public class NEVideoView extends SurfaceView implements NEMediaController.MediaP
     private boolean mMute = false;
     private boolean isBackground;
     private boolean manualPause = false;
+    
     
     public NEVideoView(Context context) {
         super(context);
@@ -169,9 +171,9 @@ public class NEVideoView extends SurfaceView implements NEMediaController.MediaP
         int winWidth  = 0;
         int winHeight = 0;
         Rect rect = new Rect();
-        this.getWindowVisibleDisplayFrame(rect);//获取状态栏高度
+        this.getWindowVisibleDisplayFrame(rect);//鑾峰彇鐘舵?佹爮楂樺害
         WindowManager wm = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
-        Display display = wm.getDefaultDisplay(); //获取屏幕分辨率
+        Display display = wm.getDefaultDisplay(); //鑾峰彇灞忓箷鍒嗚鲸鐜?
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) { //new
             DisplayMetrics metrics = new DisplayMetrics();
             display.getRealMetrics(metrics);
@@ -209,7 +211,7 @@ public class NEVideoView extends SurfaceView implements NEMediaController.MediaP
             if (VIDEO_SCALING_MODE_NONE == videoScalingMode && mSurfaceWidth < winWidth && mSurfaceHeight < winHeight) {
             	layPara.width = (int) (mSurfaceHeight * aspectRatio);
             	layPara.height = mSurfaceHeight;
-            } else if ( VIDEO_SCALING_MODE_FIT == videoScalingMode) { //拉伸
+            } else if ( VIDEO_SCALING_MODE_FIT == videoScalingMode) { //鎷変几
             	 if (winRatio < aspectRatio) {
             		 layPara.width  = winWidth;
             		 layPara.height = (int)(winWidth / aspectRatio);
@@ -218,9 +220,18 @@ public class NEVideoView extends SurfaceView implements NEMediaController.MediaP
             		 layPara.width  = (int)(aspectRatio * winHeight);
             		 layPara.height = winHeight;
             	 }
-            } else if (VIDEO_SCALING_MODE_FILL == videoScalingMode){ //全屏
+            } else if (VIDEO_SCALING_MODE_FILL == videoScalingMode){ //婊″睆
                 layPara.width  = winWidth;
                 layPara.height = winHeight;
+            } else if (VIDEO_SCALING_MODE_FULL == videoScalingMode) { //鍏ㄥ睆
+                if (winRatio < aspectRatio) {
+                    layPara.width  = (int)(winHeight * aspectRatio);
+                    layPara.height = winHeight;
+                }
+                else {
+                    layPara.width  = winWidth;
+                    layPara.height = (int)(winWidth / aspectRatio);
+                }
             } else {
             	if (winRatio < aspectRatio) {
            		 layPara.width  = (int)(aspectRatio * winHeight);
@@ -255,8 +266,8 @@ public class NEVideoView extends SurfaceView implements NEMediaController.MediaP
         mNextState = IDLE;
     }
 
-    public void setVideoPath(String path) { //设置视频文件路径
-    	isBackground = false; //指示是否在后台
+    public void setVideoPath(String path) { //璁剧疆瑙嗛鏂囦欢璺緞
+    	isBackground = false; //鎸囩ず鏄惁鍦ㄥ悗鍙?
         setVideoURI(Uri.parse(path));
     }
 
@@ -320,7 +331,7 @@ public class NEVideoView extends SurfaceView implements NEMediaController.MediaP
             }
             mMediaPlayer.setDisplay(mSurfaceHolder);
             mMediaPlayer.setScreenOnWhilePlaying(true);
-            mMediaPlayer.prepareAsync();
+            mMediaPlayer.prepareAsync(mContext);
             mCurrState = PREPARING;
             attachMediaController();
         } catch (IOException ex) {
@@ -433,7 +444,7 @@ public class NEVideoView extends SurfaceView implements NEMediaController.MediaP
             if (getWindowToken() != null  && mMediaType.equals("livestream")) {
                 new AlertDialog.Builder(mContext)
                         .setTitle("Completed!")
-                        .setMessage("播放结束！")
+                        .setMessage("鎾斁缁撴潫锛?")
                         .setPositiveButton("OK",
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int whichButton) {
@@ -514,6 +525,10 @@ public class NEVideoView extends SurfaceView implements NEMediaController.MediaP
                 	Log.d(TAG, "onInfo: NELP_BUFFERING_END");
                     if (mBuffer != null)
                     	mBuffer.setVisibility(View.GONE);
+                } else if (what == NELivePlayer.NELP_FIRST_VIDEO_RENDERED) {
+                    Log.d(TAG, "onInfo: NELP_FIRST_VIDEO_RENDERED");
+                } else if (what == NELivePlayer.NELP_RELEASE_SUCCESS) {
+                    Log.d(TAG, "onInfo: NELP_RELEASE_SUCCESS");
                 }
             }
 
@@ -604,13 +619,13 @@ public class NEVideoView extends SurfaceView implements NEMediaController.MediaP
         	else {
         		if (mHardwareDecoder) {
         			openVideo();
-        			isBackground = false; //不在后台
+        			isBackground = false; //涓嶅湪鍚庡彴
         		}
         		else if (mPauseInBackground) {
         			//mMediaPlayer.setDisplay(mSurfaceHolder);
         			if (!isPaused())
         				start();
-        			isBackground = false; //不在后台
+        			isBackground = false; //涓嶅湪鍚庡彴
         		}
         	}
         }
@@ -901,7 +916,7 @@ public class NEVideoView extends SurfaceView implements NEMediaController.MediaP
 				e.printStackTrace();
 			}			
 			
-			Toast.makeText(mContext, "截图成功", Toast.LENGTH_SHORT).show();
+			Toast.makeText(mContext, "鎴浘鎴愬姛", Toast.LENGTH_SHORT).show();
     	}
     }
     

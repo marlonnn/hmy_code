@@ -92,6 +92,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<MyViewHolder>{
             });
         }
     }
+    
+    public void UpdateData()
+    {
+    	this.notifyDataSetChanged();
+    }
 
 }
 class MyViewHolder extends ViewHolder {

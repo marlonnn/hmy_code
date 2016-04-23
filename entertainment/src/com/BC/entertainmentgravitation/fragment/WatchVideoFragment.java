@@ -143,7 +143,6 @@ public class WatchVideoFragment extends BaseFragment implements SurfaceHolder.Ca
 		mVideoView.requestFocus();
 		
 		mVideoView.start();
-		mMediaPlayer.start();
 	}
 
 	@Override
@@ -184,7 +183,12 @@ public class WatchVideoFragment extends BaseFragment implements SurfaceHolder.Ca
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
 		mMediaPlayer.setDisplay(holder);
-//		mMediaPlayer.prepareAsync();
+		try {
+			mMediaPlayer.prepareAsync(getActivity().getApplicationContext());
+		} catch (IllegalStateException e) {
+			XLog.e("java.lang.IllegalStateException");
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -206,7 +210,7 @@ public class WatchVideoFragment extends BaseFragment implements SurfaceHolder.Ca
 
 	@Override
 	public void onPrepared(NELivePlayer arg0) {
-		
+		mMediaPlayer.start();
 	}
 
 	@Override

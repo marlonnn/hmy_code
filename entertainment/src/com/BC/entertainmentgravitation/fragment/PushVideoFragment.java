@@ -66,7 +66,7 @@ public class PushVideoFragment extends BaseFragment implements View.OnClickListe
     
     private Looper mCameraLooper;
     
-    private int mCameraID = CAMERA_POSITION_FRONT;//默认查询的是后置摄像头
+    private int mCameraID = CAMERA_POSITION_BACK;//默认查询的是后置摄像头
     
     private Camera mCamera;
     
@@ -428,7 +428,7 @@ public class PushVideoFragment extends BaseFragment implements View.OnClickListe
 	}
 	
     //切换前后摄像头
-	private void switchCamera() {
+	public void SwitchCamera() {
 		if(mLSMediaCapture != null) {
 			mLSMediaCapture.switchCamera();
 		}
@@ -518,7 +518,7 @@ public class PushVideoFragment extends BaseFragment implements View.OnClickListe
 	public void onClick(View v) {
 		
 	}
-
+	
 	//处理SDK抛上来的异常和事件，用户需要在这里监听各种消息，进行相应的处理。
     //例如监听断网消息，用户根据断网消息进行直播重连
 	@Override

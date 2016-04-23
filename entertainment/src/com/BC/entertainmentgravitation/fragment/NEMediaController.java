@@ -103,11 +103,12 @@ public class NEMediaController extends FrameLayout {
     
     private int mVideoScalingMode = VIDEO_SCALING_MODE_NONE;
     public static final int VIDEO_SCALING_MODE_NONE = 0;
-    public static final int VIDEO_SCALING_MODE_FIT = 1;
+    public static final int VIDEO_SCALING_MODE_FIT  = 1;
     public static final int VIDEO_SCALING_MODE_FILL = 2;
+    public static final int VIDEO_SCALING_MODE_FULL = 3;
 
 
-    //ͨ��Context�����AttributeSet����������MediaController����
+    //通过Context对象和AttributeSet对象来创建MediaController对象
     public NEMediaController(Context context, AttributeSet attrs) {
         super(context, attrs);
         mRoot = this;
@@ -115,7 +116,7 @@ public class NEMediaController extends FrameLayout {
         initController(context);
     }
 
-    //ͨ��Context������MediaController����
+    //通过Context来创建MediaController对象
     public NEMediaController(Context context) {
         super(context);
         if (!mFromXml && initController(context))
@@ -128,7 +129,7 @@ public class NEMediaController extends FrameLayout {
     }
 
     @Override
-    //��XML��������������ͼ����á���ʼ��������ͼ������initControllerView�����������¼����󶨿ؼ�������Ĭ��ֵ��
+    //从XML加载完所有子视图后调用。初始化控制视图（调用initControllerView方法，设置事件、绑定控件和设置默认值）
     public void onFinishInflate() {
         if (mRoot != null)
             initControllerView(mRoot);
@@ -143,10 +144,10 @@ public class NEMediaController extends FrameLayout {
     }
 
     /**
-     * ����MediaController�󶨵�һ����ͼ�ϡ����������һ��VideoView���󣬻��������activity������ͼ��
+     * 设置MediaController绑定到一个视图上。例如可以是一个VideoView对象，或者是你的activity的主视图。
      * 
      * @param view
-     *            view	�ɼ�ʱ�󶨵���ͼ
+     *            view	可见时绑定的视图
      */
     public void setAnchorView(View view) {
         mAnchor = view;
@@ -171,7 +172,7 @@ public class NEMediaController extends FrameLayout {
     }
 
     private void initControllerView(View v) {
-        mPauseButton = (ImageView) v.findViewById(R.id.mediacontroller_play_pause); //������ͣ��ť
+        mPauseButton = (ImageView) v.findViewById(R.id.mediacontroller_play_pause); //播放暂停按钮
         if (mPauseButton != null) {
         	if (mPaused) {
         		mPauseButton.setImageResource(R.drawable.nemediacontroller_pause);
@@ -181,7 +182,7 @@ public class NEMediaController extends FrameLayout {
             mPauseButton.setOnClickListener(mPauseListener);
         }
         
-        mSetPlayerScaleButton = (ImageView) v.findViewById(R.id.video_player_scale);  //������ʾģʽ��ť
+        mSetPlayerScaleButton = (ImageView) v.findViewById(R.id.video_player_scale);  //画面显示模式按钮
         if(mSetPlayerScaleButton != null) {
         	if (mPlayer.isHardware() && mPlayer.isInBackground()) {
 				switch(mVideoScalingMode)
@@ -204,13 +205,13 @@ public class NEMediaController extends FrameLayout {
         	mSetPlayerScaleButton.setOnClickListener(mSetPlayerScaleListener);
         }
         
-        mSnapshotButton = (ImageView) v.findViewById(R.id.snapShot);  //��ͼ��ť
+        mSnapshotButton = (ImageView) v.findViewById(R.id.snapShot);  //截图按钮
         if (mSnapshotButton != null) {
         	mSnapshotButton.requestFocus();
         	mSnapshotButton.setOnClickListener(mSnapShotListener);
         }
        
-        mMuteButton = (ImageView) v.findViewById(R.id.video_player_mute);  //������ť
+        mMuteButton = (ImageView) v.findViewById(R.id.video_player_mute);  //静音按钮
     	if (mMuteButton != null) {
     		if (mPlayer.isHardware() && mPlayer.isInBackground()) {
             	if (mute_flag) {
@@ -221,7 +222,7 @@ public class NEMediaController extends FrameLayout {
     		mMuteButton.setOnClickListener(mMuteListener);
     	}
 
-        mProgress = (SeekBar) v.findViewById(R.id.mediacontroller_seekbar);  //������
+        mProgress = (SeekBar) v.findViewById(R.id.mediacontroller_seekbar);  //进度条
         if (mProgress != null) {
             if (mProgress instanceof SeekBar) {
                 SeekBar seeker = (SeekBar) mProgress;
@@ -232,21 +233,21 @@ public class NEMediaController extends FrameLayout {
         }
         
 
-        mEndTime = (TextView) v.findViewById(R.id.mediacontroller_time_total); //��ʱ��
-        mCurrentTime = (TextView) v.findViewById(R.id.mediacontroller_time_current); //��ǰ����λ��
+        mEndTime = (TextView) v.findViewById(R.id.mediacontroller_time_total); //总时长
+        mCurrentTime = (TextView) v.findViewById(R.id.mediacontroller_time_current); //当前播放位置
         
 //        if(mPlayer.getMediaType().equals("localaudio")) {
-//        	mSetPlayerScaleButton.setVisibility(View.INVISIBLE); //�������ֲ���Ҫ������ʾģʽ���ð�ť����ʾ
-//        	mSnapshotButton.setVisibility(View.INVISIBLE);       //�������ֲ���Ҫ��ͼ���ð�ť����ʾ
+//        	mSetPlayerScaleButton.setVisibility(View.INVISIBLE); //播放音乐不需要设置显示模式，该按钮不显示
+//        	mSnapshotButton.setVisibility(View.INVISIBLE);       //播放音乐不需要截图，该按钮不显示
 //        	show();
 //        }
         
 //        if (mPlayer.isHardware()) {
-//        	mSnapshotButton.setVisibility(View.INVISIBLE); //Ӳ�����벻֧�ֽ�ͼ���ð�ť����ʾ
+//        	mSnapshotButton.setVisibility(View.INVISIBLE); //硬件解码不支持截图，该按钮不显示
 //        }
     }
-    //����MediaPlayerʹ֮��Ҫ�󶨵Ŀؼ�����һ���������һ��MediaController.MediaPlayerControl ��̬�ӿڵĶ���
-    //(��VideoView��MediaController.MediaPlayerControl��̬�ӿڵ���ʵ���࣬���ʹ�����ǿ��Ը��õĿ������ǵ���Ƶ���Ž���)
+    //设置MediaPlayer使之与要绑定的控件绑定在一起其参数是一个MediaController.MediaPlayerControl 静态接口的对象，
+    //(而VideoView是MediaController.MediaPlayerControl静态接口的子实现类，这就使得我们可以更好的控制我们的视频播放进度)
     public void setMediaPlayer(MediaPlayerControl player) {
         mPlayer = player;
         updatePausePlay();
@@ -262,14 +263,14 @@ public class NEMediaController extends FrameLayout {
         mInstantSeeking = seekWhenDragging;
     }
 
-    //��ʾMediaController��Ĭ����ʾ3����Զ����ء�
+    //显示MediaController。默认显示3秒后自动隐藏。
     public void show() {
         show(sDefaultTimeout);
     }
 
     /**
      * Set the content of the file_name TextView
-     * ������Ƶ�ļ����ơ�
+     * 设置视频文件名称。
      * 
      * @param name
      */
@@ -340,7 +341,7 @@ public class NEMediaController extends FrameLayout {
     }
 
     @SuppressLint({ "InlinedApi", "NewApi" })
-    //����MediaController��
+    //隐藏MediaController。
     public void hide() {
         if (mAnchor == null)
             return;
@@ -370,7 +371,7 @@ public class NEMediaController extends FrameLayout {
 
     private OnShownListener mShownListener;
 
-    //ע��һ���ص���������MediaController��ʾ�󱻵��á�
+    //注册一个回调函数，在MediaController显示后被调用。
     public void setOnShownListener(OnShownListener l) {
         mShownListener = l;
     }
@@ -381,7 +382,7 @@ public class NEMediaController extends FrameLayout {
 
     private OnHiddenListener mHiddenListener;
 
-    //ע��һ���ص���������MediaController���غ󱻵��á�
+    //注册一个回调函数，在MediaController隐藏后被调用。
     public void setOnHiddenListener(OnHiddenListener l) {
         mHiddenListener = l;
     }
@@ -549,13 +550,13 @@ public class NEMediaController extends FrameLayout {
 			if(mPlayer.getMediaType().equals("localaudio") || mPlayer.isHardware()) {
 				AlertDialog alertDialog;
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(mContext);
-                alertDialogBuilder.setTitle("ע��");
+                alertDialogBuilder.setTitle("注意");
                 if (mPlayer.getMediaType().equals("localaudio"))
-                	alertDialogBuilder.setMessage("��Ƶ���Ų�֧�ֽ�ͼ��");
+                	alertDialogBuilder.setMessage("音频播放不支持截图！");
                 else if (mPlayer.isHardware())
-                	alertDialogBuilder.setMessage("Ӳ�����벻֧�ֽ�ͼ��");
+                	alertDialogBuilder.setMessage("硬件解码不支持截图！");
                 alertDialogBuilder.setCancelable(false)
-                    .setPositiveButton("ȷ��", new DialogInterface.OnClickListener() {
+                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
 
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -643,10 +644,10 @@ public class NEMediaController extends FrameLayout {
         	if (mPlayer.getMediaType().equals("livestream")) {
         		AlertDialog alertDialog;
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(mContext);
-                alertDialogBuilder.setTitle("ע��");
-                alertDialogBuilder.setMessage("ֱ����֧��seek����"); 
+                alertDialogBuilder.setTitle("注意");
+                alertDialogBuilder.setMessage("直播不支持seek操作"); 
                 alertDialogBuilder.setCancelable(false)
-                    .setPositiveButton("ȷ��", new DialogInterface.OnClickListener() {
+                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
 
                         @Override
                         public void onClick(DialogInterface dialog, int which) {

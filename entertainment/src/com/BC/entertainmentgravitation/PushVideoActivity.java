@@ -17,6 +17,7 @@ import com.BC.entertainmentgravitation.fragment.ExitFragmentListener;
 import com.BC.entertainmentgravitation.fragment.PushVideoFragment;
 import com.BC.entertainmentgravitation.fragment.ScrollListener;
 import com.BC.entertainmentgravitation.fragment.SurfaceFragment;
+import com.BC.entertainmentgravitation.fragment.TopSurfaceFragment.SwitchCamera;
 import com.netease.LSMediaCapture.lsMessageHandler;
 import com.netease.nim.uikit.common.ui.dialog.DialogMaker;
 import com.netease.nimlib.sdk.AbortableFuture;
@@ -42,7 +43,7 @@ import com.summer.utils.ToastUtil;
  * @author zhongwen
  *
  */
-public class PushVideoActivity extends FragmentActivity implements ExitFragmentListener {
+public class PushVideoActivity extends FragmentActivity implements ExitFragmentListener, SwitchCamera {
 	
 	private View rootView;
 	
@@ -233,7 +234,8 @@ public class PushVideoActivity extends FragmentActivity implements ExitFragmentL
     }
     
     private void logoutChatRoom() {
-    	
+		NIMClient.getService(ChatRoomService.class).exitChatRoom(
+				chatRoom.getChatroomid());
         clearChatRoom();
     }
     
@@ -246,9 +248,8 @@ public class PushVideoActivity extends FragmentActivity implements ExitFragmentL
     @Override
 	protected void onDestroy() {
 		super.onDestroy();
-		registerObservers(false);
 		logoutChatRoom();
-		fragment.Destory();
+		registerObservers(false);
 	}
 
 	private boolean checkVideoResolution()
@@ -419,7 +420,18 @@ public class PushVideoActivity extends FragmentActivity implements ExitFragmentL
 	public void isExit(boolean exit) {
 		if (exit)
 		{
+			fragment.Destory();
 			finish();
+		}
+	}
+
+	@Override
+	public void onSwitchCamera() {
+		try {
+			fragment.SwitchCamera();
+		} catch (Exception e) {
+			e.printStackTrace();
+			XLog.e("switch camera exception!");
 		}
 	}
 }
