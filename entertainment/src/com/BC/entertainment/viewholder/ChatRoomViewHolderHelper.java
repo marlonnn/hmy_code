@@ -14,14 +14,12 @@ import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum;
 import java.util.Map;
 
 /**
- * 聊天室成员姓名
  * Created by hzxuwen on 2016/1/20.
  */
 public class ChatRoomViewHolderHelper {
 
     public static void setNameTextView(ChatRoomMessage message, TextView text, ImageView imageView, Context context) {
         if (message.getMsgType() != MsgTypeEnum.notification) {
-            // 聊天室中显示姓名
             if (message.getChatRoomMessageExtension() != null) {
                 text.setText(message.getChatRoomMessageExtension().getSenderNick());
             } else {

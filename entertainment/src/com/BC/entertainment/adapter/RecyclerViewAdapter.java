@@ -33,16 +33,16 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<MyViewHolder>{
         this.mOnItemClickListener = listener;
     }
     
-    //¹¹Ôì·½·¨
+    //æ„é€ æ–¹æ³•
     public RecyclerViewAdapter(Context context, LinkedList<ChatRoomMember> datas) {
-        //³ÉÔ±±äÁ¿½øĞĞ¸³Öµ
+        //æˆå‘˜å˜é‡è¿›è¡Œèµ‹å€¼
         this.mContext = context;
         this.mDatas = datas;
         mInflater = LayoutInflater.from(context);
     }
     
     /*
-            ´´½¨ViewHolder
+            åˆ›å»ºViewHolder
      */
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
@@ -53,7 +53,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<MyViewHolder>{
     }
     
     /*
-            °ó¶¨ViewHolderµÄÊı¾İ
+            ç»‘å®šViewHolderçš„æ•°æ®
      */
     @Override
     public void onBindViewHolder(final MyViewHolder myViewHolder, final int pos) {

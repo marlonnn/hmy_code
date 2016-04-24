@@ -131,7 +131,7 @@ public class JiaGeQuXianFragment extends BaseFragment implements
 		// TODO Auto-generated method stub
 		if (kLink == null || kLink.getPoint() == null
 				|| kLink.getPoint().size() == 0) {
-			ToastUtil.show(getActivity(), "ÔİÎŞÊı¾İ");
+			ToastUtil.show(getActivity(), "æš‚æ— æ•°æ®");
 			return;
 		}
 		List<Point> price_movements = kLink.getPoint();
@@ -226,7 +226,7 @@ public class JiaGeQuXianFragment extends BaseFragment implements
 			type = 1;
 			sendReqKLineGraph();
 		} else {
-			ToastUtil.show(getActivity(), "»ñÈ¡Ê§°Ü");
+			ToastUtil.show(getActivity(), "è·å–å¤±è´¥");
 		}
 	}
 
@@ -235,14 +235,14 @@ public class JiaGeQuXianFragment extends BaseFragment implements
 				getActivity());
 		builder.setTitle(title);
 		builder.setMessage(message);
-		builder.setNegativeButton("È¡Ïû", new DialogInterface.OnClickListener() {
+		builder.setNegativeButton("å–æ¶ˆ", new DialogInterface.OnClickListener() {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				dialog.dismiss();
 			}
 		});
-		builder.setPositiveButton("È·¶¨", new DialogInterface.OnClickListener() {
+		builder.setPositiveButton("ç¡®å®š", new DialogInterface.OnClickListener() {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
@@ -258,17 +258,17 @@ public class JiaGeQuXianFragment extends BaseFragment implements
 	}
 
 	public void requestFailed(int errcode, String message) {
-		if (message.equals("Óé±Ò²»×ã£¡")) {
-			showWarningDialog("ÊÇ·ñ¹ºÂòÓé±Ò", "ÄúµÄÓé±Ò²»×ãÊÇ·ñÈ¥¹ºÂò");
+		if (message.equals("å¨±å¸ä¸è¶³ï¼")) {
+			showWarningDialog("æ˜¯å¦è´­ä¹°å¨±å¸", "æ‚¨çš„å¨±å¸ä¸è¶³æ˜¯å¦å»è´­ä¹°");
 		}
 	}
 
 	/**
-	 * »ñÈ¡Ã÷ĞÇĞÅÏ¢
+	 * è·å–æ˜æ˜Ÿä¿¡æ¯
 	 */
 	private void sendReqStarInformation() {
 		if (starID == null) {
-			ToastUtil.show(getActivity(), "ÎŞ·¨»ñÈ¡Êı¾İ");
+			ToastUtil.show(getActivity(), "æ— æ³•è·å–æ•°æ®");
 			return;
 		}
 		HashMap<String, String> entity = new HashMap<String, String>();
@@ -281,11 +281,11 @@ public class JiaGeQuXianFragment extends BaseFragment implements
 	}
 
 	/**
-	 * »ñÈ¡¼Û¸ñÇúÏß
+	 * è·å–ä»·æ ¼æ›²çº¿
 	 */
 	private void sendReqKLineGraph() {
 		if (starInformation == null) {
-			ToastUtil.show(getActivity(), "ÎŞ·¨»ñÈ¡Êı¾İ");
+			ToastUtil.show(getActivity(), "æ— æ³•è·å–æ•°æ®");
 			return;
 		}
 		HashMap<String, String> entity = new HashMap<String, String>();
@@ -313,19 +313,19 @@ public class JiaGeQuXianFragment extends BaseFragment implements
 		}
 		switch (v.getId()) {
 		/**
-		 * ¹ÄÕÆ
+		 * é¼“æŒ
 		 */
 		case R.id.applause:
 			applauseGiveConcern.showApplaudDialog(1);
 			break;
 		/**
-		 * µ¹²Ê
+		 * å€’å½©
 		 */
 		case R.id.bigbird:
 			applauseGiveConcern.showApplaudDialog(2);
 			break;
 		/**
-		 * ¹Ø×¢
+		 * å…³æ³¨
 		 */
 		case R.id.FocusOn:
 			applauseGiveConcern.sendFocusRequest();
@@ -338,7 +338,7 @@ public class JiaGeQuXianFragment extends BaseFragment implements
 		Gson gson = new Gson();
 		switch (taskType) {
 		case Config.give_applause_booed:
-			ToastUtil.show(getActivity(), "Ìá½»³É¹¦");
+			ToastUtil.show(getActivity(), "æäº¤æˆåŠŸ");
 			if (updataMainActivity != null) {
 				updataMainActivity.updataMainActivity();
 			}
@@ -360,7 +360,7 @@ public class JiaGeQuXianFragment extends BaseFragment implements
 
 			break;
 		case Config.and_attention:
-			ToastUtil.show(getActivity(), "Ìá½»³É¹¦");
+			ToastUtil.show(getActivity(), "æäº¤æˆåŠŸ");
 			applauseGiveConcern.showAnimationDialog(R.drawable.circle6,
 					R.raw.concern);
 			if (updataMainActivity != null) {

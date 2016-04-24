@@ -39,7 +39,7 @@ import com.summer.utils.StringUtil;
 import com.summer.utils.ToastUtil;
 
 /**
- * Ã÷ĞÇÖ±²¥
+ * æ˜æ˜Ÿç›´æ’­
  * @author zhongwen
  *
  */
@@ -53,7 +53,7 @@ public class PushVideoActivity extends FragmentActivity implements ExitFragmentL
 	
 	private ChatRoom chatRoom;
     
-    private AbortableFuture<EnterChatRoomResultData> enterRequest;//ÁÄÌìÊÒ
+    private AbortableFuture<EnterChatRoomResultData> enterRequest;//èŠå¤©å®¤
     
     private ChatRoomInfo roomInfo;
     
@@ -64,11 +64,11 @@ public class PushVideoActivity extends FragmentActivity implements ExitFragmentL
 		boolean onTouchEvent(MotionEvent event);  
 	}
 	
-	// ±£´æMyTouchListener½Ó¿ÚµÄÁĞ±í  
+	// ä¿å­˜MyTouchListeneræ¥å£çš„åˆ—è¡¨  
 	private ArrayList<TouchListener> myTouchListeners = new ArrayList<TouchListener>();
 	
 	/** 
-	* Ìá¹©¸øFragmentÍ¨¹ıPushVideoActivity.this·½·¨À´×¢²á×Ô¼ºµÄ´¥ÃşÊÂ¼şµÄ·½·¨ 
+	* æä¾›ç»™Fragmenté€šè¿‡PushVideoActivity.thisæ–¹æ³•æ¥æ³¨å†Œè‡ªå·±çš„è§¦æ‘¸äº‹ä»¶çš„æ–¹æ³• 
 	* @param listener 
 	*/  
 	public void registerMyTouchListener(TouchListener listener) {  
@@ -76,7 +76,7 @@ public class PushVideoActivity extends FragmentActivity implements ExitFragmentL
 	}  
 	      
 	/** 
-	* Ìá¹©¸øFragmentÍ¨¹ıPushVideoActivity.this·½·¨À´È¡Ïû×¢²á×Ô¼ºµÄ´¥ÃşÊÂ¼şµÄ·½·¨ 
+	* æä¾›ç»™Fragmenté€šè¿‡PushVideoActivity.thisæ–¹æ³•æ¥å–æ¶ˆæ³¨å†Œè‡ªå·±çš„è§¦æ‘¸äº‹ä»¶çš„æ–¹æ³• 
 	* @param listener 
 	*/  
 	public void unRegisterMyTouchListener(TouchListener listener) {  
@@ -84,7 +84,7 @@ public class PushVideoActivity extends FragmentActivity implements ExitFragmentL
 	}  
 	      
 	/** 
-	* ·Ö·¢´¥ÃşÊÂ¼ş¸øËùÓĞ×¢²áÁËMyTouchListenerµÄ½Ó¿Ú 
+	* åˆ†å‘è§¦æ‘¸äº‹ä»¶ç»™æ‰€æœ‰æ³¨å†Œäº†MyTouchListenerçš„æ¥å£ 
 	*/  
 	@Override  
 	public boolean dispatchTouchEvent(MotionEvent ev) {   
@@ -94,8 +94,8 @@ public class PushVideoActivity extends FragmentActivity implements ExitFragmentL
 	    return super.dispatchTouchEvent(ev);  
 	}  
 
-    //ÂË¾µ£¨Éæ¼°Ó²¼ş±àÂë£©µÄÏà¹Ø²Ù×÷
-    Blacklist[] g_blacklist = { //¿ÉÀ©Õ¹£¬ĞèĞŞ¸Ä
+    //æ»¤é•œï¼ˆæ¶‰åŠç¡¬ä»¶ç¼–ç ï¼‰çš„ç›¸å…³æ“ä½œ
+    Blacklist[] g_blacklist = { //å¯æ‰©å±•ï¼Œéœ€ä¿®æ”¹
     		new Blacklist("L39h", 19),
     		new Blacklist("N1", 22)
     };
@@ -172,7 +172,7 @@ public class PushVideoActivity extends FragmentActivity implements ExitFragmentL
 		fragment.StopVideoEncode();
 	}
 
-	private void initializePushVideoFragment()
+	private void initializePushVideoFragment(ChatRoomMember member)
     {
     	fragment = new PushVideoFragment(chatRoom);
     	fragment.setHandler(handler);
@@ -181,7 +181,7 @@ public class PushVideoActivity extends FragmentActivity implements ExitFragmentL
                 .beginTransaction()
                 .add(R.id.layout_video_play, fragment)
                 .commit();
-        new SurfaceFragment(listener, chatRoom).show(getSupportFragmentManager(), "push video");
+        new SurfaceFragment(listener, chatRoom, member, false).show(getSupportFragmentManager(), "push video");
     	
     }
     
@@ -223,7 +223,7 @@ public class PushVideoActivity extends FragmentActivity implements ExitFragmentL
                 ChatRoomMember member = result.getMember();
                 member.setRoomId(roomInfo.getRoomId());
 //                ChatRoomMemberCache.getInstance().saveMyMember(member);
-                initializePushVideoFragment();
+                initializePushVideoFragment(member);
                 XLog.i("enter chat room success" + roomInfo.getRoomId());
 			}});
     }
@@ -290,7 +290,7 @@ public class PushVideoActivity extends FragmentActivity implements ExitFragmentL
 		finish();
 	}
 	
-	/************************** ×¢²á ***************************/
+	/************************** æ³¨å†Œ ***************************/
     private void registerObservers(boolean register) {
         NIMClient.getService(ChatRoomServiceObserver.class).observeOnlineStatus(onlineStatus, register);
         NIMClient.getService(ChatRoomServiceObserver.class).observeKickOutEvent(kickOutObserver, register);
@@ -333,7 +333,7 @@ public class PushVideoActivity extends FragmentActivity implements ExitFragmentL
     };
 	
     /**
-     * ´¦ÀíÖ±²¥¹ı³ÌÖĞµÄÒì³£
+     * å¤„ç†ç›´æ’­è¿‡ç¨‹ä¸­çš„å¼‚å¸¸
      * @return
      */
     protected final Handler getHandler() {
@@ -345,62 +345,62 @@ public class PushVideoActivity extends FragmentActivity implements ExitFragmentL
 //					super.handleMessage(msg);
 					switch(msg.what)
 					{
-				      case lsMessageHandler.MSG_INIT_LIVESTREAMING_OUTFILE_ERROR://³õÊ¼»¯Ö±²¥³ö´í
+				      case lsMessageHandler.MSG_INIT_LIVESTREAMING_OUTFILE_ERROR://åˆå§‹åŒ–ç›´æ’­å‡ºé”™
 				      case lsMessageHandler.MSG_INIT_LIVESTREAMING_VIDEO_ERROR:	
 				      case lsMessageHandler.MSG_INIT_LIVESTREAMING_AUDIO_ERROR:
-				    	  toastAndExit("³õÊ¼»¯Ö±²¥³ö´í");
+				    	  toastAndExit("åˆå§‹åŒ–ç›´æ’­å‡ºé”™");
 				    	  break;
-				      case lsMessageHandler.MSG_START_LIVESTREAMING_ERROR://¿ªÊ¼Ö±²¥³ö´í
-				    	  toastAndExit("¿ªÊ¼Ö±²¥³ö´í");
+				      case lsMessageHandler.MSG_START_LIVESTREAMING_ERROR://å¼€å§‹ç›´æ’­å‡ºé”™
+				    	  toastAndExit("å¼€å§‹ç›´æ’­å‡ºé”™");
 				    	  break;
-				      case lsMessageHandler.MSG_STOP_LIVESTREAMING_ERROR://Í£Ö¹Ö±²¥³ö´í
-				    	  toastAndExit("Í£Ö¹Ö±²¥³ö´í");
+				      case lsMessageHandler.MSG_STOP_LIVESTREAMING_ERROR://åœæ­¢ç›´æ’­å‡ºé”™
+				    	  toastAndExit("åœæ­¢ç›´æ’­å‡ºé”™");
 				    	  break;
-				      case lsMessageHandler.MSG_AUDIO_PROCESS_ERROR://ÒôÆµ´¦Àí³ö´í
-				    	  toastAndExit("ÒôÆµ´¦Àí³ö´í");
+				      case lsMessageHandler.MSG_AUDIO_PROCESS_ERROR://éŸ³é¢‘å¤„ç†å‡ºé”™
+				    	  toastAndExit("éŸ³é¢‘å¤„ç†å‡ºé”™");
 				    	  break;
-				      case lsMessageHandler.MSG_VIDEO_PROCESS_ERROR://ÊÓÆµ´¦Àí³ö´í
-				    	  toastAndExit("ÊÓÆµ´¦Àí³ö´í");
+				      case lsMessageHandler.MSG_VIDEO_PROCESS_ERROR://è§†é¢‘å¤„ç†å‡ºé”™
+				    	  toastAndExit("è§†é¢‘å¤„ç†å‡ºé”™");
 				    	  break;
-				      case lsMessageHandler.MSG_RTMP_URL_ERROR://¶ÏÍøÏûÏ¢
-				    	  toastAndExit("¶ÏÍøÁË£¬Çë¼ì²éÍøÂçÁ¬½Ó");
+				      case lsMessageHandler.MSG_RTMP_URL_ERROR://æ–­ç½‘æ¶ˆæ¯
+				    	  toastAndExit("æ–­ç½‘äº†ï¼Œè¯·æ£€æŸ¥ç½‘ç»œè¿æ¥");
 				    	  break;
-				      case lsMessageHandler.MSG_URL_NOT_AUTH://Ö±²¥URL·Ç·¨
-				    	  toastAndExit("Ö±²¥µØÖ·URL·Ç·¨£¬Çë¼ì²é");
+				      case lsMessageHandler.MSG_URL_NOT_AUTH://ç›´æ’­URLéæ³•
+				    	  toastAndExit("ç›´æ’­åœ°å€URLéæ³•ï¼Œè¯·æ£€æŸ¥");
 				    	  break;
-				      case lsMessageHandler.MSG_SEND_STATICS_LOG_ERROR://·¢ËÍÍ³¼ÆĞÅÏ¢³ö´í
-				    	  toastAndExit("·¢ËÍÍ³¼ÆĞÅÏ¢³ö´í");
+				      case lsMessageHandler.MSG_SEND_STATICS_LOG_ERROR://å‘é€ç»Ÿè®¡ä¿¡æ¯å‡ºé”™
+				    	  toastAndExit("å‘é€ç»Ÿè®¡ä¿¡æ¯å‡ºé”™");
 				    	  break;
-				      case lsMessageHandler.MSG_SEND_HEARTBEAT_LOG_ERROR://·¢ËÍĞÄÌøĞÅÏ¢³ö´í
-				    	  toastAndExit("·¢ËÍĞÄÌøĞÅÏ¢³ö´í");
+				      case lsMessageHandler.MSG_SEND_HEARTBEAT_LOG_ERROR://å‘é€å¿ƒè·³ä¿¡æ¯å‡ºé”™
+				    	  toastAndExit("å‘é€å¿ƒè·³ä¿¡æ¯å‡ºé”™");
 				    	  break;
-				      case lsMessageHandler.MSG_AUDIO_SAMPLE_RATE_NOT_SUPPORT_ERROR://ÒôÆµ²É¼¯²ÎÊı²»Ö§³Ö
-				    	  toastAndExit("ÒôÆµ²É¼¯²ÎÊı²»Ö§³Ö");
+				      case lsMessageHandler.MSG_AUDIO_SAMPLE_RATE_NOT_SUPPORT_ERROR://éŸ³é¢‘é‡‡é›†å‚æ•°ä¸æ”¯æŒ
+				    	  toastAndExit("éŸ³é¢‘é‡‡é›†å‚æ•°ä¸æ”¯æŒ");
 				    	  break;
-				      case lsMessageHandler.MSG_AUDIO_PARAMETER_NOT_SUPPORT_BY_HARDWARE_ERROR://ÒôÆµ²ÎÊı²»Ö§³Ö
-				    	  toastAndExit("ÒôÆµ²ÎÊı²»Ö§³Ö");
+				      case lsMessageHandler.MSG_AUDIO_PARAMETER_NOT_SUPPORT_BY_HARDWARE_ERROR://éŸ³é¢‘å‚æ•°ä¸æ”¯æŒ
+				    	  toastAndExit("éŸ³é¢‘å‚æ•°ä¸æ”¯æŒ");
 				    	  break;
-				      case lsMessageHandler.MSG_NEW_AUDIORECORD_INSTANCE_ERROR://ÒôÆµÊµÀı³õÊ¼»¯³ö´í
-				    	  toastAndExit("ÒôÆµÊµÀı³õÊ¼»¯³ö´í");
+				      case lsMessageHandler.MSG_NEW_AUDIORECORD_INSTANCE_ERROR://éŸ³é¢‘å®ä¾‹åˆå§‹åŒ–å‡ºé”™
+				    	  toastAndExit("éŸ³é¢‘å®ä¾‹åˆå§‹åŒ–å‡ºé”™");
 				    	  break;
-				      case lsMessageHandler.MSG_AUDIO_START_RECORDING_ERROR://ÒôÆµ²É¼¯³ö´í
-				    	  toastAndExit("ÒôÆµ²É¼¯³ö´í");
+				      case lsMessageHandler.MSG_AUDIO_START_RECORDING_ERROR://éŸ³é¢‘é‡‡é›†å‡ºé”™
+				    	  toastAndExit("éŸ³é¢‘é‡‡é›†å‡ºé”™");
 				    	  break;
-				      case lsMessageHandler.MSG_OTHER_AUDIO_PROCESS_ERROR://ÒôÆµ²Ù×÷µÄÆäËû´íÎó
-				    	  toastAndExit("ÒôÆµ²Ù×÷µÄÆäËû´íÎó");
+				      case lsMessageHandler.MSG_OTHER_AUDIO_PROCESS_ERROR://éŸ³é¢‘æ“ä½œçš„å…¶ä»–é”™è¯¯
+				    	  toastAndExit("éŸ³é¢‘æ“ä½œçš„å…¶ä»–é”™è¯¯");
 				    	  break;
-				      case lsMessageHandler.MSG_QOS_TO_STOP_LIVESTREAMING://ÍøÂçQoS¼«²î£¬ÂëÂÊµµ´Î½µµ½×îµÍ
+				      case lsMessageHandler.MSG_QOS_TO_STOP_LIVESTREAMING://ç½‘ç»œQoSæå·®ï¼Œç ç‡æ¡£æ¬¡é™åˆ°æœ€ä½
 				    	  break;
-				      case lsMessageHandler.MSG_HW_VIDEO_PACKET_ERROR://ÊÓÆµÓ²¼ş±àÂë³ö´í
-				    	  toastAndExit("ÊÓÆµÓ²¼ş±àÂë³ö´í");
+				      case lsMessageHandler.MSG_HW_VIDEO_PACKET_ERROR://è§†é¢‘ç¡¬ä»¶ç¼–ç å‡ºé”™
+				    	  toastAndExit("è§†é¢‘ç¡¬ä»¶ç¼–ç å‡ºé”™");
 				    	  break;
-				      case lsMessageHandler.MSG_CAMERA_PREVIEW_SIZE_NOT_SUPPORT_ERROR://camera²É¼¯·Ö±æÂÊ²»Ö§³Ö
-				    	  toastAndExit("²É¼¯·Ö±æÂÊ²»Ö§³Ö");
+				      case lsMessageHandler.MSG_CAMERA_PREVIEW_SIZE_NOT_SUPPORT_ERROR://cameraé‡‡é›†åˆ†è¾¨ç‡ä¸æ”¯æŒ
+				    	  toastAndExit("é‡‡é›†åˆ†è¾¨ç‡ä¸æ”¯æŒ");
 				    	  break;
-				      case lsMessageHandler.MSG_START_LIVESTREAMING_FINISHED://¿ªÊ¼Ö±²¥Íê³É
+				      case lsMessageHandler.MSG_START_LIVESTREAMING_FINISHED://å¼€å§‹ç›´æ’­å®Œæˆ
 				    	  break;
-				      case lsMessageHandler.MSG_STOP_LIVESTREAMING_FINISHED://Í£Ö¹Ö±²¥Íê³É
-				    	  toastAndExit("Í£Ö¹Ö±²¥Íê³É");
+				      case lsMessageHandler.MSG_STOP_LIVESTREAMING_FINISHED://åœæ­¢ç›´æ’­å®Œæˆ
+				    	  toastAndExit("åœæ­¢ç›´æ’­å®Œæˆ");
 			              break;
 					}
 				}

@@ -30,7 +30,7 @@ import com.summer.fragment.BaseFragment;
 import com.summer.logger.XLog;
 
 /**
- * Ã÷ĞÇÖ±²¥¼ä£¬ÍÆËÍÊÓÆµ
+ * æ˜æ˜Ÿç›´æ’­é—´ï¼Œæ¨é€è§†é¢‘
  * @author wen zhong
  *
  */
@@ -55,22 +55,22 @@ public class PushVideoFragment extends BaseFragment implements View.OnClickListe
 	
 	private String chatroomid;
 	
-	private boolean mHardWareEncEnable = false;//ÊÇ·ñÖ§³ÖÂË¾µÄ£Ê½
+	private boolean mHardWareEncEnable = false;//æ˜¯å¦æ”¯æŒæ»¤é•œæ¨¡å¼
 	
 	private CameraSurfaceView mCameraSurfaceView;
 	
     private LiveSurfaceView mVideoView;
 	
-    //²éÑ¯ÉãÏñÍ·Ö§³ÖµÄ²É¼¯·Ö±æÂÊĞÅÏ¢Ïà¹Ø±äÁ¿
+    //æŸ¥è¯¢æ‘„åƒå¤´æ”¯æŒçš„é‡‡é›†åˆ†è¾¨ç‡ä¿¡æ¯ç›¸å…³å˜é‡
     private Thread mCameraThread;
     
     private Looper mCameraLooper;
     
-    private int mCameraID = CAMERA_POSITION_BACK;//Ä¬ÈÏ²éÑ¯µÄÊÇºóÖÃÉãÏñÍ·
+    private int mCameraID = CAMERA_POSITION_BACK;//é»˜è®¤æŸ¥è¯¢çš„æ˜¯åç½®æ‘„åƒå¤´
     
     private Camera mCamera;
     
-	//SDKÍ³¼ÆÏà¹Ø±äÁ¿
+	//SDKç»Ÿè®¡ç›¸å…³å˜é‡
 	private LSLiveStreamingParaCtx mLSLiveStreamingParaCtx = null;
     private Statistics mStatistics = null;
     
@@ -96,15 +96,15 @@ public class PushVideoFragment extends BaseFragment implements View.OnClickListe
 	private final int LS_AUDIO_CODEC_G711A = 3;
 	private final int LS_AUDIO_CODEC_G711U = 4;
 	
-	private final int LS_LOG_QUIET       = 0x00;            //!< logÊä³öÄ£Ê½£º²»Êä³ö
-    private final int LS_LOG_ERROR       = 1 << 0;          //!< logÊä³öÄ£Ê½£ºÊä³ö´íÎó
-    private final int LS_LOG_WARNING     = 1 << 1;          //!< logÊä³öÄ£Ê½£ºÊä³ö¾¯¸æ
-    private final int LS_LOG_INFO        = 1 << 2;          //!< logÊä³öÄ£Ê½£ºÊä³öĞÅÏ¢
-    private final int LS_LOG_DEBUG       = 1 << 3;          //!< logÊä³öÄ£Ê½£ºÊä³öµ÷ÊÔĞÅÏ¢
-    private final int LS_LOG_DETAIL      = 1 << 4;          //!< logÊä³öÄ£Ê½£ºÊä³öÏêÏ¸
-    private final int LS_LOG_RESV        = 1 << 5;          //!< logÊä³öÄ£Ê½£º±£Áô
+	private final int LS_LOG_QUIET       = 0x00;            //!< logè¾“å‡ºæ¨¡å¼ï¼šä¸è¾“å‡º
+    private final int LS_LOG_ERROR       = 1 << 0;          //!< logè¾“å‡ºæ¨¡å¼ï¼šè¾“å‡ºé”™è¯¯
+    private final int LS_LOG_WARNING     = 1 << 1;          //!< logè¾“å‡ºæ¨¡å¼ï¼šè¾“å‡ºè­¦å‘Š
+    private final int LS_LOG_INFO        = 1 << 2;          //!< logè¾“å‡ºæ¨¡å¼ï¼šè¾“å‡ºä¿¡æ¯
+    private final int LS_LOG_DEBUG       = 1 << 3;          //!< logè¾“å‡ºæ¨¡å¼ï¼šè¾“å‡ºè°ƒè¯•ä¿¡æ¯
+    private final int LS_LOG_DETAIL      = 1 << 4;          //!< logè¾“å‡ºæ¨¡å¼ï¼šè¾“å‡ºè¯¦ç»†
+    private final int LS_LOG_RESV        = 1 << 5;          //!< logè¾“å‡ºæ¨¡å¼ï¼šä¿ç•™
     private final int LS_LOG_LEVEL_COUNT = 6;
-    private final int LS_LOG_DEFAULT     = LS_LOG_WARNING;	//!< logÊä³öÄ£Ê½£ºÄ¬ÈÏÊä³ö¾¯¸æ
+    private final int LS_LOG_DEFAULT     = LS_LOG_WARNING;	//!< logè¾“å‡ºæ¨¡å¼ï¼šé»˜è®¤è¾“å‡ºè­¦å‘Š
 	
 	private float mCurrentDistance;
 	
@@ -170,7 +170,7 @@ public class PushVideoFragment extends BaseFragment implements View.OnClickListe
 	public void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);   //Ó¦ÓÃÔËĞĞÊ±£¬±£³ÖÆÁÄ»¸ßÁÁ£¬²»ËøÆÁ
+		getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);   //åº”ç”¨è¿è¡Œæ—¶ï¼Œä¿æŒå±å¹•é«˜äº®ï¼Œä¸é”å±
 		
     	cid = chatRoom.getCid();
     	mliveStreamingURL = chatRoom.getPushUrl();
@@ -207,7 +207,7 @@ public class PushVideoFragment extends BaseFragment implements View.OnClickListe
 	{
 		rootView = view.findViewById(R.id.layout_root);
 		
-//        //ÇĞ»»Ç°ºóÉãÏñÍ·°´Å¥³õÊ¼»¯
+//        //åˆ‡æ¢å‰åæ‘„åƒå¤´æŒ‰é’®åˆå§‹åŒ–
 //        switchBtn = (ImageButton)view.findViewById(R.id.switchBtn);	      
 //        switchBtn.setOnClickListener(new OnClickListener() {
 // 			@Override
@@ -231,7 +231,7 @@ public class PushVideoFragment extends BaseFragment implements View.OnClickListe
     	int mVideoPreviewWidth = 640;
     	int mVideoPreviewHeight = 480;
     	
-	    //´´½¨Ö±²¥ÊµÀı
+	    //åˆ›å»ºç›´æ’­å®ä¾‹
         mLSMediaCapture = new lsMediaCapture(this, getActivity(), mVideoPreviewWidth, mVideoPreviewHeight);
 
 		if(mHardWareEncEnable)
@@ -243,7 +243,7 @@ public class PushVideoFragment extends BaseFragment implements View.OnClickListe
 		    mVideoView.setPreviewSize(mVideoPreviewWidth, mVideoPreviewHeight);
 		}
 		
-        //´´½¨²ÎÊıÊµÀı
+        //åˆ›å»ºå‚æ•°å®ä¾‹
         mLSLiveStreamingParaCtx = mLSMediaCapture.new LSLiveStreamingParaCtx();
         mLSLiveStreamingParaCtx.eHaraWareEncType = mLSLiveStreamingParaCtx.new HardWareEncEnable();
         mLSLiveStreamingParaCtx.eOutFormatType = mLSLiveStreamingParaCtx.new OutputFormatType();
@@ -255,14 +255,14 @@ public class PushVideoFragment extends BaseFragment implements View.OnClickListe
         mLSLiveStreamingParaCtx.sLSVideoParaCtx.cameraPosition = mLSLiveStreamingParaCtx.sLSVideoParaCtx.new CameraPosition();
         mLSLiveStreamingParaCtx.sLSVideoParaCtx.interfaceOrientation = mLSLiveStreamingParaCtx.sLSVideoParaCtx.new CameraOrientation();
         
-        //·¢ËÍÍ³¼ÆÊı¾İµ½ÍøÂçĞÅÏ¢½çÃæ
+        //å‘é€ç»Ÿè®¡æ•°æ®åˆ°ç½‘ç»œä¿¡æ¯ç•Œé¢
 //        staticsHandle();
     	
         if(mLSMediaCapture != null) {  
         	boolean ret = false;
         	
-        	//ÉèÖÃÉãÏñÍ·ĞÅÏ¢£¬²¢¿ªÊ¼±¾µØÊÓÆµÔ¤ÀÀ
-        	mLSLiveStreamingParaCtx.sLSVideoParaCtx.cameraPosition.cameraPosition = CAMERA_POSITION_BACK;//Ä¬ÈÏºóÖÃÉãÏñÍ·£¬ÓÃ»§¿ÉÒÔ¸ù¾İĞèÒªµ÷Õû
+        	//è®¾ç½®æ‘„åƒå¤´ä¿¡æ¯ï¼Œå¹¶å¼€å§‹æœ¬åœ°è§†é¢‘é¢„è§ˆ
+        	mLSLiveStreamingParaCtx.sLSVideoParaCtx.cameraPosition.cameraPosition = CAMERA_POSITION_BACK;//é»˜è®¤åç½®æ‘„åƒå¤´ï¼Œç”¨æˆ·å¯ä»¥æ ¹æ®éœ€è¦è°ƒæ•´
             if(mHardWareEncEnable)
 			{
 			    mLSMediaCapture.startVideoPreviewOpenGL(mCameraSurfaceView, mLSLiveStreamingParaCtx.sLSVideoParaCtx.cameraPosition.cameraPosition);
@@ -272,13 +272,13 @@ public class PushVideoFragment extends BaseFragment implements View.OnClickListe
 			    mLSMediaCapture.startVideoPreview(mVideoView, mLSLiveStreamingParaCtx.sLSVideoParaCtx.cameraPosition.cameraPosition);
 			}
 
-            //ÅäÖÃÒôÊÓÆµºÍcamera²ÎÊı
+            //é…ç½®éŸ³è§†é¢‘å’Œcameraå‚æ•°
             paraSet();
             
-            //ÉèÖÃÈÕÖ¾¼¶±ğ
+            //è®¾ç½®æ—¥å¿—çº§åˆ«
         	mLSMediaCapture.setTraceLevel(LS_LOG_ERROR);
         	
-            //³õÊ¼»¯Ö±²¥ÍÆÁ÷
+            //åˆå§‹åŒ–ç›´æ’­æ¨æµ
 	        ret = mLSMediaCapture.initLiveStream(mliveStreamingURL, mLSLiveStreamingParaCtx);
 	        
 	        if(ret) {
@@ -293,19 +293,19 @@ public class PushVideoFragment extends BaseFragment implements View.OnClickListe
         }
 	}
 	
-	//ÒôÊÓÆµ²ÎÊıÉèÖÃ
+	//éŸ³è§†é¢‘å‚æ•°è®¾ç½®
 	public void paraSet(){
 		
-		//Êä³ö¸ñÊ½£ºÊÓÆµ¡¢ÒôÆµºÍÒôÊÓÆµ
+		//è¾“å‡ºæ ¼å¼ï¼šè§†é¢‘ã€éŸ³é¢‘å’ŒéŸ³è§†é¢‘
 		mLSLiveStreamingParaCtx.eOutStreamType.outputStreamType = HAVE_AV;
 
-		//Êä³ö·â×°¸ñÊ½
+		//è¾“å‡ºå°è£…æ ¼å¼
 		mLSLiveStreamingParaCtx.eOutFormatType.outputFormatType = RTMP;
 		
-        //ÉãÏñÍ·²ÎÊıÅäÖÃ
-        mLSLiveStreamingParaCtx.sLSVideoParaCtx.interfaceOrientation.interfaceOrientation = CAMERA_ORIENTATION_PORTRAIT;//ÊúÆÁ
+        //æ‘„åƒå¤´å‚æ•°é…ç½®
+        mLSLiveStreamingParaCtx.sLSVideoParaCtx.interfaceOrientation.interfaceOrientation = CAMERA_ORIENTATION_PORTRAIT;//ç«–å±
         
-        //ÒôÆµ±àÂë²ÎÊıÅäÖÃ
+        //éŸ³é¢‘ç¼–ç å‚æ•°é…ç½®
         mLSLiveStreamingParaCtx.sLSAudioParaCtx.samplerate = 44100;
     	mLSLiveStreamingParaCtx.sLSAudioParaCtx.bitrate = 64000;
     	mLSLiveStreamingParaCtx.sLSAudioParaCtx.frameSize = 2048;
@@ -313,11 +313,11 @@ public class PushVideoFragment extends BaseFragment implements View.OnClickListe
     	mLSLiveStreamingParaCtx.sLSAudioParaCtx.channelConfig = AudioFormat.CHANNEL_IN_MONO;	
     	mLSLiveStreamingParaCtx.sLSAudioParaCtx.codec.audioCODECType = LS_AUDIO_CODEC_AAC;
 
-    	//Ó²¼ş±àÂë²ÎÊıÉèÖÃ
+    	//ç¡¬ä»¶ç¼–ç å‚æ•°è®¾ç½®
         mLSLiveStreamingParaCtx.eHaraWareEncType.hardWareEncEnable = mHardWareEncEnable;	
         
-        //ÊÓÆµ±àÂë²ÎÊıÅäÖÃ£¬ÊÓÆµÂëÂÊ¿ÉÒÔÓÉÓÃ»§ÈÎÒâÉèÖÃ£¬ÊÓÆµ·Ö±æÂÊ°´ÕÕÈçÏÂ±í¸ñÉèÖÃ
-        //²É¼¯·Ö±æÂÊ     ±àÂë·Ö±æÂÊ     ½¨ÒéÂëÂÊ
+        //è§†é¢‘ç¼–ç å‚æ•°é…ç½®ï¼Œè§†é¢‘ç ç‡å¯ä»¥ç”±ç”¨æˆ·ä»»æ„è®¾ç½®ï¼Œè§†é¢‘åˆ†è¾¨ç‡æŒ‰ç…§å¦‚ä¸‹è¡¨æ ¼è®¾ç½®
+        //é‡‡é›†åˆ†è¾¨ç‡     ç¼–ç åˆ†è¾¨ç‡     å»ºè®®ç ç‡
         //1280x720     1280x720     1500kbps
         //1280x720     960x540      800kbps
         //960x720      960x720      1000kbps
@@ -327,7 +327,7 @@ public class PushVideoFragment extends BaseFragment implements View.OnClickListe
         //640x480      640x360      500kbps
         //320x240      320x240      250kbps
         //320x240      320x180      200kbps
-        //ÈçÏÂÊÇ±àÂë·Ö±æÂÊµÈĞÅÏ¢µÄÉèÖÃ
+        //å¦‚ä¸‹æ˜¯ç¼–ç åˆ†è¾¨ç‡ç­‰ä¿¡æ¯çš„è®¾ç½®
 //        if(mVideoResolution.equals("HD")) {
 //        	mLSLiveStreamingParaCtx.sLSVideoParaCtx.fps = 20;
 //        	mLSLiveStreamingParaCtx.sLSVideoParaCtx.bitrate = 800000;
@@ -359,7 +359,7 @@ public class PushVideoFragment extends BaseFragment implements View.OnClickListe
         startAV();
 	}
 	
-	//¿ªÊ¼Ö±²¥
+	//å¼€å§‹ç›´æ’­
 	private void startAV(){
 		if(mLSMediaCapture != null && m_liveStreamingInitFinished) {
 		    mLSMediaCapture.startLiveStreaming();
@@ -373,7 +373,7 @@ public class PushVideoFragment extends BaseFragment implements View.OnClickListe
 		List<Camera.Size> cameraSupportSize = getCameraSupportSize();
 	}
 	
-	//²éÑ¯AndroidÉãÏñÍ·Ö§³ÖµÄ²ÉÑù·Ö±æÂÊÏà¹Ø·½·¨£¨4£©
+	//æŸ¥è¯¢Androidæ‘„åƒå¤´æ”¯æŒçš„é‡‡æ ·åˆ†è¾¨ç‡ç›¸å…³æ–¹æ³•ï¼ˆ4ï¼‰
 	public List<Camera.Size> getCameraSupportSize() {	
 		openCamera();		
 		if(mCamera != null) {
@@ -385,7 +385,7 @@ public class PushVideoFragment extends BaseFragment implements View.OnClickListe
 		return null;
 	}
 	
-    //²éÑ¯AndroidÉãÏñÍ·Ö§³ÖµÄ²ÉÑù·Ö±æÂÊÏà¹Ø·½·¨£¨1£©
+    //æŸ¥è¯¢Androidæ‘„åƒå¤´æ”¯æŒçš„é‡‡æ ·åˆ†è¾¨ç‡ç›¸å…³æ–¹æ³•ï¼ˆ1ï¼‰
 	public void openCamera() {
 		final Semaphore lock = new Semaphore(0);
 		final RuntimeException[] exception = new RuntimeException[1];
@@ -408,7 +408,7 @@ public class PushVideoFragment extends BaseFragment implements View.OnClickListe
 		lock.acquireUninterruptibly();
 	}
 	
-	//²éÑ¯AndroidÉãÏñÍ·Ö§³ÖµÄ²ÉÑù·Ö±æÂÊÏà¹Ø·½·¨£¨2£©
+	//æŸ¥è¯¢Androidæ‘„åƒå¤´æ”¯æŒçš„é‡‡æ ·åˆ†è¾¨ç‡ç›¸å…³æ–¹æ³•ï¼ˆ2ï¼‰
 	public void lockCamera() {
 		try {
 			mCamera.reconnect();
@@ -416,7 +416,7 @@ public class PushVideoFragment extends BaseFragment implements View.OnClickListe
 		}
 	}
 	
-	//²éÑ¯AndroidÉãÏñÍ·Ö§³ÖµÄ²ÉÑù·Ö±æÂÊÏà¹Ø·½·¨£¨3£©
+	//æŸ¥è¯¢Androidæ‘„åƒå¤´æ”¯æŒçš„é‡‡æ ·åˆ†è¾¨ç‡ç›¸å…³æ–¹æ³•ï¼ˆ3ï¼‰
 	public void releaseCamera() {
 		if (mCamera != null) {
 			lockCamera();
@@ -427,7 +427,7 @@ public class PushVideoFragment extends BaseFragment implements View.OnClickListe
 		}		
 	}
 	
-    //ÇĞ»»Ç°ºóÉãÏñÍ·
+    //åˆ‡æ¢å‰åæ‘„åƒå¤´
 	public void SwitchCamera() {
 		if(mLSMediaCapture != null) {
 			mLSMediaCapture.switchCamera();
@@ -482,7 +482,7 @@ public class PushVideoFragment extends BaseFragment implements View.OnClickListe
 			m_liveStreamingInit = false;
 		}
         
-        //Í£Ö¹Ö±²¥µ÷ÓÃÏà¹ØAPI½Ó¿Ú
+        //åœæ­¢ç›´æ’­è°ƒç”¨ç›¸å…³APIæ¥å£
 		if(mLSMediaCapture != null && m_liveStreamingInitFinished && m_liveStreamingOn) {		
 			mLSMediaCapture.stopLiveStreaming();		
 			mLSMediaCapture.stopVideoPreview();
@@ -501,11 +501,11 @@ public class PushVideoFragment extends BaseFragment implements View.OnClickListe
 		}
 	}
 	
-	//³ÌĞòÇĞ»ØÇ°Ì¨ºó»Ö¸´ÊÓÆµ±àÂë  ĞèÒªÔÚactivity onRestart()·½·¨µ÷ÓÃ
+	//ç¨‹åºåˆ‡å›å‰å°åæ¢å¤è§†é¢‘ç¼–ç   éœ€è¦åœ¨activity onRestart()æ–¹æ³•è°ƒç”¨
 	public void StopVideoEncode()
 	{
         if(mLSMediaCapture != null) {
-        	//¹Ø±ÕÍÆÁ÷¹Ì¶¨Í¼Ïñ
+        	//å…³é—­æ¨æµå›ºå®šå›¾åƒ
         	mLSMediaCapture.stopVideoEncode();
         }  
 	}
@@ -519,12 +519,12 @@ public class PushVideoFragment extends BaseFragment implements View.OnClickListe
 		
 	}
 	
-	//´¦ÀíSDKÅ×ÉÏÀ´µÄÒì³£ºÍÊÂ¼ş£¬ÓÃ»§ĞèÒªÔÚÕâÀï¼àÌı¸÷ÖÖÏûÏ¢£¬½øĞĞÏàÓ¦µÄ´¦Àí¡£
-    //ÀıÈç¼àÌı¶ÏÍøÏûÏ¢£¬ÓÃ»§¸ù¾İ¶ÏÍøÏûÏ¢½øĞĞÖ±²¥ÖØÁ¬
+	//å¤„ç†SDKæŠ›ä¸Šæ¥çš„å¼‚å¸¸å’Œäº‹ä»¶ï¼Œç”¨æˆ·éœ€è¦åœ¨è¿™é‡Œç›‘å¬å„ç§æ¶ˆæ¯ï¼Œè¿›è¡Œç›¸åº”çš„å¤„ç†ã€‚
+    //ä¾‹å¦‚ç›‘å¬æ–­ç½‘æ¶ˆæ¯ï¼Œç”¨æˆ·æ ¹æ®æ–­ç½‘æ¶ˆæ¯è¿›è¡Œç›´æ’­é‡è¿
 	@Override
 	public void handleMessage(int msg, Object object) {
 		  switch (msg) {
-		      case MSG_INIT_LIVESTREAMING_OUTFILE_ERROR://³õÊ¼»¯Ö±²¥³ö´í
+		      case MSG_INIT_LIVESTREAMING_OUTFILE_ERROR://åˆå§‹åŒ–ç›´æ’­å‡ºé”™
 		      case MSG_INIT_LIVESTREAMING_VIDEO_ERROR:	
 		      case MSG_INIT_LIVESTREAMING_AUDIO_ERROR:
 		    	  if(m_liveStreamingInit)
@@ -533,18 +533,18 @@ public class PushVideoFragment extends BaseFragment implements View.OnClickListe
 	      		      XLog.i("MSG_INIT_LIVESTREAMING_AUDIO_ERROR");
 		    	  }
 		    	  break;
-		      case MSG_START_LIVESTREAMING_ERROR://¿ªÊ¼Ö±²¥³ö´í
+		      case MSG_START_LIVESTREAMING_ERROR://å¼€å§‹ç›´æ’­å‡ºé”™
 		    	  sendMessage(MSG_START_LIVESTREAMING_ERROR);
 		    	  XLog.i("MSG_START_LIVESTREAMING_ERROR");
 		    	  break;
-		      case MSG_STOP_LIVESTREAMING_ERROR://Í£Ö¹Ö±²¥³ö´í
+		      case MSG_STOP_LIVESTREAMING_ERROR://åœæ­¢ç›´æ’­å‡ºé”™
 		    	  if(m_liveStreamingOn)
 		    	  {
 		    		  sendMessage(MSG_STOP_LIVESTREAMING_ERROR);
 	      		    XLog.i("MSG_STOP_LIVESTREAMING_ERROR");
 		    	  }
 		    	  break;
-		      case MSG_AUDIO_PROCESS_ERROR://ÒôÆµ´¦Àí³ö´í
+		      case MSG_AUDIO_PROCESS_ERROR://éŸ³é¢‘å¤„ç†å‡ºé”™
 		    	  if(m_liveStreamingOn && System.currentTimeMillis() - mLastAudioProcessErrorAlertTime  >= 10000)
 		    	  {
 	      		      mLastAudioProcessErrorAlertTime = System.currentTimeMillis();
@@ -554,7 +554,7 @@ public class PushVideoFragment extends BaseFragment implements View.OnClickListe
 		    	  XLog.i("MSG_AUDIO_PROCESS_ERROR");
 		    	  
 		    	  break;
-		      case MSG_VIDEO_PROCESS_ERROR://ÊÓÆµ´¦Àí³ö´í
+		      case MSG_VIDEO_PROCESS_ERROR://è§†é¢‘å¤„ç†å‡ºé”™
 		      {
 		    	  if(m_liveStreamingOn && System.currentTimeMillis() - mLastVideoProcessErrorAlertTime  >= 10000)
 		    	  {
@@ -564,7 +564,7 @@ public class PushVideoFragment extends BaseFragment implements View.OnClickListe
 		    	  XLog.i("MSG_VIDEO_PROCESS_ERROR");
 		    	  break;
 		      }
-		      case MSG_RTMP_URL_ERROR://¶ÏÍøÏûÏ¢
+		      case MSG_RTMP_URL_ERROR://æ–­ç½‘æ¶ˆæ¯
 		    	  if (mLSMediaCapture != null)
 		    	  {
 			    	  mLSMediaCapture.stopLiveStreaming();
@@ -572,67 +572,67 @@ public class PushVideoFragment extends BaseFragment implements View.OnClickListe
 		    	  }
 		    	  XLog.i("MSG_RTMP_URL_ERROR");
 		    	  break;
-		      case MSG_URL_NOT_AUTH://Ö±²¥URL·Ç·¨
+		      case MSG_URL_NOT_AUTH://ç›´æ’­URLéæ³•
 		    	  if(m_liveStreamingInit)
 		    	  {
 			    	  sendMessage(MSG_URL_NOT_AUTH);
 		    	  }
 		    	  XLog.i("MSG_URL_NOT_AUTH");
 		    	  break;
-		      case MSG_SEND_STATICS_LOG_ERROR://·¢ËÍÍ³¼ÆĞÅÏ¢³ö´í
+		      case MSG_SEND_STATICS_LOG_ERROR://å‘é€ç»Ÿè®¡ä¿¡æ¯å‡ºé”™
 		    	  sendMessage(MSG_SEND_STATICS_LOG_ERROR);
 		    	  XLog.i("MSG_SEND_STATICS_LOG_ERROR");
 		    	  break;
-		      case MSG_SEND_HEARTBEAT_LOG_ERROR://·¢ËÍĞÄÌøĞÅÏ¢³ö´í
+		      case MSG_SEND_HEARTBEAT_LOG_ERROR://å‘é€å¿ƒè·³ä¿¡æ¯å‡ºé”™
 		    	  sendMessage(MSG_SEND_HEARTBEAT_LOG_ERROR);
 		    	  XLog.i("MSG_SEND_HEARTBEAT_LOG_ERROR");
 		    	  break;
-		      case MSG_AUDIO_SAMPLE_RATE_NOT_SUPPORT_ERROR://ÒôÆµ²É¼¯²ÎÊı²»Ö§³Ö
+		      case MSG_AUDIO_SAMPLE_RATE_NOT_SUPPORT_ERROR://éŸ³é¢‘é‡‡é›†å‚æ•°ä¸æ”¯æŒ
 		    	  sendMessage(MSG_AUDIO_SAMPLE_RATE_NOT_SUPPORT_ERROR);
 		    	  //Log.i(TAG, "test: in handleMessage, MSG_AUDIO_SAMPLE_RATE_NOT_SUPPORT_ERROR");
 		    	  XLog.i("MSG_AUDIO_SAMPLE_RATE_NOT_SUPPORT_ERROR");
 		    	  break;
-		      case MSG_AUDIO_PARAMETER_NOT_SUPPORT_BY_HARDWARE_ERROR://ÒôÆµ²ÎÊı²»Ö§³Ö
+		      case MSG_AUDIO_PARAMETER_NOT_SUPPORT_BY_HARDWARE_ERROR://éŸ³é¢‘å‚æ•°ä¸æ”¯æŒ
 		    	  sendMessage(MSG_AUDIO_PARAMETER_NOT_SUPPORT_BY_HARDWARE_ERROR);
 		    	  XLog.i("MSG_AUDIO_PARAMETER_NOT_SUPPORT_BY_HARDWARE_ERROR");
 		    	  break;
-		      case MSG_NEW_AUDIORECORD_INSTANCE_ERROR://ÒôÆµÊµÀı³õÊ¼»¯³ö´í
+		      case MSG_NEW_AUDIORECORD_INSTANCE_ERROR://éŸ³é¢‘å®ä¾‹åˆå§‹åŒ–å‡ºé”™
 		    	  sendMessage(MSG_NEW_AUDIORECORD_INSTANCE_ERROR);
 		    	  XLog.i("MSG_NEW_AUDIORECORD_INSTANCE_ERROR");
 		    	  break;
-		      case MSG_AUDIO_START_RECORDING_ERROR://ÒôÆµ²É¼¯³ö´í
+		      case MSG_AUDIO_START_RECORDING_ERROR://éŸ³é¢‘é‡‡é›†å‡ºé”™
 		    	  sendMessage(MSG_AUDIO_START_RECORDING_ERROR);
 		    	  XLog.i("MSG_AUDIO_START_RECORDING_ERROR");
 		    	  break;
-		      case MSG_OTHER_AUDIO_PROCESS_ERROR://ÒôÆµ²Ù×÷µÄÆäËû´íÎó
+		      case MSG_OTHER_AUDIO_PROCESS_ERROR://éŸ³é¢‘æ“ä½œçš„å…¶ä»–é”™è¯¯
 		    	  sendMessage(MSG_OTHER_AUDIO_PROCESS_ERROR);
 		    	  XLog.i("MSG_OTHER_AUDIO_PROCESS_ERROR");
 		    	  break;
-		      case MSG_QOS_TO_STOP_LIVESTREAMING://ÍøÂçQoS¼«²î£¬ÂëÂÊµµ´Î½µµ½×îµÍ
+		      case MSG_QOS_TO_STOP_LIVESTREAMING://ç½‘ç»œQoSæå·®ï¼Œç ç‡æ¡£æ¬¡é™åˆ°æœ€ä½
 		    	  XLog.i("MSG_QOS_TO_STOP_LIVESTREAMING");
 //		    	  m_tryToStopLivestreaming = true;
 //		    	  m_QoSToStopLivestreaming = true;
 //		  		  mLSMediaCapture.stopLiveStreaming();
 		    	  break;
-		      case MSG_HW_VIDEO_PACKET_ERROR://ÊÓÆµÓ²¼ş±àÂë³ö´í
+		      case MSG_HW_VIDEO_PACKET_ERROR://è§†é¢‘ç¡¬ä»¶ç¼–ç å‡ºé”™
 		    	  if(m_liveStreamingOn)
 		    	  {
 		    		  sendMessage(MSG_HW_VIDEO_PACKET_ERROR);
 		    		  XLog.i("MSG_HW_VIDEO_PACKET_ERROR");
 		    	  }
 		    	  break;
-		      case MSG_CAMERA_PREVIEW_SIZE_NOT_SUPPORT_ERROR://camera²É¼¯·Ö±æÂÊ²»Ö§³Ö
+		      case MSG_CAMERA_PREVIEW_SIZE_NOT_SUPPORT_ERROR://cameraé‡‡é›†åˆ†è¾¨ç‡ä¸æ”¯æŒ
 		    	  sendMessage(MSG_CAMERA_PREVIEW_SIZE_NOT_SUPPORT_ERROR);
 		    	  XLog.i("MSG_CAMERA_PREVIEW_SIZE_NOT_SUPPORT_ERROR");
 		    	  break;
-		      case MSG_START_PREVIEW_FINISHED://camera²É¼¯Ô¤ÀÀÍê³É
+		      case MSG_START_PREVIEW_FINISHED://cameraé‡‡é›†é¢„è§ˆå®Œæˆ
 		    	  XLog.i("MSG_START_PREVIEW_FINISHED");
 		    	  startAV();
 		    	  break;
-		      case MSG_START_LIVESTREAMING_FINISHED://¿ªÊ¼Ö±²¥Íê³É
+		      case MSG_START_LIVESTREAMING_FINISHED://å¼€å§‹ç›´æ’­å®Œæˆ
 		    	  XLog.i("MSG_START_LIVESTREAMING_FINISHED");
 		    	  break;
-		      case MSG_STOP_LIVESTREAMING_FINISHED://Í£Ö¹Ö±²¥Íê³É
+		      case MSG_STOP_LIVESTREAMING_FINISHED://åœæ­¢ç›´æ’­å®Œæˆ
 		    	  XLog.i("MSG_STOP_LIVESTREAMING_FINISHED");
 		    	  sendMessage(MSG_STOP_LIVESTREAMING_FINISHED);
 	              break;
@@ -640,18 +640,18 @@ public class PushVideoFragment extends BaseFragment implements View.OnClickListe
 		    	  XLog.i("MSG_STOP_VIDEO_CAPTURE_FINISHED");
 		    	  if(mLSMediaCapture != null)
 		    	  {
-		    	      //¼ÌĞøÊÓÆµÍÆÁ÷£¬ÍÆ×îºóÒ»Ö¡Í¼Ïñ
+		    	      //ç»§ç»­è§†é¢‘æ¨æµï¼Œæ¨æœ€åä¸€å¸§å›¾åƒ
 		    	      mLSMediaCapture.resumeVideoEncode();
 		    	  }
 		    	  break;
 		      case MSG_STOP_RESUME_VIDEO_CAPTURE_FINISHED:
 		    	  XLog.i("MSG_STOP_RESUME_VIDEO_CAPTURE_FINISHED");
-		    	  //¿ªÆôÊÓÆµpreview
+		    	  //å¼€å¯è§†é¢‘preview
 		    	  if(mLSMediaCapture != null)
 		    	  {
 		              mLSMediaCapture.resumeVideoPreview();
 		              m_liveStreamingOn = true;
-		    	      //¿ªÆôÊÓÆµÍÆÁ÷£¬ÍÆÕı³£Ö¡
+		    	      //å¼€å¯è§†é¢‘æ¨æµï¼Œæ¨æ­£å¸¸å¸§
 		              mLSMediaCapture.startVideoLiveStream();
 		    	  }
 		    	  break;
@@ -659,20 +659,20 @@ public class PushVideoFragment extends BaseFragment implements View.OnClickListe
 		    	  XLog.i("MSG_STOP_AUDIO_CAPTURE_FINISHED");
 		    	  if( mLSMediaCapture != null)
 		    	  {
-		    	      //¼ÌĞøÒôÆµÍÆÁ÷£¬ÍÆ¾²ÒôÖ¡
+		    	      //ç»§ç»­éŸ³é¢‘æ¨æµï¼Œæ¨é™éŸ³å¸§
 		    	      mLSMediaCapture.resumeAudioEncode();
 		    	  }
 		    	  break;
 		      case MSG_STOP_RESUME_AUDIO_CAPTURE_FINISHED:
 		    	  XLog.i("MSG_STOP_RESUME_AUDIO_CAPTURE_FINISHED");
-		    	  //¿ªÆôÒôÆµÍÆÁ÷£¬ÍÆÕı³£Ö¡
+		    	  //å¼€å¯éŸ³é¢‘æ¨æµï¼Œæ¨æ­£å¸¸å¸§
 		          mLSMediaCapture.startAudioLiveStream();
 		    	  break;
-		      case MSG_SWITCH_CAMERA_FINISHED://ÇĞ»»ÉãÏñÍ·Íê³É
+		      case MSG_SWITCH_CAMERA_FINISHED://åˆ‡æ¢æ‘„åƒå¤´å®Œæˆ
 		    	  XLog.i("MSG_SWITCH_CAMERA_FINISHED");
-		    	  int cameraId = (Integer) object;//ÇĞ»»Ö®ºóµÄcamera id
+		    	  int cameraId = (Integer) object;//åˆ‡æ¢ä¹‹åçš„camera id
 		    	  break;
-		      case MSG_SEND_STATICS_LOG_FINISHED://·¢ËÍÍ³¼ÆĞÅÏ¢Íê³É
+		      case MSG_SEND_STATICS_LOG_FINISHED://å‘é€ç»Ÿè®¡ä¿¡æ¯å®Œæˆ
 		    	  XLog.i("MSG_SEND_STATICS_LOG_FINISHED");
 		    	  break;
 		      case MSG_SERVER_COMMAND_STOP_LIVESTREAMING:

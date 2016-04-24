@@ -3,27 +3,27 @@ package com.BC.entertainmentgravitation.entity;
 public class OutConnect {
 
 	/**
-	 * Á¬½ÓID
+	 * è¿æ¥ID
 	 **/
 	private String connectID;
 	/**
-	 * Ã÷ĞÇ
+	 * æ˜æ˜Ÿ
 	 **/
 	private int starID;
 	/**
-	 * ±êÌâ
+	 * æ ‡é¢˜
 	 **/
 	private String title;
 	/**
-	 * Á´½Ó
+	 * é“¾æ¥
 	 **/
 	private String link;
 	/**
-	 * ÀàĞÍ1¡¢°Ù¶ÈÌù°É£¬2¡¢QQ¿Õ¼ä3¡¢ĞÂÀËÎ¢²©£¬4¡¢ÊÓÆÁÁ´½Ó£¬5¡¢ÆäËû
+	 * ç±»å‹1ã€ç™¾åº¦è´´å§ï¼Œ2ã€QQç©ºé—´3ã€æ–°æµªå¾®åšï¼Œ4ã€è§†å±é“¾æ¥ï¼Œ5ã€å…¶ä»–
 	 **/
 	private int type;
 	/**
-	 * Í¼Æ¬
+	 * å›¾ç‰‡
 	 **/
 	private String icon;
 

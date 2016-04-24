@@ -8,6 +8,7 @@ import com.BC.entertainmentgravitation.fragment.ExitFragmentListener;
 import com.BC.entertainmentgravitation.fragment.PushVideoFragment;
 import com.BC.entertainmentgravitation.fragment.ScrollListener;
 import com.BC.entertainmentgravitation.fragment.SurfaceFragment;
+import com.BC.entertainmentgravitation.fragment.TopSurfaceFragment;
 import com.BC.entertainmentgravitation.fragment.WatchVideoFragment;
 import com.netease.nim.uikit.common.ui.dialog.DialogMaker;
 import com.netease.nimlib.sdk.AbortableFuture;
@@ -16,14 +17,27 @@ import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.ResponseCode;
 import com.netease.nimlib.sdk.StatusCode;
+import com.netease.nimlib.sdk.chatroom.ChatRoomMessageBuilder;
 import com.netease.nimlib.sdk.chatroom.ChatRoomService;
 import com.netease.nimlib.sdk.chatroom.ChatRoomServiceObserver;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomInfo;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomKickOutEvent;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomMember;
+import com.netease.nimlib.sdk.chatroom.model.ChatRoomMessage;
+import com.netease.nimlib.sdk.chatroom.model.ChatRoomMessageExtension;
+import com.netease.nimlib.sdk.chatroom.model.ChatRoomNotificationAttachment;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomStatusChangeData;
 import com.netease.nimlib.sdk.chatroom.model.EnterChatRoomData;
 import com.netease.nimlib.sdk.chatroom.model.EnterChatRoomResultData;
+import com.netease.nimlib.sdk.msg.attachment.MsgAttachment;
+import com.netease.nimlib.sdk.msg.constant.AttachStatusEnum;
+import com.netease.nimlib.sdk.msg.constant.MsgDirectionEnum;
+import com.netease.nimlib.sdk.msg.constant.MsgStatusEnum;
+import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum;
+import com.netease.nimlib.sdk.msg.constant.NotificationType;
+import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
+import com.netease.nimlib.sdk.msg.model.CustomMessageConfig;
+import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.summer.config.Config;
 import com.summer.logger.XLog;
 import com.summer.utils.StringUtil;
@@ -37,7 +51,7 @@ import android.view.View;
 import android.widget.Toast;
 
 /**
- * ø¥√˜–«÷±≤•
+ * ÁúãÊòéÊòüÁõ¥Êí≠
  * @author zhongwen
  *
  */
@@ -48,13 +62,15 @@ public class WatchVideoActivity extends FragmentActivity implements ExitFragment
 
 	private ChatRoom chatRoom;
 	
-    private AbortableFuture<EnterChatRoomResultData> enterRequest;//¡ƒÃÏ “
+    private AbortableFuture<EnterChatRoomResultData> enterRequest;//ËÅäÂ§©ÂÆ§
 
 	private ChatRoomInfo roomInfo;
 	
 	private Handler handler;
 	
 	private WatchVideoFragment fragment;
+	
+	private TopSurfaceFragment topsurfaceFragment;
 	
 	protected final Handler getHandler() {
         if (handler == null) {
@@ -95,7 +111,7 @@ public class WatchVideoActivity extends FragmentActivity implements ExitFragment
 
     }
     
-    private void initializeWatchVideoFragment()
+    private void initializeWatchVideoFragment(ChatRoomMember member)
     {
         fragment = new WatchVideoFragment(chatRoom);
         fragment.setHandler(handler);
@@ -104,7 +120,7 @@ public class WatchVideoActivity extends FragmentActivity implements ExitFragment
                 .beginTransaction()
                 .add(R.id.layout_video_play, fragment)
                 .commit();
-        new SurfaceFragment(listener, chatRoom).show(getSupportFragmentManager(), "watch video");
+        new SurfaceFragment(listener, chatRoom, member, true).show(getSupportFragmentManager(), "watch video");
     }
     
     @Override
@@ -159,9 +175,6 @@ public class WatchVideoActivity extends FragmentActivity implements ExitFragment
 	@SuppressWarnings("unchecked")
 	private void enterChatRoom() {
 		EnterChatRoomData data = new EnterChatRoomData(chatRoom.getChatroomid());
-//		Map<String, Object> map = new HashMap<String, Object>();
-//		map.put("nickname", Config.User.getNickName());
-//		data.setNotifyExtension(map);
 		enterRequest = NIMClient.getService(ChatRoomService.class).enterChatRoom(data);
 		enterRequest.setCallback(new RequestCallback<EnterChatRoomResultData>() {
 
@@ -179,7 +192,7 @@ public class WatchVideoActivity extends FragmentActivity implements ExitFragment
 						onLoginDone();
 						if (code == ResponseCode.RES_CHATROOM_BLACKLIST) {
 							Toast.makeText(WatchVideoActivity.this,
-									"ƒ„“—±ª¿≠»Î∫⁄√˚µ•£¨≤ªƒ‹‘ŸΩ¯»Î", Toast.LENGTH_SHORT).show();
+									"‰Ω†Â∑≤Ë¢´ÊãâÂÖ•ÈªëÂêçÂçïÔºå‰∏çËÉΩÂÜçËøõÂÖ•", Toast.LENGTH_SHORT).show();
 						} else {
 							XLog.i("enter chat room failed, code=" + code);
 							Toast.makeText(WatchVideoActivity.this,
@@ -191,12 +204,35 @@ public class WatchVideoActivity extends FragmentActivity implements ExitFragment
 					@Override
 					public void onSuccess(EnterChatRoomResultData result) {
 						roomInfo = result.getRoomInfo();
-						ChatRoomMember member = result.getMember();
+						final ChatRoomMember member = result.getMember();
 						member.setExtension(roomInfo.getExtension());
 						XLog.i("extension: " + roomInfo.getExtension());
 						member.setRoomId(roomInfo.getRoomId());
 						XLog.i("enter chat room success" + roomInfo.getRoomId());
-						initializeWatchVideoFragment();
+						initializeWatchVideoFragment(member);
+//						ChatRoomMessage message = ChatRoomMessageBuilder.createChatRoomTextMessage(chatRoom.getChatroomid(), "Ê¨¢Ëøé" + Config.User.getNickName() + "ËøõÂÖ•ËÅäÂ§©ÂÆ§");
+////						ChatRoomNotificationAttachment attach = new ChatRoomNotificationAttachment();
+////						attach.setType(NotificationType.ChatRoomMemberIn);
+//						message.setDirect(MsgDirectionEnum.In);
+////						message.setAttachment(attach);
+//						NIMClient.getService(ChatRoomService.class).sendMessage(message, false).setCallback(new RequestCallback<Void>() {
+//							
+//							@Override
+//							public void onSuccess(Void arg0) {
+//								XLog.i("enter room success" );
+//							}
+//							
+//							@Override
+//							public void onFailed(int arg0) {
+//								XLog.i("enteroom exception");
+//							}
+//							
+//							@Override
+//							public void onException(Throwable arg0) {
+//								XLog.i("enteroom exception");
+//							}
+//						});
+
 					}
 				});
 	}

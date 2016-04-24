@@ -127,7 +127,7 @@ public class AccountFragment extends BaseFragment{
 					}.getType());
 			List<RedAList> messageItems = baseEntity.getData();
 			if (messageItems != null) {
-				if (pageIndex == 1) {// µÚÒ»Ò³Ê±£¬ÏÈÇå¿ÕÊı¾İ¼¯
+				if (pageIndex == 1) {// ç¬¬ä¸€é¡µæ—¶ï¼Œå…ˆæ¸…ç©ºæ•°æ®é›†
 					adapter.clearAll();
 				}
 				pageIndex++;
@@ -151,7 +151,7 @@ public class AccountFragment extends BaseFragment{
 
 		@Override
 		public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
-			// ÏÂÀ­Ë¢ĞÂ
+			// ä¸‹æ‹‰åˆ·æ–°
 			String time = DateUtils.formatDateTime(getActivity(),
 					System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME
 							| DateUtils.FORMAT_SHOW_DATE
@@ -170,7 +170,7 @@ public class AccountFragment extends BaseFragment{
 
 		@Override
 		public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
-			// ÉÏÀ­·­Ò³
+			// ä¸Šæ‹‰ç¿»é¡µ
 			String time = DateUtils.formatDateTime(getActivity(),
 					System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME
 							| DateUtils.FORMAT_SHOW_DATE

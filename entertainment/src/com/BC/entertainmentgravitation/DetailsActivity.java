@@ -124,16 +124,16 @@ public class DetailsActivity extends BaseActivity implements OnClickListener{
 //		ShareSDK.initSDK(context, "10ee118b8af16");
 //
 //		OnekeyShare oks = new OnekeyShare();
-//		// ¹Ø±ÕssoÊÚÈ¨
+//		// å…³é—­ssoæˆæƒ
 //		oks.disableSSOWhenAuthorize();
-//		// ·ÖÏíÊ±NotificationµÄÍ¼±êºÍÎÄ×Ö
-//		oks.setTitle("¿´ÑİÔ±£¬È¥º£ÃàÓéÖ±²¥APP!");
-//		oks.setText("¿´ÑİÔ±£¬È¥º£ÃàÓéÖ±²¥APP!" + "(" + Config.User.getNickName()
-//				+ "ÕıÔÚÖ±²¥ÖĞ)");
+//		// åˆ†äº«æ—¶Notificationçš„å›¾æ ‡å’Œæ–‡å­—
+//		oks.setTitle("çœ‹æ¼”å‘˜ï¼Œå»æµ·ç»µå¨±ç›´æ’­APP!");
+//		oks.setText("çœ‹æ¼”å‘˜ï¼Œå»æµ·ç»µå¨±ç›´æ’­APP!" + "(" + Config.User.getNickName()
+//				+ "æ­£åœ¨ç›´æ’­ä¸­)");
 //		oks.setSite(getString(R.string.app_name));
-//		// ·ÖÏíÁ´½ÓµØÖ·
+//		// åˆ†äº«é“¾æ¥åœ°å€
 //		oks.setUrl("http://shouji.baidu.com/soft/item?docid=9008168");
-//		// logoµØÖ·
+//		// logoåœ°å€
 //		oks.setImageUrl("http://app.haimianyu.cn/DOWNLOAD/app_logo.png");
 //		oks.show(context);
 //	}
@@ -201,13 +201,13 @@ public class DetailsActivity extends BaseActivity implements OnClickListener{
 
 	public void initPersonalInformation() {
 		if (album == null) {
-			ToastUtil.show(this, "»ñÈ¡Êı¾İÊ§°Ü");
+			ToastUtil.show(this, "è·å–æ•°æ®å¤±è´¥");
 			return;
 		}
 		switch (type) {
 		case R.id.radio0:
 			if (album.getMore_pictures().size() <= 0) {
-				ToastUtil.show(this, "Ã»ÓĞ¸ü¶àÁË");
+				ToastUtil.show(this, "æ²¡æœ‰æ›´å¤šäº†");
 				return;
 			} else {
 				initImages(album.getMore_pictures());
@@ -222,7 +222,7 @@ public class DetailsActivity extends BaseActivity implements OnClickListener{
 			break;
 		case R.id.radio1:
 			if (album.getPhoto_images().size() <= 0) {
-				ToastUtil.show(this, "Ã»ÓĞ¸ü¶àÁË");
+				ToastUtil.show(this, "æ²¡æœ‰æ›´å¤šäº†");
 				return;
 			} else {
 				initImages(album.getPhoto_images());
@@ -237,7 +237,7 @@ public class DetailsActivity extends BaseActivity implements OnClickListener{
 			break;
 		case R.id.radio2:
 			if (album.getPhotographs().size() <= 0) {
-				ToastUtil.show(this, "Ã»ÓĞ¸ü¶àÁË");
+				ToastUtil.show(this, "æ²¡æœ‰æ›´å¤šäº†");
 				return;
 			} else {
 				initImages(album.getPhotographs());
@@ -255,7 +255,7 @@ public class DetailsActivity extends BaseActivity implements OnClickListener{
 	}
 
 	/**
-	 * »ñÈ¡Ïà²áĞÅÏ¢
+	 * è·å–ç›¸å†Œä¿¡æ¯
 	 */
 	private void sendAlbumRequest(int pageIndex) {
 		HashMap<String, String> entity = new HashMap<String, String>();
@@ -268,7 +268,7 @@ public class DetailsActivity extends BaseActivity implements OnClickListener{
 	}
 
 	/**
-	 * »ñÈ¡Ã÷ĞÇĞÅÏ¢
+	 * è·å–æ˜æ˜Ÿä¿¡æ¯
 	 */
 	private void sendGetStartInfoRequest(String starID) {
 		HashMap<String, String> entity = new HashMap<String, String>();
@@ -280,28 +280,28 @@ public class DetailsActivity extends BaseActivity implements OnClickListener{
 	}
 	
 	/**
-	 * ¼Ó¹Ø×¢
+	 * åŠ å…³æ³¨
 	 */
 	private void sendFocusRequest() {
 		if (Config.User == null || MainActivity.starInformation == null) {
-			ToastUtil.show(this, "±§Ç¸£¬Ìá½»Ê§°Ü");
+			ToastUtil.show(this, "æŠ±æ­‰ï¼Œæäº¤å¤±è´¥");
 			return;
 		}
 		HashMap<String, String> entity = new HashMap<String, String>();
 
 		entity.put("clientID", Config.User.getClientID());
 		entity.put("Star_ID", userID);
-		ShowProgressDialog("ÕıÔÚÌá½»...");
+		ShowProgressDialog("æ­£åœ¨æäº¤...");
 		List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
 		addToThreadPool(Config.and_attention, "send focus request", params);
 	}
 
 	/**
-	 * ¹ÄÕÆ¡¢ºÈµ¹²Ê
+	 * é¼“æŒã€å–å€’å½©
 	 */
 	private void sendApplaudOrBoosRrequest(int type) {
 		if (Config.User == null || MainActivity.starInformation == null) {
-			ToastUtil.show(this, "±§Ç¸£¬Ìá½»Ê§°Ü");
+			ToastUtil.show(this, "æŠ±æ­‰ï¼Œæäº¤å¤±è´¥");
 			return;
 		}
 		HashMap<String, String> entity = new HashMap<String, String>();
@@ -309,7 +309,7 @@ public class DetailsActivity extends BaseActivity implements OnClickListener{
 		entity.put("clientID", Config.User.getClientID());
 		entity.put("Star_ID", userID);
 		entity.put("Type", "" + type);
-		ShowProgressDialog("ÕıÔÚÌá½»...");
+		ShowProgressDialog("æ­£åœ¨æäº¤...");
 		List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
 		addToThreadPool(Config.give_applause_booed, "send focus request", params);
 	}
@@ -325,7 +325,7 @@ public class DetailsActivity extends BaseActivity implements OnClickListener{
 
 	private void initContent() {
 		if (starInformation == null) {
-			ToastUtil.show(this, "»ñÈ¡ĞÅÏ¢Ê§°Ü");
+			ToastUtil.show(this, "è·å–ä¿¡æ¯å¤±è´¥");
 		}
 		Glide.with(this).load(starInformation.getHead_portrait()).centerCrop()
 				.diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -360,7 +360,7 @@ public class DetailsActivity extends BaseActivity implements OnClickListener{
 		final PromptDialog.Builder builder = new PromptDialog.Builder(this);
 		builder.setTitle(title);
 		builder.setMessage(message);
-		builder.setNegativeButton("È¡Ïû", new DialogInterface.OnClickListener() {
+		builder.setNegativeButton("å–æ¶ˆ", new DialogInterface.OnClickListener() {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
@@ -368,7 +368,7 @@ public class DetailsActivity extends BaseActivity implements OnClickListener{
 				dialog.dismiss();
 			}
 		});
-		builder.setPositiveButton("È·¶¨", new DialogInterface.OnClickListener() {
+		builder.setPositiveButton("ç¡®å®š", new DialogInterface.OnClickListener() {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
@@ -388,8 +388,8 @@ public class DetailsActivity extends BaseActivity implements OnClickListener{
 	@Override
 	public void RequestFailed(int errcode, String message, int taskType) {
 		super.RequestFailed(errcode, message, taskType);
-		if (message.equals("Óé±Ò²»×ã£¡")) {
-			showWarningDialog("ÊÇ·ñ¹ºÂòÓé±Ò", "ÄúµÄÓé±Ò²»×ãÊÇ·ñÈ¥¹ºÂò");
+		if (message.equals("å¨±å¸ä¸è¶³ï¼")) {
+			showWarningDialog("æ˜¯å¦è´­ä¹°å¨±å¸", "æ‚¨çš„å¨±å¸ä¸è¶³æ˜¯å¦å»è´­ä¹°");
 		}
 	}
 
@@ -408,7 +408,7 @@ public class DetailsActivity extends BaseActivity implements OnClickListener{
 				// p = 0;
 				initPersonalInformation();
 			} else {
-				ToastUtil.show(this, "»ñÈ¡Êı¾İÊ§°Ü");
+				ToastUtil.show(this, "è·å–æ•°æ®å¤±è´¥");
 			}
 
 			break;
@@ -431,7 +431,7 @@ public class DetailsActivity extends BaseActivity implements OnClickListener{
 
 			break;
 		case Config.give_applause_booed:
-			ToastUtil.show(this, "Ìá½»³É¹¦");
+			ToastUtil.show(this, "æäº¤æˆåŠŸ");
 			switch (applauseGiveConcern.getType()) {
 			case 1:
 				applauseGiveConcern.showAnimationDialog(R.drawable.circle4,
@@ -449,7 +449,7 @@ public class DetailsActivity extends BaseActivity implements OnClickListener{
 
 			break;
 		case Config.and_attention:
-			ToastUtil.show(this, "Ìá½»³É¹¦");
+			ToastUtil.show(this, "æäº¤æˆåŠŸ");
 			applauseGiveConcern.showAnimationDialog(R.drawable.circle6,
 					R.raw.concern);
 			break;
@@ -463,19 +463,19 @@ public class DetailsActivity extends BaseActivity implements OnClickListener{
 		}
 		switch (v.getId()) {
 		/**
-		 * ¹ÄÕÆ
+		 * é¼“æŒ
 		 */
 		case R.id.applause:
 			applauseGiveConcern.showApplaudDialog(1);
 			break;
 		/**
-		 * µ¹²Ê
+		 * å€’å½©
 		 */
 		case R.id.bigbird:
 			applauseGiveConcern.showApplaudDialog(2);
 			break;
 		/**
-		 * ¹Ø×¢
+		 * å…³æ³¨
 		 */
 		case R.id.FocusOn:
 			applauseGiveConcern.sendFocusRequest();
@@ -490,7 +490,7 @@ public class DetailsActivity extends BaseActivity implements OnClickListener{
 						.getLink());
 				startActivity(intent);
 			} else {
-				ToastUtil.show(this, "Ã»ÓĞÁ¬½Ó");
+				ToastUtil.show(this, "æ²¡æœ‰è¿æ¥");
 			}
 			break;
 		}

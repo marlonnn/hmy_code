@@ -48,23 +48,23 @@ import java.util.List;
 import org.apache.http.NameValuePair;
 
 /**
- * µÇÂ½½çÃæ
+ * ç™»é™†ç•Œé¢
  * Created by zhongwen on 2016/4/3.
  */
 @SuppressLint("CutPasteId") public class LoginActivity extends BaseActivity implements InfoReceiver{
 
-    private CheckBox chBoxRememberPassword;//¼Ç×¡ÃÜÂë
-    private Button btnLogin;//µÇÂ½
-    private Button btnSignUp;//×¢²á
-    private Button btnForgetPassword;//Íü¼ÇÃÜÂë
-    private EditText loginPhoneNumber;//µÇÂ½½çÃæÊÖ»úºÅ
-    private EditText loginPassword;//µÇÂ½ÃÜÂë
+    private CheckBox chBoxRememberPassword;//è®°ä½å¯†ç 
+    private Button btnLogin;//ç™»é™†
+    private Button btnSignUp;//æ³¨å†Œ
+    private Button btnForgetPassword;//å¿˜è®°å¯†ç 
+    private EditText loginPhoneNumber;//ç™»é™†ç•Œé¢æ‰‹æœºå·
+    private EditText loginPassword;//ç™»é™†å¯†ç 
     private View loginView, signUpView;
 
-    private EditText signUpPhoneNumber;//×¢²á½çÃæÊÖ»úºÅ
-    private EditText signUpValidate;//×¢²á½çÃæÑéÖ¤Âë
-    private EditText signUpPassword;//×¢²á½çÃæÃÜÂë
-    private EditText signUpPasswordAgain;//×¢²á½çÃæÔÙ´ÎÊäÈëÃÜÂë
+    private EditText signUpPhoneNumber;//æ³¨å†Œç•Œé¢æ‰‹æœºå·
+    private EditText signUpValidate;//æ³¨å†Œç•Œé¢éªŒè¯ç 
+    private EditText signUpPassword;//æ³¨å†Œç•Œé¢å¯†ç 
+    private EditText signUpPasswordAgain;//æ³¨å†Œç•Œé¢å†æ¬¡è¾“å…¥å¯†ç 
     private EditText signUpShareCode;
     private TextView signUpValidatetext;
     private CheckBox signUpcheckBox;
@@ -92,7 +92,7 @@ import org.apache.http.NameValuePair;
     }
 
     /**
-     * ³õÊ¼»¯µÇÂ¼½çÃæ¿Ø¼ş
+     * åˆå§‹åŒ–ç™»å½•ç•Œé¢æ§ä»¶
      */
     private void initializeLoginView()
     {
@@ -178,7 +178,7 @@ import org.apache.http.NameValuePair;
 		view2.setVisibility(View.GONE);
 	}
     /**
-     * ³õÊ¼»¯×¢²á½çÃæ¿Õ¼ä
+     * åˆå§‹åŒ–æ³¨å†Œç•Œé¢ç©ºé—´
      */
     private void initializeSignUpView() {
         signUpPhoneNumber = (EditText) findViewById(R.id.signUp_editText_phone);
@@ -235,7 +235,7 @@ import org.apache.http.NameValuePair;
     
     
     /**
-     * »ñÈ¡ÑéÖ¤Âë
+     * è·å–éªŒè¯ç 
      */
     private void sendValidateRequest()
     {
@@ -250,7 +250,7 @@ import org.apache.http.NameValuePair;
     }
     
     /**
-     * ×¢²á
+     * æ³¨å†Œ
      */
     private void sendSignUpRequest()
     {
@@ -343,9 +343,9 @@ import org.apache.http.NameValuePair;
 				public void onFailed(int arg0) {
 					XLog.i("login to Nim server failed: " + arg0);
 	                if (arg0 == 302 || arg0 == 404) {
-	                    Toast.makeText(LoginActivity.this, "µÇÂ½Ê§°Ü", Toast.LENGTH_SHORT).show();
+	                    Toast.makeText(LoginActivity.this, "ç™»é™†å¤±è´¥", Toast.LENGTH_SHORT).show();
 	                } else {
-	                    Toast.makeText(LoginActivity.this, "µÇÂ¼Ê§°Ü: " + arg0, Toast.LENGTH_SHORT).show();
+	                    Toast.makeText(LoginActivity.this, "ç™»å½•å¤±è´¥: " + arg0, Toast.LENGTH_SHORT).show();
 	                }
 				}
 
@@ -370,7 +370,7 @@ import org.apache.http.NameValuePair;
     	}
     	else
     	{
-    		Toast.makeText(LoginActivity.this, "µÇÂ½Ê§°Ü", Toast.LENGTH_SHORT).show();
+    		Toast.makeText(LoginActivity.this, "ç™»é™†å¤±è´¥", Toast.LENGTH_SHORT).show();
     	}
     }
     
@@ -525,7 +525,7 @@ import org.apache.http.NameValuePair;
 			public void onClick(DialogInterface dialog, int which) {
 				signUpcheckBox.setChecked(true);
 				dialog.dismiss();
-				// ÉèÖÃÄãµÄ²Ù×÷ÊÂÏî
+				// è®¾ç½®ä½ çš„æ“ä½œäº‹é¡¹
 			}
 		});
 
@@ -539,7 +539,7 @@ import org.apache.http.NameValuePair;
 		builder.create().show();
     }
 
-    //region ÇĞ»»µÇÂ½ºÍ×¢²áview£¬ÏÔÊ¾¶¯»­Ğ§¹û
+    //region åˆ‡æ¢ç™»é™†å’Œæ³¨å†Œviewï¼Œæ˜¾ç¤ºåŠ¨ç”»æ•ˆæœ
     private void exChangeView(final View view1, final View view2) {
         view2.setVisibility(View.VISIBLE);
         Animation in = new AlphaAnimation(0f, 1f);

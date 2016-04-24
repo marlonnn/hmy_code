@@ -10,9 +10,7 @@ import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 
 import java.util.HashMap;
-/**
- * 聊天室消息项展示ViewHolder工厂类。
- */
+
 public class ChatRoomMsgViewHolderFactory {
 
     private static HashMap<Class<? extends MsgAttachment>, Class<? extends MsgViewHolderBase>> viewHolders = new HashMap<Class<? extends MsgAttachment>, Class<? extends MsgViewHolderBase>>();

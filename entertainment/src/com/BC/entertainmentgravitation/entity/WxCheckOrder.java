@@ -4,7 +4,7 @@ public class WxCheckOrder {
 	
 	public String clientID;
 	
-	//Ô¤Ö§¸¶¶©µ¥ºÅ
+	//é¢„æ”¯ä»˜è®¢å•å·
 	public String rechargesn;
 
 	public String getClientID() {

@@ -3,7 +3,6 @@ package com.BC.entertainment.chatroom.module;
 import java.util.List;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Handler;
 import android.support.v4.view.ViewPager;
 import android.text.Editable;
@@ -36,25 +35,25 @@ public class InputPanel {
     private View view;
     private Handler uiHandler;
     
-    protected EditText messageEditText;// ÎÄ±¾ÏûÏ¢±à¼­¿ò
+    protected EditText messageEditText;// æ–‡æœ¬æ¶ˆæ¯ç¼–è¾‘æ¡†
     
-    protected View sendMessageButtonInInputBar;// ·¢ËÍÏûÏ¢°´Å¥
+    protected View sendMessageButtonInInputBar;// å‘é€æ¶ˆæ¯æŒ‰é’®
     
-    protected View messageInputBar;//ÊäÈë¿ò¿Ø¼şÕûÌå
+    protected View messageInputBar;//è¾“å…¥æ¡†æ§ä»¶æ•´ä½“
     
-    protected View giftBottomLayout; // ÀñÎï²¼¾Ö
+    protected View giftBottomLayout; // ç¤¼ç‰©å¸ƒå±€
     
-    private boolean giftBottomLayoutHasSetup = false;// ÀñÎï²¼¾Ö×´Ì¬
+    private boolean giftBottomLayoutHasSetup = false;// ç¤¼ç‰©å¸ƒå±€çŠ¶æ€
     
-    private List<BaseGift> gifts;//ÔùËÍµÄÀñÎï
+    private List<BaseGift> gifts;//èµ é€çš„ç¤¼ç‰©
 
-	private LinearLayout messageActivityBottomLayout;//ÊäÈë¿òºÍÀñÎïÕûÌå¸ù²¼¾Ö
+	private LinearLayout messageActivityBottomLayout;//è¾“å…¥æ¡†å’Œç¤¼ç‰©æ•´ä½“æ ¹å¸ƒå±€
 	
-	private boolean isKeyboardShowed = true; // ÊÇ·ñÏÔÊ¾¼üÅÌ
+	private boolean isKeyboardShowed = true; // æ˜¯å¦æ˜¾ç¤ºé”®ç›˜
 
-	private ViewPager viewPager;//ÀñÎïµÄ»¬¶¯Ò³
+	private ViewPager viewPager;//ç¤¼ç‰©çš„æ»‘åŠ¨é¡µ
 
-	private ViewGroup indicator;//¹ö¶¯µã
+	private ViewGroup indicator;//æ»šåŠ¨ç‚¹
 	
     public InputPanel(Container container, View view, List<BaseGift> gifts) {
         this.container = container;
@@ -63,14 +62,11 @@ public class InputPanel {
         this.uiHandler = new Handler();
         initViews();
     	initInputBarListener();
-    	initTextEdit();//³õÊ¼»¯ÊäÈë¿ò¿Ø¼ş
-//    	showGiftLayout();
-//    	showInputBar();
-    	
+    	initTextEdit();//åˆå§‹åŒ–è¾“å…¥æ¡†æ§ä»¶
     }
     
     /**
-     * ³õÊ¼»¯ÀñÎï»¬¶¯Ò³Ãæ
+     * åˆå§‹åŒ–ç¤¼ç‰©æ»‘åŠ¨é¡µé¢
      */
     private void initgiftViewPage()
     {
@@ -80,7 +76,7 @@ public class InputPanel {
     }
     
     /**
-     * ³õÊ¼»¯ÀñÎï²¼¾ÖPageListener
+     * åˆå§‹åŒ–ç¤¼ç‰©å¸ƒå±€PageListener
      * @param indicator
      * @param count
      * @param viewPager
@@ -109,7 +105,7 @@ public class InputPanel {
     }
     
     /**
-     * ÉèÖÃÒ³Âë
+     * è®¾ç½®é¡µç 
      */
     private void setIndicator(ViewGroup indicator, int total, int current) {
         if (total <= 1) {
@@ -119,7 +115,7 @@ public class InputPanel {
             for (int i = 0; i < total; i++) {
                 ImageView imgCur = new ImageView(indicator.getContext());
                 imgCur.setId(i);
-                // ÅĞ¶Ïµ±Ç°Ò³ÂëÀ´¸üĞÂ
+                // åˆ¤æ–­å½“å‰é¡µç æ¥æ›´æ–°
                 if (i == current) {
                     imgCur.setBackgroundResource(R.drawable.nim_moon_page_selected);
                 } else {
@@ -132,7 +128,7 @@ public class InputPanel {
     }
     
     /**
-     * ·¢ËÍÏûÏ¢»òÕß·¢ËÍÀñÎï³õÊ¼»¯¿Ø¼ş
+     * å‘é€æ¶ˆæ¯æˆ–è€…å‘é€ç¤¼ç‰©åˆå§‹åŒ–æ§ä»¶
      * @param isSendGift
      */
     public void init(boolean isSendGift)
@@ -219,7 +215,7 @@ public class InputPanel {
         checkSendButtonEnable(messageEditText);
     }
     
-    // µã»÷edittext£¬ÇĞ»»¼üÅÌºÍÀñÎï²¼¾Ö
+    // ç‚¹å‡»edittextï¼Œåˆ‡æ¢é”®ç›˜å’Œç¤¼ç‰©å¸ƒå±€
     private void switchToTextLayout(boolean needShowInput) {
         hideGiftLayout();
 
@@ -234,7 +230,7 @@ public class InputPanel {
         }
     }
     
-    // ³õÊ¼»¯ÀñÎï²¼¾Ö
+    // åˆå§‹åŒ–ç¤¼ç‰©å¸ƒå±€
     private void addGiftLayout() {
         if (giftBottomLayout == null) {
             giftBottomLayout = view.findViewById(R.id.giftLayout);
@@ -243,7 +239,7 @@ public class InputPanel {
         initGiftLayout();
     }
     
-    // ³õÊ¼»¯¾ßÌåÀñÎïlayoutÖĞµÄÏîÄ¿
+    // åˆå§‹åŒ–å…·ä½“ç¤¼ç‰©layoutä¸­çš„é¡¹ç›®
     private void initGiftLayout() {
         if (giftBottomLayoutHasSetup) {
             return;
@@ -253,7 +249,7 @@ public class InputPanel {
         giftBottomLayoutHasSetup = true;
     }
     
-    //ÏÔÊ¾ÀñÎï°´Å¥£¬ÇĞ»»ÀñÎï²¼¾ÖºÍ¼üÅÌ
+    //æ˜¾ç¤ºç¤¼ç‰©æŒ‰é’®ï¼Œåˆ‡æ¢ç¤¼ç‰©å¸ƒå±€å’Œé”®ç›˜
     public void ToggleGiftLayout() {
         if (giftBottomLayout == null || giftBottomLayout.getVisibility() == View.GONE) {
             showGiftLayout();
@@ -276,10 +272,10 @@ public class InputPanel {
         }
     };
     
-    // ÏÔÊ¾¼üÅÌ²¼¾Ö
+    // æ˜¾ç¤ºé”®ç›˜å¸ƒå±€
     private void showInputMethod(EditText editTextMessage) {
         editTextMessage.requestFocus();
-        //Èç¹ûÒÑ¾­ÏÔÊ¾,Ôò¼ÌĞø²Ù×÷Ê±²»ĞèÒª°Ñ¹â±ê¶¨Î»µ½×îºó
+        //å¦‚æœå·²ç»æ˜¾ç¤º,åˆ™ç»§ç»­æ“ä½œæ—¶ä¸éœ€è¦æŠŠå…‰æ ‡å®šä½åˆ°æœ€å
         if (!isKeyboardShowed) {
             editTextMessage.setSelection(editTextMessage.getText().length());
             isKeyboardShowed = true;
@@ -290,7 +286,7 @@ public class InputPanel {
 
     }
     
-    // Òş²Ø¼üÅÌ²¼¾Ö
+    // éšè—é”®ç›˜å¸ƒå±€
     public void hideInputMethod() {
         isKeyboardShowed = false;
         uiHandler.removeCallbacks(showTextRunnable);
@@ -299,7 +295,7 @@ public class InputPanel {
         messageEditText.clearFocus();
     }
     
-    // ÏÔÊ¾ÀñÎï²¼¾Ö
+    // æ˜¾ç¤ºç¤¼ç‰©å¸ƒå±€
     public void showGiftLayout() {
         addGiftLayout();
         hideInputMethod();
@@ -307,7 +303,7 @@ public class InputPanel {
         uiHandler.postDelayed(showGiftFuncRunnable, SHOW_LAYOUT_DELAY);
     }
     
-    // Òş²ØÀñÎï²¼¾Ö
+    // éšè—ç¤¼ç‰©å¸ƒå±€
     public void hideGiftLayout() {
         uiHandler.removeCallbacks(showGiftFuncRunnable);
         if (giftBottomLayout != null) {
@@ -315,7 +311,7 @@ public class InputPanel {
         }
     }
     
-    //ÏÔÊ¾ÊäÈëÌõ
+    //æ˜¾ç¤ºè¾“å…¥æ¡
     public void showInputBar()
     {
     	if (messageInputBar != null)
@@ -324,7 +320,7 @@ public class InputPanel {
     	}
     }
     
-    //Òş²ØÊäÈëÌõ
+    //éšè—è¾“å…¥æ¡
     public void hideInputBar()
     {
     	if (messageInputBar != null)
@@ -343,7 +339,7 @@ public class InputPanel {
     }
     
     /**
-     * ************************* ¼üÅÌ²¼¾ÖÇĞ»» *******************************
+     * ************************* é”®ç›˜å¸ƒå±€åˆ‡æ¢ *******************************
      */
     private View.OnClickListener clickListener = new View.OnClickListener() {
 
@@ -356,7 +352,7 @@ public class InputPanel {
     };
     
     /**
-     * ·¢ËÍÎÄ±¾ÏûÏ¢
+     * å‘é€æ–‡æœ¬æ¶ˆæ¯
      */
     private void onTextMessageSendButtonPressed(){
         IMMessage textMessage;
@@ -366,7 +362,7 @@ public class InputPanel {
         } else {
             textMessage = MessageBuilder.createTextMessage(container.account, container.sessionType, text);
         }
-        //·¢ËÍÏûÏ¢
+        //å‘é€æ¶ˆæ¯
         if (container.proxy.sendMessage(textMessage)) {
             restoreText(true);
         }

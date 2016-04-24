@@ -51,7 +51,7 @@ import com.summer.logger.XLog;
 import com.summer.view.CircularImage;
 
 /**
- * ÁÄÌìÊÒÏûÏ¢ÊÕ·¢Ä£¿é
+ * èŠå¤©å®¤æ¶ˆæ¯æ”¶å‘æ¨¡å—
  * @author wen zhong
  *
  */
@@ -70,32 +70,32 @@ public class ChatRoomPanel {
 
     // message list view
     private ListView messageListView;
-    private LinkedList<IMMessage> items;//ÁÄÌìÊÒÏûÏ¢ÁĞ±í
+    private LinkedList<IMMessage> items;//èŠå¤©å®¤æ¶ˆæ¯åˆ—è¡¨
     
     private LinkedList<ChatRoomMember> onlinePeopleitems;
     
-    //ÁÄÌìÊÒÈËÊı»º´æ
+    //èŠå¤©å®¤äººæ•°ç¼“å­˜
     private Map<String, ChatRoomMember> memberCache = new ConcurrentHashMap<>();
     
-    private boolean isNormalEmpty = false; // ¹Ì¶¨³ÉÔ±ÊÇ·ñÀ­È¡Íê
+    private boolean isNormalEmpty = false; // å›ºå®šæˆå‘˜æ˜¯å¦æ‹‰å–å®Œ
     
-    private long updateTime = 0; // ·ÇÓÎ¿ÍµÄupdateTime
+    private long updateTime = 0; // éæ¸¸å®¢çš„updateTime
     
-    private long enterTime = 0; // ÓÎ¿ÍµÄenterTime
+    private long enterTime = 0; // æ¸¸å®¢çš„enterTime
     
     private CommonAdapter<IMMessage> adapter;
 
 	private CircularImage headPortrait;
 	
-	private ChatRoomMember master;//¹ÜÀíÔ±Ïà¹ØĞÅÏ¢
+	private ChatRoomMember master;//ç®¡ç†å‘˜ç›¸å…³ä¿¡æ¯
 	
 	private RecyclerView recycleView;
 	
 	private RecyclerViewAdapter recycleAdapter;
 	
-	private TextView onlinePeople;//×ÜµÄÔÚÏßÈËÊı
+	private TextView onlinePeople;//æ€»çš„åœ¨çº¿äººæ•°
 	
-	private Map<String, List<SimpleCallback<ChatRoomMember>>> frequencyLimitCache = new HashMap<String, List<SimpleCallback<ChatRoomMember>>>(); // ÖØ¸´ÇëÇó´¦Àí
+	private Map<String, List<SimpleCallback<ChatRoomMember>>> frequencyLimitCache = new HashMap<String, List<SimpleCallback<ChatRoomMember>>>(); // é‡å¤è¯·æ±‚å¤„ç†
 	
 	private  static Map<MemberType, Integer> compMap = new HashMap<>();
 
@@ -151,7 +151,7 @@ public class ChatRoomPanel {
     }
     
     /**
-     * ÁÄÌìÊÒÏûÏ¢ÁĞ±í
+     * èŠå¤©å®¤æ¶ˆæ¯åˆ—è¡¨
      */
     private void initListView(){
     	items = new LinkedList<>();
@@ -170,14 +170,14 @@ public class ChatRoomPanel {
 					 		try {
 								ChatRoomNotificationAttachment attachment = (ChatRoomNotificationAttachment) item
 										.getAttachment();
-								holder.setText(R.id.txtName, "ÏµÍ³ÏûÏ¢£º");
+								holder.setText(R.id.txtName, "ç³»ç»Ÿæ¶ˆæ¯ï¼š");
 								if (attachment.getType() == NotificationType.ChatRoomMemberIn)
 								{
-									holder.setText(R.id.txtContent, "»¶Ó­"+ attachment.getOperatorNick() + "½øÈëÖ±²¥¼ä");
+									holder.setText(R.id.txtContent, "æ¬¢è¿"+ attachment.getOperatorNick() + "è¿›å…¥ç›´æ’­é—´");
 								}
 								else if (attachment.getType() == NotificationType.ChatRoomMemberExit)
 								{
-									holder.setText(R.id.txtContent, (attachment.getOperatorNick() == null ? "" : attachment.getOperatorNick()) + "Àë¿ªÁËÖ±²¥¼ä");
+									holder.setText(R.id.txtContent, (attachment.getOperatorNick() == null ? "" : attachment.getOperatorNick()) + "ç¦»å¼€äº†ç›´æ’­é—´");
 								}
 								holder.setTextColor(R.id.txtContent, Color.parseColor("#8B658B"));
 
@@ -192,13 +192,13 @@ public class ChatRoomPanel {
 								ChatRoomMessage message  = (ChatRoomMessage)item;
 								if (message.getDirect() == MsgDirectionEnum.Out)
 								{
-									//·¢³öÈ¥µÄÏûÏ¢
+									//å‘å‡ºå»çš„æ¶ˆæ¯
 									holder.setText(R.id.txtName, Config.User.getNickName() + ":");
 									holder.setText(R.id.txtContent, message.getContent());
 								}
 								else if (message.getDirect() == MsgDirectionEnum.In)
 								{
-									//½ÓÊÜµ½µÄÏûÏ¢
+									//æ¥å—åˆ°çš„æ¶ˆæ¯
 									holder.setText(R.id.txtName, message.getChatRoomMessageExtension().getSenderNick() + ":");
 									holder.setText(R.id.txtContent, message.getContent());
 								}
@@ -215,7 +215,7 @@ public class ChatRoomPanel {
     }
     
     /**
-     * Ö÷²¥Í·Ïñ
+     * ä¸»æ’­å¤´åƒ
      */
     private void initPortrait()
     {
@@ -227,7 +227,7 @@ public class ChatRoomPanel {
     }
     
     /**
-     * ³õÊ¼»¯ÔÚÏßÈËÊıÍ·ÏñÁĞ±í
+     * åˆå§‹åŒ–åœ¨çº¿äººæ•°å¤´åƒåˆ—è¡¨
      */
     private void initOnlinePortrait()
     {
@@ -239,7 +239,7 @@ public class ChatRoomPanel {
     	recycleView.setAdapter(recycleAdapter);
     	
         recycleView.setLayoutManager(new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.HORIZONTAL));
-        recycleView.setItemAnimator(new DefaultItemAnimator());//moreµÄ¶¯»­Ğ§¹û
+        recycleView.setItemAnimator(new DefaultItemAnimator());//moreçš„åŠ¨ç”»æ•ˆæœ
         recycleAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
@@ -252,7 +252,7 @@ public class ChatRoomPanel {
     
     
     /**
-     * ³õÊ¼»¯ÔÚÏßÈËÊı
+     * åˆå§‹åŒ–åœ¨çº¿äººæ•°
      */
     private void initOnlinePeople()
     {
@@ -260,7 +260,7 @@ public class ChatRoomPanel {
     }
     
     /**
-     * »ñÈ¡ÔÚÏßÈËÊı
+     * è·å–åœ¨çº¿äººæ•°
      */
     private void fetchOnlinePeople()
     {
@@ -274,7 +274,7 @@ public class ChatRoomPanel {
     }
 
     /**
-     * »ñÈ¡Ö÷²¥Í·Ïñ
+     * è·å–ä¸»æ’­å¤´åƒ
      */
     public void fetchPortrait()
     {
@@ -287,7 +287,7 @@ public class ChatRoomPanel {
         });
     }
     
-    // Ë¢ĞÂÏûÏ¢ÁĞ±í
+    // åˆ·æ–°æ¶ˆæ¯åˆ—è¡¨
     public void refreshMessageList() {
         container.activity.runOnUiThread(new Runnable() {
 
@@ -321,7 +321,7 @@ public class ChatRoomPanel {
 			}
         	
             if (isMyMessage(message)) {
-            	//±£´æÏûÏ¢µ½ÁÄÌìÊÒÏûÏ¢ÁĞ±íÖĞ
+            	//ä¿å­˜æ¶ˆæ¯åˆ°èŠå¤©å®¤æ¶ˆæ¯åˆ—è¡¨ä¸­
                 saveMessage(message, false);
                 if (message.getMsgType() == MsgTypeEnum.notification)
                 {
@@ -357,7 +357,7 @@ public class ChatRoomPanel {
                 ChatRoomMember member = getChatRoomMember(roomId, target);
                 if (attachment.getType() == NotificationType.ChatRoomMemberIn)
                 {
-                	//½øÈëÁÄÌìÊÒ
+                	//è¿›å…¥èŠå¤©å®¤
             		addMembers(member, false);
             		fetchMember(roomId, account, new SimpleCallback<ChatRoomMember>() {
 
@@ -382,9 +382,9 @@ public class ChatRoomPanel {
     }
     
     /**
-     * ¸ù¾İÁÄÌìÊÒidºÍÓÃ»§id»ñÈ¡ÁÄÌìÊÒ³ÉÔ±ChatRoomMember
-     * @param roomId ÁÄÌìÊÒid
-     * @param account ÓÃ»§ÔÆĞÅÕËºÅ
+     * æ ¹æ®èŠå¤©å®¤idå’Œç”¨æˆ·idè·å–èŠå¤©å®¤æˆå‘˜ChatRoomMember
+     * @param roomId èŠå¤©å®¤id
+     * @param account ç”¨æˆ·äº‘ä¿¡è´¦å·
      * @return
      */
     public ChatRoomMember getChatRoomMember(String roomId, String account) {
@@ -440,16 +440,16 @@ public class ChatRoomPanel {
     
     private void fetchData() {
         if (!isNormalEmpty) {
-            // À­È¡¹Ì¶¨ÔÚÏß³ÉÔ±
+            // æ‹‰å–å›ºå®šåœ¨çº¿æˆå‘˜
             getMembers(MemberQueryType.ONLINE_NORMAL, updateTime, 0);
         } else {
-            // À­È¡·Ç¹Ì¶¨³ÉÔ±
+            // æ‹‰å–éå›ºå®šæˆå‘˜
             getMembers(MemberQueryType.GUEST, enterTime, 0);
         }
     }
     
     /**
-     * »ñÈ¡³ÉÔ±ÁĞ±í
+     * è·å–æˆå‘˜åˆ—è¡¨
      */
     private void getMembers(final MemberQueryType memberQueryType, final long time, int limit) {
         fetchRoomMembers(container.account, memberQueryType, time, (LIMIT - limit), new SimpleCallback<List<ChatRoomMember>>() {
@@ -460,7 +460,7 @@ public class ChatRoomPanel {
                     addMembers(result);
 
                     if (memberQueryType == MemberQueryType.ONLINE_NORMAL && result.size() < LIMIT) {
-                        isNormalEmpty = true; // ¹Ì¶¨³ÉÔ±ÒÑ¾­À­Íê
+                        isNormalEmpty = true; // å›ºå®šæˆå‘˜å·²ç»æ‹‰å®Œ
                         getMembers(MemberQueryType.GUEST, enterTime, result.size());
                     }
                 }
@@ -469,11 +469,11 @@ public class ChatRoomPanel {
     }
     
     /**
-     * ´Ó·şÎñÆ÷»ñÈ¡ÁÄÌìÊÒ³ÉÔ±×ÊÁÏ£¨È¥ÖØ´¦Àí£©£¨Òì²½£©
-     * @param roomId ÁÄÌìÊÒID
-     * @param memberQueryType ·ÖÒ³»ñÈ¡³ÉÔ±²éÑ¯ÀàĞÍ
-     * @param time ¹Ì¶¨³ÉÔ±ÁĞ±íÓÃupdateTime, ÓÎ¿ÍÁĞ±íÓÃ½øÈëenterTime£¬ Ìî0»áÊ¹ÓÃµ±Ç°·şÎñÆ÷×îĞÂÊ±¼ä¿ªÊ¼²éÑ¯£¬¼´µÚÒ»Ò³£¬µ¥Î»ºÁÃë
-     * @param limit ÌõÊıÏŞÖÆ
+     * ä»æœåŠ¡å™¨è·å–èŠå¤©å®¤æˆå‘˜èµ„æ–™ï¼ˆå»é‡å¤„ç†ï¼‰ï¼ˆå¼‚æ­¥ï¼‰
+     * @param roomId èŠå¤©å®¤ID
+     * @param memberQueryType åˆ†é¡µè·å–æˆå‘˜æŸ¥è¯¢ç±»å‹
+     * @param time å›ºå®šæˆå‘˜åˆ—è¡¨ç”¨updateTime, æ¸¸å®¢åˆ—è¡¨ç”¨è¿›å…¥enterTimeï¼Œ å¡«0ä¼šä½¿ç”¨å½“å‰æœåŠ¡å™¨æœ€æ–°æ—¶é—´å¼€å§‹æŸ¥è¯¢ï¼Œå³ç¬¬ä¸€é¡µï¼Œå•ä½æ¯«ç§’
+     * @param limit æ¡æ•°é™åˆ¶
      * @param callback
      */
 	public void fetchRoomMembers(String roomId, MemberQueryType memberQueryType, long time, int limit, 
@@ -506,7 +506,7 @@ public class ChatRoomPanel {
 	}
     
     /**
-     * Ìí¼Óµ½ÁÄÌìÊÒ×ÜÈËÊı
+     * æ·»åŠ åˆ°èŠå¤©å®¤æ€»äººæ•°
      * @param members
      */
     private void addMembers(List<ChatRoomMember> members) {
@@ -534,7 +534,7 @@ public class ChatRoomPanel {
     }
     
     /**
-     * ÁÄÌìÊÒÈËÀë¿ªÊ±¼õÉÙ×ÜÈËÊı
+     * èŠå¤©å®¤äººç¦»å¼€æ—¶å‡å°‘æ€»äººæ•°
      * @param member
      */
     public void removeMembers(ChatRoomMember member)
@@ -557,7 +557,7 @@ public class ChatRoomPanel {
     }
     
     /**
-     * Ìí¼ÓÁÄÌìÊÒÈËÔ±µ½×ÜÈËÊıÖĞ
+     * æ·»åŠ èŠå¤©å®¤äººå‘˜åˆ°æ€»äººæ•°ä¸­
      * @param member
      * @param addFirst
      */
@@ -594,7 +594,7 @@ public class ChatRoomPanel {
         }
     }
     
-    // ·¢ËÍÏûÏ¢ºó£¬¸üĞÂ±¾µØÏûÏ¢ÁĞ±í
+    // å‘é€æ¶ˆæ¯åï¼Œæ›´æ–°æœ¬åœ°æ¶ˆæ¯åˆ—è¡¨
     public void onMsgSend(IMMessage message) {
         // add to listView and refresh
         saveMessage(message, false);
@@ -603,6 +603,11 @@ public class ChatRoomPanel {
 
         adapter.notifyDataSetChanged();
         ListViewUtil.scrollToBottom(messageListView);
+    }
+    
+    public void saveMessage(final IMMessage message)
+    {
+    	this.saveMessage(message, false);
     }
 
     public void saveMessage(final IMMessage message, boolean addFirst) {
@@ -661,10 +666,10 @@ public class ChatRoomPanel {
     }
     
     /**
-     * ´Ó·şÎñÆ÷»ñÈ¡ÁÄÌìÊÒ³ÉÔ±×ÊÁÏ£¨È¥ÖØ´¦Àí£©£¨Òì²½£©
-     * @param roomId ÁÄÌìÊÒid
-     * @param account ÓÃ»§ÔÆĞÅÕËºÅ
-     * @param callback »Øµ÷º¯Êı
+     * ä»æœåŠ¡å™¨è·å–èŠå¤©å®¤æˆå‘˜èµ„æ–™ï¼ˆå»é‡å¤„ç†ï¼‰ï¼ˆå¼‚æ­¥ï¼‰
+     * @param roomId èŠå¤©å®¤id
+     * @param account ç”¨æˆ·äº‘ä¿¡è´¦å·
+     * @param callback å›è°ƒå‡½æ•°
      */
     public void fetchMember(final String roomId, final String account, final SimpleCallback<ChatRoomMember> callback)
     {
@@ -672,12 +677,12 @@ public class ChatRoomPanel {
             callback.onResult(false, null);
             return;
         }
-        // ÆµÂÊ¿ØÖÆ
+        // é¢‘ç‡æ§åˆ¶
         if (frequencyLimitCache.containsKey(account)) {
             if (callback != null) {
                 frequencyLimitCache.get(account).add(callback);
             }
-            return; // ÒÑ¾­ÔÚÇëÇóÖĞ£¬²»ÒªÖØ¸´ÇëÇó
+            return; // å·²ç»åœ¨è¯·æ±‚ä¸­ï¼Œä¸è¦é‡å¤è¯·æ±‚
         }
         else
         {

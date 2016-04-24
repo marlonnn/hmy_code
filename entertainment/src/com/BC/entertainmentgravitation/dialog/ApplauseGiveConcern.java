@@ -54,13 +54,13 @@ public class ApplauseGiveConcern {
 	public void showApplaudDialog(final int type) {
 		final ApplaudDialog.Builder builder = new ApplaudDialog.Builder(context);
 		if (type == 1) {
-			builder.setTitle("ÇëÊäÈë¹ÄÕÆ´ÎÊı");
+			builder.setTitle("è¯·è¾“å…¥é¼“æŒæ¬¡æ•°");
 		} else {
-			builder.setTitle("ÇëÊäÈëÌßºì°ü¸öÊı");
+			builder.setTitle("è¯·è¾“å…¥è¸¢çº¢åŒ…ä¸ªæ•°");
 		}
-		builder.setMessage("ÇëÊäÈë´ÎÊı");
+		builder.setMessage("è¯·è¾“å…¥æ¬¡æ•°");
 
-		builder.setPositiveButton("È·¶¨", new DialogInterface.OnClickListener() {
+		builder.setPositiveButton("ç¡®å®š", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int which) {
 
 				EditText message = (EditText) builder
@@ -70,12 +70,12 @@ public class ApplauseGiveConcern {
 					sendApplaseOrBoosRequest(type, message.getText().toString());
 					dialog.dismiss();
 				} else {
-					ToastUtil.show(context, "±§Ç¸ÖÁÉÙËÍÒ»¸öÕÆÉù");
+					ToastUtil.show(context, "æŠ±æ­‰è‡³å°‘é€ä¸€ä¸ªæŒå£°");
 				}
 			}
 		});
 
-		builder.setNegativeButton("È¡Ïû",
+		builder.setNegativeButton("å–æ¶ˆ",
 				new android.content.DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int which) {
 						dialog.dismiss();
@@ -94,10 +94,10 @@ public class ApplauseGiveConcern {
 				.findViewById(R.id.TextView04);
 		if (type == 1) {
 			editText.setText("6");
-			textView1.setText("ĞèÒª»¨·ÑÓé±ÒÊıÁ¿£º");
+			textView1.setText("éœ€è¦èŠ±è´¹å¨±å¸æ•°é‡ï¼š");
 			if (name != null) {
 				textView2.setText("" + (price * 6 + 15));
-				textView4.setText("ÄÜ¶Ò»»" + name + "µÄºì°üÊıÁ¿£º");
+				textView4.setText("èƒ½å…‘æ¢" + name + "çš„çº¢åŒ…æ•°é‡ï¼š");
 				textView3.setText(6 + "");
 				textView4.setVisibility(View.GONE);
 				textView3.setVisibility(View.GONE);
@@ -120,14 +120,14 @@ public class ApplauseGiveConcern {
 					if (!ts.equals("")) {
 						int v = Integer.valueOf(ts);
 						textView2.setText("" + (price * v + v * (v - 1) / 2));
-						textView4.setText("ÄÜ¶Ò»»" + name + "µÄºì°üÊıÁ¿£º");
+						textView4.setText("èƒ½å…‘æ¢" + name + "çš„çº¢åŒ…æ•°é‡ï¼š");
 						textView3.setText(v + "");
 					}
 				}
 			});
 		} else {
 			editText.setText("1");
-			textView1.setText("µ±Ç°Ñ¡Ôñºì°üÊı¿É¶Ò»»»ØÓé±ÒÊıÁ¿£º");
+			textView1.setText("å½“å‰é€‰æ‹©çº¢åŒ…æ•°å¯å…‘æ¢å›å¨±å¸æ•°é‡ï¼š");
 			textView2.setText("" + (price - 1));
 			textView4.setVisibility(View.GONE);
 			textView3.setVisibility(View.GONE);
@@ -183,11 +183,11 @@ public class ApplauseGiveConcern {
 	}
 
 	/**
-	 * ¼Ó¹Ø×¢
+	 * åŠ å…³æ³¨
 	 */
 	public void sendFocusRequest() {
 		if (Config.User == null || Star_ID == null) {
-			ToastUtil.show(context, "±§Ç¸£¬Ìá½»Ê§°Ü");
+			ToastUtil.show(context, "æŠ±æ­‰ï¼Œæäº¤å¤±è´¥");
 			return;
 		}
 		HashMap<String, String> entity = new HashMap<String, String>();
@@ -199,11 +199,11 @@ public class ApplauseGiveConcern {
 	}
 
 	/**
-	 * ¹ÄÕÆ¡¢ºÈµ¹²Ê
+	 * é¼“æŒã€å–å€’å½©
 	 */
 	public void sendApplaseOrBoosRequest(int type, String number) {
 		if (Config.User == null) {
-			ToastUtil.show(context, "±§Ç¸£¬Ìá½»Ê§°Ü");
+			ToastUtil.show(context, "æŠ±æ­‰ï¼Œæäº¤å¤±è´¥");
 			return;
 		}
 		this.type = type;

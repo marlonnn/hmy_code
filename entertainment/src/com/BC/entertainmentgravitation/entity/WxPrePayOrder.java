@@ -2,16 +2,16 @@ package com.BC.entertainmentgravitation.entity;
 
 public class WxPrePayOrder {
 
-	//¿Í»§ºÅ
+	//å®¢æˆ·å·
 	private String clientID;
 	
-	//²úÆ·Ãû³Æ
+	//äº§å“åç§°
 	private String productname;
 	
-	//¼Û¸ñ
+	//ä»·æ ¼
 	private int price;
 	
-	//Óé±ÒÊıÁ¿
+	//å¨±å¸æ•°é‡
 	private int amount;
 
 	public String getClientID() {

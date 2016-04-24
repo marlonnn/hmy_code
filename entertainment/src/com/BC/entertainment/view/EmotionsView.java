@@ -105,7 +105,7 @@ public class EmotionsView extends View {
 	}
 
 	/**
-	 * 随机生成位置
+	 * 闅忔満鐢熸垚浣嶇疆
 	 */
 	public void addRandomEmotion() {
 		calculateNextCoordinate();

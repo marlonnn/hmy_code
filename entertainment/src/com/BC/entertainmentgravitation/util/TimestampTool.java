@@ -11,7 +11,7 @@ import java.util.GregorianCalendar;
 public class TimestampTool {
 
 	/**
-	 * ½«ºÁÃë×ª³ÉÊ±¼ä
+	 * å°†æ¯«ç§’è½¬æˆæ—¶é—´
 	 */
 	public static String getTimeMillisToDate(long l) {
 		Timestamp d = new Timestamp(l);
@@ -19,7 +19,7 @@ public class TimestampTool {
 	}
 
 	/**
-	 * µ±Ç°Ê±¼ä
+	 * å½“å‰æ—¶é—´
 	 * 
 	 * @return Timestamp
 	 */
@@ -28,7 +28,7 @@ public class TimestampTool {
 	}
 
 	/**
-	 * »ñÈ¡µ±Ç°Ê±¼äµÄ×Ö·û´®
+	 * è·å–å½“å‰æ—¶é—´çš„å­—ç¬¦ä¸²
 	 * 
 	 * @return String ex:2006-07-07
 	 */
@@ -38,7 +38,7 @@ public class TimestampTool {
 	}
 
 	/**
-	 * »ñÈ¡µ±Ç°Ê±¼äµÄ×Ö·û´®
+	 * è·å–å½“å‰æ—¶é—´çš„å­—ç¬¦ä¸²
 	 * 
 	 * @return String ex:2006-07-07 22:10:10
 	 */
@@ -48,7 +48,7 @@ public class TimestampTool {
 	}
 
 	/**
-	 * »ñÈ¡µ±Ç°Ê±¼äµÄ×Ö·û´®
+	 * è·å–å½“å‰æ—¶é—´çš„å­—ç¬¦ä¸²
 	 * 
 	 * @return String ex:20060707221010
 	 */
@@ -74,7 +74,7 @@ public class TimestampTool {
 	}
 
 	/**
-	 * »ñÈ¡Ö¸¶¨Ê±¼äµÄ×Ö·û´®,Ö»µ½ÈÕÆÚ
+	 * è·å–æŒ‡å®šæ—¶é—´çš„å­—ç¬¦ä¸²,åªåˆ°æ—¥æœŸ
 	 * 
 	 * @param t
 	 *            Timestamp
@@ -85,7 +85,7 @@ public class TimestampTool {
 	}
 
 	/**
-	 * »ñÈ¡Ö¸¶¨Ê±¼äµÄ×Ö·û´®
+	 * è·å–æŒ‡å®šæ—¶é—´çš„å­—ç¬¦ä¸²
 	 * 
 	 * @param t
 	 *            Timestamp
@@ -96,7 +96,7 @@ public class TimestampTool {
 	}
 
 	/**
-	 * »ñµÃµ±Ç°ÈÕÆÚµÄÇ°¶ÎÈÕÆÚ
+	 * è·å¾—å½“å‰æ—¥æœŸçš„å‰æ®µæ—¥æœŸ
 	 * 
 	 * @param days
 	 * @return String
@@ -110,7 +110,7 @@ public class TimestampTool {
 	}
 
 	/**
-	 * ¸ñÊ½»¯Ê±¼ä
+	 * æ ¼å¼åŒ–æ—¶é—´
 	 * 
 	 * @param dt
 	 *            String -> yyyyMMddhhmmss
@@ -130,7 +130,7 @@ public class TimestampTool {
 	}
 
 	/**
-	 * ¸ñÊ½»¯Ê±¼ä
+	 * æ ¼å¼åŒ–æ—¶é—´
 	 * 
 	 * @param dt
 	 *            String -> yyyy-MM-dd hh:mm
@@ -150,7 +150,7 @@ public class TimestampTool {
 	}
 
 	/**
-	 * ¸ñÊ½»¯Ê±¼äyyyy-MM-dd HH:mm:ss
+	 * æ ¼å¼åŒ–æ—¶é—´yyyy-MM-dd HH:mm:ss
 	 * 
 	 * @param date
 	 *            java.util.Date
@@ -170,7 +170,7 @@ public class TimestampTool {
 	}
 
 	/**
-	 * ¸ñÊ½»¯ÈÕÆÚ
+	 * æ ¼å¼åŒ–æ—¥æœŸ
 	 * 
 	 * @param dt
 	 *            String -> yyyy-MM-dd
@@ -190,7 +190,7 @@ public class TimestampTool {
 	}
 
 	/**
-	 * ¸ñÊ½»¯Ê±¼äyyyy-MM-dd
+	 * æ ¼å¼åŒ–æ—¶é—´yyyy-MM-dd
 	 * 
 	 * @param date
 	 *            java.util.Date
@@ -266,7 +266,7 @@ public class TimestampTool {
 	}
 
 	/**
-	 * ·µ»ØÈÕÆÚ ¸ñÊ½:2006-07-05
+	 * è¿”å›æ—¥æœŸ æ ¼å¼:2006-07-05
 	 * 
 	 * @param str
 	 * @return Timestamp
@@ -283,7 +283,7 @@ public class TimestampTool {
 		return tp;
 	}
 
-	// »ñÈ¡Ö¸¶¨ÈÕÆÚÖ®ºóµÄÈÕÆÚ×Ö·û´® Èç 2007-04-15 ºóÒ»Ìì ¾ÍÊÇ 2007-04-16
+	// è·å–æŒ‡å®šæ—¥æœŸä¹‹åçš„æ—¥æœŸå­—ç¬¦ä¸² å¦‚ 2007-04-15 åä¸€å¤© å°±æ˜¯ 2007-04-16
 	public static String getNextDay(String strDate, int day) {
 		if (strDate != null && !strDate.equals("")) {
 			Calendar cal1 = Calendar.getInstance();
@@ -300,7 +300,7 @@ public class TimestampTool {
 		}
 	}
 
-	// »ñÈ¡Ö¸¶¨ÈÕÆÚÖ®ºóµÄÈÕÆÚ×Ö·û´® Èç 2007-02-28 ºóÒ»Äê ¾ÍÊÇ 2008-02-29 £¨º¬ÈòÄê£©
+	// è·å–æŒ‡å®šæ—¥æœŸä¹‹åçš„æ—¥æœŸå­—ç¬¦ä¸² å¦‚ 2007-02-28 åä¸€å¹´ å°±æ˜¯ 2008-02-29 ï¼ˆå«é—°å¹´ï¼‰
 	public static String getNextYear(String strDate, int year) {
 		Calendar cal1 = Calendar.getInstance();
 		String[] string = strDate.trim().split("-");
@@ -314,7 +314,7 @@ public class TimestampTool {
 	}
 
 	/**
-	 * ·µ»ØÊ±¼äºÍÈÕÆÚ ¸ñÊ½:2006-07-05 22:10:10
+	 * è¿”å›æ—¶é—´å’Œæ—¥æœŸ æ ¼å¼:2006-07-05 22:10:10
 	 * 
 	 * @param str
 	 * @return Timestamp
@@ -337,7 +337,7 @@ public class TimestampTool {
 	}
 
 	/**
-	 * ·µ»ØÈÕÆÚºÍÊ±¼ä(Ã»ÓĞÃë) ¸ñÊ½:2006-07-05 22:10
+	 * è¿”å›æ—¥æœŸå’Œæ—¶é—´(æ²¡æœ‰ç§’) æ ¼å¼:2006-07-05 22:10
 	 * 
 	 * @param str
 	 * @return Timestamp
@@ -359,33 +359,33 @@ public class TimestampTool {
 	}
 
 	/**
-	 * »ñµÃµ±Ç°ÏµÍ³ÈÕÆÚÓë±¾ÖÜÒ»Ïà²îµÄÌìÊı
+	 * è·å¾—å½“å‰ç³»ç»Ÿæ—¥æœŸä¸æœ¬å‘¨ä¸€ç›¸å·®çš„å¤©æ•°
 	 * 
 	 * @return int
 	 */
 	private static int getMondayPlus() {
 		Calendar calendar = Calendar.getInstance();
-		// »ñµÃ½ñÌìÊÇÒ»ÖÜµÄµÚ¼¸Ìì£¬Õı³£Ë³ĞòÊÇĞÇÆÚÈÕÊÇµÚÒ»Ìì£¬ĞÇÆÚÒ»ÊÇµÚ¶şÌì......
-		int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK); // ĞÇÆÚÈÕÊÇµÚÒ»Ìì
+		// è·å¾—ä»Šå¤©æ˜¯ä¸€å‘¨çš„ç¬¬å‡ å¤©ï¼Œæ­£å¸¸é¡ºåºæ˜¯æ˜ŸæœŸæ—¥æ˜¯ç¬¬ä¸€å¤©ï¼Œæ˜ŸæœŸä¸€æ˜¯ç¬¬äºŒå¤©......
+		int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK); // æ˜ŸæœŸæ—¥æ˜¯ç¬¬ä¸€å¤©
 		return (dayOfWeek == 1) ? -6 : 2 - dayOfWeek;
 	}
 
 	/**
-	 * »ñµÃ¾àµ±Ç°Ê±¼äËùÔÚÄ³ĞÇÆÚµÄÖÜÒ»µÄÈÕÆÚ Àı£º 0-±¾ÖÜÖÜÒ»ÈÕÆÚ -1-ÉÏÖÜÖÜÒ»ÈÕÆÚ 1-ÏÂÖÜÖÜÒ»ÈÕÆÚ
+	 * è·å¾—è·å½“å‰æ—¶é—´æ‰€åœ¨æŸæ˜ŸæœŸçš„å‘¨ä¸€çš„æ—¥æœŸ ä¾‹ï¼š 0-æœ¬å‘¨å‘¨ä¸€æ—¥æœŸ -1-ä¸Šå‘¨å‘¨ä¸€æ—¥æœŸ 1-ä¸‹å‘¨å‘¨ä¸€æ—¥æœŸ
 	 * 
 	 * @param week
 	 *            int
 	 * @return java.util.Date
 	 */
 	public static Date getMondayOfWeek(int week) {
-		int mondayPlus = getMondayPlus(); // Ïà¾àÖÜÒ»µÄÌìÊı²î
+		int mondayPlus = getMondayPlus(); // ç›¸è·å‘¨ä¸€çš„å¤©æ•°å·®
 		GregorianCalendar current = new GregorianCalendar();
 		current.add(GregorianCalendar.DATE, mondayPlus + 7 * week);
 		return current.getTime();
 	}
 
 	/**
-	 * »ñµÃÄ³ÈÕÇ°ºóµÄÄ³Ò»Ìì
+	 * è·å¾—æŸæ—¥å‰åçš„æŸä¸€å¤©
 	 * 
 	 * @param date
 	 *            java.util.Date
@@ -401,7 +401,7 @@ public class TimestampTool {
 	}
 
 	/**
-	 * »ñµÃ¾àµ±Ç°ÖÜµÄÇ°ºóÄ³Ò»ÖÜµÄÈÕÆÚ
+	 * è·å¾—è·å½“å‰å‘¨çš„å‰åæŸä¸€å‘¨çš„æ—¥æœŸ
 	 * 
 	 * @param week
 	 *            int
@@ -409,7 +409,7 @@ public class TimestampTool {
 	 */
 	public static String[] getDaysOfWeek(int week) {
 		String[] days = new String[7];
-		Date monday = getMondayOfWeek(week); // »ñµÃ¾à±¾ÖÜÇ°»òºóµÄÄ³ÖÜÖÜÒ»
+		Date monday = getMondayOfWeek(week); // è·å¾—è·æœ¬å‘¨å‰æˆ–åçš„æŸå‘¨å‘¨ä¸€
 		Timestamp t = new Timestamp(monday.getTime());
 		days[0] = getStrDate(t);
 		for (int i = 1; i < 7; i++) {
@@ -420,19 +420,19 @@ public class TimestampTool {
 	}
 
 	/***
-	 * MCCµÄUTCÊ±¼ä×ª»»£¬MCCµÄUTC²»ÊÇµ½ºÁÃëµÄ
+	 * MCCçš„UTCæ—¶é—´è½¬æ¢ï¼ŒMCCçš„UTCä¸æ˜¯åˆ°æ¯«ç§’çš„
 	 * 
 	 * @param utc
 	 * @return java.util.Date
 	 */
 	public static Date mccUTC2Date(long utc) {
 		Date d = new Date();
-		d.setTime(utc * 1000); // ×ª³ÉºÁÃë
+		d.setTime(utc * 1000); // è½¬æˆæ¯«ç§’
 		return d;
 	}
 
 	/**
-	 *  ½«³¤Ê±¼ä¸ñÊ½×Ö·û´®×ª»»ÎªÊ±¼ä yyyy-MM-dd HH:mm:ss
+	 *  å°†é•¿æ—¶é—´æ ¼å¼å­—ç¬¦ä¸²è½¬æ¢ä¸ºæ—¶é—´ yyyy-MM-dd HH:mm:ss
 	 * @param strDate
 	 * @return
 	 */
@@ -447,7 +447,7 @@ public class TimestampTool {
 		return strtodate;
 	}
 
-	// ½« yyyy-MM-dd HH:mm ¸ñÊ½×Ö·û´®×ª»»ÎªÊ±¼ä
+	// å°† yyyy-MM-dd HH:mm æ ¼å¼å­—ç¬¦ä¸²è½¬æ¢ä¸ºæ—¶é—´
 	public static Date strToDateTime(String strDate) {
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		ParsePosition pos = new ParsePosition(0);
@@ -459,7 +459,7 @@ public class TimestampTool {
 		return strtodate;
 	}
 
-	// ¸ù¾İÊäÈëµÄ×Ö·û´®·µ»ØÈÕÆÚ×Ö·û´® 2006-07-07 22:10 2006-07-07
+	// æ ¹æ®è¾“å…¥çš„å­—ç¬¦ä¸²è¿”å›æ—¥æœŸå­—ç¬¦ä¸² 2006-07-07 22:10 2006-07-07
 	public static String getStrDate(String str) {
 		if (str.length() > 10) {
 			String[] string = str.trim().split(" ");
@@ -469,25 +469,25 @@ public class TimestampTool {
 		}
 	}
 
-	// »ñÈ¡µ±Ç°Ê±¼äµÄ×Ö·û´® 2006-07-07 22:10:10 2006-07-07_221010
+	// è·å–å½“å‰æ—¶é—´çš„å­—ç¬¦ä¸² 2006-07-07 22:10:10 2006-07-07_221010
 	public static String getStrDateTime() {
 		Timestamp d = crunttime();
 		return d.toString().substring(0, 19).replace(":", "").replace(" ", "_");
 	}
 
-	// ¸ù¾İÈÕÆÚ×Ö·û´®£¬·µ»Ø½ñÌì£¬×òÌì»òÈÕÆÚ
+	// æ ¹æ®æ—¥æœŸå­—ç¬¦ä¸²ï¼Œè¿”å›ä»Šå¤©ï¼Œæ˜¨å¤©æˆ–æ—¥æœŸ
 	public static String getDayOrDate(String str) {
 		if (str != null && !str.equals("")) {
 			if (getNextDay(str, 0).equals(getCurrentDate())) {
-				str = "½ñÌì";
+				str = "ä»Šå¤©";
 			} else if (getNextDay(str, 1).equals(getCurrentDate())) {
-				str = "×òÌì";
+				str = "æ˜¨å¤©";
 			}
 		}
 		return str;
 	}
 
-	// ·µ»Øµ±Ç°ÈÕÆÚËùÔÚĞÇÆÚ£¬2¶ÔÓ¦ĞÇÆÚÒ»
+	// è¿”å›å½“å‰æ—¥æœŸæ‰€åœ¨æ˜ŸæœŸï¼Œ2å¯¹åº”æ˜ŸæœŸä¸€
 	public static int getMonOfWeek() {
 		Calendar cal1 = Calendar.getInstance();
 		cal1.setTime(new Date());
@@ -499,7 +499,7 @@ public class TimestampTool {
 	}
 
 	/**
-	 * »ñÈ¡µ±Ç°ÈÕÆÚÖ®Ç°µÄÈÕÆÚ×Ö·û´® Èç 2007-04-15 Ç°5ÔÂ ¾ÍÊÇ 2006-11-15
+	 * è·å–å½“å‰æ—¥æœŸä¹‹å‰çš„æ—¥æœŸå­—ç¬¦ä¸² å¦‚ 2007-04-15 å‰5æœˆ å°±æ˜¯ 2006-11-15
 	 */
 	public static String getPreviousMonth(int month) {
 		Calendar cal1 = Calendar.getInstance();
@@ -515,11 +515,11 @@ public class TimestampTool {
 		cal1.setTime(new Date());
 		cal1.add(Calendar.YEAR, -year);
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy");
-		return formatter.format(cal1.getTime()) + "Äê·İ";
+		return formatter.format(cal1.getTime()) + "å¹´ä»½";
 	}
 
 	/**
-	 * ±È½ÏÁ½¸öÈÕÆÚÇ°ºó ¿ÉÒÔ´óÓÚ»òµÈÓÚ
+	 * æ¯”è¾ƒä¸¤ä¸ªæ—¥æœŸå‰å å¯ä»¥å¤§äºæˆ–ç­‰äº
 	 * 
 	 * @param starDate
 	 * @param endDate
@@ -534,7 +534,7 @@ public class TimestampTool {
 	}
 
 	/**
-	 * ±È½ÏÁ½¸öÈÕÆÚÇ°ºó ¿ÉÒÔ´óÓÚ»òµÈÓÚ ¸ñÊ½yyyy-MM-dd hh:mm:ss
+	 * æ¯”è¾ƒä¸¤ä¸ªæ—¥æœŸå‰å å¯ä»¥å¤§äºæˆ–ç­‰äº æ ¼å¼yyyy-MM-dd hh:mm:ss
 	 * 
 	 * @param starDate
 	 * @param endDate
@@ -568,7 +568,7 @@ public class TimestampTool {
 		return days;
 	}
 
-	// µÃµ½Á½¸öÈÕÆÚÖ®¼äµÄÄê
+	// å¾—åˆ°ä¸¤ä¸ªæ—¥æœŸä¹‹é—´çš„å¹´
 	public static int dateDiffYear(String starDate, String endDate) {
 		int result = 0;
 		Calendar d1 = Calendar.getInstance();
@@ -576,7 +576,7 @@ public class TimestampTool {
 		d1.setTime(parseDate(starDate));
 		d2.setTime(parseDate(endDate));
 
-		// ÈÕÆÚ´óĞ¡·­×ª
+		// æ—¥æœŸå¤§å°ç¿»è½¬
 		if (d1.after(d2)) { // swap dates so that d1 is start and d2 is end
 			java.util.Calendar swap = d1;
 			d1 = d2;
@@ -600,13 +600,13 @@ public class TimestampTool {
 		return result;
 	}
 
-	// »ñÈ¡ÄêÁä
+	// è·å–å¹´é¾„
 	public static int getAgeByBirth(String starDate) {
 		return dateDiffYear(starDate, getCurrentDate());
 	}
 
 	/**
-	 * ·µ»ØÈÕÆÚÓë½ñÌì¾àÀë
+	 * è¿”å›æ—¥æœŸä¸ä»Šå¤©è·ç¦»
 	 * 
 	 * @param endDate
 	 * @return
@@ -623,20 +623,20 @@ public class TimestampTool {
 		if (day > 2) {
 			return parseDate(date);
 		} else if (day > 1) {
-			return "×òÌì";
+			return "æ˜¨å¤©";
 		} else if (hour > 5) {
-			return "½ñÌì";
+			return "ä»Šå¤©";
 		} else if (hour > 1) {
-			return hour + "Ğ¡Ê±Ç°";
+			return hour + "å°æ—¶å‰";
 		} else if (min > 0) {
-			return min + "·ÖÖÓÇ°";
+			return min + "åˆ†é’Ÿå‰";
 		} else {
-			return "¸Õ²Å";
+			return "åˆšæ‰";
 		}
 	}
 
 	/**
-	 * ·µ»ØÈÕÆÚÓë½ñÌì¾àÀë(µ¥Î»ÎªÈÕ)
+	 * è¿”å›æ—¥æœŸä¸ä»Šå¤©è·ç¦»(å•ä½ä¸ºæ—¥)
 	 * 
 	 * @param endDate
 	 * @return
@@ -651,7 +651,7 @@ public class TimestampTool {
 	}
 
 	/**
-	 * ·µ»ØÁ½¸öÈÕÆÚ¾àÀë(µ¥Î»ÎªÈÕ)
+	 * è¿”å›ä¸¤ä¸ªæ—¥æœŸè·ç¦»(å•ä½ä¸ºæ—¥)
 	 * 
 	 * @param endDate
 	 * @return

@@ -6,6 +6,7 @@
     <color name="white">#FFFFFF</color>
     <color name="blackcover">#95000000</color>
     <color name="transparent">#00000000</color>
+    <color name="gift_bg_color">#99000000</color>
     <color name="gray">#ff999999</color>
     <color name="green">#2fab21</color>
     <color name="black">#ff000000</color>

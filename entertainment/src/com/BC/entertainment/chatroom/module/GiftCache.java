@@ -17,57 +17,57 @@ public class GiftCache {
         final static GiftCache instance = new GiftCache();
     }
 	
-	//´´½¨ÀñÎïÁĞ±í
+	//åˆ›å»ºç¤¼ç‰©åˆ—è¡¨
 	public List<BaseGift> getListGifts()
 	{
 		List<BaseGift> gifts = new ArrayList<BaseGift>();
-		//Ò»ÏÂÊÇ²âÊÔÊı¾İ
-		BaseGift gift1 = new Gift("±¯Ï²½»¼Ó", R.drawable.emotion_bxjj, 1, 10);
+		//ä¸€ä¸‹æ˜¯æµ‹è¯•æ•°æ®
+		BaseGift gift1 = new Gift("æ‚²å–œäº¤åŠ ", R.drawable.emotion_bxjj, 1, 10);
 		gifts.add(gift1);
-		BaseGift gift2 = new Gift("²ìÑÔ¹ÛÉ«", R.drawable.emotion_cygs, 2, 20);
+		BaseGift gift2 = new Gift("å¯Ÿè¨€è§‚è‰²", R.drawable.emotion_cygs, 2, 20);
 		gifts.add(gift2);
-		BaseGift gift3 = new Gift("´ó¾ªĞ¡¹Ö", R.drawable.emotion_djxg, 3, 30);
+		BaseGift gift3 = new Gift("å¤§æƒŠå°æ€ª", R.drawable.emotion_djxg, 3, 30);
 		gifts.add(gift3);
 		
-		BaseGift gift4 = new Gift("¸¡ÏëÁªôæ", R.drawable.emotion_fxlp, 4, 40);
+		BaseGift gift4 = new Gift("æµ®æƒ³è”ç¿©", R.drawable.emotion_fxlp, 4, 40);
 		gifts.add(gift4);
 		
-		BaseGift gift5 = new Gift("¸Ğ¼¤ÌéÁã", R.drawable.emotion_gjt, 5, 50);
+		BaseGift gift5 = new Gift("æ„Ÿæ¿€æ¶•é›¶", R.drawable.emotion_gjt, 5, 50);
 		gifts.add(gift5);
 		
-		BaseGift gift6 = new Gift("º¬ÇéÂöÂö", R.drawable.emotion_hqmm, 6, 60);
+		BaseGift gift6 = new Gift("å«æƒ…è„‰è„‰", R.drawable.emotion_hqmm, 6, 60);
 		gifts.add(gift6);
 		
-		BaseGift gift7 = new Gift("»¢ÊÓíñíñ", R.drawable.emotion_hsdd, 7, 70);
+		BaseGift gift7 = new Gift("è™è§†çœˆçœˆ", R.drawable.emotion_hsdd, 7, 70);
 		gifts.add(gift7);
 		
-		BaseGift gift8 = new Gift("¼·Ã¼ÅªÑÛ", R.drawable.emotion_jmny, 8, 80);
+		BaseGift gift8 = new Gift("æŒ¤çœ‰å¼„çœ¼", R.drawable.emotion_jmny, 8, 80);
 		gifts.add(gift8);
 		
-		BaseGift gift9 = new Gift("¿ŞĞ¦²»µÃ", R.drawable.emotion_kxbd, 9, 90);
+		BaseGift gift9 = new Gift("å“­ç¬‘ä¸å¾—", R.drawable.emotion_kxbd, 9, 90);
 		gifts.add(gift9);
 		
 		
-		BaseGift gift10 = new Gift("ÁùÉñÎŞÖ÷", R.drawable.emotion_lswz, 10, 100);
+		BaseGift gift10 = new Gift("å…­ç¥æ— ä¸»", R.drawable.emotion_lswz, 10, 100);
 		gifts.add(gift10);
-		BaseGift gift11 = new Gift("Ã¼·ÉÉ«Îè", R.drawable.emotion_mfsw, 11, 110);
+		BaseGift gift11 = new Gift("çœ‰é£è‰²èˆ", R.drawable.emotion_mfsw, 11, 110);
 		gifts.add(gift11);
-		BaseGift gift12 = new Gift("Ã«¹Çã¤È»", R.drawable.emotion_mgsr, 12, 120);
+		BaseGift gift12 = new Gift("æ¯›éª¨æ‚šç„¶", R.drawable.emotion_mgsr, 12, 120);
 		gifts.add(gift12);
-		BaseGift gift13 = new Gift("Ã¼¿ªÑÛĞ¦", R.drawable.emotion_mkyx, 13, 130);
+		BaseGift gift13 = new Gift("çœ‰å¼€çœ¼ç¬‘", R.drawable.emotion_mkyx, 13, 130);
 		gifts.add(gift13);
-		BaseGift gift14 = new Gift("Å­Ä¿¶øÊÓ", R.drawable.emotion_nmes, 14, 140);
+		BaseGift gift14 = new Gift("æ€’ç›®è€Œè§†", R.drawable.emotion_nmes, 14, 140);
 		gifts.add(gift14);
-		BaseGift gift15 = new Gift("Åõ¸¹´óĞ¦", R.drawable.emotion_pfdx, 15, 150);
+		BaseGift gift15 = new Gift("æ§è…¹å¤§ç¬‘", R.drawable.emotion_pfdx, 15, 150);
 		gifts.add(gift15);
-		BaseGift gift16 = new Gift("ÊÖÎè×ãµ¸", R.drawable.emotion_swzd, 16, 160);
+		BaseGift gift16 = new Gift("æ‰‹èˆè¶³è¹ˆ", R.drawable.emotion_swzd, 16, 160);
 		gifts.add(gift16);
 
-		BaseGift gift17 = new Gift("ĞÄ»¨Å­·Å", R.drawable.emotion_xhnf, 17, 170);
+		BaseGift gift17 = new Gift("å¿ƒèŠ±æ€’æ”¾", R.drawable.emotion_xhnf, 17, 170);
 		gifts.add(gift17);
-		BaseGift gift18 = new Gift("ĞÄÈçµ¶½Ê", R.drawable.emotion_xrdj, 18, 180);
+		BaseGift gift18 = new Gift("å¿ƒå¦‚åˆ€ç»", R.drawable.emotion_xrdj, 18, 180);
 		gifts.add(gift18);
-		BaseGift gift19 = new Gift("ĞÀÏ²Èô¿ñ", R.drawable.emotion_xxrk, 19, 190);
+		BaseGift gift19 = new Gift("æ¬£å–œè‹¥ç‹‚", R.drawable.emotion_xxrk, 19, 190);
 		gifts.add(gift19);
 		return gifts;
 	}

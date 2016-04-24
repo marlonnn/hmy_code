@@ -15,68 +15,68 @@ import android.view.View;
 public class CoordinateSystemView extends View {
 
 	/**
-	 * y,xÖáµÄÃû³Æ
+	 * y,xè½´çš„åç§°
 	 */
 	String yName, xName;
 	/**
-	 * Ô­µã
+	 * åŸç‚¹
 	 */
 	float x0, y0;
 	/**
-	 * x,yÖá×î´óÖµ
+	 * x,yè½´æœ€å¤§å€¼
 	 */
 	float xMax, yMax;
 	/**
-	 * ÖáÏßÑÕÉ«
+	 * è½´çº¿é¢œè‰²
 	 */
 	int axisColor;
 	/**
-	 * y¡¢xÖáµÄ²½³¤
+	 * yã€xè½´çš„æ­¥é•¿
 	 */
 	float yStepSize, xStepSize;
 	/**
-	 * yÖá·Ö¸îÏß
+	 * yè½´åˆ†å‰²çº¿
 	 */
 	boolean yPartingLine = true;
 	/**
-	 * xÖá·Ö¸îÏß
+	 * xè½´åˆ†å‰²çº¿
 	 */
 	boolean xPartingLine = true;
 	/**
-	 * x·Ö¸îÊıÁ¿
+	 * xåˆ†å‰²æ•°é‡
 	 */
 	int xParting = 24;
 	/**
-	 * y·Ö¸îÊıÁ¿
+	 * yåˆ†å‰²æ•°é‡
 	 */
 	int yParting = 7;
 	/**
-	 * yÖáÏÔÊ¾×î´óÖµ
+	 * yè½´æ˜¾ç¤ºæœ€å¤§å€¼
 	 */
 	float yShowMax = 7;
 	/**
-	 * xÖáÏÔÊ¾×î´óÖµ
+	 * xè½´æ˜¾ç¤ºæœ€å¤§å€¼
 	 */
 	float xShowMax = 23;
 	/**
-	 * ÕÛÏßÍ¼
+	 * æŠ˜çº¿å›¾
 	 */
 	LineChart lineChart;
 	/**
-	 * Ö±·½Í¼
+	 * ç›´æ–¹å›¾
 	 */
 	Histogram histogram;
 	/**
-	 * yÖá·Ö¸îÏß±ê×¢
+	 * yè½´åˆ†å‰²çº¿æ ‡æ³¨
 	 */
 	String[] xPartingName;
 	/**
-	 * xÖá±ê×¢
+	 * xè½´æ ‡æ³¨
 	 */
 	String[] yPartingName;
 
 	/**
-	 * xÖá±ê×¢ÑÕÉ«
+	 * xè½´æ ‡æ³¨é¢œè‰²
 	 * 
 	 * @return
 	 */
@@ -84,11 +84,11 @@ public class CoordinateSystemView extends View {
 
 	int yTextColor = Color.WHITE;
 	/**
-	 * ÏÔÊ¾×ø±êÏß
+	 * æ˜¾ç¤ºåæ ‡çº¿
 	 */
 	boolean showLine = true;
 	/**
-	 * ÏÔÊ¾X×ø±êµÄÆğµã
+	 * æ˜¾ç¤ºXåæ ‡çš„èµ·ç‚¹
 	 */
 	boolean showXBeginNames = true;
 

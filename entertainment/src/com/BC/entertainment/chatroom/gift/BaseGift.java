@@ -12,11 +12,11 @@ public abstract class BaseGift implements Serializable{
 	
 	private String name;
 	
-	private int iconResId;//Í¼Æ¬×ÊÔ´
+	private int iconResId;//å›¾ç‰‡èµ„æº
 	
-	private int value;//¼ÛÖµ
+	private int value;//ä»·å€¼
 	
-	private int exPoints;//¿ÉÒÔ»ñÈ¡µ½µÄ¾­ÑéÖµ
+	private int exPoints;//å¯ä»¥è·å–åˆ°çš„ç»éªŒå€¼
 	
 	private transient Container container;
 	

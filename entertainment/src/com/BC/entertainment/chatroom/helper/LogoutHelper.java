@@ -1,16 +1,15 @@
 package com.BC.entertainment.chatroom.helper;
 
 import com.BC.entertainment.config.Cache;
-import com.netease.nim.uikit.LoginSyncDataStatusObserver;
 import com.netease.nim.uikit.NimUIKit;
 
 /**
- * ×¢Ïú°ïÖúÀà
+ * æ³¨é”€å¸®åŠ©ç±»
  * Created by huangjun on 2015/10/8.
  */
 public class LogoutHelper {
     public static void logout() {
-        // ÇåÀí»º´æ&×¢Ïú¼àÌı&Çå³ı×´Ì¬
+        // æ¸…ç†ç¼“å­˜&æ³¨é”€ç›‘å¬&æ¸…é™¤çŠ¶æ€
         NimUIKit.clearCache();
 //        ChatRoomHelper.logout();
         Cache.clear();

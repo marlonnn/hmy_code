@@ -1,6 +1,7 @@
 package com.BC.entertainmentgravitation.fragment;
 
 import com.BC.entertainment.chatroom.module.ChatRoomPanel;
+import com.BC.entertainment.chatroom.module.DanmakuPanel;
 import com.BC.entertainment.chatroom.module.GiftCache;
 import com.BC.entertainment.chatroom.module.InputPanel;
 import com.BC.entertainmentgravitation.R;
@@ -11,6 +12,7 @@ import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.ResponseCode;
 import com.netease.nimlib.sdk.chatroom.ChatRoomService;
+import com.netease.nimlib.sdk.chatroom.model.ChatRoomMember;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomMessage;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
@@ -36,38 +38,48 @@ public class TopSurfaceFragment extends Fragment implements OnClickListener, Mod
 	
 	private ChatRoom chatRoom;
 	
+	private ChatRoomMember chatRoomMember;
+	
+	private boolean isWatchVideo;//å¦æ˜¯è§‚çœ‹ï¼ˆæ‹‰æµæ¨¡å¼ï¼‰ï¼Œæ‹‰æµè‡ªå·±æ”¶ä¸åˆ°è‡ªå·±çš„ç™»é™†å’Œç™»å‡ºæ¶ˆæ¯
+	
 	private View view;
 	
-	private ImageView btnChat;//ÁÄÌì
+	private ImageView btnChat;//èŠå¤©
 	
-	private ImageView btnShare;//·ÖÏí
+	private ImageView btnShare;//åˆ†äº«
 	
-	private ImageView btnFocus;//¹Ø×¢
+	private ImageView btnFocus;//å…³æ³¨
 	
-	private ImageView btnBoos;//ºÈµ¹²Ê
+	private ImageView btnBoos;//å–å€’å½©
 	
-	private ImageView btnApplaud;//¹ÄÕÆ
+	private ImageView btnApplaud;//é¼“æŒ
 	
 	private LinearLayout layoutInput;
 	
 	private RelativeLayout rootView;
 	
-	private RelativeLayout functionView;//µ×²¿¹¦ÄÜ¼ü¸ù²¼¾Ö
+	private RelativeLayout functionView;//åº•éƒ¨åŠŸèƒ½é”®æ ¹å¸ƒå±€
     
     //module
-	private ChatRoomPanel messageListPanel;
+	private ChatRoomPanel chatRoomPanel;
     
     private InputPanel inputPanel;
     
+    private DanmakuPanel danmakuPanel;
+    
     private SwitchCamera switchCamera;
     
-	public TopSurfaceFragment(ChatRoom chatRoom)
+	public TopSurfaceFragment(ChatRoom chatRoom, ChatRoomMember chatRoomMember, boolean isWatchVideo)
 	{
 		this.chatRoom = chatRoom;
+		
+		this.chatRoomMember = chatRoomMember;
+		
+		this.isWatchVideo = isWatchVideo;
 	}
 	
 	/**
-	 * Ö±²¥ÍÆÁ÷Ê±ÇĞ»»ÉãÏñÍ·½Ó¿Ú
+	 * ç›´æ’­æ¨æµæ—¶åˆ‡æ¢æ‘„åƒå¤´æ¥å£
 	 * @author zhongwen
 	 *
 	 */
@@ -107,19 +119,53 @@ public class TopSurfaceFragment extends Fragment implements OnClickListener, Mod
 		initializeView();
 	}
 	
+	
+	
+	@Override
+	public void onPause() {
+		super.onPause();
+		if (danmakuPanel != null)
+		{
+			danmakuPanel.onPause();
+		}
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		if (danmakuPanel != null)
+		{
+			danmakuPanel.onResume();
+		}
+	}
+
+	@Override
+	public void onStop() {
+		super.onStop();
+	}
+
 	private void initializeView()
 	{
         Container container = new Container(getActivity(), chatRoom.getChatroomid(), SessionTypeEnum.ChatRoom, this);
-        if (messageListPanel == null) {
-            messageListPanel = new ChatRoomPanel(container, view);
-            messageListPanel.showMessageListView(true);
+        if (chatRoomPanel == null) {
+            chatRoomPanel = new ChatRoomPanel(container, view);
+//            if (isWatchVideo)
+//            {
+//            	chatRoomPanel.addMembers(chatRoomMember, false);
+//            }
+            chatRoomPanel.showMessageListView(true);
         }
-		messageListPanel.registerObservers(true);
+		chatRoomPanel.registerObservers(true);
 		
 		if (inputPanel == null)
 		{
 			
 			inputPanel = new InputPanel(container, view, GiftCache.getInstance().getListGifts());
+		}
+		
+		if (danmakuPanel == null)
+		{
+			danmakuPanel = new DanmakuPanel(container, view);
 		}
         
 		layoutInput = (LinearLayout) view.findViewById(R.id.layout_input);
@@ -146,7 +192,7 @@ public class TopSurfaceFragment extends Fragment implements OnClickListener, Mod
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 //				layoutInput.setVisibility(View.INVISIBLE);
-				messageListPanel.showMessageListView(true);
+				chatRoomPanel.showMessageListView(true);
 				showFunctionView(true);
 				inputPanel.hideInputMethod();
 				inputPanel.hideInputBar();
@@ -172,9 +218,14 @@ public class TopSurfaceFragment extends Fragment implements OnClickListener, Mod
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		if (messageListPanel != null)
+		if (chatRoomPanel != null)
 		{
-			messageListPanel.registerObservers(false);
+			chatRoomPanel.registerObservers(false);
+		}
+		
+		if (danmakuPanel != null)
+		{
+			danmakuPanel.onDestroy();
 		}
 
 	}
@@ -185,22 +236,22 @@ public class TopSurfaceFragment extends Fragment implements OnClickListener, Mod
 		{
 		case R.id.imageView_chart:
 			showFunctionView(false);
-			messageListPanel.showMessageListView(true);
+			chatRoomPanel.showMessageListView(true);
 			layoutInput.setVisibility(View.VISIBLE);
 			inputPanel.showInputBar();
 			inputPanel.hideGiftLayout();
 			break;
 		case R.id.imageView:
-			//ÔİÊ±ÓÃ¹ÄÕÆÀ´²âÊÔÀñÎï
+			//æš‚æ—¶ç”¨é¼“æŒæ¥æµ‹è¯•ç¤¼ç‰©
 			showFunctionView(false);
-			messageListPanel.showMessageListView(false);
+			chatRoomPanel.showMessageListView(false);
 			layoutInput.setVisibility(View.VISIBLE);
 			inputPanel.hideInputBar();
 			inputPanel.showGiftLayout();
 			break;
 			
 		case R.id.imageView_share:
-			//ÔİÊ±ÓÃ·ÖÏí°´Å¥À´ÇĞ»»ÉãÏñÍ·
+			//æš‚æ—¶ç”¨åˆ†äº«æŒ‰é’®æ¥åˆ‡æ¢æ‘„åƒå¤´
 			if( switchCamera != null)
 			{
 				switchCamera.onSwitchCamera();
@@ -223,19 +274,21 @@ public class TopSurfaceFragment extends Fragment implements OnClickListener, Mod
 					@Override
 					public void onFailed(int code) {
 						if (code == ResponseCode.RES_CHATROOM_MUTED) {
-							Toast.makeText(getActivity(), "ÓÃ»§±»½ûÑÔ",Toast.LENGTH_SHORT).show();
+							Toast.makeText(getActivity(), "ç”¨æˆ·è¢«ç¦è¨€",Toast.LENGTH_SHORT).show();
 						} else {
-							Toast.makeText(getActivity(),"ÏûÏ¢·¢ËÍÊ§°Ü£ºcode:" + code, Toast.LENGTH_SHORT).show();
+							Toast.makeText(getActivity(),"æ¶ˆæ¯å‘é€å¤±è´¥ï¼šcode:" + code, Toast.LENGTH_SHORT).show();
 						}
 					}
 
 					@Override
 					public void onException(Throwable exception) {
-						Toast.makeText(getActivity(), "ÏûÏ¢·¢ËÍÊ§°Ü£¡",
+						Toast.makeText(getActivity(), "æ¶ˆæ¯å‘é€å¤±è´¥ï¼",
 								Toast.LENGTH_SHORT).show();
 					}
 				});
-		messageListPanel.onMsgSend(msg);
+		danmakuPanel.AddDanmaku(false, message.getContent());
+		danmakuPanel.AddDanmaKuShowTextAndImage(false);
+		chatRoomPanel.onMsgSend(msg);
 		return true;
 	}
 

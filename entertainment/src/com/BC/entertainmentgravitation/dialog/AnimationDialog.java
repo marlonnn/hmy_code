@@ -200,7 +200,7 @@ public class AnimationDialog extends Dialog {
 			Handler handler = new Handler();
 			handler.postDelayed(new Runnable() {
 				public void run() {
-					// ´Ë´¦µ÷ÓÃµÚ¶þ¸ö¶¯»­²¥·Å·½·¨
+					// æ­¤å¤„è°ƒç”¨ç¬¬äºŒä¸ªåŠ¨ç”»æ’­æ”¾æ–¹æ³•
 					animationDrawable.stop();
 					if (animationOver != null) {
 						animationOver.AnimationOver();

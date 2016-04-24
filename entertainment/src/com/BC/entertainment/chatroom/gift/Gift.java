@@ -4,11 +4,11 @@ package com.BC.entertainment.chatroom.gift;
 public class Gift extends BaseGift{
 
 	/**
-	 * ¾ßÌåµÄÀñÎï¶ÔÏó
-	 * @param name ÀñÎïÃû³Æ
-	 * @param iconResId ÀñÎïÍ¼Æ¬×ÊÔ´
-	 * @param value ¼ÛÖµ
-	 * @param exPoints ¾­ÑéÖµ
+	 * å…·ä½“çš„ç¤¼ç‰©å¯¹è±¡
+	 * @param name ç¤¼ç‰©åç§°
+	 * @param iconResId ç¤¼ç‰©å›¾ç‰‡èµ„æº
+	 * @param value ä»·å€¼
+	 * @param exPoints ç»éªŒå€¼
 	 */
 	public Gift(String name, int iconResId, int value, int exPoints) {
 		super(name, iconResId, value, exPoints);
@@ -16,7 +16,7 @@ public class Gift extends BaseGift{
 
 	@Override
 	public void onClick() {
-		//ÏÈ·¢ËÍÏûÏ¢µ½ÁÄÌìÊÒ£¬ÔÙ²¥·Å¶¯»­
+		//å…ˆå‘é€æ¶ˆæ¯åˆ°èŠå¤©å®¤ï¼Œå†æ’­æ”¾åŠ¨ç”»
 	}
 
 }

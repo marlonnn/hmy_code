@@ -1,7 +1,7 @@
 package com.BC.entertainmentgravitation.entity;
 
 /**
- * Ã÷ĞÇ´´½¨µÄÖ±²¥ÆµµÀÏà¹ØĞÅÏ¢
+ * æ˜æ˜Ÿåˆ›å»ºçš„ç›´æ’­é¢‘é“ç›¸å…³ä¿¡æ¯
  * @author zhongwen
  *
  */
@@ -10,17 +10,17 @@ public class StarLiveVideoInfo {
 	private String username;
 	
 	/**
-	 * Ö±²¥ÆµµÀID
+	 * ç›´æ’­é¢‘é“ID
 	 */
 	private String cid;
 	
 	/**
-	 * ÍÆÁ÷µØÖ·
+	 * æ¨æµåœ°å€
 	 */
 	private String pushUrl;
 	
 	/**
-	 * À­Á÷Èı¸öµØÖ·
+	 * æ‹‰æµä¸‰ä¸ªåœ°å€
 	 */
 	private String httpPullUrl;
 	
@@ -29,7 +29,7 @@ public class StarLiveVideoInfo {
 	private String rtmpPullUrl;
 	
 	/**
-	 * ÁÄÌìÊÒID
+	 * èŠå¤©å®¤ID
 	 */
 	private String chatroomid;
 

@@ -5,16 +5,16 @@ import android.content.Context;
 import android.text.TextUtils;
 
 /**
- * ÏµÍ³¹¤¾ßÏä
+ * ç³»ç»Ÿå·¥å…·ç®±
  * @author wen zhong
  *
  */
 public class SystemUtil {
 
     /**
-     * »ñÈ¡µ±Ç°½ø³ÌÃû
+     * è·å–å½“å‰è¿›ç¨‹å
      * @param context
-     * @return ½ø³ÌÃû
+     * @return è¿›ç¨‹å
      */
     public static final String getProcessName(Context context) {
         String processName = null;

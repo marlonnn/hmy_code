@@ -139,14 +139,14 @@ public class BaseInfoFragment extends BaseFragment implements OnClickListener{
 		height.setSelectContent(height1List);
 		height.setSelect2Content(height2List);
 		height.setSelect3Content(height3List);
-		height.setWheelTitle1String("Ã×");
-		height.setWheelTitle2String("X10ÀåÃ×");
-		height.setWheelTitle3String("ÀåÃ×");
+		height.setWheelTitle1String("ç±³");
+		height.setWheelTitle2String("X10å˜ç±³");
+		height.setWheelTitle3String("å˜ç±³");
 
 		weight.setSelectContent(weight1List);
 		weight.setSelect2Content(weight2List);
-		weight.setWheelTitle1String("X10¹«½ï");
-		weight.setWheelTitle2String("¹«½ï");
+		weight.setWheelTitle1String("X10å…¬æ–¤");
+		weight.setWheelTitle2String("å…¬æ–¤");
 
 		nickname = (EditText) contentView.findViewById(R.id.nickname);
 		level = (TextView) contentView.findViewById(R.id.level);
@@ -169,14 +169,14 @@ public class BaseInfoFragment extends BaseFragment implements OnClickListener{
 	
 	public void initPersonalInformation() {
 		if (MainActivity.personalInformation == null) {
-			ToastUtil.show(activity, "»ñÈ¡Êı¾İÊ§°Ü");
+			ToastUtil.show(activity, "è·å–æ•°æ®å¤±è´¥");
 			return;
 		}
 		nickname.setText(MainActivity.personalInformation.getNickname());
 		In_the_mood.setText(MainActivity.personalInformation.getIn_the_mood());
 
 		gender.setContent(MainActivity.personalInformation.getGender().equals(
-				"ÄĞ") ? "ÄĞ" : "Å®");
+				"ç”·") ? "ç”·" : "å¥³");
 		birthday.setContent(MainActivity.personalInformation.getBirthday());
 		constellation.setContent(MainActivity.personalInformation
 				.getThe_constellation());
@@ -233,7 +233,7 @@ public class BaseInfoFragment extends BaseFragment implements OnClickListener{
 		MainActivity.personalInformation.setIn_the_mood(In_the_mood.getText()
 				.toString());
 		MainActivity.personalInformation.setGender(gender.getContent().equals(
-				"ÄĞ") ? "ÄĞ" : "Å®");
+				"ç”·") ? "ç”·" : "å¥³");
 		MainActivity.personalInformation.setBirthday(birthday.getContent());
 		MainActivity.personalInformation.setAge(""
 				+ TimestampTool.dateDiffYear(birthday.getContent(),
@@ -265,11 +265,11 @@ public class BaseInfoFragment extends BaseFragment implements OnClickListener{
 			canEdit = !canEdit;
 			canEdit(canEdit);
 			if (!canEdit) {
-				editButton.setText("¸ü¸Ä");
+				editButton.setText("æ›´æ”¹");
 				save();
 				exitEditButton.setVisibility(View.GONE);
 			} else {
-				editButton.setText("È·¶¨");
+				editButton.setText("ç¡®å®š");
 				exitEditButton.setVisibility(View.VISIBLE);
 			}
 			break;
@@ -277,7 +277,7 @@ public class BaseInfoFragment extends BaseFragment implements OnClickListener{
 		case R.id.exitEditButton:
 			canEdit = false;
 			canEdit(canEdit);
-			editButton.setText("¸ü¸Ä");
+			editButton.setText("æ›´æ”¹");
 			exitEditButton.setVisibility(View.GONE);
 			save();
 			break;
@@ -288,7 +288,7 @@ public class BaseInfoFragment extends BaseFragment implements OnClickListener{
 			break;
 		case R.id.copy:
 			copy(Config.User.getShareCode(), activity);
-			Toast.makeText(activity, "ÒÑ¸´ÖÆµ½¼ôÇĞ°å£¬¿ìÈ¥·ÖÏí¸øºÃÓÑ°É",
+			Toast.makeText(activity, "å·²å¤åˆ¶åˆ°å‰ªåˆ‡æ¿ï¼Œå¿«å»åˆ†äº«ç»™å¥½å‹å§",
 					Toast.LENGTH_LONG).show();
 //			showShare(activity);
 			break;
@@ -296,16 +296,16 @@ public class BaseInfoFragment extends BaseFragment implements OnClickListener{
 	}
 	
 	/**
-	 * ÏÔÊ¾Ò»¸ö×Ô¶¨ÒåµÄÑ¡ÔñÍ¼Æ¬¶Ô»°¿ò
+	 * æ˜¾ç¤ºä¸€ä¸ªè‡ªå®šä¹‰çš„é€‰æ‹©å›¾ç‰‡å¯¹è¯æ¡†
 	 * 
 	 * @param layoutId
-	 *            ²¼¾Ö
+	 *            å¸ƒå±€
 	 * @param noId
-	 *            È¡Ïû°´Å¥
+	 *            å–æ¶ˆæŒ‰é’®
 	 * @param phoneImageId
-	 *            Ïà²áÑ¡È¡
+	 *            ç›¸å†Œé€‰å–
 	 * @param takePictureImageId
-	 *            ÅÄÕÕ
+	 *            æ‹ç…§
 	 */
 	public void showAlertDialog(int layoutId, int noId, int phoneImageId,
 			int takePictureImageId, final BaseFragment flag) {
@@ -352,41 +352,41 @@ public class BaseInfoFragment extends BaseFragment implements OnClickListener{
 	@SuppressWarnings("deprecation")
 	public void copy(String content, Context context)
 	{
-		// µÃµ½¼ôÌù°å¹ÜÀíÆ÷
+		// å¾—åˆ°å‰ªè´´æ¿ç®¡ç†å™¨
 		ClipboardManager cmb = (ClipboardManager)context.getSystemService(Context.CLIPBOARD_SERVICE);
 		cmb.setText(content.trim());
 	}
 	
 	/**
-	 * »ñÈ¡ÓÃ»§ĞÅÏ¢
+	 * è·å–ç”¨æˆ·ä¿¡æ¯
 	 */
 	private void sendReqUser() {
 		if (Config.User== null) {
-			ToastUtil.show(activity, "ÎŞ·¨»ñÈ¡ĞÅÏ¢");
+			ToastUtil.show(activity, "æ— æ³•è·å–ä¿¡æ¯");
 			return;
 		}
 		HashMap<String, String> entity = new HashMap<String, String>();
 		entity.put("clientID", Config.User.getClientID());
 		
-		ShowProgressDialog("»ñÈ¡ÓÃ»§»ù±¾ĞÅÏ¢...");		
+		ShowProgressDialog("è·å–ç”¨æˆ·åŸºæœ¬ä¿¡æ¯...");		
 		List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
 		addToThreadPool(Config.personal_information, "send search request", params);
 	}
 
 	/**
-	 * Ìá½»ÓÃ»§ĞÅÏ¢
+	 * æäº¤ç”¨æˆ·ä¿¡æ¯
 	 */
 	private void sendReqSaveUser() {
 		if (Config.User== null
 				|| MainActivity.personalInformation == null) {
-			ToastUtil.show(activity, "ÎŞ·¨»ñÈ¡ĞÅÏ¢");
+			ToastUtil.show(activity, "æ— æ³•è·å–ä¿¡æ¯");
 			return;
 		}
 		EditPersonal entity = MainActivity.personalInformation;
 		entity.setClientID(Config.User.getClientID());
 		entity.setHead_portrait(Head_portraitbmp == null ? MainActivity.personalInformation
 				.getHead_portrait() : ("data:image/jpg;base64," + getBtye64String(Head_portraitbmp)));
-		ShowProgressDialog("Ìá½»»ù±¾ĞÅÏ¢...");
+		ShowProgressDialog("æäº¤åŸºæœ¬ä¿¡æ¯...");
 		String content = JsonUtil.toString(entity);
 		addToThreadPool(Config.edit_personal_information, "send save user request", content);
 
@@ -433,11 +433,11 @@ public class BaseInfoFragment extends BaseFragment implements OnClickListener{
 			if (MainActivity.personalInformation != null) {
 				initPersonalInformation();
 			} else {
-				ToastUtil.show(activity, "»ñÈ¡Êı¾İÊ§°Ü");
+				ToastUtil.show(activity, "è·å–æ•°æ®å¤±è´¥");
 			}
 			break;
 		case Config.edit_personal_information:
-			ToastUtil.show(getActivity(), "Ìá½»³É¹¦");
+			ToastUtil.show(getActivity(), "æäº¤æˆåŠŸ");
 			sendReqUser();
 			break;
 		}

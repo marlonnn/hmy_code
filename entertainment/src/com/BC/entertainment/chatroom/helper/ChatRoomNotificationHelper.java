@@ -2,7 +2,6 @@ package com.BC.entertainment.chatroom.helper;
 
 import android.text.TextUtils;
 
-import com.netease.nimlib.sdk.chatroom.model.ChatRoomMember;
 //import com.netease.nim.demo.DemoCache;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomNotificationAttachment;
 
@@ -22,43 +21,43 @@ public class ChatRoomNotificationHelper {
         String text;
         switch (attachment.getType()) {
             case ChatRoomMemberIn:
-                text = buildText("»¶Ó­", targets, "½øÈëÖ±²¥¼ä");
+                text = buildText("æ¬¢è¿", targets, "è¿›å…¥ç›´æ’­é—´");
                 break;
             case ChatRoomMemberExit:
-                text = buildText(targets, "Àë¿ªÁËÖ±²¥¼ä");
+                text = buildText(targets, "ç¦»å¼€äº†ç›´æ’­é—´");
                 break;
             case ChatRoomMemberBlackAdd:
-                text = buildText(targets, "±»¹ÜÀíÔ±À­ÈëºÚÃûµ¥");
+                text = buildText(targets, "è¢«ç®¡ç†å‘˜æ‹‰å…¥é»‘åå•");
                 break;
             case ChatRoomMemberBlackRemove:
-                text = buildText(targets, "±»¹ÜÀíÔ±½â³ıÀ­ºÚ");
+                text = buildText(targets, "è¢«ç®¡ç†å‘˜è§£é™¤æ‹‰é»‘");
                 break;
             case ChatRoomMemberMuteAdd:
-                text = buildText(targets, "±»¹ÜÀíÔ±½ûÑÔ");
+                text = buildText(targets, "è¢«ç®¡ç†å‘˜ç¦è¨€");
                 break;
             case ChatRoomMemberMuteRemove:
-                text = buildText(targets, "±»¹ÜÀíÔ±½â³ı½ûÑÔ");
+                text = buildText(targets, "è¢«ç®¡ç†å‘˜è§£é™¤ç¦è¨€");
                 break;
             case ChatRoomManagerAdd:
-                text = buildText(targets, "±»ÈÎÃü¹ÜÀíÔ±Éí·İ");
+                text = buildText(targets, "è¢«ä»»å‘½ç®¡ç†å‘˜èº«ä»½");
                 break;
             case ChatRoomManagerRemove:
-                text = buildText(targets, "±»½â³ı¹ÜÀíÔ±Éí·İ");
+                text = buildText(targets, "è¢«è§£é™¤ç®¡ç†å‘˜èº«ä»½");
                 break;
             case ChatRoomCommonAdd:
-                text = buildText(targets, "±»ÉèÎªÆÕÍ¨³ÉÔ±");
+                text = buildText(targets, "è¢«è®¾ä¸ºæ™®é€šæˆå‘˜");
                 break;
             case ChatRoomCommonRemove:
-                text = buildText(targets, "±»È¡ÏûÆÕÍ¨³ÉÔ±");
+                text = buildText(targets, "è¢«å–æ¶ˆæ™®é€šæˆå‘˜");
                 break;
             case ChatRoomClose:
-                text = buildText("Ö±²¥¼ä±»¹Ø±Õ");
+                text = buildText("ç›´æ’­é—´è¢«å…³é—­");
                 break;
             case ChatRoomInfoUpdated:
-                text = buildText("Ö±²¥¼äĞÅÏ¢ÒÑ¸üĞÂ");
+                text = buildText("ç›´æ’­é—´ä¿¡æ¯å·²æ›´æ–°");
                 break;
             case ChatRoomMemberKicked:
-                text = buildText(targets, "±»Ìß³öÖ±²¥¼ä");
+                text = buildText(targets, "è¢«è¸¢å‡ºç›´æ’­é—´");
                 break;
             default:
                 text = attachment.toString();
@@ -74,7 +73,7 @@ public class ChatRoomNotificationHelper {
         List<String> targets = attachment.getTargetNicks();
         if (attachment.getTargetNicks() != null) {
             for (int i = 0; i < targets.size(); i++) {
-//                sb.append(DemoCache.getAccount().equals(accounts.get(i)) ? "Äã" : targets.get(i));
+//                sb.append(DemoCache.getAccount().equals(accounts.get(i)) ? "ä½ " : targets.get(i));
                 sb.append(",");
             }
             sb.deleteCharAt(sb.length() - 1);

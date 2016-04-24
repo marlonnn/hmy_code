@@ -2,28 +2,16 @@ package com.BC.entertainmentgravitation.entity;
 
 public class ChatRoom {
 
-	/**
-	 * 直播频道ID
-	 */
 	private String cid;
 	
-	/**
-	 * 推流地址
-	 */
 	private String pushUrl;
 	
-	/**
-	 * 拉流三个地址
-	 */
 	private String httpPullUrl;
 	
 //	private String hlsPullUrl;
 //	
 //	private String rtmpPullUrl;
 	
-	/**
-	 * 聊天室ID
-	 */
 	private String chatroomid;
 	
 	private boolean filter;

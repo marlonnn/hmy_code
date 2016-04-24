@@ -19,12 +19,12 @@ public class ListViewUtil {
 	    }
 	}
 
-    //indexÊÇitemsµÄindex£¬²»°üº¬header
+    //indexæ˜¯itemsçš„indexï¼Œä¸åŒ…å«header
     public static Object getViewHolderByIndex(ListView listView, int index) {
 		int firstVisibleFeedPosition = listView.getFirstVisiblePosition() - listView.getHeaderViewsCount();
 		int lastVisibleFeedPosition = listView.getLastVisiblePosition() - listView.getHeaderViewsCount();
 
-		//Ö»ÓÐ»ñÈ¡¿É¼ûÇøÓòµÄ
+		//åªæœ‰èŽ·å–å¯è§åŒºåŸŸçš„
 		if (index >= firstVisibleFeedPosition && index <= lastVisibleFeedPosition) {
 			View view = listView.getChildAt(index - firstVisibleFeedPosition);
 			Object tag = view.getTag();

@@ -1,7 +1,6 @@
 package com.BC.entertainmentgravitation.entity;
 
 /**
- *支付方式  微信支付/支付宝支付
  * 
  * @author zhongwen
  *

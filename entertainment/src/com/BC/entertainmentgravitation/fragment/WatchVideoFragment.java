@@ -50,7 +50,7 @@ public class WatchVideoFragment extends BaseFragment implements SurfaceHolder.Ca
 	public void setHandler(Handler handler) {
 		this.handler = handler;
 	}
-    
+	
     public WatchVideoFragment(ChatRoom chatRoom)
     {
     	this.chatRoom = chatRoom;

@@ -3,6 +3,7 @@ package com.BC.entertainmentgravitation.fragment;
 import com.BC.entertainmentgravitation.R;
 import com.BC.entertainmentgravitation.entity.ChatRoom;
 import com.BC.entertainmentgravitation.entity.StarLiveVideoInfo;
+import com.netease.nimlib.sdk.chatroom.model.ChatRoomMember;
 import com.summer.logger.XLog;
 
 import android.app.Activity;
@@ -27,12 +28,18 @@ public class SurfaceFragment extends DialogFragment {
 	
 	private ChatRoom chatRoom;
 	
+	private ChatRoomMember chatRoomMember;
+	
+	private boolean isWatchVideo;
+	
 	private ExitFragmentListener exitListener;
 	
-	public SurfaceFragment(ScrollListener listener, ChatRoom chatRoom)
+	public SurfaceFragment(ScrollListener listener, ChatRoom chatRoom, ChatRoomMember chatRoomMember, boolean isWatchVideo)
 	{
 		this.listener = listener;
 		this.chatRoom = chatRoom;
+		this.chatRoomMember = chatRoomMember;
+		this.isWatchVideo = isWatchVideo;
 	}
 	
 	
@@ -77,7 +84,7 @@ public class SurfaceFragment extends DialogFragment {
                 else if (position == 1)
                 {
                 	XLog.i("position == 1");
-                	return new TopSurfaceFragment(chatRoom);
+                	return new TopSurfaceFragment(chatRoom, chatRoomMember, isWatchVideo);
                 }
                 return null;
             }

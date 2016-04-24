@@ -150,11 +150,11 @@ public class MainActivity extends BaseActivity implements OnClickListener, Updat
 		
 		if (Config.User != null && Config.User.getPermission().contains("2"))
 		{
-			aplayOrLive.setText("Ö±²¥");
+			aplayOrLive.setText("ç›´æ’­");
 		}
 		else
 		{
-			aplayOrLive.setText("ÉêÇë");
+			aplayOrLive.setText("ç”³è¯·");
 		}
     }
     
@@ -181,14 +181,14 @@ public class MainActivity extends BaseActivity implements OnClickListener, Updat
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-        // ÇåÀí»º´æ&×¢Ïú¼àÌı
+        // æ¸…ç†ç¼“å­˜&æ³¨é”€ç›‘å¬
         LogoutHelper.logout();
 	}
 
 
 
 	/**
-	 * Í¼Æ¬»¬¶¯ÇĞ»»ÓÃ»§
+	 * å›¾ç‰‡æ»‘åŠ¨åˆ‡æ¢ç”¨æˆ·
 	 */
 	public void setImageListener() {
 		details.setOnTouchListener(new View.OnTouchListener() {
@@ -197,14 +197,14 @@ public class MainActivity extends BaseActivity implements OnClickListener, Updat
 
 				switch (event.getAction()) {
 				/**
-				 * °´ÏÂ
+				 * æŒ‰ä¸‹
 				 * */
 				case MotionEvent.ACTION_DOWN:
 					mPosX = event.getX();
 					isSlipping = true;
 					break;
 				/**
-				 * ÒÆ¶¯
+				 * ç§»åŠ¨
 				 * */
 				case MotionEvent.ACTION_MOVE:
 					mCurrentPosX = event.getX();
@@ -220,7 +220,7 @@ public class MainActivity extends BaseActivity implements OnClickListener, Updat
 					}
 				
 					break;
-				// ÄÃÆğ
+				// æ‹¿èµ·
 				case MotionEvent.ACTION_UP:
 					if(isSlipping){
 //						Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
@@ -237,8 +237,8 @@ public class MainActivity extends BaseActivity implements OnClickListener, Updat
 	}
 	
 	/** 
-	 * Ê×Ò³Õ¹Ê¾,ÇĞ»»Ã÷ĞÇ
-	 * ÉÏÒ»¸ö
+	 * é¦–é¡µå±•ç¤º,åˆ‡æ¢æ˜æ˜Ÿ
+	 * ä¸Šä¸€ä¸ª
 	 ***/
 	public void lastOne(){
 		if (selectIndex > 0) {
@@ -250,13 +250,13 @@ public class MainActivity extends BaseActivity implements OnClickListener, Updat
 						.getStar_ID());
 			}
 		} else {
-			ToastUtil.show(this, "Ã»ÓĞ¸ü¶àÊı¾İÁË");
+			ToastUtil.show(this, "æ²¡æœ‰æ›´å¤šæ•°æ®äº†");
 		}
 	}
 	
 	/** 
-	 * Ê×Ò³Õ¹Ê¾,ÇĞ»»Ã÷ĞÇ
-	 * ÏÂÒ»¸ö
+	 * é¦–é¡µå±•ç¤º,åˆ‡æ¢æ˜æ˜Ÿ
+	 * ä¸‹ä¸€ä¸ª
 	 ***/
 	public void nextOne(){
 		if (searchs != null) {
@@ -264,7 +264,7 @@ public class MainActivity extends BaseActivity implements OnClickListener, Updat
 				selectIndex++;
 				getStarInfoRequest(searchs.get(selectIndex).getSearch());
 			} else {
-				ToastUtil.show(this, "Ã»ÓĞ¸ü¶àÊı¾İÁË");
+				ToastUtil.show(this, "æ²¡æœ‰æ›´å¤šæ•°æ®äº†");
 			}
 		} else {
 			if (selectIndex < ranking.size() - 1) {
@@ -288,7 +288,7 @@ public class MainActivity extends BaseActivity implements OnClickListener, Updat
 	}
 
     /**
-     * »ñÈ¡ÓÃ»§ĞÅÏ¢
+     * è·å–ç”¨æˆ·ä¿¡æ¯
      */
     private void getUserInfoRequest()
     {
@@ -306,7 +306,7 @@ public class MainActivity extends BaseActivity implements OnClickListener, Updat
     }
     
     /**
-     * »ñÈ¡Ã÷ĞÇĞÅÏ¢
+     * è·å–æ˜æ˜Ÿä¿¡æ¯
      */
     private void getStarInfoRequest(String starID)
     {
@@ -319,7 +319,7 @@ public class MainActivity extends BaseActivity implements OnClickListener, Updat
     }
     
 	/**
-	 * »ñÈ¡¹ã¸æ¼°¹«¸æĞÅÏ¢
+	 * è·å–å¹¿å‘ŠåŠå…¬å‘Šä¿¡æ¯
 	 */
     private void getAdvertiseInfoRequest()
     {
@@ -334,7 +334,7 @@ public class MainActivity extends BaseActivity implements OnClickListener, Updat
     }
     
 	/**
-	 * »ñÈ¡Ã÷ĞÇÅÅĞĞĞÅÏ¢
+	 * è·å–æ˜æ˜Ÿæ’è¡Œä¿¡æ¯
 	 */
     private void getStartRankInfoRequest()
     {
@@ -353,7 +353,7 @@ public class MainActivity extends BaseActivity implements OnClickListener, Updat
     }
     
 	/**
-	 * ËÑË÷
+	 * æœç´¢
 	 */
 	private void sendSearchRequest(String search) 
 	{
@@ -412,57 +412,57 @@ public class MainActivity extends BaseActivity implements OnClickListener, Updat
 		switch (v.getId()) 
 		{
 		/**
-		 * ¸öÈËÖĞĞÄ
+		 * ä¸ªäººä¸­å¿ƒ
 		 */
 		case R.id.Center:
 			break;
 		/**
-		 * Ç©µ½
+		 * ç­¾åˆ°
 		 */
 		case R.id.SignIn:
 			break;
 		/**
-		 * ³äÖµ
+		 * å……å€¼
 		 */
 		case R.id.topUp:
 			intent = new Intent(this, RechargeActivity.class);
 			startActivity(intent);
 			break;
 		/**
-		 * »î¶¯
+		 * æ´»åŠ¨
 		 */
 		case R.id.activitys:
 			break;
 		/**
-		 * ºÃÓÑ
+		 * å¥½å‹
 		 */
 		case R.id.friends:
 //			intent = new Intent(this, FriendsActivity.class);
 //			startActivity(intent);
 			break;
 		/**
-		 * ÏûÏ¢
+		 * æ¶ˆæ¯
 		 */
 		case R.id.information:
 //			intent = new Intent(this, InformationActivity.class);
 //			startActivity(intent);
 			break;
 		/**
-		 * µãÔŞÅÅĞĞ
+		 * ç‚¹èµæ’è¡Œ
 		 */
 		case R.id.level:
 //			intent = new Intent(this, LevelAcitivity.class);
 //			startActivity(intent);
 			break;
 		/**
-		 * ÉêÇë
+		 * ç”³è¯·
 		 */
 		case R.id.ToApplyFor:
 //			if (!user.getPermission().equals("2")) {
 //				intent = new Intent(this, ToApplyForActivity.class);
 //				startActivity(intent);
 //			} else {
-//				ToastUtil.show(this, "ÄúÒÑ³öµÀ³ÉÎªÃ÷ĞÇÁË");
+//				ToastUtil.show(this, "æ‚¨å·²å‡ºé“æˆä¸ºæ˜æ˜Ÿäº†");
 //			}
 			if (Config.User.getPermission().equals("2")) 
 			{
@@ -470,52 +470,52 @@ public class MainActivity extends BaseActivity implements OnClickListener, Updat
 			}
 			else
 			{
-//				intent = new Intent(this, ToApplyForActivity.class);
-//				startActivity(intent);
+				intent = new Intent(this, ApplyActivity.class);
+				startActivity(intent);
 			}
 			break;
 		/**
-		 * ÀñÆ·
+		 * ç¤¼å“
 		 */
 		case R.id.gift:
 //			intent = new Intent(this, GiftActivity2.class);
 //			startActivity(intent);
 			break;
 		/**
-		 * ºì°ü
+		 * çº¢åŒ…
 		 */
 		case R.id.redEnvelope:
 //			intent = new Intent(this, RedEnvelopeActivity.class);
 //			startActivity(intent);
 			break;
 		/**
-		 * ³é½±
+		 * æŠ½å¥–
 		 */
 		case R.id.LuckyDraw:
 //			intent = new Intent(this, LuckyDrawActivity.class);
 //			startActivity(intent);
 			break;
 		/**
-		 * ÉÏÒ»¸öÃ÷ĞÇ
+		 * ä¸Šä¸€ä¸ªæ˜æ˜Ÿ
 		 */
 		case R.id.previous:
 			lastOne();
 			break;
 		/**
-		 * ÏÂÒ»¸öÃ÷ĞÇ
+		 * ä¸‹ä¸€ä¸ªæ˜æ˜Ÿ
 		 */
 		case R.id.next:
 			nextOne();
 			break;
 		/**
-		 * ÅÅĞĞ°ñ
+		 * æ’è¡Œæ¦œ
 		 */
 		case R.id.toLevel:
 //			intent = new Intent(this, ToLevelActivity.class);
 //			startActivity(intent);
 			break;
 		/**
-		 * Ã÷ĞÇÏêÇé
+		 * æ˜æ˜Ÿè¯¦æƒ…
 		 */
 		case R.id.details:
 //			intent = new Intent(this, DetailsActivity.class);
@@ -523,14 +523,14 @@ public class MainActivity extends BaseActivity implements OnClickListener, Updat
 //			watchLiveVideoRequest();
 			break;
 		/**
-		 * ²éÑ¯Óé±Ò½»Ò×ĞÅÏ¢
+		 * æŸ¥è¯¢å¨±å¸äº¤æ˜“ä¿¡æ¯
 		 */
 		case R.id.account:
 			intent = new Intent(this, AccountActivity.class);
 			startActivity(intent);
 			break;
 		/**
-		 * ËÑË÷
+		 * æœç´¢
 		 */
 		case R.id.searchButton:
 //			String search = searchEdit.getText().toString();
@@ -663,7 +663,7 @@ public class MainActivity extends BaseActivity implements OnClickListener, Updat
 	}
 	
 	/**
-	 * Ã÷ĞÇÖ±²¥
+	 * æ˜æ˜Ÿç›´æ’­
 	 * @param startLiveVideoInfo
 	 */
 	private void startLiveVideo(StarLiveVideoInfo startLiveVideoInfo)
@@ -678,7 +678,7 @@ public class MainActivity extends BaseActivity implements OnClickListener, Updat
 	}
 	
 	/**
-	 * ÈºÖÚ¿´Ö±²¥
+	 * ç¾¤ä¼—çœ‹ç›´æ’­
 	 * @param startLiveVideoInfo
 	 */
 	private void startWatchVideo(StarLiveVideoInfo startLiveVideoInfo)
@@ -695,7 +695,7 @@ public class MainActivity extends BaseActivity implements OnClickListener, Updat
 		}
 		else
 		{
-			ToastUtil.show(this, "¸ÃÖ±²¥ÔİÎ´¿ªÊ¼£¡");
+			ToastUtil.show(this, "è¯¥ç›´æ’­æš‚æœªå¼€å§‹ï¼");
 		}
 
 	}
@@ -710,7 +710,7 @@ public class MainActivity extends BaseActivity implements OnClickListener, Updat
 		}
 
 		/**
-		 * ÔËĞĞÔÚUIÏß³ÌÖĞ£¬ÔÚµ÷ÓÃdoInBackground()Ö®Ç°Ö´ĞĞ
+		 * è¿è¡Œåœ¨UIçº¿ç¨‹ä¸­ï¼Œåœ¨è°ƒç”¨doInBackground()ä¹‹å‰æ‰§è¡Œ
 		 */
 		@Override
 		protected void onPreExecute() {
@@ -718,7 +718,7 @@ public class MainActivity extends BaseActivity implements OnClickListener, Updat
 		}
 
 		/**
-		 * ºóÌ¨ÔËĞĞµÄ·½·¨£¬¿ÉÒÔÔËĞĞ·ÇUIÏß³Ì£¬¿ÉÒÔÖ´ĞĞºÄÊ±µÄ·½·¨
+		 * åå°è¿è¡Œçš„æ–¹æ³•ï¼Œå¯ä»¥è¿è¡ŒéUIçº¿ç¨‹ï¼Œå¯ä»¥æ‰§è¡Œè€—æ—¶çš„æ–¹æ³•
 		 */
 		@Override
 		protected Integer doInBackground(Void... params) {
@@ -735,7 +735,7 @@ public class MainActivity extends BaseActivity implements OnClickListener, Updat
 		}
 
 		/**
-		 * ÔËĞĞÔÚuiÏß³ÌÖĞ£¬ÔÚdoInBackground()Ö´ĞĞÍê±ÏºóÖ´ĞĞ
+		 * è¿è¡Œåœ¨uiçº¿ç¨‹ä¸­ï¼Œåœ¨doInBackground()æ‰§è¡Œå®Œæ¯•åæ‰§è¡Œ
 		 */
 		@Override
 		protected void onPostExecute(Integer integer) {
@@ -743,7 +743,7 @@ public class MainActivity extends BaseActivity implements OnClickListener, Updat
 		}
 
 		/**
-		 * ÔÚpublishProgress()±»µ÷ÓÃÒÔºóÖ´ĞĞ£¬publishProgress()ÓÃÓÚ¸üĞÂ½ø¶È
+		 * åœ¨publishProgress()è¢«è°ƒç”¨ä»¥åæ‰§è¡Œï¼ŒpublishProgress()ç”¨äºæ›´æ–°è¿›åº¦
 		 */
 		@Override
 		protected void onProgressUpdate(Integer... values) {

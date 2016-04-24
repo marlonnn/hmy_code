@@ -1,7 +1,6 @@
 package com.BC.entertainmentgravitation.entity;
 
 /**
- * »î¶¯
  * @author zhongwen
  *
  */

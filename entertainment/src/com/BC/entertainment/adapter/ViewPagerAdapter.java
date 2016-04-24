@@ -7,11 +7,11 @@ import android.view.View;
 import java.util.ArrayList;
 
 /**
- * Òıµ¼Ò³ViewPagerÊÊÅäÆ÷£¬ÓÃÀ´°ó¶¨Êı¾İºÍview
+ * å¼•å¯¼é¡µViewPageré€‚é…å™¨ï¼Œç”¨æ¥ç»‘å®šæ•°æ®å’Œview
  * Created by zhongwen on 2016/4/3.
  */
 public class ViewPagerAdapter extends PagerAdapter {
-    //½çÃæÁĞ±í
+    //ç•Œé¢åˆ—è¡¨
     private ArrayList<View> views;
     public ViewPagerAdapter(ArrayList<View> views)
     {
@@ -19,7 +19,7 @@ public class ViewPagerAdapter extends PagerAdapter {
     }
 
     /**
-     * »ñµÃµ±Ç°½çÃæÊı
+     * è·å¾—å½“å‰ç•Œé¢æ•°
      */
     @Override
     public int getCount() {
@@ -30,7 +30,7 @@ public class ViewPagerAdapter extends PagerAdapter {
     }
 
     /**
-     * ÅĞ¶ÏÊÇ·ñÓÉ¶ÔÏóÉú³É½çÃæ
+     * åˆ¤æ–­æ˜¯å¦ç”±å¯¹è±¡ç”Ÿæˆç•Œé¢
      */
     @Override
     public boolean isViewFromObject(View arg0, Object arg1) {
@@ -38,7 +38,7 @@ public class ViewPagerAdapter extends PagerAdapter {
     }
 
     /**
-     * Ïú»ÙpositionÎ»ÖÃµÄ½çÃæ
+     * é”€æ¯positionä½ç½®çš„ç•Œé¢
      */
     @Override
     public void destroyItem(View container, int position, Object object) {
@@ -46,7 +46,7 @@ public class ViewPagerAdapter extends PagerAdapter {
     }
 
     /**
-     * ³õÊ¼»¯positionÎ»ÖÃµÄ½çÃæ
+     * åˆå§‹åŒ–positionä½ç½®çš„ç•Œé¢
      */
     @Override
     public Object instantiateItem(View container, int position) {
@@ -54,4 +54,3 @@ public class ViewPagerAdapter extends PagerAdapter {
         return views.get(position);
     }
 }
-

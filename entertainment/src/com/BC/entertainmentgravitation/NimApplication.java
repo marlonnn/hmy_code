@@ -39,7 +39,7 @@ public class NimApplication extends Application {
 		
 		if (inMainProcess())
 		{
-            // ³õÊ¼»¯UIKitÄ£¿é
+            // åˆå§‹åŒ–UIKitæ¨¡å—
             initUIKit();
 		}
 	}
@@ -65,38 +65,38 @@ public class NimApplication extends Application {
     private SDKOptions getOptions() {
         SDKOptions options = new SDKOptions();
 //
-//        // Èç¹û½«ĞÂÏûÏ¢Í¨ÖªÌáĞÑÍĞ¹Ü¸øSDKÍê³É£¬ĞèÒªÌí¼ÓÒÔÏÂÅäÖÃ¡£
+//        // å¦‚æœå°†æ–°æ¶ˆæ¯é€šçŸ¥æé†’æ‰˜ç®¡ç»™SDKå®Œæˆï¼Œéœ€è¦æ·»åŠ ä»¥ä¸‹é…ç½®ã€‚
 //        StatusBarNotificationConfig config = UserPreferences.getStatusConfig();
 //        if (config == null) {
 //            config = new StatusBarNotificationConfig();
 //        }
-//        // µã»÷Í¨ÖªĞèÒªÌø×ªµ½µÄ½çÃæ
+//        // ç‚¹å‡»é€šçŸ¥éœ€è¦è·³è½¬åˆ°çš„ç•Œé¢
 //        config.notificationEntrance = WelcomeActivity.class;
 //        config.notificationSmallIconId = R.drawable.ic_stat_notify_msg;
 //
-//        // Í¨ÖªÁåÉùµÄuri×Ö·û´®
+//        // é€šçŸ¥é“ƒå£°çš„uriå­—ç¬¦ä¸²
 //        config.notificationSound = "android.resource://com.netease.nim.demo/raw/msg";
 //        options.statusBarNotificationConfig = config;
 //        DemoCache.setNotificationConfig(config);
 //        UserPreferences.setStatusConfig(config);
 //
-        // ÅäÖÃ±£´æÍ¼Æ¬£¬ÎÄ¼ş£¬logµÈÊı¾İµÄÄ¿Â¼
+        // é…ç½®ä¿å­˜å›¾ç‰‡ï¼Œæ–‡ä»¶ï¼Œlogç­‰æ•°æ®çš„ç›®å½•
         String sdkPath = Environment.getExternalStorageDirectory() + "/" + getPackageName() + "/nim";
         options.sdkStorageRootPath = sdkPath;
 //
-//        // ÅäÖÃÊı¾İ¿â¼ÓÃÜÃØÔ¿
+//        // é…ç½®æ•°æ®åº“åŠ å¯†ç§˜é’¥
 //        options.databaseEncryptKey = "NETEASE";
 //
-//        // ÅäÖÃÊÇ·ñĞèÒªÔ¤ÏÂÔØ¸½¼şËõÂÔÍ¼
+//        // é…ç½®æ˜¯å¦éœ€è¦é¢„ä¸‹è½½é™„ä»¶ç¼©ç•¥å›¾
 //        options.preloadAttach = true;
 //
-//        // ÅäÖÃ¸½¼şËõÂÔÍ¼µÄ³ß´ç´óĞ¡£¬
+//        // é…ç½®é™„ä»¶ç¼©ç•¥å›¾çš„å°ºå¯¸å¤§å°ï¼Œ
 //        options.thumbnailSize = MsgViewHolderThumbBase.getImageMaxEdge();
 //
-        // ÓÃ»§ĞÅÏ¢Ìá¹©Õß
+        // ç”¨æˆ·ä¿¡æ¯æä¾›è€…
         options.userInfoProvider = infoProvider;
 //
-//        // ¶¨ÖÆÍ¨ÖªÀ¸ÌáĞÑÎÄ°¸£¨¿ÉÑ¡£¬Èç¹û²»¶¨ÖÆ½«²ÉÓÃSDKÄ¬ÈÏÎÄ°¸£©
+//        // å®šåˆ¶é€šçŸ¥æ æé†’æ–‡æ¡ˆï¼ˆå¯é€‰ï¼Œå¦‚æœä¸å®šåˆ¶å°†é‡‡ç”¨SDKé»˜è®¤æ–‡æ¡ˆï¼‰
 //        options.messageNotifierCustomization = messageNotifierCustomization;
 //
         return options;
@@ -104,14 +104,14 @@ public class NimApplication extends Application {
     
     
     private void initUIKit() {
-        // ³õÊ¼»¯£¬ĞèÒª´«ÈëÓÃ»§ĞÅÏ¢Ìá¹©Õß
+        // åˆå§‹åŒ–ï¼Œéœ€è¦ä¼ å…¥ç”¨æˆ·ä¿¡æ¯æä¾›è€…
         NimUIKit.init(this, infoProvider, null);
     }
     
     private UserInfoProvider infoProvider = new UserInfoProvider() {
         @Override
         public UserInfo getUserInfo(String account) {
-        	//¹¹½¨»º´æ
+        	//æ„å»ºç¼“å­˜
 //        	NimUserInfoCache.getInstance().buildCache();
             UserInfo user = NimUserInfoCache.getInstance().getUserInfo(account);
             if (user == null) {
@@ -139,7 +139,7 @@ public class NimApplication extends Application {
         @Override
         public Bitmap getAvatarForMessageNotifier(String account) {
             /**
-             * ×¢Òâ£ºÕâÀï×îºÃ´Ó»º´æÀïÄÃ£¬Èç¹û¶ÁÈ¡±¾µØÍ·Ïñ¿ÉÄÜµ¼ÖÂUI½ø³Ì×èÈû£¬µ¼ÖÂÍ¨ÖªÀ¸ÌáĞÑÑÓÊ±µ¯³ö¡£
+             * æ³¨æ„ï¼šè¿™é‡Œæœ€å¥½ä»ç¼“å­˜é‡Œæ‹¿ï¼Œå¦‚æœè¯»å–æœ¬åœ°å¤´åƒå¯èƒ½å¯¼è‡´UIè¿›ç¨‹é˜»å¡ï¼Œå¯¼è‡´é€šçŸ¥æ æé†’å»¶æ—¶å¼¹å‡ºã€‚
              */
             UserInfo user = getUserInfo(account);
             return (user != null) ? ImageLoaderKit.getNotificationBitmapFromCache(user) : null;
@@ -156,7 +156,7 @@ public class NimApplication extends Application {
                     nick = NimUserInfoCache.getInstance().getAlias(account);
                 }
             }
-            // ·µ»Ønull£¬½»¸øsdk´¦Àí¡£Èç¹û¶Ô·½ÓĞÉèÖÃnick£¬sdk»áÏÔÊ¾nick
+            // è¿”å›nullï¼Œäº¤ç»™sdkå¤„ç†ã€‚å¦‚æœå¯¹æ–¹æœ‰è®¾ç½®nickï¼Œsdkä¼šæ˜¾ç¤ºnick
             if (TextUtils.isEmpty(nick)) {
                 return null;
             }

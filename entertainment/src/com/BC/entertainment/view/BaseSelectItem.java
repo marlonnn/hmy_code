@@ -51,7 +51,7 @@ public class BaseSelectItem extends LinearLayout implements OnClickListener {
 	private String wheelTitle3String;
 	private String wheelTitle4String;
 	private EditText content2;
-	private String equalsString = "ÆäËû£¨¿É±à¼­£©";
+	private String equalsString = "å…¶ä»–ï¼ˆå¯ç¼–è¾‘ï¼‰";
 	private View showView;
 
 	public boolean showDay = false;

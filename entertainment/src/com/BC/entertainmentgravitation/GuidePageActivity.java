@@ -18,18 +18,18 @@ import java.util.ArrayList;
 public class GuidePageActivity extends Activity implements View.OnClickListener,
 ViewPager.OnPageChangeListener {
 
-    // ¶¨ÒåViewPager¶ÔÏó
+    // å®šä¹‰ViewPagerå¯¹è±¡
     private ViewPager viewPager;
-    // ¶¨ÒåViewPagerÊÊÅäÆ÷
+    // å®šä¹‰ViewPageré€‚é…å™¨
     private ViewPagerAdapter vpAdapter;
-    // ¶¨ÒåÒ»¸öArrayListÀ´´æ·ÅView
+    // å®šä¹‰ä¸€ä¸ªArrayListæ¥å­˜æ”¾View
     private ArrayList<View> views;
-    // µ×²¿Ğ¡µãµÄÍ¼Æ¬
+    // åº•éƒ¨å°ç‚¹çš„å›¾ç‰‡
     private ImageView[] points;
-    // ¼ÇÂ¼µ±Ç°Ñ¡ÖĞÎ»ÖÃ
+    // è®°å½•å½“å‰é€‰ä¸­ä½ç½®
     private int currentIndex;
     private int currentPageScrollStatus;
-    // Òıµ¼Í¼Æ¬×ÊÔ´
+    // å¼•å¯¼å›¾ç‰‡èµ„æº
     private static final int[] pics = { R.drawable.activity_guide_page1, R.drawable.activity_guide_page2,
             R.drawable.activity_guide_page3, R.drawable.activity_guide_page4 };
     
@@ -54,52 +54,52 @@ ViewPager.OnPageChangeListener {
 	}
 
     /**
-     * ³õÊ¼»¯×é¼ş
+     * åˆå§‹åŒ–ç»„ä»¶
      */
     private void initializeView()
     {
-        // ÊµÀı»¯ArrayList¶ÔÏó
+        // å®ä¾‹åŒ–ArrayListå¯¹è±¡
         views = new ArrayList<View>();
-        // ÊµÀı»¯ViewPager
+        // å®ä¾‹åŒ–ViewPager
         viewPager = (ViewPager) findViewById(R.id.viewpager);
-        // ÊµÀı»¯ViewPagerÊÊÅäÆ÷
+        // å®ä¾‹åŒ–ViewPageré€‚é…å™¨
         vpAdapter = new ViewPagerAdapter(views);
     }
 
     /**
-     * ³õÊ¼»¯Êı¾İ
+     * åˆå§‹åŒ–æ•°æ®
      */
     private void initializeData()
     {
-        // ¶¨ÒåÒ»¸ö²¼¾Ö²¢ÉèÖÃ²ÎÊı
+        // å®šä¹‰ä¸€ä¸ªå¸ƒå±€å¹¶è®¾ç½®å‚æ•°
         LinearLayout.LayoutParams mParams = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.MATCH_PARENT);
 
-        // ³õÊ¼»¯Òıµ¼Í¼Æ¬ÁĞ±í
+        // åˆå§‹åŒ–å¼•å¯¼å›¾ç‰‡åˆ—è¡¨
         for (int i = 0; i < pics.length; i++) {
         	bitmapPics[i] = readBitmap(pics[i]);
             ImageView iv = new ImageView(this);
             iv.setLayoutParams(mParams);
-            //·ÀÖ¹Í¼Æ¬²»ÄÜÌîÂúÆÁÄ»
+            //é˜²æ­¢å›¾ç‰‡ä¸èƒ½å¡«æ»¡å±å¹•
             iv.setScaleType(ImageView.ScaleType.FIT_XY);
-            //¼ÓÔØÍ¼Æ¬×ÊÔ´
+            //åŠ è½½å›¾ç‰‡èµ„æº
             iv.setImageBitmap(bitmapPics[i]);
 //            iv.setImageResource(pics[i]);
             views.add(iv);
         }
 
-        // ÉèÖÃÊı¾İ
+        // è®¾ç½®æ•°æ®
         viewPager.setAdapter(vpAdapter);
-        // ÉèÖÃ¼àÌı
+        // è®¾ç½®ç›‘å¬
         viewPager.setOnPageChangeListener(this);
 
-        // ³õÊ¼»¯µ×²¿Ğ¡µã
+        // åˆå§‹åŒ–åº•éƒ¨å°ç‚¹
         initializePoint();
     }
 
     /**
-     * ³õÊ¼»¯µ×²¿Ğ¡µã
+     * åˆå§‹åŒ–åº•éƒ¨å°ç‚¹
      */
     private void initializePoint()
     {
@@ -107,21 +107,21 @@ ViewPager.OnPageChangeListener {
 
         points = new ImageView[pics.length];
 
-        // Ñ­»·È¡µÃĞ¡µãÍ¼Æ¬
+        // å¾ªç¯å–å¾—å°ç‚¹å›¾ç‰‡
         for (int i = 0; i < pics.length; i++) {
-            // µÃµ½Ò»¸öLinearLayoutÏÂÃæµÄÃ¿Ò»¸ö×ÓÔªËØ
+            // å¾—åˆ°ä¸€ä¸ªLinearLayoutä¸‹é¢çš„æ¯ä¸€ä¸ªå­å…ƒç´ 
             points[i] = (ImageView) linearLayout.getChildAt(i);
-            // Ä¬ÈÏ¶¼ÉèÎª»ÒÉ«
+            // é»˜è®¤éƒ½è®¾ä¸ºç°è‰²
             points[i].setEnabled(true);
-            // ¸øÃ¿¸öĞ¡µãÉèÖÃ¼àÌı
+            // ç»™æ¯ä¸ªå°ç‚¹è®¾ç½®ç›‘å¬
             points[i].setOnClickListener(this);
-            // ÉèÖÃÎ»ÖÃtag£¬·½±ãÈ¡³öÓëµ±Ç°Î»ÖÃ¶ÔÓ¦
+            // è®¾ç½®ä½ç½®tagï¼Œæ–¹ä¾¿å–å‡ºä¸å½“å‰ä½ç½®å¯¹åº”
             points[i].setTag(i);
         }
 
-        // ÉèÖÃµ±ÃæÄ¬ÈÏµÄÎ»ÖÃ
+        // è®¾ç½®å½“é¢é»˜è®¤çš„ä½ç½®
         currentIndex = 0;
-        // ÉèÖÃÎª°×É«£¬¼´Ñ¡ÖĞ×´Ì¬
+        // è®¾ç½®ä¸ºç™½è‰²ï¼Œå³é€‰ä¸­çŠ¶æ€
         points[currentIndex].setEnabled(false);
     }
 
@@ -133,20 +133,20 @@ ViewPager.OnPageChangeListener {
     }
 
     /**
-     * µ±Ç°Ò³Ãæ»¬¶¯Ê±µ÷ÓÃ
+     * å½“å‰é¡µé¢æ»‘åŠ¨æ—¶è°ƒç”¨
      */
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
         if (currentIndex == 0)
         {
-            //Èç¹ûoffsetPixelsÊÇ0Ò³ÃæÒ²±»»¬¶¯ÁË£¬´ú±íÔÚµÚÒ»Ò³»¹ÒªÍù×ó»®
+            //å¦‚æœoffsetPixelsæ˜¯0é¡µé¢ä¹Ÿè¢«æ»‘åŠ¨äº†ï¼Œä»£è¡¨åœ¨ç¬¬ä¸€é¡µè¿˜è¦å¾€å·¦åˆ’
             if (positionOffsetPixels == 0 && currentPageScrollStatus == 1)
             {
             }
         }
         else if (currentIndex == pics.length - 1)
         {
-            //ÒÑ¾­ÔÚ×îºóÒ»Ò³»¹ÏëÍùÓÒ»®
+            //å·²ç»åœ¨æœ€åä¸€é¡µè¿˜æƒ³å¾€å³åˆ’
             if (positionOffsetPixels == 0 && currentPageScrollStatus == 1)
             {
                 Intent intent = new Intent();
@@ -159,25 +159,25 @@ ViewPager.OnPageChangeListener {
     }
 
     /**
-     * »¬¶¯×´Ì¬¸Ä±äÊ±µ÷ÓÃ
+     * æ»‘åŠ¨çŠ¶æ€æ”¹å˜æ—¶è°ƒç”¨
      */
     @Override
     public void onPageScrollStateChanged(int state) {
-        //¼ÇÂ¼page»¬¶¯×´Ì¬£¬Èç¹û»¬¶¯ÁËstate¾ÍÊÇ1
+        //è®°å½•pageæ»‘åŠ¨çŠ¶æ€ï¼Œå¦‚æœæ»‘åŠ¨äº†stateå°±æ˜¯1
         currentPageScrollStatus = state;
     }
 
     /**
-     * ĞÂµÄÒ³Ãæ±»Ñ¡ÖĞÊ±µ÷ÓÃ
+     * æ–°çš„é¡µé¢è¢«é€‰ä¸­æ—¶è°ƒç”¨
      */
     @Override
     public void onPageSelected(int position) {
-        // ÉèÖÃµ×²¿Ğ¡µãÑ¡ÖĞ×´Ì¬
+        // è®¾ç½®åº•éƒ¨å°ç‚¹é€‰ä¸­çŠ¶æ€
         setCurrentDotPosition(position);
     }
 
     /**
-     * ÉèÖÃµ±Ç°µÄĞ¡µãµÄÎ»ÖÃ
+     * è®¾ç½®å½“å‰çš„å°ç‚¹çš„ä½ç½®
      */
     private void setCurrentDotPosition(int positon) {
         if (positon < 0 || positon > pics.length - 1 || currentIndex == positon) {
@@ -190,7 +190,7 @@ ViewPager.OnPageChangeListener {
     }
 
     /**
-     * ÉèÖÃµ±Ç°Ò³ÃæµÄÎ»ÖÃ
+     * è®¾ç½®å½“å‰é¡µé¢çš„ä½ç½®
      */
     private void setCurrentViewPosition(int position) {
         if (position < 0 || position >= pics.length) {
