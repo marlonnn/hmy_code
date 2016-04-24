@@ -95,6 +95,8 @@ public class ChatRoomPanel {
 	
 	private TextView onlinePeople;//总的在线人数
 	
+	private DanmakuPanel danmakuPanel;
+	
 	private Map<String, List<SimpleCallback<ChatRoomMember>>> frequencyLimitCache = new HashMap<String, List<SimpleCallback<ChatRoomMember>>>(); // 重复请求处理
 	
 	private  static Map<MemberType, Integer> compMap = new HashMap<>();
@@ -122,9 +124,10 @@ public class ChatRoomPanel {
         }
     };
     
-    public ChatRoomPanel(Container container, View rootView) {
+    public ChatRoomPanel(Container container, View rootView, DanmakuPanel danmakuPanel) {
         this.container = container;
         this.rootView = rootView;
+        this.danmakuPanel = danmakuPanel;
         init();
     }
     
@@ -174,12 +177,21 @@ public class ChatRoomPanel {
 								if (attachment.getType() == NotificationType.ChatRoomMemberIn)
 								{
 									holder.setText(R.id.txtContent, "欢迎"+ attachment.getOperatorNick() + "进入直播间");
+									if (danmakuPanel != null)
+									{
+										danmakuPanel.AddDanmaku(false, "系统消息：" + "欢迎"+ attachment.getOperatorNick() + "进入直播间");
+									}
 								}
 								else if (attachment.getType() == NotificationType.ChatRoomMemberExit)
 								{
 									holder.setText(R.id.txtContent, (attachment.getOperatorNick() == null ? "" : attachment.getOperatorNick()) + "离开了直播间");
+									if (danmakuPanel != null)
+									{
+										danmakuPanel.AddDanmaku(false,  (attachment.getOperatorNick() == null ? "" : attachment.getOperatorNick()) + "离开了直播间");
+									}
 								}
 								holder.setTextColor(R.id.txtContent, Color.parseColor("#8B658B"));
+
 
 							} catch (Exception e) {
 								e.printStackTrace();
@@ -195,12 +207,20 @@ public class ChatRoomPanel {
 									//发出去的消息
 									holder.setText(R.id.txtName, Config.User.getNickName() + ":");
 									holder.setText(R.id.txtContent, message.getContent());
+									if (danmakuPanel != null)
+									{
+										danmakuPanel.AddDanmaku(false,  Config.User.getNickName() + ":" + message.getContent());
+									}
 								}
 								else if (message.getDirect() == MsgDirectionEnum.In)
 								{
 									//接受到的消息
 									holder.setText(R.id.txtName, message.getChatRoomMessageExtension().getSenderNick() + ":");
 									holder.setText(R.id.txtContent, message.getContent());
+									if (danmakuPanel != null)
+									{
+										danmakuPanel.AddDanmaku(false,  message.getChatRoomMessageExtension().getSenderNick() + ":" + message.getContent());
+									}
 								}
 
 								holder.setTextColor(R.id.txtContent, Color.parseColor("#FFFFFF"));

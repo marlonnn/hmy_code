@@ -16,7 +16,6 @@ import master.flame.danmaku.danmaku.model.android.DanmakuContext;
 import master.flame.danmaku.danmaku.model.android.Danmakus;
 import master.flame.danmaku.danmaku.model.android.SpannedCacheStuffer;
 import master.flame.danmaku.danmaku.parser.BaseDanmakuParser;
-import master.flame.danmaku.danmaku.parser.android.BiliDanmukuParser;
 import master.flame.danmaku.danmaku.util.IOUtils;
 import android.annotation.SuppressLint;
 import android.graphics.Color;
@@ -159,15 +158,33 @@ public class DanmakuPanel {
             return;
         }
         danmaku.text = message;
+        danmaku.padding = 8;
+        danmaku.priority = 1;  // 可能会被各种过滤器过滤并隐藏显示
+        danmaku.isLive = islive;
+        danmaku.time = danmakuView.getCurrentTime() + 1200;
+        danmaku.textSize = 25f * (mParser.getDisplayer().getDensity() - 0.6f);
+        danmaku.textColor = Color.parseColor("#EEB422");
+//        danmaku.textShadowColor = Color.WHITE;
+        // danmaku.underlineColor = Color.GREEN;
+        danmaku.borderColor = Color.parseColor("#8B658B");
+        danmakuView.addDanmaku(danmaku);
+    }
+    
+    public void AddDanmaku(boolean islive, String message, int textColor, int textShadowColor, int boarderColor) {
+        BaseDanmaku danmaku = mContext.mDanmakuFactory.createDanmaku(BaseDanmaku.TYPE_SCROLL_RL);
+        if (danmaku == null || danmakuView == null) {
+            return;
+        }
+        danmaku.text = message;
         danmaku.padding = 5;
         danmaku.priority = 1;  // 可能会被各种过滤器过滤并隐藏显示
         danmaku.isLive = islive;
         danmaku.time = danmakuView.getCurrentTime() + 1200;
         danmaku.textSize = 25f * (mParser.getDisplayer().getDensity() - 0.6f);
-        danmaku.textColor = Color.RED;
-        danmaku.textShadowColor = Color.WHITE;
+        danmaku.textColor = textColor;
+        danmaku.textShadowColor = textShadowColor;
         // danmaku.underlineColor = Color.GREEN;
-        danmaku.borderColor = Color.GREEN;
+        danmaku.borderColor = boarderColor;
         danmakuView.addDanmaku(danmaku);
 
     }

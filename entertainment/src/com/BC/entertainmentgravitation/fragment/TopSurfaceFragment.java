@@ -16,6 +16,7 @@ import com.netease.nimlib.sdk.chatroom.model.ChatRoomMember;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomMessage;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
+import com.summer.config.Config;
 import com.summer.logger.XLog;
 
 import android.annotation.SuppressLint;
@@ -147,8 +148,14 @@ public class TopSurfaceFragment extends Fragment implements OnClickListener, Mod
 	private void initializeView()
 	{
         Container container = new Container(getActivity(), chatRoom.getChatroomid(), SessionTypeEnum.ChatRoom, this);
+        
+		if (danmakuPanel == null)
+		{
+			danmakuPanel = new DanmakuPanel(container, view);
+		}
+		
         if (chatRoomPanel == null) {
-            chatRoomPanel = new ChatRoomPanel(container, view);
+            chatRoomPanel = new ChatRoomPanel(container, view, null);
 //            if (isWatchVideo)
 //            {
 //            	chatRoomPanel.addMembers(chatRoomMember, false);
@@ -161,11 +168,6 @@ public class TopSurfaceFragment extends Fragment implements OnClickListener, Mod
 		{
 			
 			inputPanel = new InputPanel(container, view, GiftCache.getInstance().getListGifts());
-		}
-		
-		if (danmakuPanel == null)
-		{
-			danmakuPanel = new DanmakuPanel(container, view);
 		}
         
 		layoutInput = (LinearLayout) view.findViewById(R.id.layout_input);
@@ -286,8 +288,8 @@ public class TopSurfaceFragment extends Fragment implements OnClickListener, Mod
 								Toast.LENGTH_SHORT).show();
 					}
 				});
-		danmakuPanel.AddDanmaku(false, message.getContent());
-		danmakuPanel.AddDanmaKuShowTextAndImage(false);
+		danmakuPanel.AddDanmaku(false, (Config.User.getNickName() == null ? "" : Config.User.getNickName()) + ": " + message.getContent());
+//		danmakuPanel.AddDanmaKuShowTextAndImage(false);
 		chatRoomPanel.onMsgSend(msg);
 		return true;
 	}
