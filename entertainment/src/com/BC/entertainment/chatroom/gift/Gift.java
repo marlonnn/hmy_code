@@ -1,5 +1,6 @@
 package com.BC.entertainment.chatroom.gift;
 
+import com.BC.entertainment.chatroom.extension.BaseEmotion;
 import com.BC.entertainment.chatroom.extension.CustomAttachmentType;
 import com.BC.entertainment.chatroom.extension.Emotion;
 import com.BC.entertainment.chatroom.extension.EmotionAttachment;
@@ -12,6 +13,8 @@ import com.netease.nimlib.sdk.msg.model.IMMessage;
 
 @SuppressWarnings("serial")
 public class Gift extends BaseGift{
+	
+	private BaseEmotion baseEmotion;
 
 	private IMMessage message;
 	/**
@@ -35,8 +38,8 @@ public class Gift extends BaseGift{
 		switch(customAttachmentType)
 		{
 		case CustomAttachmentType.emotion:
-			Emotion emotion = Emotion.enumOfCategory(category);
-			EmotionAttachment emotionAttachment = new EmotionAttachment(customAttachmentType, emotion);
+			baseEmotion = Emotion.enumOfCategory(category);
+			EmotionAttachment emotionAttachment = new EmotionAttachment(customAttachmentType, baseEmotion);
 			if (getContainer() != null && getContainer().sessionType == SessionTypeEnum.ChatRoom)
 			{
 				message = ChatRoomMessageBuilder.createChatRoomCustomMessage(getAccount(), emotionAttachment);

@@ -10,13 +10,13 @@ import com.alibaba.fastjson.JSONObject;
 @SuppressWarnings("serial")
 public class EmotionAttachment extends CustomAttachment{
 	
-	private Emotion emotion;
+	private BaseEmotion emotion;
 	
 	public EmotionAttachment(int type) {
 		super(type);
 	}
 	
-	public EmotionAttachment(int type, Emotion emotion) {
+	public EmotionAttachment(int type, BaseEmotion emotion) {
 		super(type);
 		this.emotion = emotion;
 	}
@@ -33,7 +33,7 @@ public class EmotionAttachment extends CustomAttachment{
         return data;
 	}
 	
-	public Emotion getEmotion()
+	public BaseEmotion getEmotion()
 	{
 		return emotion;
 	}

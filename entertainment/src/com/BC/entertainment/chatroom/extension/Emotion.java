@@ -6,7 +6,7 @@ package com.BC.entertainment.chatroom.extension;
  * @author wen zhong
  *
  */
-public enum Emotion{
+public enum Emotion implements BaseEmotion{
 	
 	emotion_car(1,"保姆车", 100, 1000)
 	;
