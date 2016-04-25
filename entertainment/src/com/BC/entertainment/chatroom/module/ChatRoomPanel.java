@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import com.BC.entertainment.adapter.RecyclerViewAdapter;
 import com.BC.entertainment.adapter.RecyclerViewAdapter.OnItemClickListener;
+import com.BC.entertainment.chatroom.extension.CustomAttachParser;
 import com.BC.entertainmentgravitation.MainActivity;
 import com.BC.entertainmentgravitation.R;
 import com.bumptech.glide.Glide;
@@ -41,6 +42,7 @@ import com.netease.nimlib.sdk.chatroom.model.ChatRoomInfo;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomMember;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomMessage;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomNotificationAttachment;
+import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.constant.MsgDirectionEnum;
 import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum;
 import com.netease.nimlib.sdk.msg.constant.NotificationType;
@@ -768,4 +770,8 @@ public class ChatRoomPanel {
          }
      };
      
+     public void registerCustomMsgObservers()
+     {
+    	 NIMClient.getService(MsgService.class).registerCustomAttachmentParser(new CustomAttachParser());
+     }
 }

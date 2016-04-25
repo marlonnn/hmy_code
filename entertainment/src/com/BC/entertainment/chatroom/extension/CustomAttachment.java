@@ -1,13 +1,11 @@
-package com.BC.entertainment.session.extensioin;
+package com.BC.entertainment.chatroom.extension;
 
 import com.alibaba.fastjson.JSONObject;
 import com.netease.nimlib.sdk.msg.attachment.MsgAttachment;
 
-/**
- * Created by zhoujianghua on 2015/4/9.
- */
-public abstract class CustomAttachment implements MsgAttachment {
-
+@SuppressWarnings("serial")
+public abstract class CustomAttachment implements MsgAttachment{
+	
     protected int type;
 
     CustomAttachment(int type) {
@@ -20,15 +18,16 @@ public abstract class CustomAttachment implements MsgAttachment {
         }
     }
 
-    @Override
-    public String toJson(boolean send) {
-        return CustomAttachParser.packData(type, packData());
-    }
-
+	@Override
+	public String toJson(boolean send) {
+		return CustomAttachParser.packData(type, packData());
+	}
+	
     public int getType() {
         return type;
     }
 
     protected abstract void parseData(JSONObject data);
     protected abstract JSONObject packData();
+
 }
