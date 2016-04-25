@@ -21,7 +21,6 @@ import com.BC.entertainment.adapter.GiftPagerAdapter;
 import com.BC.entertainment.chatroom.gift.BaseGift;
 import com.BC.entertainmentgravitation.R;
 import com.netease.nim.uikit.common.util.string.StringUtil;
-import com.netease.nim.uikit.session.module.Container;
 import com.netease.nimlib.sdk.chatroom.ChatRoomMessageBuilder;
 import com.netease.nimlib.sdk.msg.MessageBuilder;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
@@ -70,6 +69,10 @@ public class InputPanel {
      */
     private void initgiftViewPage()
     {
+    	for (BaseGift baseGift : gifts)
+    	{
+    		baseGift.setContainer(container);
+    	}
     	GiftPagerAdapter adapter = new GiftPagerAdapter(viewPager, gifts);
         viewPager.setAdapter(adapter);
         initPageListener(indicator, adapter.getCount(), viewPager);

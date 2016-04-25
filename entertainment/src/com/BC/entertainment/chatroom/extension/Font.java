@@ -32,7 +32,7 @@ public enum Font {
 	 * @param category
 	 * @return
 	 */
-	static Font enumOfCategory(int category)
+	public static Font enumOfCategory(int category)
 	{
 		for (Font font : values())
 		{

@@ -1,4 +1,5 @@
 eclipse.preferences.version=1
+encoding//src/com/BC/entertainment/adapter/GiftGridviewAdapter.java=UTF-8
 encoding//src/com/BC/entertainment/adapter/RecyclerViewAdapter.java=UTF-8
 encoding//src/com/BC/entertainment/adapter/ViewPagerAdapter.java=UTF-8
 encoding//src/com/BC/entertainment/chatroom/gift/BaseGift.java=UTF-8

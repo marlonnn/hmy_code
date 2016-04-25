@@ -15,6 +15,11 @@ public class FontAttachment extends CustomAttachment{
 	public FontAttachment(int type) {
 		super(type);
 	}
+	
+	public FontAttachment(int type, Font font) {
+		super(type);
+		this.font = font;
+	}
 
 	@Override
 	protected void parseData(JSONObject data) {

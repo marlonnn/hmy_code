@@ -28,7 +28,6 @@ import android.text.style.BackgroundColorSpan;
 import android.text.style.ImageSpan;
 import android.view.View;
 
-import com.netease.nim.uikit.session.module.Container;
 import com.BC.entertainmentgravitation.R;
 
 /**

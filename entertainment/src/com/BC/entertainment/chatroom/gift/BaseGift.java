@@ -4,22 +4,43 @@ import java.io.Serializable;
 
 import android.app.Activity;
 
-import com.netease.nim.uikit.session.module.Container;
+import com.BC.entertainment.chatroom.module.Container;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
+import com.netease.nimlib.sdk.msg.model.IMMessage;
 
 @SuppressWarnings("serial")
 public abstract class BaseGift implements Serializable{
 	
-	private String name;
+	protected int customAttachmentType;
 	
-	private int iconResId;//图片资源
+	protected int category;//emotion kind
 	
-	private int value;//价值
+	protected String name;
 	
-	private int exPoints;//可以获取到的经验值
+	protected int iconResId;//图片资源
+	
+	protected int value;//价值
+	
+	protected int exPoints;//可以获取到的经验值
 	
 	private transient Container container;
 	
+	public int getCustomAttachmentType() {
+		return customAttachmentType;
+	}
+
+	public void setCustomAttachmentType(int customAttachmentType) {
+		this.customAttachmentType = customAttachmentType;
+	}
+
+	public int getCategory() {
+		return category;
+	}
+
+	public void setCategory(int category) {
+		this.category = category;
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -28,8 +49,10 @@ public abstract class BaseGift implements Serializable{
 		this.name = name;
 	}
 
-	protected BaseGift(String name, int iconResId, int value, int exPoints)
+	protected BaseGift(int customAttachmentType, int category, String name, int iconResId, int value, int exPoints)
 	{
+		this.customAttachmentType = customAttachmentType;
+		this.category = category;
 		this.name = name;
 		this.iconResId = iconResId;
 		this.value = value;
@@ -50,6 +73,10 @@ public abstract class BaseGift implements Serializable{
     
     public Container getContainer() {
         return container;
+    }
+    
+    public void setContainer(Container container) {
+        this.container = container;
     }
     
     public abstract void onClick();
@@ -78,4 +105,18 @@ public abstract class BaseGift implements Serializable{
 		this.exPoints = exPoints;
 	}
 	
+    protected void sendMessage(IMMessage message) {
+    	if(container != null && container.proxy != null)
+    	{
+            container.proxy.sendMessage(message);
+    	}
+    }
+    
+    protected void showAnimation(Gift gift)
+    {
+    	if(container != null && container.proxy != null)
+    	{
+            container.proxy.showAnimation(gift);
+    	}
+    }
 }

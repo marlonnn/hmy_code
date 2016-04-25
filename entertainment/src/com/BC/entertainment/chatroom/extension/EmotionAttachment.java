@@ -15,6 +15,11 @@ public class EmotionAttachment extends CustomAttachment{
 	public EmotionAttachment(int type) {
 		super(type);
 	}
+	
+	public EmotionAttachment(int type, Emotion emotion) {
+		super(type);
+		this.emotion = emotion;
+	}
 
 	@Override
 	protected void parseData(JSONObject data) {

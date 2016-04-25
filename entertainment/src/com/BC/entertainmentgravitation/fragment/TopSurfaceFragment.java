@@ -1,13 +1,14 @@
 package com.BC.entertainmentgravitation.fragment;
 
+import com.BC.entertainment.chatroom.gift.Gift;
 import com.BC.entertainment.chatroom.module.ChatRoomPanel;
+import com.BC.entertainment.chatroom.module.Container;
 import com.BC.entertainment.chatroom.module.DanmakuPanel;
 import com.BC.entertainment.chatroom.module.GiftCache;
 import com.BC.entertainment.chatroom.module.InputPanel;
+import com.BC.entertainment.chatroom.module.ModuleProxy;
 import com.BC.entertainmentgravitation.R;
 import com.BC.entertainmentgravitation.entity.ChatRoom;
-import com.netease.nim.uikit.session.module.Container;
-import com.netease.nim.uikit.session.module.ModuleProxy;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.ResponseCode;
@@ -305,5 +306,10 @@ public class TopSurfaceFragment extends Fragment implements OnClickListener, Mod
 	@Override
 	public boolean isLongClickEnabled() {
 		return false;
+	}
+
+	@Override
+	public void showAnimation(Gift gift) {
+		//show local animation
 	}
 }

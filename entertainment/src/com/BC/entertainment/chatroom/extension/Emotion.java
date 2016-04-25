@@ -32,7 +32,7 @@ public enum Emotion{
 	 * @param category
 	 * @return
 	 */
-	static Emotion enumOfCategory(int category)
+	public static Emotion enumOfCategory(int category)
 	{
 		for (Emotion emotion : values())
 		{
