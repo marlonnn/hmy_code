@@ -112,6 +112,13 @@ public abstract class BaseGift implements Serializable{
     	}
     }
     
+    protected void sendCustomMessage(IMMessage message) {
+    	if(container != null && container.proxy != null)
+    	{
+            container.proxy.sendCustomMessage(message);
+    	}
+    }
+    
     protected void showAnimation(Gift gift)
     {
     	if(container != null && container.proxy != null)

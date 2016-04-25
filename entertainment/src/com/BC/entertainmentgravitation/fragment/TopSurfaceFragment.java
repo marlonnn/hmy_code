@@ -15,6 +15,7 @@ import com.netease.nimlib.sdk.ResponseCode;
 import com.netease.nimlib.sdk.chatroom.ChatRoomService;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomMember;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomMessage;
+import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.summer.config.Config;
@@ -156,7 +157,7 @@ public class TopSurfaceFragment extends Fragment implements OnClickListener, Mod
 		}
 		
         if (chatRoomPanel == null) {
-            chatRoomPanel = new ChatRoomPanel(container, view, null);
+            chatRoomPanel = new ChatRoomPanel(container, view, danmakuPanel);
 //            if (isWatchVideo)
 //            {
 //            	chatRoomPanel.addMembers(chatRoomMember, false);
@@ -164,6 +165,7 @@ public class TopSurfaceFragment extends Fragment implements OnClickListener, Mod
             chatRoomPanel.showMessageListView(true);
         }
 		chatRoomPanel.registerObservers(true);
+//		chatRoomPanel.registerCustomMsgObservers();
 		
 		if (inputPanel == null)
 		{
@@ -289,7 +291,7 @@ public class TopSurfaceFragment extends Fragment implements OnClickListener, Mod
 								Toast.LENGTH_SHORT).show();
 					}
 				});
-		danmakuPanel.AddDanmaku(false, (Config.User.getNickName() == null ? "" : Config.User.getNickName()) + ": " + message.getContent());
+//		danmakuPanel.AddDanmaku(false, (Config.User.getNickName() == null ? "" : Config.User.getNickName()) + ": " + message.getContent());
 //		danmakuPanel.AddDanmaKuShowTextAndImage(false);
 		chatRoomPanel.onMsgSend(msg);
 		return true;
@@ -311,5 +313,35 @@ public class TopSurfaceFragment extends Fragment implements OnClickListener, Mod
 	@Override
 	public void showAnimation(Gift gift) {
 		//show local animation
+	}
+
+	@Override
+	public boolean sendCustomMessage(final IMMessage msg) {
+		
+		NIMClient.getService(MsgService.class).sendMessage(msg, false).setCallback(new RequestCallback<Void>() {
+
+			@Override
+			public void onException(Throwable exception) {
+				Toast.makeText(getActivity(), "自定义消息发送失败！",
+						Toast.LENGTH_SHORT).show();
+			}
+
+			@Override
+			public void onFailed(int code) {
+				if (code == ResponseCode.RES_CHATROOM_MUTED) {
+					Toast.makeText(getActivity(), "用户被禁言",Toast.LENGTH_SHORT).show();
+				} else {
+					Toast.makeText(getActivity(),"消息发送失败：code:" + code, Toast.LENGTH_SHORT).show();
+				}
+			}
+
+			@Override
+			public void onSuccess(Void param) {
+				XLog.i("send custom messsage success");
+		        chatRoomPanel.onMsgSend(msg);
+			}
+		});
+		
+		return true;
 	}
 }

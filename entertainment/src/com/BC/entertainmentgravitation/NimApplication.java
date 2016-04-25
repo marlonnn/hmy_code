@@ -3,6 +3,7 @@ package com.BC.entertainmentgravitation;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.BC.entertainment.chatroom.extension.CustomAttachParser;
 import com.BC.entertainment.config.Cache;
 import com.BC.entertainment.config.Preferences;
 import com.BC.entertainmentgravitation.util.SystemUtil;
@@ -16,6 +17,7 @@ import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.SDKOptions;
 import com.netease.nimlib.sdk.StatusBarNotificationConfig;
 import com.netease.nimlib.sdk.auth.LoginInfo;
+import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.uinfo.UserInfoProvider;
 import com.netease.nimlib.sdk.uinfo.UserInfoProvider.UserInfo;
@@ -41,6 +43,7 @@ public class NimApplication extends Application {
 		{
             // 初始化UIKit模块
             initUIKit();
+            NIMClient.getService(MsgService.class).registerCustomAttachmentParser(new CustomAttachParser());
 		}
 	}
 

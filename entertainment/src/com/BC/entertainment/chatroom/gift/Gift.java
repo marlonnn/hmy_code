@@ -10,6 +10,7 @@ import com.netease.nimlib.sdk.chatroom.ChatRoomMessageBuilder;
 import com.netease.nimlib.sdk.msg.MessageBuilder;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
+import com.summer.logger.XLog;
 
 @SuppressWarnings("serial")
 public class Gift extends BaseGift{
@@ -48,7 +49,7 @@ public class Gift extends BaseGift{
 			{
 				 message = MessageBuilder.createCustomMessage(getAccount(), getSessionType(), emotionAttachment.getEmotion().getName(), emotionAttachment);
 			}
-			sendMessage(message);
+			sendCustomMessage(message);
 //			showAnimation();
 			break;
 		case CustomAttachmentType.font:
@@ -62,7 +63,7 @@ public class Gift extends BaseGift{
 			{
 				 message = MessageBuilder.createCustomMessage(getAccount(), getSessionType(), fontAttachment.getFont().getName(), fontAttachment);
 			}
-			sendMessage(message);
+			sendCustomMessage(message);
 			break;
 		}
 	}

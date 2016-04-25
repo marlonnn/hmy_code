@@ -15,6 +15,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -169,6 +170,8 @@ public class ChatRoomPanel {
 							ViewHolder holder,
 							IMMessage item) {
 						holder.setTextColor(R.id.txtName, Color.parseColor("#EEB422"));
+//						XLog.i("incoming message message type: " + item.getMsgType());
+//						XLog.i("incoming message message content: " + item.getContent());
 						if (item.getMsgType() == MsgTypeEnum.notification)
 						{
 					 		try {
@@ -178,18 +181,22 @@ public class ChatRoomPanel {
 								if (attachment.getType() == NotificationType.ChatRoomMemberIn)
 								{
 									holder.setText(R.id.txtContent, "欢迎"+ attachment.getOperatorNick() + "进入直播间");
-									if (danmakuPanel != null)
-									{
-										danmakuPanel.AddDanmaku(false, "系统消息：" + "欢迎"+ attachment.getOperatorNick() + "进入直播间");
-									}
+//									if (danmakuPanel != null)
+//									{
+////										XLog.i("incoming danmakuPanel message in");
+//										danmakuPanel.AddDanmaku(false, "系统消息：" + "欢迎"+ attachment.getOperatorNick() + "进入直播间");
+//									}
+//									XLog.i("incoming notification message in");
 								}
 								else if (attachment.getType() == NotificationType.ChatRoomMemberExit)
 								{
 									holder.setText(R.id.txtContent, (attachment.getOperatorNick() == null ? "" : attachment.getOperatorNick()) + "离开了直播间");
-									if (danmakuPanel != null)
-									{
-										danmakuPanel.AddDanmaku(false,  (attachment.getOperatorNick() == null ? "" : attachment.getOperatorNick()) + "离开了直播间");
-									}
+//									if (danmakuPanel != null)
+//									{
+////										XLog.i("incoming danmakuPanel message exit");
+//										danmakuPanel.AddDanmaku(false,  (attachment.getOperatorNick() == null ? "" : attachment.getOperatorNick()) + "离开了直播间");
+//									}
+									XLog.i("incoming notification message in");
 								}
 								holder.setTextColor(R.id.txtContent, Color.parseColor("#8B658B"));
 
@@ -208,20 +215,24 @@ public class ChatRoomPanel {
 									//发出去的消息
 									holder.setText(R.id.txtName, Config.User.getNickName() + ":");
 									holder.setText(R.id.txtContent, message.getContent());
-									if (danmakuPanel != null)
-									{
-										danmakuPanel.AddDanmaku(false,  Config.User.getNickName() + ":" + message.getContent());
-									}
+//									if (danmakuPanel != null)
+//									{
+////										XLog.i("incoming danmakuPanel message out");
+//										danmakuPanel.AddDanmaku(false,  Config.User.getNickName() + ":" + message.getContent());
+//									}
+									XLog.i("incoming text message out: " + message.getContent());
 								}
 								else if (message.getDirect() == MsgDirectionEnum.In)
 								{
 									//接受到的消息
 									holder.setText(R.id.txtName, message.getChatRoomMessageExtension().getSenderNick() + ":");
 									holder.setText(R.id.txtContent, message.getContent());
-									if (danmakuPanel != null)
-									{
-										danmakuPanel.AddDanmaku(false,  message.getChatRoomMessageExtension().getSenderNick() + ":" + message.getContent());
-									}
+//									if (danmakuPanel != null)
+//									{
+//										XLog.i("incoming danmakuPanel message in");
+//										danmakuPanel.AddDanmaku(false,  message.getChatRoomMessageExtension().getSenderNick() + ":" + message.getContent());
+//									}
+									XLog.i("incoming text message in: " + message.getContent());
 								}
 
 								holder.setTextColor(R.id.txtContent, Color.parseColor("#FFFFFF"));
@@ -337,6 +348,7 @@ public class ChatRoomPanel {
         	 try {
         		 XLog.i("sessioon type: " + message.getSessionType());
         		 XLog.i("message type: " + message.getMsgType());
+        		 Log.i("ChatRoomPanel","message type: " + message.getContent());
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -344,6 +356,7 @@ public class ChatRoomPanel {
             if (isMyMessage(message)) {
             	//保存消息到聊天室消息列表中
                 saveMessage(message, false);
+                showDanmuku(message);
                 if (message.getMsgType() == MsgTypeEnum.notification)
                 {
                 	handleNotification(message);
@@ -354,7 +367,8 @@ public class ChatRoomPanel {
             }
         }
         if (needRefresh) {
-            adapter.notifyDataSetChanged();
+//            adapter.notifyDataSetChanged();
+            refreshMessageList();
         }
 
         // incoming messages tip
@@ -362,6 +376,31 @@ public class ChatRoomPanel {
         if (isMyMessage(lastMsg) && needScrollToBottom) {
             ListViewUtil.scrollToBottom(messageListView);
         }
+    }
+    
+    private void showDamuku(final ChatRoomNotificationAttachment attachment)
+    {
+        container.activity.runOnUiThread(new Runnable() {
+
+            @Override
+            public void run() {
+        		if (attachment.getType() == NotificationType.ChatRoomMemberIn)
+        		{
+        			if (danmakuPanel != null)
+        			{
+        				danmakuPanel.AddDanmaku(false, "系统消息：" + "欢迎"+ attachment.getOperatorNick() + "进入直播间");
+        			}
+        		}
+        		else if (attachment.getType() == NotificationType.ChatRoomMemberExit)
+        		{
+        			if (danmakuPanel != null)
+        			{
+        				danmakuPanel.AddDanmaku(false,  (attachment.getOperatorNick() == null ? "" : attachment.getOperatorNick()) + "离开了直播间");
+        			}
+        		}
+            }
+        });
+
     }
     
     private void handleNotification(IMMessage message) {
@@ -372,6 +411,7 @@ public class ChatRoomPanel {
         String roomId = message.getSessionId();
         String account = message.getFromAccount();
         ChatRoomNotificationAttachment attachment = (ChatRoomNotificationAttachment) message.getAttachment();
+        showDamuku(attachment);
         List<String> targets = attachment.getTargets();
         if (targets != null) {
             for (String target : targets) {
@@ -622,8 +662,47 @@ public class ChatRoomPanel {
         List<IMMessage> addedListItems = new ArrayList<>(1);
         addedListItems.add(message);
 
-        adapter.notifyDataSetChanged();
+//        adapter.notifyDataSetChanged();
+        refreshMessageList();
+        showDanmuku(message);
         ListViewUtil.scrollToBottom(messageListView);
+    }
+    
+    
+    
+    private void showDanmuku(final IMMessage message)
+    {
+        container.activity.runOnUiThread(new Runnable() {
+
+            @Override
+            public void run() {
+            	if(message != null)
+            	{
+            		ChatRoomMessage chatRoomMessage  = (ChatRoomMessage)message;
+        			if (message.getDirect() == MsgDirectionEnum.Out)
+        			{
+        	    		if (danmakuPanel != null && chatRoomMessage != null && chatRoomMessage.getContent() != null)
+        	    		{
+        	    			XLog.i("show incoming danmakuPanel message in");
+        					danmakuPanel.AddDanmaku(false,  Config.User.getNickName() + ":" + chatRoomMessage.getContent());
+        	    		}
+
+        			}
+
+            		else if (message.getDirect() == MsgDirectionEnum.In)
+            		{
+            			if (danmakuPanel != null && chatRoomMessage != null && 
+            					chatRoomMessage.getChatRoomMessageExtension() != null && chatRoomMessage.getChatRoomMessageExtension().getSenderNick() != null
+            					&& message.getContent() != null)
+            			{
+            				XLog.i("show incoming danmakuPanel message in");
+            				danmakuPanel.AddDanmaku(false,  chatRoomMessage.getChatRoomMessageExtension().getSenderNick() + ":" + message.getContent());
+            			}
+            		}
+            	}
+            }
+        });
+
     }
     
     public void saveMessage(final IMMessage message)
@@ -761,7 +840,8 @@ public class ChatRoomPanel {
  	private Observer<List<ChatRoomMessage>> incomingChatRoomMsg = new Observer<List<ChatRoomMessage>>() {
          @Override
          public void onEvent(List<ChatRoomMessage> messages) {
-         	XLog.i("incomingChatRoomMsg");
+         	XLog.i("incomingChatRoomMsg" + messages.size());
+         	Log.i("ChatRoomPanel", "Log incomingChatRoomMsg: " + messages.size());
              if (messages == null || messages.isEmpty()) {
                  return;
              }
@@ -769,8 +849,8 @@ public class ChatRoomPanel {
          }
      };
      
-     public void registerCustomMsgObservers()
-     {
-    	 NIMClient.getService(MsgService.class).registerCustomAttachmentParser(new CustomAttachParser());
-     }
+//     public void registerCustomMsgObservers()
+//     {
+//    	 NIMClient.getService(MsgService.class).registerCustomAttachmentParser(new CustomAttachParser());
+//     }
 }

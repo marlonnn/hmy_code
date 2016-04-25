@@ -69,9 +69,14 @@ public class InputPanel {
      */
     private void initgiftViewPage()
     {
-    	for (BaseGift baseGift : gifts)
+//    	for (BaseGift baseGift : gifts)
+//    	{
+//    		baseGift.setContainer(container);
+//    	}
+    	
+    	for(int i =0; i<gifts.size(); i++ )
     	{
-    		baseGift.setContainer(container);
+    		gifts.get(i).setContainer(container);
     	}
     	GiftPagerAdapter adapter = new GiftPagerAdapter(viewPager, gifts);
         viewPager.setAdapter(adapter);
