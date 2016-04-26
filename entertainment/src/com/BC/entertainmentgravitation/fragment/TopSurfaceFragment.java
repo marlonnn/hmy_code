@@ -315,34 +315,4 @@ public class TopSurfaceFragment extends Fragment implements OnClickListener, Mod
 	public void showAnimation(Gift gift) {
 		//show local animation
 	}
-
-	@Override
-	public boolean sendCustomMessage(final IMMessage msg) {
-		
-		NIMClient.getService(MsgService.class).sendMessage(msg, false).setCallback(new RequestCallback<Void>() {
-
-			@Override
-			public void onException(Throwable exception) {
-				Toast.makeText(getActivity(), "自定义消息发送失败！",
-						Toast.LENGTH_SHORT).show();
-			}
-
-			@Override
-			public void onFailed(int code) {
-				if (code == ResponseCode.RES_CHATROOM_MUTED) {
-					Toast.makeText(getActivity(), "用户被禁言",Toast.LENGTH_SHORT).show();
-				} else {
-					Toast.makeText(getActivity(),"消息发送失败：code:" + code, Toast.LENGTH_SHORT).show();
-				}
-			}
-
-			@Override
-			public void onSuccess(Void param) {
-				XLog.i("send custom messsage success");
-		        chatRoomPanel.onMsgSend(msg);
-			}
-		});
-		
-		return true;
-	}
 }

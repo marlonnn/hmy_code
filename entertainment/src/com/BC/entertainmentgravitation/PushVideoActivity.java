@@ -234,8 +234,8 @@ public class PushVideoActivity extends FragmentActivity implements ExitFragmentL
     }
     
     private void logoutChatRoom() {
-		NIMClient.getService(ChatRoomService.class).exitChatRoom(
-				chatRoom.getChatroomid());
+//		NIMClient.getService(ChatRoomService.class).exitChatRoom(
+//				chatRoom.getChatroomid());
         clearChatRoom();
     }
     

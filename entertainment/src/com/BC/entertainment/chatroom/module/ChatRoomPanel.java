@@ -9,6 +9,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.apache.http.NameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Handler;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -17,19 +22,29 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.BC.entertainment.adapter.RecyclerViewAdapter;
 import com.BC.entertainment.adapter.RecyclerViewAdapter.OnItemClickListener;
-import com.BC.entertainment.chatroom.extension.CustomAttachParser;
 import com.BC.entertainment.chatroom.extension.CustomAttachment;
 import com.BC.entertainment.chatroom.extension.CustomAttachmentType;
 import com.BC.entertainment.chatroom.extension.FontAttachment;
+import com.BC.entertainmentgravitation.AuthoritativeInformation;
+import com.BC.entertainmentgravitation.BrowserAcitvity;
 import com.BC.entertainmentgravitation.MainActivity;
 import com.BC.entertainmentgravitation.R;
+import com.BC.entertainmentgravitation.entity.EditPersonal;
+import com.BC.entertainmentgravitation.entity.Ranking;
+import com.BC.entertainmentgravitation.entity.Search;
+import com.BC.entertainmentgravitation.entity.StarInformation;
+import com.BC.entertainmentgravitation.entity.StarLiveVideoInfo;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.netease.nim.uikit.cache.SimpleCallback;
 import com.netease.nim.uikit.common.ui.listview.ListViewUtil;
 import com.netease.nimlib.sdk.NIMClient;
@@ -45,7 +60,6 @@ import com.netease.nimlib.sdk.chatroom.model.ChatRoomInfo;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomMember;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomMessage;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomNotificationAttachment;
-import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.MsgServiceObserve;
 import com.netease.nimlib.sdk.msg.constant.MsgDirectionEnum;
 import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum;
@@ -54,8 +68,18 @@ import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.summer.adapter.CommonAdapter;
 import com.summer.adapter.CommonAdapter.ViewHolder;
 import com.summer.config.Config;
+import com.summer.factory.ThreadPoolFactory;
+import com.summer.handler.InfoHandler;
+import com.summer.handler.InfoHandler.InfoReceiver;
+import com.summer.json.Entity;
 import com.summer.logger.XLog;
+import com.summer.task.HttpBaseTask;
+import com.summer.treadpool.ThreadPoolConst;
+import com.summer.utils.JsonUtil;
+import com.summer.utils.ToastUtil;
+import com.summer.utils.UrlUtil;
 import com.summer.view.CircularImage;
+import com.summer.view.Pandamate;
 
 /**
  * 聊天室消息收发模块
@@ -71,6 +95,8 @@ public class ChatRoomPanel {
     // container
     private Container container;
     private View rootView;
+    
+    private ImageView imageViewAnimation;
     private Handler uiHandler;
     
 	private Map<String, Map<String, ChatRoomMember>> cache = new HashMap<String, Map<String, ChatRoomMember>>();
@@ -168,6 +194,8 @@ public class ChatRoomPanel {
     	
     	messageListView = (ListView)rootView.findViewById(R.id.messageListView);
     	
+    	imageViewAnimation = (ImageView)rootView.findViewById(R.id.imageViewAnimation);
+    	
     	adapter = new CommonAdapter<IMMessage>(container.activity, R.layout.fragment_message_item, 
 				items){
 					@Override
@@ -251,6 +279,7 @@ public class ChatRoomPanel {
     			holder.setText(R.id.txtContent, (chatRoomMember == null ? "" : chatRoomMember.getNick()) + " 送来了 " + fontAttachment.getEmotion().getName());
     			XLog.i("font gift name: " + fontName);
     			holder.setTextColor(R.id.txtContent, Color.parseColor("#8B658B"));
+    			showAnimate();
     		}
     		break;
     	}
@@ -292,6 +321,22 @@ public class ChatRoomPanel {
         });
     }
     
+    private void showAnimate()
+    {
+    	Pandamate.animate(R.drawable.animation_bxjj, imageViewAnimation, new Runnable() {
+			
+			@Override
+			public void run() {
+				imageViewAnimation.setVisibility(View.VISIBLE);
+			}
+		}, new Runnable() {
+			
+			@Override
+			public void run() {
+				imageViewAnimation.setVisibility(View.GONE);
+			}
+		});
+    }
     
     /**
      * 初始化在线人数
@@ -655,7 +700,6 @@ public class ChatRoomPanel {
             onlinePeopleitems.add(member);
         }
         Collections.sort(onlinePeopleitems, comp);
-//        recycleAdapter.notifyDataSetChanged();
         recycleAdapter.UpdateData();
         XLog.i("have notifiy data set changed");
         XLog.i("amount people: " + onlinePeopleitems.size());
@@ -672,7 +716,6 @@ public class ChatRoomPanel {
         List<IMMessage> addedListItems = new ArrayList<>(1);
         addedListItems.add(message);
 
-//        adapter.notifyDataSetChanged();
         refreshMessageList();
         showDanmuku(message);
         ListViewUtil.scrollToBottom(messageListView);
@@ -769,11 +812,92 @@ public class ChatRoomPanel {
                             if (success) {
                                 master = result;
                                 updatePortraitView(roomInfo);
+                                updateVideoStatus(master, false);
                             }
                         }
                     });
         }
     }
+    
+    private void updateVideoStatus(ChatRoomMember master, boolean isLeave)
+    {
+    	if (Config.User.getUserName().contains(master.getAccount()))
+    	{
+        	HashMap<String, String> entity = new HashMap<String, String>();
+        	entity.put("username", Config.User.getUserName());
+        	if(isLeave){
+        		entity.put("status", "0");
+        	}
+        	else
+        	{
+            	entity.put("status", "1");
+        	}
+
+    		List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
+    		addToThreadPool(Config.update_status, "send update status request", params);
+    	}
+    }
+    
+    private void addToThreadPool(int taskType, String Tag, List<NameValuePair> params)
+    {
+    	HttpBaseTask httpTask = new HttpBaseTask(ThreadPoolConst.THREAD_TYPE_FILE_HTTP, Tag, params, UrlUtil.GetUrl(taskType));
+    	httpTask.setTaskType(taskType);
+    	InfoHandler handler = new InfoHandler(new InfoReceiver() {
+			
+			@Override
+			public void onNotifyText(String notify) {
+				
+			}
+			
+			@Override
+			public void onInfoReceived(int errorCode, HashMap<String, Object> items) {
+
+		        if (errorCode == 0)
+		        {
+		            XLog.i(errorCode);
+		            String jsonString = (String) items.get("content");
+		            if (jsonString != null)
+		            {
+		                JSONObject object;
+		                try {
+		                    object = new JSONObject(jsonString);
+		                    String msg = object.optString("msg");
+		                    int code = object.optInt("status", -1);
+		                    int taskType = (Integer) items.get("taskType");
+		                    if (code == 0)
+		                    {
+		                        RequestSuccessful(jsonString, taskType);
+		                    }
+		                    else
+		                    {
+//		                        RequestFailed(code, msg, taskType);
+		                    }
+		                } catch (JSONException e) {
+		                    //parse error
+		                    XLog.e(e);
+		                    e.printStackTrace();
+//		                    RequestFailed(-1, "Json Parse Error", -1);
+		                }
+		            }
+		        }
+			}
+		});
+    	httpTask.setInfoHandler(handler);
+    	ThreadPoolFactory.getThreadPoolManager().addTask(httpTask);
+    }
+    
+	public void RequestSuccessful(String jsonString, int taskType) {
+		Gson gson = new Gson();
+		XLog.i("taskType: " + taskType + " json string: " + jsonString);
+		switch(taskType)
+		{
+		case Config.update_status:
+			XLog.i("taskType: " + taskType + " json string: " + jsonString);
+			break;
+
+		}
+		
+	}
     
     /**
      * 从服务器获取聊天室成员资料（去重处理）（异步）
@@ -843,8 +967,16 @@ public class ChatRoomPanel {
     }
     
     public void registerObservers(boolean register) {
+    	if(! register){
+    		logoutChatRoom();
+    	}
         NIMClient.getService(ChatRoomServiceObserver.class).observeReceiveMessage(incomingChatRoomMsg, register);
     }
+    
+	private void logoutChatRoom() {
+		NIMClient.getService(ChatRoomService.class).exitChatRoom(
+				container.account);
+	}
     
     @SuppressWarnings("serial")
  	private Observer<List<ChatRoomMessage>> incomingChatRoomMsg = new Observer<List<ChatRoomMessage>>() {

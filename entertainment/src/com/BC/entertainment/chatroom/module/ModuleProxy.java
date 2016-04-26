@@ -10,9 +10,6 @@ public interface ModuleProxy {
 
     // 发送消息
     boolean sendMessage(IMMessage msg);
-    
-    //send custom message
-    boolean sendCustomMessage(IMMessage msg);
 
     // 消息输入区展开时候的处理
     void onInputPanelExpand();
