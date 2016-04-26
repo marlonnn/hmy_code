@@ -23,6 +23,9 @@ import android.widget.TextView;
 import com.BC.entertainment.adapter.RecyclerViewAdapter;
 import com.BC.entertainment.adapter.RecyclerViewAdapter.OnItemClickListener;
 import com.BC.entertainment.chatroom.extension.CustomAttachParser;
+import com.BC.entertainment.chatroom.extension.CustomAttachment;
+import com.BC.entertainment.chatroom.extension.CustomAttachmentType;
+import com.BC.entertainment.chatroom.extension.FontAttachment;
 import com.BC.entertainmentgravitation.MainActivity;
 import com.BC.entertainmentgravitation.R;
 import com.bumptech.glide.Glide;
@@ -43,11 +46,13 @@ import com.netease.nimlib.sdk.chatroom.model.ChatRoomMember;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomMessage;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomNotificationAttachment;
 import com.netease.nimlib.sdk.msg.MsgService;
+import com.netease.nimlib.sdk.msg.MsgServiceObserve;
 import com.netease.nimlib.sdk.msg.constant.MsgDirectionEnum;
 import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum;
 import com.netease.nimlib.sdk.msg.constant.NotificationType;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.summer.adapter.CommonAdapter;
+import com.summer.adapter.CommonAdapter.ViewHolder;
 import com.summer.config.Config;
 import com.summer.logger.XLog;
 import com.summer.view.CircularImage;
@@ -170,8 +175,6 @@ public class ChatRoomPanel {
 							ViewHolder holder,
 							IMMessage item) {
 						holder.setTextColor(R.id.txtName, Color.parseColor("#EEB422"));
-//						XLog.i("incoming message message type: " + item.getMsgType());
-//						XLog.i("incoming message message content: " + item.getContent());
 						if (item.getMsgType() == MsgTypeEnum.notification)
 						{
 					 		try {
@@ -181,21 +184,10 @@ public class ChatRoomPanel {
 								if (attachment.getType() == NotificationType.ChatRoomMemberIn)
 								{
 									holder.setText(R.id.txtContent, "欢迎"+ attachment.getOperatorNick() + "进入直播间");
-//									if (danmakuPanel != null)
-//									{
-////										XLog.i("incoming danmakuPanel message in");
-//										danmakuPanel.AddDanmaku(false, "系统消息：" + "欢迎"+ attachment.getOperatorNick() + "进入直播间");
-//									}
-//									XLog.i("incoming notification message in");
 								}
 								else if (attachment.getType() == NotificationType.ChatRoomMemberExit)
 								{
 									holder.setText(R.id.txtContent, (attachment.getOperatorNick() == null ? "" : attachment.getOperatorNick()) + "离开了直播间");
-//									if (danmakuPanel != null)
-//									{
-////										XLog.i("incoming danmakuPanel message exit");
-//										danmakuPanel.AddDanmaku(false,  (attachment.getOperatorNick() == null ? "" : attachment.getOperatorNick()) + "离开了直播间");
-//									}
 									XLog.i("incoming notification message in");
 								}
 								holder.setTextColor(R.id.txtContent, Color.parseColor("#8B658B"));
@@ -206,6 +198,10 @@ public class ChatRoomPanel {
 								XLog.i("may null point exception ");
 							}
 						}
+						else if(item.getMsgType() == MsgTypeEnum.custom)
+						{
+							handlerCustomMessage(holder, item);
+						}
 						else if (item.getMsgType() == MsgTypeEnum.text)
 						{
 							try {
@@ -215,11 +211,6 @@ public class ChatRoomPanel {
 									//发出去的消息
 									holder.setText(R.id.txtName, Config.User.getNickName() + ":");
 									holder.setText(R.id.txtContent, message.getContent());
-//									if (danmakuPanel != null)
-//									{
-////										XLog.i("incoming danmakuPanel message out");
-//										danmakuPanel.AddDanmaku(false,  Config.User.getNickName() + ":" + message.getContent());
-//									}
 									XLog.i("incoming text message out: " + message.getContent());
 								}
 								else if (message.getDirect() == MsgDirectionEnum.In)
@@ -227,11 +218,6 @@ public class ChatRoomPanel {
 									//接受到的消息
 									holder.setText(R.id.txtName, message.getChatRoomMessageExtension().getSenderNick() + ":");
 									holder.setText(R.id.txtContent, message.getContent());
-//									if (danmakuPanel != null)
-//									{
-//										XLog.i("incoming danmakuPanel message in");
-//										danmakuPanel.AddDanmaku(false,  message.getChatRoomMessageExtension().getSenderNick() + ":" + message.getContent());
-//									}
 									XLog.i("incoming text message in: " + message.getContent());
 								}
 
@@ -244,6 +230,30 @@ public class ChatRoomPanel {
 
 					}};
 		messageListView.setAdapter(adapter);
+    }
+    
+    
+    private void handlerCustomMessage(@SuppressWarnings("rawtypes") ViewHolder holder, IMMessage message)
+    {
+    	holder.setTextColor(R.id.txtName, Color.parseColor("#EEB422"));
+    	holder.setText(R.id.txtName, "系统消息：");
+    	CustomAttachment customAttachment = (CustomAttachment)message.getAttachment();
+    	ChatRoomMember chatRoomMember = getChatRoomMember(message.getSessionId(), message.getFromAccount());
+    	switch(customAttachment.getType())
+    	{
+    	case CustomAttachmentType.emotion:
+    		break;
+    	case CustomAttachmentType.font:
+    		FontAttachment fontAttachment = (FontAttachment)customAttachment;
+    		if (fontAttachment != null)
+    		{
+    			String fontName = fontAttachment.getEmotion().getName();
+    			holder.setText(R.id.txtContent, (chatRoomMember == null ? "" : chatRoomMember.getNick()) + " 送来了 " + fontAttachment.getEmotion().getName());
+    			XLog.i("font gift name: " + fontName);
+    			holder.setTextColor(R.id.txtContent, Color.parseColor("#8B658B"));
+    		}
+    		break;
+    	}
     }
     
     /**
@@ -849,8 +859,18 @@ public class ChatRoomPanel {
          }
      };
      
-//     public void registerCustomMsgObservers()
-//     {
-//    	 NIMClient.getService(MsgService.class).registerCustomAttachmentParser(new CustomAttachParser());
-//     }
+     public void registerCustomMsgObservers(boolean register)
+     {
+    	 NIMClient.getService(MsgServiceObserve.class).observeReceiveMessage(incomingMessageObserver, register);
+     }
+     
+     private Observer<List<IMMessage>> incomingMessageObserver = new Observer<List<IMMessage>>(){
+
+		@Override
+		public void onEvent(List<IMMessage> arg0) {
+         	XLog.i("custom incomingChatRoomMsg" + arg0.size());
+         	Log.i("custom ChatRoomPanel", "Log incomingChatRoomMsg: " + arg0.size());
+		}
+    	 
+     };
 }

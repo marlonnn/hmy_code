@@ -4,12 +4,18 @@ import java.io.Serializable;
 
 import android.app.Activity;
 
+import com.BC.entertainment.chatroom.extension.BaseEmotion;
+import com.BC.entertainment.chatroom.extension.CustomAttachmentType;
+import com.BC.entertainment.chatroom.extension.Emotion;
+import com.BC.entertainment.chatroom.extension.Font;
 import com.BC.entertainment.chatroom.module.Container;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 
 @SuppressWarnings("serial")
 public abstract class BaseGift implements Serializable{
+	
+	protected BaseEmotion baseEmotion;
 	
 	protected int customAttachmentType;
 	
@@ -25,6 +31,14 @@ public abstract class BaseGift implements Serializable{
 	
 	private transient Container container;
 	
+	public BaseEmotion getBaseEmotion() {
+		return baseEmotion;
+	}
+
+	protected void setBaseEmotion(BaseEmotion baseEmotion) {
+		this.baseEmotion = baseEmotion;
+	}
+
 	public int getCustomAttachmentType() {
 		return customAttachmentType;
 	}
@@ -57,6 +71,15 @@ public abstract class BaseGift implements Serializable{
 		this.iconResId = iconResId;
 		this.value = value;
 		this.exPoints = exPoints;
+		switch(customAttachmentType)
+		{
+		case CustomAttachmentType.emotion:
+			this.baseEmotion = new Emotion(category, name, value, exPoints);
+			break;
+		case CustomAttachmentType.font:
+			this.baseEmotion = new Font(category, name, value, exPoints);
+			break;
+		}
 	}
 	
     public Activity getActivity() {

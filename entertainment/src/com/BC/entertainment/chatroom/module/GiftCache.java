@@ -4,12 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.BC.entertainmentgravitation.R;
+import com.BC.entertainment.chatroom.extension.BaseEmotion;
 import com.BC.entertainment.chatroom.extension.CustomAttachmentType;
 import com.BC.entertainment.chatroom.gift.BaseGift;
 import com.BC.entertainment.chatroom.gift.Gift;
 import com.BC.entertainment.chatroom.gift.GiftCategory;
 
 public class GiftCache {
+	
+	public List<BaseGift> gifts;
 	
     public static GiftCache getInstance() {
         return InstanceHolder.instance;
@@ -18,11 +21,23 @@ public class GiftCache {
     static class InstanceHolder {
         final static GiftCache instance = new GiftCache();
     }
+    
+    public BaseEmotion GetEmotion(int type, int category)
+    {
+    	for(int i=0; i<gifts.size(); i++)
+    	{
+    		if(gifts.get(i).getCategory() == category)
+    		{
+    			return gifts.get(i).getBaseEmotion();
+    		}
+    	}
+    	return null;
+    }
 	
 	//创建礼物列表
 	public List<BaseGift> getListGifts()
 	{
-		List<BaseGift> gifts = new ArrayList<BaseGift>();
+		gifts = new ArrayList<BaseGift>();
 		//一下是测试数据
 		BaseGift gift1 = new Gift(CustomAttachmentType.font, GiftCategory.font_bxjj, "悲喜交加", R.drawable.emotion_bxjj, 1, 10);
 		gifts.add(gift1);

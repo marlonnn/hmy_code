@@ -1,6 +1,5 @@
 package com.BC.entertainment.chatroom.gift;
 
-import com.BC.entertainment.chatroom.extension.BaseEmotion;
 import com.BC.entertainment.chatroom.extension.CustomAttachmentType;
 import com.BC.entertainment.chatroom.extension.Emotion;
 import com.BC.entertainment.chatroom.extension.EmotionAttachment;
@@ -10,12 +9,9 @@ import com.netease.nimlib.sdk.chatroom.ChatRoomMessageBuilder;
 import com.netease.nimlib.sdk.msg.MessageBuilder;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
-import com.summer.logger.XLog;
 
 @SuppressWarnings("serial")
 public class Gift extends BaseGift{
-	
-	private BaseEmotion baseEmotion;
 
 	private IMMessage message;
 	/**
@@ -39,7 +35,7 @@ public class Gift extends BaseGift{
 		switch(customAttachmentType)
 		{
 		case CustomAttachmentType.emotion:
-			baseEmotion = Emotion.enumOfCategory(category);
+			baseEmotion = new Emotion(category, name, value, exPoints);
 			EmotionAttachment emotionAttachment = new EmotionAttachment(customAttachmentType, baseEmotion);
 			if (getContainer() != null && getContainer().sessionType == SessionTypeEnum.ChatRoom)
 			{
@@ -49,21 +45,20 @@ public class Gift extends BaseGift{
 			{
 				 message = MessageBuilder.createCustomMessage(getAccount(), getSessionType(), emotionAttachment.getEmotion().getName(), emotionAttachment);
 			}
-			sendCustomMessage(message);
-//			showAnimation();
+			sendMessage(message);
 			break;
 		case CustomAttachmentType.font:
-			Font font = Font.enumOfCategory(category);
-			FontAttachment fontAttachment = new FontAttachment(customAttachmentType, font);
+			baseEmotion = new Font(category, name, value, exPoints);
+			FontAttachment fontAttachment = new FontAttachment(customAttachmentType, baseEmotion);
 			if (getContainer() != null && getContainer().sessionType == SessionTypeEnum.ChatRoom)
 			{
 				message = ChatRoomMessageBuilder.createChatRoomCustomMessage(getAccount(), fontAttachment);
 			}
 			else
 			{
-				 message = MessageBuilder.createCustomMessage(getAccount(), getSessionType(), fontAttachment.getFont().getName(), fontAttachment);
+				 message = MessageBuilder.createCustomMessage(getAccount(), getSessionType(), fontAttachment.getEmotion().getName(), fontAttachment);
 			}
-			sendCustomMessage(message);
+			sendMessage(message);
 			break;
 		}
 	}

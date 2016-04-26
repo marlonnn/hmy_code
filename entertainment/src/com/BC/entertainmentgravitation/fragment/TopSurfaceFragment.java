@@ -165,7 +165,7 @@ public class TopSurfaceFragment extends Fragment implements OnClickListener, Mod
             chatRoomPanel.showMessageListView(true);
         }
 		chatRoomPanel.registerObservers(true);
-//		chatRoomPanel.registerCustomMsgObservers();
+		chatRoomPanel.registerCustomMsgObservers(true);
 		
 		if (inputPanel == null)
 		{
@@ -226,6 +226,7 @@ public class TopSurfaceFragment extends Fragment implements OnClickListener, Mod
 		if (chatRoomPanel != null)
 		{
 			chatRoomPanel.registerObservers(false);
+			chatRoomPanel.registerCustomMsgObservers(false);
 		}
 		
 		if (danmakuPanel != null)

@@ -1,5 +1,6 @@
 package com.BC.entertainment.chatroom.extension;
 
+import com.BC.entertainment.chatroom.module.GiftCache;
 import com.alibaba.fastjson.JSONObject;
 import com.summer.logger.XLog;
 
@@ -24,7 +25,7 @@ public class EmotionAttachment extends CustomAttachment{
 
 	@Override
 	protected void parseData(JSONObject data) {
-		emotion = Emotion.enumOfCategory(data.getIntValue("category"));
+		emotion = GiftCache.getInstance().GetEmotion(type, data.getIntValue("category"));
 		try {
 			XLog.i("emotion category: " + data.getIntValue("category"));
 		} catch (Exception e) {

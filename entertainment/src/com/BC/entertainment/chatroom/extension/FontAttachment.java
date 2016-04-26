@@ -1,5 +1,6 @@
 package com.BC.entertainment.chatroom.extension;
 
+import com.BC.entertainment.chatroom.module.GiftCache;
 import com.alibaba.fastjson.JSONObject;
 
 /**
@@ -10,32 +11,32 @@ import com.alibaba.fastjson.JSONObject;
 @SuppressWarnings("serial")
 public class FontAttachment extends CustomAttachment{
 
-	private Font font;
+	private BaseEmotion emotion;
 	
 	public FontAttachment(int type) {
 		super(type);
 	}
 	
-	public FontAttachment(int type, Font font) {
+	public FontAttachment(int type, BaseEmotion emotion) {
 		super(type);
-		this.font = font;
+		this.emotion = emotion;
 	}
 
 	@Override
 	protected void parseData(JSONObject data) {
-		font = Font.enumOfCategory(data.getIntValue("category"));
+		emotion = GiftCache.getInstance().GetEmotion(type, data.getIntValue("category"));
 	}
 
 	@Override
 	protected JSONObject packData() {
         JSONObject data = new JSONObject();
-        data.put("category", font.getCategory());
+        data.put("category", emotion.getCategory());
         return data;
 	}
 	
-	public Font getFont()
+	public BaseEmotion getEmotion()
 	{
-		return font;
+		return emotion;
 	}
 
 }

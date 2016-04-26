@@ -104,6 +104,7 @@
         android:layout_height="80dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
+        android:divider="@null"
         android:layout_marginBottom="90dp" >
     </ListView>
 
