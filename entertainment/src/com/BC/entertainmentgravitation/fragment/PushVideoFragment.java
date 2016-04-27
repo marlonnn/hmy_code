@@ -528,7 +528,10 @@ public class PushVideoFragment extends BaseFragment implements View.OnClickListe
 	
     private void toastAndExit(String message)
     {
-    	ToastUtil.show(getActivity(), message);
+    	if(message != null && getActivity() != null)
+    	{
+        	ToastUtil.show(getActivity(), message);
+    	}
     	if(exitListener != null)
     	{
     		exitListener.isExit(true);

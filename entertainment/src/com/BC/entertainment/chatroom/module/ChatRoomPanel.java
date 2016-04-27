@@ -496,13 +496,13 @@ public class ChatRoomPanel {
 						}
 					});
             		//更新聊天室人数到后台
-//            		updateRoomMember();
+            		updateRoomMember();
                 }
                 else if(attachment.getType() == NotificationType.ChatRoomMemberExit)
                 {
                 	 removeMembers(member);	
                 	 //更新聊天室人数到后台
-//                	 updateRoomMember();
+                	 updateRoomMember();
                 }
             }
         }
