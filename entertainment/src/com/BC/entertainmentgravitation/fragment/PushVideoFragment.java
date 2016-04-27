@@ -199,68 +199,66 @@ public class PushVideoFragment extends BaseFragment implements View.OnClickListe
 	    //创建直播实例
         mLSMediaCapture = new lsMediaCapture(this, getActivity(), mVideoPreviewWidth, mVideoPreviewHeight);
         
-		getActivity().runOnUiThread(new Runnable(){
+		if(mHardWareEncEnable)
+		{
+		    mCameraSurfaceView.setPreviewSize(mVideoPreviewWidth, mVideoPreviewHeight);
+        }
+		else
+		{
+		    mVideoView.setPreviewSize(mVideoPreviewWidth, mVideoPreviewHeight);
+		}
+		
+        //创建参数实例
+        mLSLiveStreamingParaCtx = mLSMediaCapture.new LSLiveStreamingParaCtx();
+        mLSLiveStreamingParaCtx.eHaraWareEncType = mLSLiveStreamingParaCtx.new HardWareEncEnable();
+        mLSLiveStreamingParaCtx.eOutFormatType = mLSLiveStreamingParaCtx.new OutputFormatType();
+        mLSLiveStreamingParaCtx.eOutStreamType = mLSLiveStreamingParaCtx.new OutputStreamType();
+        mLSLiveStreamingParaCtx.sLSAudioParaCtx = mLSLiveStreamingParaCtx.new LSAudioParaCtx();
+        mLSLiveStreamingParaCtx.sLSAudioParaCtx.codec = mLSLiveStreamingParaCtx.sLSAudioParaCtx.new LSAudioCodecType();
+        mLSLiveStreamingParaCtx.sLSVideoParaCtx = mLSLiveStreamingParaCtx.new LSVideoParaCtx();
+        mLSLiveStreamingParaCtx.sLSVideoParaCtx.codec = mLSLiveStreamingParaCtx.sLSVideoParaCtx.new LSVideoCodecType();
+        mLSLiveStreamingParaCtx.sLSVideoParaCtx.cameraPosition = mLSLiveStreamingParaCtx.sLSVideoParaCtx.new CameraPosition();
+        mLSLiveStreamingParaCtx.sLSVideoParaCtx.interfaceOrientation = mLSLiveStreamingParaCtx.sLSVideoParaCtx.new CameraOrientation();
+        
+        //发送统计数据到网络信息界面
+//        staticsHandle();
+    	
+        if(mLSMediaCapture != null) {  
+        	boolean ret = false;
+        	
+        	//设置摄像头信息，并开始本地视频预览
+        	mLSLiveStreamingParaCtx.sLSVideoParaCtx.cameraPosition.cameraPosition = CAMERA_POSITION_BACK;//默认后置摄像头，用户可以根据需要调整
+            if(mHardWareEncEnable)
+			{
+			    mLSMediaCapture.startVideoPreviewOpenGL(mCameraSurfaceView, mLSLiveStreamingParaCtx.sLSVideoParaCtx.cameraPosition.cameraPosition);
+            }
+			else
+			{
+			    mLSMediaCapture.startVideoPreview(mVideoView, mLSLiveStreamingParaCtx.sLSVideoParaCtx.cameraPosition.cameraPosition);
+			}
 
-			@Override
-			public void run() {
-
-				if(mHardWareEncEnable)
-				{
-				    mCameraSurfaceView.setPreviewSize(mVideoPreviewWidth, mVideoPreviewHeight);
-		        }
-				else
-				{
-				    mVideoView.setPreviewSize(mVideoPreviewWidth, mVideoPreviewHeight);
-				}
-				
-		        //创建参数实例
-		        mLSLiveStreamingParaCtx = mLSMediaCapture.new LSLiveStreamingParaCtx();
-		        mLSLiveStreamingParaCtx.eHaraWareEncType = mLSLiveStreamingParaCtx.new HardWareEncEnable();
-		        mLSLiveStreamingParaCtx.eOutFormatType = mLSLiveStreamingParaCtx.new OutputFormatType();
-		        mLSLiveStreamingParaCtx.eOutStreamType = mLSLiveStreamingParaCtx.new OutputStreamType();
-		        mLSLiveStreamingParaCtx.sLSAudioParaCtx = mLSLiveStreamingParaCtx.new LSAudioParaCtx();
-		        mLSLiveStreamingParaCtx.sLSAudioParaCtx.codec = mLSLiveStreamingParaCtx.sLSAudioParaCtx.new LSAudioCodecType();
-		        mLSLiveStreamingParaCtx.sLSVideoParaCtx = mLSLiveStreamingParaCtx.new LSVideoParaCtx();
-		        mLSLiveStreamingParaCtx.sLSVideoParaCtx.codec = mLSLiveStreamingParaCtx.sLSVideoParaCtx.new LSVideoCodecType();
-		        mLSLiveStreamingParaCtx.sLSVideoParaCtx.cameraPosition = mLSLiveStreamingParaCtx.sLSVideoParaCtx.new CameraPosition();
-		        mLSLiveStreamingParaCtx.sLSVideoParaCtx.interfaceOrientation = mLSLiveStreamingParaCtx.sLSVideoParaCtx.new CameraOrientation();
-		        
-		        //发送统计数据到网络信息界面
-//		        staticsHandle();
-		    	
-		        if(mLSMediaCapture != null) {  
-		        	boolean ret = false;
-		        	
-		        	//设置摄像头信息，并开始本地视频预览
-		        	mLSLiveStreamingParaCtx.sLSVideoParaCtx.cameraPosition.cameraPosition = CAMERA_POSITION_BACK;//默认后置摄像头，用户可以根据需要调整
-		            if(mHardWareEncEnable)
-					{
-					    mLSMediaCapture.startVideoPreviewOpenGL(mCameraSurfaceView, mLSLiveStreamingParaCtx.sLSVideoParaCtx.cameraPosition.cameraPosition);
-		            }
-					else
-					{
-					    mLSMediaCapture.startVideoPreview(mVideoView, mLSLiveStreamingParaCtx.sLSVideoParaCtx.cameraPosition.cameraPosition);
-					}
-
-		            //配置音视频和camera参数
-		            paraSet();
-		            
-		            //设置日志级别
-		        	mLSMediaCapture.setTraceLevel(LS_LOG_DETAIL);
-		        	
-		            //初始化直播推流
-			        ret = mLSMediaCapture.initLiveStream(mliveStreamingURL, mLSLiveStreamingParaCtx);
-			        
-			        if(ret) {
-			        	m_liveStreamingInit = true;
-			        	m_liveStreamingInitFinished = true;
-			        }
-			        else {
-			        	m_liveStreamingInit = true;
-			        	m_liveStreamingInitFinished = false;
-			        }
-		        }
-			}});
+            //配置音视频和camera参数
+            paraSet();
+            
+            //设置日志级别
+        	mLSMediaCapture.setTraceLevel(LS_LOG_ERROR);
+        	
+            //初始化直播推流
+	        ret = mLSMediaCapture.initLiveStream(mliveStreamingURL, mLSLiveStreamingParaCtx);
+	        XLog.i("------ret---------" + ret);
+	        if(ret) {
+	        	m_liveStreamingInit = true;
+	        	m_liveStreamingInitFinished = true;
+	        	XLog.i("------ret---------" + "success");
+	        }
+	        else {
+	        	m_liveStreamingInit = true;
+	        	m_liveStreamingInitFinished = false;
+	        	XLog.i("------ret---------" + "fail");
+	        }
+	        
+	        startAV();
+        }
 
 	}
 	
@@ -305,14 +303,15 @@ public class PushVideoFragment extends BaseFragment implements View.OnClickListe
     	mLSLiveStreamingParaCtx.sLSVideoParaCtx.width = 640;
     	mLSLiveStreamingParaCtx.sLSVideoParaCtx.height = 480;
         
-        startAV();
 	}
 	
 	//开始直播
 	private void startAV(){
+		XLog.i("start av----");
 		if(mLSMediaCapture != null && m_liveStreamingInitFinished) {
 		    mLSMediaCapture.startLiveStreaming();
 		    m_liveStreamingOn = true;
+		    XLog.i("========================startAV=======================");
 		}
 	}
 	

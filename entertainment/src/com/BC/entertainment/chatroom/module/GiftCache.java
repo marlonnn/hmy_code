@@ -85,6 +85,12 @@ public class GiftCache {
 		gifts.add(gift18);
 		BaseGift gift19 = new Gift(CustomAttachmentType.font, GiftCategory.font_xxrk, "欣喜若狂", R.drawable.emotion_xxrk, 19, 190);
 		gifts.add(gift19);
+		
+		BaseGift gift20 = new Gift(CustomAttachmentType.emotion, GiftCategory.emotion_mic, "金话筒", R.drawable.emotion_mic, 20, 200);
+		gifts.add(gift20);
+		
+		BaseGift gift21 = new Gift(CustomAttachmentType.emotion, GiftCategory.emotion_car, "保姆车", R.drawable.emotion_car, 21, 210);
+		gifts.add(gift21);
 		return gifts;
 	}
 

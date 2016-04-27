@@ -29,7 +29,9 @@ import com.BC.entertainment.adapter.RecyclerViewAdapter.OnItemClickListener;
 import com.BC.entertainment.chatroom.extension.BaseEmotion;
 import com.BC.entertainment.chatroom.extension.CustomAttachment;
 import com.BC.entertainment.chatroom.extension.CustomAttachmentType;
+import com.BC.entertainment.chatroom.extension.EmotionAttachment;
 import com.BC.entertainment.chatroom.extension.FontAttachment;
+import com.BC.entertainment.chatroom.gift.GiftCategory;
 import com.BC.entertainmentgravitation.MainActivity;
 import com.BC.entertainmentgravitation.R;
 import com.bumptech.glide.Glide;
@@ -188,10 +190,10 @@ public class ChatRoomPanel {
 								XLog.i("may null point exception ");
 							}
 						}
-						else if(item.getMsgType() == MsgTypeEnum.custom)
-						{
+		                else if(item.getMsgType() == MsgTypeEnum.custom)
+		                {
 							handlerCustomMessage(holder, item);
-						}
+		                }
 						else if (item.getMsgType() == MsgTypeEnum.text)
 						{
 							try {
@@ -229,26 +231,65 @@ public class ChatRoomPanel {
      */
     private void handlerCustomMessage(@SuppressWarnings("rawtypes") ViewHolder holder, IMMessage message)
     {
-    	holder.setTextColor(R.id.txtName, Color.parseColor("#EEB422"));
-    	holder.setText(R.id.txtName, "系统消息：");
-    	CustomAttachment customAttachment = (CustomAttachment)message.getAttachment();
-    	ChatRoomMember chatRoomMember = getChatRoomMember(message.getSessionId(), message.getFromAccount());
-    	switch(customAttachment.getType())
+    	if (message != null)
     	{
-    	case CustomAttachmentType.emotion:
-    		break;
-    	case CustomAttachmentType.font:
-    		FontAttachment fontAttachment = (FontAttachment)customAttachment;
-    		if (fontAttachment != null)
-    		{
-    			String fontName = fontAttachment.getEmotion().getName();
-    			holder.setText(R.id.txtContent, (chatRoomMember == null ? "" : chatRoomMember.getNick()) + " 送来了 " + fontAttachment.getEmotion().getName());
-    			XLog.i("font gift name: " + fontName);
-    			holder.setTextColor(R.id.txtContent, Color.parseColor("#8B658B"));
-    			showAnimate();
-    		}
-    		break;
+        	holder.setTextColor(R.id.txtName, Color.parseColor("#EEB422"));
+        	holder.setText(R.id.txtName, "系统消息：");
+        	CustomAttachment customAttachment = (CustomAttachment)message.getAttachment();
+        	ChatRoomMember chatRoomMember = getChatRoomMember(message.getSessionId(), message.getFromAccount());
+        	switch(customAttachment.getType())
+        	{
+        	case CustomAttachmentType.emotion:
+        		EmotionAttachment emotionAttachment = (EmotionAttachment)customAttachment;
+        		if (emotionAttachment != null)
+        		{
+        			String emotionName = emotionAttachment.getEmotion().getName();
+        			holder.setText(R.id.txtContent, (chatRoomMember == null ? "" : chatRoomMember.getNick()) + " 送来了 " + emotionAttachment.getEmotion().getName());
+        			XLog.i("font gift name: " + emotionName);
+        			holder.setTextColor(R.id.txtContent, Color.parseColor("#8B658B"));
+        		}
+        		
+        		break;
+        	case CustomAttachmentType.font:
+        		FontAttachment fontAttachment = (FontAttachment)customAttachment;
+        		if (fontAttachment != null)
+        		{
+        			String fontName = fontAttachment.getEmotion().getName();
+        			holder.setText(R.id.txtContent, (chatRoomMember == null ? "" : chatRoomMember.getNick()) + " 送来了 " + fontAttachment.getEmotion().getName());
+        			XLog.i("font gift name: " + fontName);
+        			holder.setTextColor(R.id.txtContent, Color.parseColor("#8B658B"));
+        		}
+        		break;
+        	}
     	}
+
+    }
+    
+    private void handlerCustomMessage(IMMessage message)
+    {
+    	if( message != null)
+    	{
+        	CustomAttachment customAttachment = (CustomAttachment)message.getAttachment();
+        	switch(customAttachment.getType())
+        	{
+        	case CustomAttachmentType.emotion:
+        		EmotionAttachment emotionAttachment = (EmotionAttachment)customAttachment;
+        		if (emotionAttachment != null)
+        		{
+        			showAnimate(emotionAttachment.getEmotion());
+        		}
+        		
+        		break;
+        	case CustomAttachmentType.font:
+        		FontAttachment fontAttachment = (FontAttachment)customAttachment;
+        		if (fontAttachment != null)
+        		{
+        			showAnimate(fontAttachment.getEmotion());
+        		}
+        		break;
+        	}
+    	}
+
     }
     
     /**
@@ -287,9 +328,9 @@ public class ChatRoomPanel {
         });
     }
     
-    private void showAnimate()
+    private void showAnimate(BaseEmotion baseEmotion)
     {
-    	Pandamate.animate(R.drawable.animation_bxjj, imageViewAnimation, new Runnable() {
+    	Pandamate.animate(getDrawable(baseEmotion.getCategory()), imageViewAnimation, new Runnable() {
 			
 			@Override
 			public void run() {
@@ -302,6 +343,27 @@ public class ChatRoomPanel {
 				imageViewAnimation.setVisibility(View.GONE);
 			}
 		});
+    }
+    
+    private int getDrawable(int category)
+    {
+    	int drawable;
+    	switch(category)
+    	{
+    	case GiftCategory.font_bxjj:
+    		drawable = R.drawable.animation_bxjj;
+    		break;
+    	case GiftCategory.emotion_mic:
+    		drawable = R.drawable.animation_mic;
+    		break;
+    	case GiftCategory.emotion_car:
+    		drawable = R.drawable.animation_car;
+    		break;
+    		default:
+    			drawable = R.drawable.animation_bxjj;
+    			break;
+    	}
+    	return drawable;
     }
     
     /**
@@ -382,6 +444,11 @@ public class ChatRoomPanel {
                 {
                 	handleNotification(message);
                 }
+                
+                else if(message.getMsgType() == MsgTypeEnum.custom)
+                {
+					handlerCustomMessage(message);
+                }
                 addedListItems.add(message);
                 needRefresh = true;
                 XLog.i(message.getMsgType());
@@ -429,13 +496,13 @@ public class ChatRoomPanel {
 						}
 					});
             		//更新聊天室人数到后台
-            		updateRoomMember();
+//            		updateRoomMember();
                 }
                 else if(attachment.getType() == NotificationType.ChatRoomMemberExit)
                 {
                 	 removeMembers(member);	
                 	 //更新聊天室人数到后台
-                	 updateRoomMember();
+//                	 updateRoomMember();
                 }
             }
         }
@@ -662,6 +729,10 @@ public class ChatRoomPanel {
 
         refreshMessageList();
         danmakuPanel.showDanmaku(message);
+        if (message.getMsgType() == MsgTypeEnum.custom)
+        {
+            handlerCustomMessage(message);
+        }
         ListViewUtil.scrollToBottom(messageListView);
     }
     

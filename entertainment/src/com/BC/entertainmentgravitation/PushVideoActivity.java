@@ -123,7 +123,7 @@ public class PushVideoActivity extends FragmentActivity implements ExitFragmentL
         	try {
 				chatRoom.setCid(intent.getStringExtra("cid"));
 				chatRoom.setChatroomid(intent.getStringExtra("chatroomid"));
-				chatRoom.setHttpPullUrl(intent.getStringExtra("httpPullUrl"));
+				chatRoom.setPushUrl(intent.getStringExtra("pushUrl"));
 				chatRoom.setMaster(intent.getBooleanExtra("isMaster", false));
 			} catch (Exception e) {
 				Toast.makeText(this, "直播间错误", Toast.LENGTH_LONG).show();
@@ -170,13 +170,19 @@ public class PushVideoActivity extends FragmentActivity implements ExitFragmentL
 
 	private void initializePushVideoFragment()
     {
-    	fragment = new PushVideoFragment(chatRoom);
-        listener = fragment.CreateScrollListener();
-        getSupportFragmentManager()
-                .beginTransaction()
-                .add(R.id.layout_video_play, fragment)
-                .commit();
-        new SurfaceFragment(listener, chatRoom, false).show(getSupportFragmentManager(), "push video");
+    	try {
+			fragment = new PushVideoFragment(chatRoom);
+			XLog.i("room id: " + chatRoom.getChatroomid());
+			listener = fragment.CreateScrollListener();
+			getSupportFragmentManager()
+			        .beginTransaction()
+			        .add(R.id.layout_video_play, fragment)
+			        .commit();
+			new SurfaceFragment(listener, chatRoom, false).show(getSupportFragmentManager(), "push video");
+		} catch (Exception e) {
+			e.printStackTrace();
+			XLog.i("initialize push video fragment exception");
+		}
     	
     }
     
@@ -235,6 +241,10 @@ public class PushVideoActivity extends FragmentActivity implements ExitFragmentL
     @Override
 	protected void onDestroy() {
 		super.onDestroy();
+		if (fragment != null)
+		{
+			fragment.Destory();
+		}
 		logoutChatRoom();
 		registerObservers(false);
 	}

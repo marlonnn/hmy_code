@@ -21,5 +21,6 @@ public class GiftCategory {
 	public static final int font_xhnf = 0x11;
 	public static final int font_xrdj = 0x12;
 	public static final int font_xxrk = 0x13;
-	
+	public static final int emotion_mic = 0x14;
+	public static final int emotion_car = 0x15;
 }
