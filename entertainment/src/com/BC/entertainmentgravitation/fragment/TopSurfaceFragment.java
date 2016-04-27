@@ -13,12 +13,9 @@ import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.ResponseCode;
 import com.netease.nimlib.sdk.chatroom.ChatRoomService;
-import com.netease.nimlib.sdk.chatroom.model.ChatRoomMember;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomMessage;
-import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
-import com.summer.config.Config;
 import com.summer.logger.XLog;
 
 import android.annotation.SuppressLint;
@@ -40,8 +37,6 @@ import android.widget.Toast;
 public class TopSurfaceFragment extends Fragment implements OnClickListener, ModuleProxy{
 	
 	private ChatRoom chatRoom;
-	
-	private ChatRoomMember chatRoomMember;
 	
 	private boolean isWatchVideo;//否是观看（拉流模式），拉流自己收不到自己的登陆和登出消息
 	
@@ -72,11 +67,9 @@ public class TopSurfaceFragment extends Fragment implements OnClickListener, Mod
     
     private SwitchCamera switchCamera;
     
-	public TopSurfaceFragment(ChatRoom chatRoom, ChatRoomMember chatRoomMember, boolean isWatchVideo)
+	public TopSurfaceFragment(ChatRoom chatRoom, boolean isWatchVideo)
 	{
 		this.chatRoom = chatRoom;
-		
-		this.chatRoomMember = chatRoomMember;
 		
 		this.isWatchVideo = isWatchVideo;
 	}
@@ -122,8 +115,6 @@ public class TopSurfaceFragment extends Fragment implements OnClickListener, Mod
 		initializeView();
 	}
 	
-	
-	
 	@Override
 	public void onPause() {
 		super.onPause();
@@ -149,7 +140,7 @@ public class TopSurfaceFragment extends Fragment implements OnClickListener, Mod
 
 	private void initializeView()
 	{
-        Container container = new Container(getActivity(), chatRoom.getChatroomid(), SessionTypeEnum.ChatRoom, this);
+        Container container = new Container(getActivity(), chatRoom, SessionTypeEnum.ChatRoom, this);
         
 		if (danmakuPanel == null)
 		{
@@ -158,14 +149,9 @@ public class TopSurfaceFragment extends Fragment implements OnClickListener, Mod
 		
         if (chatRoomPanel == null) {
             chatRoomPanel = new ChatRoomPanel(container, view, danmakuPanel);
-//            if (isWatchVideo)
-//            {
-//            	chatRoomPanel.addMembers(chatRoomMember, false);
-//            }
             chatRoomPanel.showMessageListView(true);
         }
 		chatRoomPanel.registerObservers(true);
-		chatRoomPanel.registerCustomMsgObservers(true);
 		
 		if (inputPanel == null)
 		{
@@ -190,13 +176,10 @@ public class TopSurfaceFragment extends Fragment implements OnClickListener, Mod
 		btnBoos.setOnClickListener(this);
 		btnApplaud.setOnClickListener(this);
 		
-//		layoutInput.setVisibility(View.INVISIBLE);
-		
         view.setOnTouchListener(new OnTouchListener() {
 			
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
-//				layoutInput.setVisibility(View.INVISIBLE);
 				chatRoomPanel.showMessageListView(true);
 				showFunctionView(true);
 				inputPanel.hideInputMethod();
@@ -208,6 +191,10 @@ public class TopSurfaceFragment extends Fragment implements OnClickListener, Mod
 		
 	}
 	
+	/**
+	 * 显示功能键
+	 * @param isShow
+	 */
 	private void showFunctionView(boolean isShow)
 	{
 		if (isShow)
@@ -226,7 +213,6 @@ public class TopSurfaceFragment extends Fragment implements OnClickListener, Mod
 		if (chatRoomPanel != null)
 		{
 			chatRoomPanel.registerObservers(false);
-			chatRoomPanel.registerCustomMsgObservers(false);
 		}
 		
 		if (danmakuPanel != null)
@@ -292,8 +278,6 @@ public class TopSurfaceFragment extends Fragment implements OnClickListener, Mod
 								Toast.LENGTH_SHORT).show();
 					}
 				});
-//		danmakuPanel.AddDanmaku(false, (Config.User.getNickName() == null ? "" : Config.User.getNickName()) + ": " + message.getContent());
-//		danmakuPanel.AddDanmaKuShowTextAndImage(false);
 		chatRoomPanel.onMsgSend(msg);
 		return true;
 	}

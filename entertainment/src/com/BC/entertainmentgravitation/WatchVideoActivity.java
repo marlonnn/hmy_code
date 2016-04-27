@@ -1,11 +1,8 @@
 package com.BC.entertainmentgravitation;
 
-import java.util.HashMap;
-import java.util.Map;
 
 import com.BC.entertainmentgravitation.entity.ChatRoom;
 import com.BC.entertainmentgravitation.fragment.ExitFragmentListener;
-import com.BC.entertainmentgravitation.fragment.PushVideoFragment;
 import com.BC.entertainmentgravitation.fragment.ScrollListener;
 import com.BC.entertainmentgravitation.fragment.SurfaceFragment;
 import com.BC.entertainmentgravitation.fragment.TopSurfaceFragment;
@@ -17,28 +14,14 @@ import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.ResponseCode;
 import com.netease.nimlib.sdk.StatusCode;
-import com.netease.nimlib.sdk.chatroom.ChatRoomMessageBuilder;
 import com.netease.nimlib.sdk.chatroom.ChatRoomService;
 import com.netease.nimlib.sdk.chatroom.ChatRoomServiceObserver;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomInfo;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomKickOutEvent;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomMember;
-import com.netease.nimlib.sdk.chatroom.model.ChatRoomMessage;
-import com.netease.nimlib.sdk.chatroom.model.ChatRoomMessageExtension;
-import com.netease.nimlib.sdk.chatroom.model.ChatRoomNotificationAttachment;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomStatusChangeData;
 import com.netease.nimlib.sdk.chatroom.model.EnterChatRoomData;
 import com.netease.nimlib.sdk.chatroom.model.EnterChatRoomResultData;
-import com.netease.nimlib.sdk.msg.attachment.MsgAttachment;
-import com.netease.nimlib.sdk.msg.constant.AttachStatusEnum;
-import com.netease.nimlib.sdk.msg.constant.MsgDirectionEnum;
-import com.netease.nimlib.sdk.msg.constant.MsgStatusEnum;
-import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum;
-import com.netease.nimlib.sdk.msg.constant.NotificationType;
-import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
-import com.netease.nimlib.sdk.msg.model.CustomMessageConfig;
-import com.netease.nimlib.sdk.msg.model.IMMessage;
-import com.summer.config.Config;
 import com.summer.logger.XLog;
 import com.summer.utils.StringUtil;
 
@@ -70,8 +53,6 @@ public class WatchVideoActivity extends FragmentActivity implements ExitFragment
 	
 	private WatchVideoFragment fragment;
 	
-	private TopSurfaceFragment topsurfaceFragment;
-	
 	protected final Handler getHandler() {
         if (handler == null) {
             handler = new Handler(getMainLooper()){
@@ -96,13 +77,17 @@ public class WatchVideoActivity extends FragmentActivity implements ExitFragment
         Intent intent = getIntent();
         if (intent != null)
         {
-            String cid = intent.getStringExtra("cid");
-        	String httpPullUrl = intent.getStringExtra("httpPullUrl");
-        	String chatroomid = intent.getStringExtra("chatroomid");
         	chatRoom = new ChatRoom();
-        	chatRoom.setCid(cid);
-        	chatRoom.setChatroomid(chatroomid);
-        	chatRoom.setHttpPullUrl(httpPullUrl);
+        	try {
+				chatRoom.setCid(intent.getStringExtra("cid"));
+				chatRoom.setChatroomid(intent.getStringExtra("chatroomid"));
+				chatRoom.setHttpPullUrl(intent.getStringExtra("httpPullUrl"));
+				chatRoom.setMaster(intent.getBooleanExtra("isMaster", false));
+			} catch (Exception e) {
+				Toast.makeText(this, "直播间错误", Toast.LENGTH_LONG).show();
+				e.printStackTrace();
+				finish();
+			}
         }
         enterChatRoom();
         registerObservers(true);
@@ -111,7 +96,7 @@ public class WatchVideoActivity extends FragmentActivity implements ExitFragment
 
     }
     
-    private void initializeWatchVideoFragment(ChatRoomMember member)
+    private void initializeWatchVideoFragment()
     {
         fragment = new WatchVideoFragment(chatRoom);
         fragment.setHandler(handler);
@@ -120,7 +105,7 @@ public class WatchVideoActivity extends FragmentActivity implements ExitFragment
                 .beginTransaction()
                 .add(R.id.layout_video_play, fragment)
                 .commit();
-        new SurfaceFragment(listener, chatRoom, member, true).show(getSupportFragmentManager(), "watch video");
+        new SurfaceFragment(listener, chatRoom, true).show(getSupportFragmentManager(), "watch video");
     }
     
     @Override
@@ -209,29 +194,7 @@ public class WatchVideoActivity extends FragmentActivity implements ExitFragment
 						XLog.i("extension: " + roomInfo.getExtension());
 						member.setRoomId(roomInfo.getRoomId());
 						XLog.i("enter chat room success" + roomInfo.getRoomId());
-						initializeWatchVideoFragment(member);
-//						ChatRoomMessage message = ChatRoomMessageBuilder.createChatRoomTextMessage(chatRoom.getChatroomid(), "欢迎" + Config.User.getNickName() + "进入聊天室");
-////						ChatRoomNotificationAttachment attach = new ChatRoomNotificationAttachment();
-////						attach.setType(NotificationType.ChatRoomMemberIn);
-//						message.setDirect(MsgDirectionEnum.In);
-////						message.setAttachment(attach);
-//						NIMClient.getService(ChatRoomService.class).sendMessage(message, false).setCallback(new RequestCallback<Void>() {
-//							
-//							@Override
-//							public void onSuccess(Void arg0) {
-//								XLog.i("enter room success" );
-//							}
-//							
-//							@Override
-//							public void onFailed(int arg0) {
-//								XLog.i("enteroom exception");
-//							}
-//							
-//							@Override
-//							public void onException(Throwable arg0) {
-//								XLog.i("enteroom exception");
-//							}
-//						});
+						initializeWatchVideoFragment();
 
 					}
 				});
@@ -243,13 +206,10 @@ public class WatchVideoActivity extends FragmentActivity implements ExitFragment
 	}
 
 	private void logoutChatRoom() {
-//		NIMClient.getService(ChatRoomService.class).exitChatRoom(
-//				chatRoom.getChatroomid());
 		clearChatRoom();
 	}
 
 	public void clearChatRoom() {
-//		 ChatRoomMemberCache.getInstance().clearRoomCache(chatRoom.getChatroomid());
 		 finish();
 	}
 	

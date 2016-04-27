@@ -29,6 +29,13 @@ import android.text.style.ImageSpan;
 import android.view.View;
 
 import com.BC.entertainmentgravitation.R;
+import com.netease.nimlib.sdk.chatroom.model.ChatRoomMessage;
+import com.netease.nimlib.sdk.chatroom.model.ChatRoomNotificationAttachment;
+import com.netease.nimlib.sdk.msg.constant.MsgDirectionEnum;
+import com.netease.nimlib.sdk.msg.constant.NotificationType;
+import com.netease.nimlib.sdk.msg.model.IMMessage;
+import com.summer.config.Config;
+import com.summer.logger.XLog;
 
 /**
  * 
@@ -151,7 +158,7 @@ public class DanmakuPanel {
 		}
 	}
 	
-    public void AddDanmaku(boolean islive, String message) {
+    public void addDanmaku(boolean islive, String message) {
         BaseDanmaku danmaku = mContext.mDanmakuFactory.createDanmaku(BaseDanmaku.TYPE_SCROLL_RL);
         if (danmaku == null || danmakuView == null) {
             return;
@@ -169,7 +176,7 @@ public class DanmakuPanel {
         danmakuView.addDanmaku(danmaku);
     }
     
-    public void AddDanmaku(boolean islive, String message, int textColor, int textShadowColor, int boarderColor) {
+    public void addDanmaku(boolean islive, String message, int textColor, int textShadowColor, int boarderColor) {
         BaseDanmaku danmaku = mContext.mDanmakuFactory.createDanmaku(BaseDanmaku.TYPE_SCROLL_RL);
         if (danmaku == null || danmakuView == null) {
             return;
@@ -188,7 +195,7 @@ public class DanmakuPanel {
 
     }
     
-    public void AddDanmaKuShowTextAndImage(boolean islive) {
+    public void addDanmaKuShowTextAndImage(boolean islive) {
         BaseDanmaku danmaku = mContext.mDanmakuFactory.createDanmaku(BaseDanmaku.TYPE_SCROLL_RL);
         Drawable drawable = container.activity.getResources().getDrawable(R.drawable.ic_launcher);
         drawable.setBounds(0, 0, 100, 100);
@@ -213,6 +220,60 @@ public class DanmakuPanel {
         spannableStringBuilder.append("图文混排");
         spannableStringBuilder.setSpan(new BackgroundColorSpan(Color.parseColor("#8A2233B1")), 0, spannableStringBuilder.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
         return spannableStringBuilder;
+    }
+    
+    public void showDanmaku(final IMMessage message)
+    {
+        container.activity.runOnUiThread(new Runnable() {
+
+            @Override
+            public void run() {
+            	if(message != null)
+            	{
+            		ChatRoomMessage chatRoomMessage  = (ChatRoomMessage)message;
+        			if (message.getDirect() == MsgDirectionEnum.Out)
+        			{
+        	    		if (chatRoomMessage != null && chatRoomMessage.getContent() != null)
+        	    		{
+        	    			XLog.i("show incoming danmakuPanel message in");
+        					addDanmaku(false,  Config.User.getNickName() + ":" + chatRoomMessage.getContent());
+        	    		}
+
+        			}
+
+            		else if (message.getDirect() == MsgDirectionEnum.In)
+            		{
+            			if (chatRoomMessage != null && chatRoomMessage.getChatRoomMessageExtension() != null 
+            					&& chatRoomMessage.getChatRoomMessageExtension().getSenderNick() != null
+            					&& message.getContent() != null)
+            			{
+            				XLog.i("show incoming danmakuPanel message in");
+            				addDanmaku(false,  chatRoomMessage.getChatRoomMessageExtension().getSenderNick() + ":" + message.getContent());
+            			}
+            		}
+            	}
+            }
+        });
+
+    }
+    
+    public void showDanmaku(final ChatRoomNotificationAttachment attachment)
+    {
+        container.activity.runOnUiThread(new Runnable() {
+
+            @Override
+            public void run() {
+        		if (attachment.getType() == NotificationType.ChatRoomMemberIn)
+        		{
+        			addDanmaku(false, "系统消息：" + "欢迎"+ attachment.getOperatorNick() + "进入直播间");
+        		}
+        		else if (attachment.getType() == NotificationType.ChatRoomMemberExit)
+        		{
+        			addDanmaku(false,  (attachment.getOperatorNick() == null ? "" : attachment.getOperatorNick()) + "离开了直播间");
+        		}
+            }
+        });
+
     }
 	
     public void onPause() {

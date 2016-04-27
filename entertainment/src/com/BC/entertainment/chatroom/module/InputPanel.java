@@ -366,9 +366,9 @@ public class InputPanel {
         IMMessage textMessage;
         String text = messageEditText.getText().toString();
         if (container.sessionType == SessionTypeEnum.ChatRoom) {
-            textMessage = ChatRoomMessageBuilder.createChatRoomTextMessage(container.account, text);
+            textMessage = ChatRoomMessageBuilder.createChatRoomTextMessage(container.chatRoom.getChatroomid(), text);
         } else {
-            textMessage = MessageBuilder.createTextMessage(container.account, container.sessionType, text);
+            textMessage = MessageBuilder.createTextMessage(container.chatRoom.getChatroomid(), container.sessionType, text);
         }
         //发送消息
         if (container.proxy.sendMessage(textMessage)) {

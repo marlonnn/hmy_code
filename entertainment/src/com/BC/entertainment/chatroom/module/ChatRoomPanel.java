@@ -2,7 +2,6 @@ package com.BC.entertainment.chatroom.module;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -13,7 +12,6 @@ import org.apache.http.NameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Handler;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -22,29 +20,21 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.BC.entertainment.adapter.RecyclerViewAdapter;
 import com.BC.entertainment.adapter.RecyclerViewAdapter.OnItemClickListener;
+import com.BC.entertainment.chatroom.extension.BaseEmotion;
 import com.BC.entertainment.chatroom.extension.CustomAttachment;
 import com.BC.entertainment.chatroom.extension.CustomAttachmentType;
 import com.BC.entertainment.chatroom.extension.FontAttachment;
-import com.BC.entertainmentgravitation.AuthoritativeInformation;
-import com.BC.entertainmentgravitation.BrowserAcitvity;
 import com.BC.entertainmentgravitation.MainActivity;
 import com.BC.entertainmentgravitation.R;
-import com.BC.entertainmentgravitation.entity.EditPersonal;
-import com.BC.entertainmentgravitation.entity.Ranking;
-import com.BC.entertainmentgravitation.entity.Search;
-import com.BC.entertainmentgravitation.entity.StarInformation;
-import com.BC.entertainmentgravitation.entity.StarLiveVideoInfo;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.netease.nim.uikit.cache.SimpleCallback;
 import com.netease.nim.uikit.common.ui.listview.ListViewUtil;
 import com.netease.nimlib.sdk.NIMClient;
@@ -55,12 +45,10 @@ import com.netease.nimlib.sdk.ResponseCode;
 import com.netease.nimlib.sdk.chatroom.ChatRoomService;
 import com.netease.nimlib.sdk.chatroom.ChatRoomServiceObserver;
 import com.netease.nimlib.sdk.chatroom.constant.MemberQueryType;
-import com.netease.nimlib.sdk.chatroom.constant.MemberType;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomInfo;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomMember;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomMessage;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomNotificationAttachment;
-import com.netease.nimlib.sdk.msg.MsgServiceObserve;
 import com.netease.nimlib.sdk.msg.constant.MsgDirectionEnum;
 import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum;
 import com.netease.nimlib.sdk.msg.constant.NotificationType;
@@ -71,12 +59,10 @@ import com.summer.config.Config;
 import com.summer.factory.ThreadPoolFactory;
 import com.summer.handler.InfoHandler;
 import com.summer.handler.InfoHandler.InfoReceiver;
-import com.summer.json.Entity;
 import com.summer.logger.XLog;
 import com.summer.task.HttpBaseTask;
 import com.summer.treadpool.ThreadPoolConst;
 import com.summer.utils.JsonUtil;
-import com.summer.utils.ToastUtil;
 import com.summer.utils.UrlUtil;
 import com.summer.view.CircularImage;
 import com.summer.view.Pandamate;
@@ -130,33 +116,6 @@ public class ChatRoomPanel {
 	
 	private DanmakuPanel danmakuPanel;
 	
-	private Map<String, List<SimpleCallback<ChatRoomMember>>> frequencyLimitCache = new HashMap<String, List<SimpleCallback<ChatRoomMember>>>(); // 重复请求处理
-	
-	private  static Map<MemberType, Integer> compMap = new HashMap<>();
-
-    static {
-        compMap.put(MemberType.CREATOR, 0);
-        compMap.put(MemberType.ADMIN, 1);
-        compMap.put(MemberType.NORMAL, 2);
-        compMap.put(MemberType.LIMITED, 3);
-        compMap.put(MemberType.GUEST, 4);
-    }
-
-    private static Comparator<ChatRoomMember> comp = new Comparator<ChatRoomMember>() {
-        @Override
-        public int compare(ChatRoomMember lhs, ChatRoomMember rhs) {
-            if (lhs == null) {
-                return 1;
-            }
-
-            if (rhs == null) {
-                return -1;
-            }
-
-            return compMap.get(lhs.getMemberType()) - compMap.get(rhs.getMemberType());
-        }
-    };
-    
     public ChatRoomPanel(Container container, View rootView, DanmakuPanel danmakuPanel) {
         this.container = container;
         this.rootView = rootView;
@@ -174,6 +133,10 @@ public class ChatRoomPanel {
         fetchOnlinePeople();
     }
     
+    /**
+     * 显示或者隐藏消息列表
+     * @param isShow
+     */
     public void showMessageListView(boolean isShow)
     {
     	if (isShow)
@@ -187,7 +150,7 @@ public class ChatRoomPanel {
     }
     
     /**
-     * 聊天室消息列表
+     * 初始化和处理聊天室消息列表
      */
     private void initListView(){
     	items = new LinkedList<>();
@@ -219,7 +182,6 @@ public class ChatRoomPanel {
 									XLog.i("incoming notification message in");
 								}
 								holder.setTextColor(R.id.txtContent, Color.parseColor("#8B658B"));
-
 
 							} catch (Exception e) {
 								e.printStackTrace();
@@ -260,7 +222,11 @@ public class ChatRoomPanel {
 		messageListView.setAdapter(adapter);
     }
     
-    
+    /**
+     * 处理自定义字体或者礼物消息
+     * @param holder
+     * @param message
+     */
     private void handlerCustomMessage(@SuppressWarnings("rawtypes") ViewHolder holder, IMMessage message)
     {
     	holder.setTextColor(R.id.txtName, Color.parseColor("#EEB422"));
@@ -411,7 +377,7 @@ public class ChatRoomPanel {
             if (isMyMessage(message)) {
             	//保存消息到聊天室消息列表中
                 saveMessage(message, false);
-                showDanmuku(message);
+                danmakuPanel.showDanmaku(message);
                 if (message.getMsgType() == MsgTypeEnum.notification)
                 {
                 	handleNotification(message);
@@ -422,7 +388,6 @@ public class ChatRoomPanel {
             }
         }
         if (needRefresh) {
-//            adapter.notifyDataSetChanged();
             refreshMessageList();
         }
 
@@ -433,31 +398,6 @@ public class ChatRoomPanel {
         }
     }
     
-    private void showDamuku(final ChatRoomNotificationAttachment attachment)
-    {
-        container.activity.runOnUiThread(new Runnable() {
-
-            @Override
-            public void run() {
-        		if (attachment.getType() == NotificationType.ChatRoomMemberIn)
-        		{
-        			if (danmakuPanel != null)
-        			{
-        				danmakuPanel.AddDanmaku(false, "系统消息：" + "欢迎"+ attachment.getOperatorNick() + "进入直播间");
-        			}
-        		}
-        		else if (attachment.getType() == NotificationType.ChatRoomMemberExit)
-        		{
-        			if (danmakuPanel != null)
-        			{
-        				danmakuPanel.AddDanmaku(false,  (attachment.getOperatorNick() == null ? "" : attachment.getOperatorNick()) + "离开了直播间");
-        			}
-        		}
-            }
-        });
-
-    }
-    
     private void handleNotification(IMMessage message) {
         if (message.getAttachment() == null) {
             return;
@@ -466,7 +406,7 @@ public class ChatRoomPanel {
         String roomId = message.getSessionId();
         String account = message.getFromAccount();
         ChatRoomNotificationAttachment attachment = (ChatRoomNotificationAttachment) message.getAttachment();
-        showDamuku(attachment);
+        danmakuPanel.showDanmaku(attachment);
         List<String> targets = attachment.getTargets();
         if (targets != null) {
             for (String target : targets) {
@@ -488,10 +428,14 @@ public class ChatRoomPanel {
 							}
 						}
 					});
+            		//更新聊天室人数到后台
+            		updateRoomMember();
                 }
                 else if(attachment.getType() == NotificationType.ChatRoomMemberExit)
                 {
                 	 removeMembers(member);	
+                	 //更新聊天室人数到后台
+                	 updateRoomMember();
                 }
             }
         }
@@ -551,7 +495,7 @@ public class ChatRoomPanel {
     public boolean isMyMessage(IMMessage message) {
         return message.getSessionType() == container.sessionType
                 && message.getSessionId() != null
-                && message.getSessionId().equals(container.account);
+                && message.getSessionId().equals(container.chatRoom.getChatroomid());
     }
     
     private void fetchData() {
@@ -568,7 +512,7 @@ public class ChatRoomPanel {
      * 获取成员列表
      */
     private void getMembers(final MemberQueryType memberQueryType, final long time, int limit) {
-        fetchRoomMembers(container.account, memberQueryType, time, (LIMIT - limit), new SimpleCallback<List<ChatRoomMember>>() {
+        fetchRoomMembers(container.chatRoom.getChatroomid(), memberQueryType, time, (LIMIT - limit), new SimpleCallback<List<ChatRoomMember>>() {
             @Override
             public void onResult(boolean success, List<ChatRoomMember> result) {
                 if (success) {
@@ -640,7 +584,7 @@ public class ChatRoomPanel {
 
             onlinePeopleitems.add(member);
         }
-        Collections.sort(onlinePeopleitems, comp);
+        Collections.sort(onlinePeopleitems, ChatRoomComparator.comp);
 //        recycleAdapter.notifyDataSetChanged();
         recycleAdapter.UpdateData();
         if (onlinePeople != null)
@@ -699,7 +643,7 @@ public class ChatRoomPanel {
             memberCache.put(member.getAccount(), member);
             onlinePeopleitems.add(member);
         }
-        Collections.sort(onlinePeopleitems, comp);
+        Collections.sort(onlinePeopleitems, ChatRoomComparator.comp);
         recycleAdapter.UpdateData();
         XLog.i("have notifiy data set changed");
         XLog.i("amount people: " + onlinePeopleitems.size());
@@ -717,52 +661,15 @@ public class ChatRoomPanel {
         addedListItems.add(message);
 
         refreshMessageList();
-        showDanmuku(message);
+        danmakuPanel.showDanmaku(message);
         ListViewUtil.scrollToBottom(messageListView);
     }
     
-    
-    
-    private void showDanmuku(final IMMessage message)
-    {
-        container.activity.runOnUiThread(new Runnable() {
-
-            @Override
-            public void run() {
-            	if(message != null)
-            	{
-            		ChatRoomMessage chatRoomMessage  = (ChatRoomMessage)message;
-        			if (message.getDirect() == MsgDirectionEnum.Out)
-        			{
-        	    		if (danmakuPanel != null && chatRoomMessage != null && chatRoomMessage.getContent() != null)
-        	    		{
-        	    			XLog.i("show incoming danmakuPanel message in");
-        					danmakuPanel.AddDanmaku(false,  Config.User.getNickName() + ":" + chatRoomMessage.getContent());
-        	    		}
-
-        			}
-
-            		else if (message.getDirect() == MsgDirectionEnum.In)
-            		{
-            			if (danmakuPanel != null && chatRoomMessage != null && 
-            					chatRoomMessage.getChatRoomMessageExtension() != null && chatRoomMessage.getChatRoomMessageExtension().getSenderNick() != null
-            					&& message.getContent() != null)
-            			{
-            				XLog.i("show incoming danmakuPanel message in");
-            				danmakuPanel.AddDanmaku(false,  chatRoomMessage.getChatRoomMessageExtension().getSenderNick() + ":" + message.getContent());
-            			}
-            		}
-            	}
-            }
-        });
-
-    }
-    
-    public void saveMessage(final IMMessage message)
-    {
-    	this.saveMessage(message, false);
-    }
-
+    /**
+     * 保存所有聊天室消息
+     * @param message
+     * @param addFirst
+     */
     public void saveMessage(final IMMessage message, boolean addFirst) {
         if (message == null) {
             return;
@@ -779,8 +686,11 @@ public class ChatRoomPanel {
         }
     }
     
+    /**
+     * 获取聊天室主播信息
+     */
     public void fetchRoomInfo(){
-    	NIMClient.getService(ChatRoomService.class).fetchRoomInfo(container.account).setCallback(new RequestCallback<ChatRoomInfo>(){
+    	NIMClient.getService(ChatRoomService.class).fetchRoomInfo(container.chatRoom.getChatroomid()).setCallback(new RequestCallback<ChatRoomInfo>(){
 
 			@Override
 			public void onException(Throwable code) {
@@ -800,6 +710,10 @@ public class ChatRoomPanel {
     	});
     }
 
+    /**
+     * 获取聊天室主播信息
+     * @param roomInfo
+     */
     private void getChatRoomMaster(final ChatRoomInfo roomInfo) {
     	master = getChatRoomMember(roomInfo.getRoomId(), roomInfo.getCreator());
         if (master != null) {
@@ -819,9 +733,15 @@ public class ChatRoomPanel {
         }
     }
     
+    /**
+     * 主播进入聊天室更新聊天室状态
+     * @param master
+     * @param isLeave
+     */
     private void updateVideoStatus(ChatRoomMember master, boolean isLeave)
     {
-    	if (Config.User.getUserName().contains(master.getAccount()))
+    	//是主播进入聊天室才发送聊天室状态到后台
+    	if (container.chatRoom.isMaster())
     	{
         	HashMap<String, String> entity = new HashMap<String, String>();
         	entity.put("username", Config.User.getUserName());
@@ -835,6 +755,37 @@ public class ChatRoomPanel {
 
     		List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
     		addToThreadPool(Config.update_status, "send update status request", params);
+    	}
+    }
+    
+    /**
+     * 如果是主播，将聊天室总人数更新到后台
+     */
+    private void updateRoomMember()
+    {
+    	//是主播才更新聊天室人数到后台
+    	if (container.chatRoom.isMaster())
+    	{
+        	HashMap<String, String> entity = new HashMap<String, String>();
+        	entity.put("username", Config.User.getUserName());
+        	entity.put("peoples", String.valueOf(onlinePeopleitems.size()));
+    		List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
+    		addToThreadPool(Config.update_room, "send update room member request", params);
+    	}
+    }
+    
+    private void sendChatRoomGift(BaseEmotion baseEmotion, int type)
+    {
+    	//非主播可以送礼物给主播
+    	if ( !container.chatRoom.isMaster())
+    	{
+        	HashMap<String, String> entity = new HashMap<String, String>();
+        	entity.put("username", Config.User.getUserName());
+        	entity.put("user_dollar", String.valueOf(baseEmotion.getValue()));
+        	entity.put("type", String.valueOf(type));
+        	entity.put("starid", master.getAccount());
+    		List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
+    		addToThreadPool(Config.send_gift, "send gift request", params);
     	}
     }
     
@@ -870,13 +821,13 @@ public class ChatRoomPanel {
 		                    }
 		                    else
 		                    {
-//		                        RequestFailed(code, msg, taskType);
+		                        RequestFailed(code, msg, taskType);
 		                    }
 		                } catch (JSONException e) {
 		                    //parse error
 		                    XLog.e(e);
 		                    e.printStackTrace();
-//		                    RequestFailed(-1, "Json Parse Error", -1);
+		                    RequestFailed(-1, "Json Parse Error", -1);
 		                }
 		            }
 		        }
@@ -886,7 +837,7 @@ public class ChatRoomPanel {
     	ThreadPoolFactory.getThreadPoolManager().addTask(httpTask);
     }
     
-	public void RequestSuccessful(String jsonString, int taskType) {
+	private void RequestSuccessful(String jsonString, int taskType) {
 		Gson gson = new Gson();
 		XLog.i("taskType: " + taskType + " json string: " + jsonString);
 		switch(taskType)
@@ -894,11 +845,26 @@ public class ChatRoomPanel {
 		case Config.update_status:
 			XLog.i("taskType: " + taskType + " json string: " + jsonString);
 			break;
-
+		case Config.update_room:
+			XLog.i("taskType: " + taskType + " json string: " + jsonString);
+			break;
 		}
-		
 	}
-    
+	
+    private void RequestFailed(int errcode, String message, int taskType)
+    {
+    	XLog.i("taskType: " + taskType + " error code: " + errcode + "error message: " + message);
+		switch(taskType)
+		{
+		case Config.update_status:
+			XLog.i("taskType: " + taskType + " error code: " + errcode + "error message: " + message);
+			break;
+		case Config.update_room:
+			XLog.i("taskType: " + taskType + " error code: " + errcode + "error message: " + message);
+			break;
+		}
+    }
+	
     /**
      * 从服务器获取聊天室成员资料（去重处理）（异步）
      * @param roomId 聊天室id
@@ -911,21 +877,6 @@ public class ChatRoomPanel {
             callback.onResult(false, null);
             return;
         }
-        // 频率控制
-        if (frequencyLimitCache.containsKey(account)) {
-            if (callback != null) {
-                frequencyLimitCache.get(account).add(callback);
-            }
-            return; // 已经在请求中，不要重复请求
-        }
-        else
-        {
-        	List<SimpleCallback<ChatRoomMember>> cbs = new ArrayList<SimpleCallback<ChatRoomMember>>();
-            if (callback != null) {
-                cbs.add(callback);
-            }
-            frequencyLimitCache.put(account, cbs);
-        }
         // fetch
         List<String> accounts = new ArrayList<>(1);
         accounts.add(account);
@@ -934,30 +885,21 @@ public class ChatRoomPanel {
 
 				@Override
 				public void onResult(int code, List<ChatRoomMember> members, Throwable exception) {
-	                ChatRoomMember member = null;
-	                boolean hasCallback = !frequencyLimitCache.get(account).isEmpty();
 	                boolean success = code == ResponseCode.RES_SUCCESS && members != null && !members.isEmpty();
 	                
 	                // cache
 	                if (success) {
 	                    saveMembers(members);
-	                    member = members.get(0);
 	                } else {
 	                    XLog.i("fetch chat room member failed, code=" + code);
 	                }
-
-	                // callback
-	                if (hasCallback) {
-	                    List<SimpleCallback<ChatRoomMember>> cbs = frequencyLimitCache.get(account);
-	                    for (SimpleCallback<ChatRoomMember> cb : cbs) {
-	                        cb.onResult(success, member);
-	                    }
-	                }
-
-	                frequencyLimitCache.remove(account);
 				}});
     }
     
+    /**
+     * 更新聊天室主播头像
+     * @param chatRoomInfo
+     */
     private void updatePortraitView(ChatRoomInfo chatRoomInfo){
 		Glide.with(container.activity)
 		.load(master.getAvatar())
@@ -966,6 +908,7 @@ public class ChatRoomPanel {
 		XLog.i("fetch master portrait seccuss");
     }
     
+    /***********************************************************注册相关**********************************************************************/
     public void registerObservers(boolean register) {
     	if(! register){
     		logoutChatRoom();
@@ -975,7 +918,7 @@ public class ChatRoomPanel {
     
 	private void logoutChatRoom() {
 		NIMClient.getService(ChatRoomService.class).exitChatRoom(
-				container.account);
+				container.chatRoom.getChatroomid());
 	}
     
     @SuppressWarnings("serial")
@@ -989,20 +932,5 @@ public class ChatRoomPanel {
              }
              onIncomingMessage(messages);
          }
-     };
-     
-     public void registerCustomMsgObservers(boolean register)
-     {
-    	 NIMClient.getService(MsgServiceObserve.class).observeReceiveMessage(incomingMessageObserver, register);
-     }
-     
-     private Observer<List<IMMessage>> incomingMessageObserver = new Observer<List<IMMessage>>(){
-
-		@Override
-		public void onEvent(List<IMMessage> arg0) {
-         	XLog.i("custom incomingChatRoomMsg" + arg0.size());
-         	Log.i("custom ChatRoomPanel", "Log incomingChatRoomMsg: " + arg0.size());
-		}
-    	 
      };
 }

@@ -32,13 +32,11 @@ import com.summer.utils.ToastUtil;
 import com.summer.utils.UrlUtil;
 import com.summer.view.CircularImage;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.v4.app.FragmentActivity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -673,6 +671,7 @@ public class MainActivity extends BaseActivity implements OnClickListener, Updat
 		bundle.putString("cid", startLiveVideoInfo.getCid());
 		bundle.putString("pushUrl", startLiveVideoInfo.getPushUrl());
 		bundle.putString("chatroomid", startLiveVideoInfo.getChatroomid());
+		bundle.putBoolean("isMaster", true);
 		intent.putExtras(bundle);
 		startActivity(intent); 
 	}
@@ -690,6 +689,7 @@ public class MainActivity extends BaseActivity implements OnClickListener, Updat
 			bundle.putString("cid", startLiveVideoInfo.getCid());
 			bundle.putString("httpPullUrl", startLiveVideoInfo.getHttpPullUrl());
 			bundle.putString("chatroomid", startLiveVideoInfo.getChatroomid());
+			bundle.putBoolean("isMaster", false);
 			intent.putExtras(bundle);
 			startActivity(intent); 
 		}

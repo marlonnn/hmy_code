@@ -15,6 +15,8 @@ public class ChatRoom {
 	private String chatroomid;
 	
 	private boolean filter;
+	
+	private boolean isMaster;//是否是主播
 
 	public String getCid() {
 		return cid;
@@ -70,6 +72,14 @@ public class ChatRoom {
 
 	public void setFilter(boolean filter) {
 		this.filter = filter;
+	}
+
+	public boolean isMaster() {
+		return isMaster;
+	}
+
+	public void setMaster(boolean isMaster) {
+		this.isMaster = isMaster;
 	}
 	
 }

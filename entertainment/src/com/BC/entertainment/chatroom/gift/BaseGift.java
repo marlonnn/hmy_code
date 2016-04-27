@@ -87,7 +87,7 @@ public abstract class BaseGift implements Serializable{
     }
 
     public String getAccount() {
-        return container.account;
+        return container.chatRoom.getChatroomid();
     }
 
     public SessionTypeEnum getSessionType() {
