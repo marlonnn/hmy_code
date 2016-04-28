@@ -241,7 +241,7 @@ public class PushVideoFragment extends BaseFragment implements View.OnClickListe
             paraSet();
             
             //设置日志级别
-        	mLSMediaCapture.setTraceLevel(LS_LOG_ERROR);
+        	mLSMediaCapture.setTraceLevel(LS_LOG_INFO);
         	
             //初始化直播推流
 	        ret = mLSMediaCapture.initLiveStream(mliveStreamingURL, mLSLiveStreamingParaCtx);

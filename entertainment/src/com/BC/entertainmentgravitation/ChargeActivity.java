@@ -17,15 +17,23 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.BC.entertainment.adapter.ChargeAdapter;
+import com.BC.entertainment.adapter.ChargeRecycleAdapter;
+import com.BC.entertainment.cache.YubiCache;
 import com.BC.entertainmentgravitation.entity.PayResult;
 import com.BC.entertainmentgravitation.entity.WxCheckOrder;
 import com.BC.entertainmentgravitation.entity.WxPrePayOrder;
+import com.BC.entertainmentgravitation.entity.Yubi;
 import com.BC.entertainmentgravitation.util.SignUtils;
 import com.alipay.sdk.app.PayTask;
 import com.summer.activity.BaseActivity;
@@ -42,7 +50,7 @@ import com.summer.utils.UrlUtil;
 import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
 
-public class ChargeActivty extends BaseActivity implements OnClickListener{
+public class ChargeActivity extends BaseActivity implements OnClickListener{
 	
 	// 商户PID
 	private final String PARTNER = "2088711408262791";
@@ -71,6 +79,12 @@ public class ChargeActivty extends BaseActivity implements OnClickListener{
 	
 	private TextView textViewAccount;
 	
+	private RecyclerView yubiRecycleList;
+	
+	private ChargeRecycleAdapter adapter;
+	
+	private List<Yubi> mYubi;
+	
 	private Handler mHandler = new Handler() {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
@@ -80,20 +94,20 @@ public class ChargeActivty extends BaseActivity implements OnClickListener{
 				String resultStatus = payResult.getResultStatus();
 				// 判断resultStatus 为“9000”则代表支付成功，具体状态码代表含义可参考接口文档
 				if (TextUtils.equals(resultStatus, "9000")) {
-					ToastUtil.show(ChargeActivty.this, 
-							StringUtil.getXmlResource(ChargeActivty.this, R.string.activity_recharge_pay_success));
-					showEmotionsView();
+					ToastUtil.show(ChargeActivity.this, 
+							StringUtil.getXmlResource(ChargeActivity.this, R.string.activity_recharge_pay_success));
+//					showEmotionsView();
 					senAlipayOKRequest();
 				} else {
 					// 判断resultStatus 为非“9000”则代表可能支付失败
 					// “8000”代表支付结果因为支付渠道原因或者系统原因还在等待支付结果确认，最终交易是否成功以服务端异步通知为准（小概率状态）
 					if(TextUtils.equals(resultStatus, "8000")) {
-						Toast.makeText(ChargeActivty.this, "支付结果确认中",
+						Toast.makeText(ChargeActivity.this, "支付结果确认中",
 								Toast.LENGTH_SHORT).show();
 
 					} else {
 						// 其他值就可以判断为支付失败，包括用户主动取消支付，或者系统返回的错误
-						Toast.makeText(ChargeActivty.this, "支付失败",
+						Toast.makeText(ChargeActivity.this, "支付失败",
 								Toast.LENGTH_SHORT).show();
 
 					}
@@ -101,12 +115,12 @@ public class ChargeActivty extends BaseActivity implements OnClickListener{
 				break;
 			}
 			case SDK_CHECK_FLAG: {
-				Toast.makeText(ChargeActivty.this, "检查结果为：" + msg.obj,
+				Toast.makeText(ChargeActivity.this, "检查结果为：" + msg.obj,
 						Toast.LENGTH_SHORT).show();
 				break;
 			}
 			case Config.WX_EXCEPTION_ERROR:
-				Toast.makeText(ChargeActivty.this, "微信支付失败，支付异常",
+				Toast.makeText(ChargeActivity.this, "微信支付失败，支付异常",
 						Toast.LENGTH_SHORT).show();
 				break;
 				
@@ -114,7 +128,7 @@ public class ChargeActivty extends BaseActivity implements OnClickListener{
 				createWxPrePay();
 				break;
 			case Config.PAY_ALI:
-				pay();
+//				pay();
 				break;
 			default:
 				break;
@@ -132,11 +146,11 @@ public class ChargeActivty extends BaseActivity implements OnClickListener{
 		    case -2:
 		    	//用户取消微信支付
 		    	XLog.i("cancel");
-		    	ToastUtil.show(ChargeActivty.this, StringUtil.getXmlResource(context, R.string.activity_recharge_pay_cancel));
+		    	ToastUtil.show(ChargeActivity.this, StringUtil.getXmlResource(context, R.string.activity_recharge_pay_cancel));
 		    	break;
 		    case -1:
 		    	XLog.i("error");
-		    	ToastUtil.show(ChargeActivty.this, StringUtil.getXmlResource(context, R.string.activity_recharge_pay_exception));
+		    	ToastUtil.show(ChargeActivity.this, StringUtil.getXmlResource(context, R.string.activity_recharge_pay_exception));
 		    	//错误，异常
 		    	break;
 		    case 0:
@@ -170,6 +184,20 @@ public class ChargeActivty extends BaseActivity implements OnClickListener{
 		textViewAccount = (TextView) findViewById(R.id.textViewAccount);
 //		textViewAccount.setText(Config.User.get)
 		findViewById(R.id.imageViewBack).setOnClickListener(this);
+		
+		yubiRecycleList = (RecyclerView)findViewById(R.id.listViewCharge);
+		
+		mYubi = YubiCache.getInstance().GetYubiLists();
+		
+		adapter = new ChargeRecycleAdapter(this, mYubi);
+        adapter.notifyDataSetChanged();
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        yubiRecycleList.setLayoutManager(linearLayoutManager);
+        
+        yubiRecycleList.setItemAnimator(new DefaultItemAnimator());//more的动画效果
+        
+        yubiRecycleList.setAdapter(adapter);
+		
 	}
 	
 	/**
@@ -180,11 +208,11 @@ public class ChargeActivty extends BaseActivity implements OnClickListener{
 		wxPrePayOrder = new WxPrePayOrder();
 		wxPrePayOrder.setClientID(Config.User.getClientID());
 		wxPrePayOrder.setProductname(Config.BODY);
-		wxPrePayOrder.setPrice(Integer.parseInt(price) * 100);
-		wxPrePayOrder.setAmount(Integer.parseInt(amount));
-		
-		String content = getJSONObject(wxPrePayOrder);
-		addToThreadPool(Config.wx_pre_pay, "create wx prePay", content);
+//		wxPrePayOrder.setPrice(Integer.parseInt(price) * 100);
+//		wxPrePayOrder.setAmount(Integer.parseInt(amount));
+//		
+//		String content = getJSONObject(wxPrePayOrder);
+//		addToThreadPool(Config.wx_pre_pay, "create wx prePay", content);
 	}
 	
 	/**
@@ -238,7 +266,7 @@ public class ChargeActivty extends BaseActivity implements OnClickListener{
 			@Override
 			public void run() {
 				// 构造PayTask 对象
-				PayTask payTask = new PayTask(ChargeActivty.this);
+				PayTask payTask = new PayTask(ChargeActivity.this);
 				// 调用查询接口，获取查询结果
 				boolean isExist = payTask.checkAccountIfExist();
 
@@ -362,6 +390,7 @@ public class ChargeActivty extends BaseActivity implements OnClickListener{
 		{
 		//返回
 		case R.id.imageViewBack:
+			finish();
 			break;
 		}
 	}

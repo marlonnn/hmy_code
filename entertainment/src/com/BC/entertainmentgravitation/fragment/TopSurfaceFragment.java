@@ -1,10 +1,10 @@
 package com.BC.entertainmentgravitation.fragment;
 
+import com.BC.entertainment.cache.GiftCache;
 import com.BC.entertainment.chatroom.gift.Gift;
 import com.BC.entertainment.chatroom.module.ChatRoomPanel;
 import com.BC.entertainment.chatroom.module.Container;
 import com.BC.entertainment.chatroom.module.DanmakuPanel;
-import com.BC.entertainment.chatroom.module.GiftCache;
 import com.BC.entertainment.chatroom.module.InputPanel;
 import com.BC.entertainment.chatroom.module.ModuleProxy;
 import com.BC.entertainmentgravitation.R;

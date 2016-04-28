@@ -423,7 +423,7 @@ public class MainActivity extends BaseActivity implements OnClickListener, Updat
 		 * 充值
 		 */
 		case R.id.topUp:
-			intent = new Intent(this, RechargeActivity.class);
+			intent = new Intent(this, ChargeActivity.class);
 			startActivity(intent);
 			break;
 		/**

@@ -5,6 +5,7 @@ import java.util.List;
 import com.BC.entertainmentgravitation.R;
 import com.BC.entertainmentgravitation.entity.Yubi;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,34 +51,31 @@ public class ChargeAdapter extends BaseAdapter {
 		return position;
 	}
 
-	@Override
+	@SuppressLint("InflateParams") @Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		if (convertView == null)
 		{
             viewHolder = new ViewHolder();
-            convertView = mInflater.inflate(R.layout.fragment_message_item, null);
+            convertView = mInflater.inflate(R.layout.activity_charge_item, null);
 
-            viewHolder.txtName = (TextView) convertView.findViewById(R.id.txtName);
-            viewHolder.txtContent = (TextView) convertView.findViewById(R.id.txtContent);
+            viewHolder.txtPrice = (TextView) convertView.findViewById(R.id.textViewMoney);
+            viewHolder.txtYubi = (TextView) convertView.findViewById(R.id.textViewYubi);
 
             convertView.setTag(mData.get(position));
-        }
-        else
-        {
-            viewHolder = (ViewHolder) convertView.getTag();
         }
 		Yubi yubi = mData.get(position);
 		
 		if (yubi != null)
 		{
-				
+			viewHolder.txtPrice.setText(yubi.getPrice() + "元");
+			viewHolder.txtYubi.setText(yubi.getAmount() + "娱币");
 		}
-		return null;
+		return convertView;
 	}
 
 	private static class ViewHolder
 	{
-	    TextView txtName;
-	    TextView txtContent;
+	    TextView txtPrice;
+	    TextView txtYubi;
 	}
 }

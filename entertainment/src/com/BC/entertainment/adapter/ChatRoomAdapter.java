@@ -80,7 +80,7 @@ public class ChatRoomAdapter extends BaseAdapter {
             viewHolder.txtName = (TextView) convertView.findViewById(R.id.txtName);
             viewHolder.txtContent = (TextView) convertView.findViewById(R.id.txtContent);
 
-            convertView.setTag(mData.get(position));
+            convertView.setTag(viewHolder);
         }
         else
         {

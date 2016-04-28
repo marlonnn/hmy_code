@@ -10,7 +10,7 @@ public class Yubi {
 	/**
 	 * 充值数量
 	 */
-	private String amount;
+	private int amount;
 	
 	/**
 	 * 价格
@@ -21,12 +21,24 @@ public class Yubi {
 	 * 额外奖励
 	 */
 	private int bonus;
+	
+	public Yubi()
+	{
+		
+	}
+	
+	public Yubi(int amount, String price, int bonus)
+	{
+	    this.amount = amount;
+	    this.price = price;
+	    this.bonus = bonus;
+	}
 
-	public String getAmount() {
+	public int getAmount() {
 		return amount;
 	}
 
-	public void setAmount(String amount) {
+	public void setAmount(int amount) {
 		this.amount = amount;
 	}
 

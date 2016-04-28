@@ -10,6 +10,8 @@ public class BaseEmotion {
 	
 	private int exPoints;//extra points
 	
+	private int frequency;
+	
 	public BaseEmotion(int category, String name, int value, int exPoints)
 	{
 		this.category = category;
@@ -49,5 +51,12 @@ public class BaseEmotion {
 	public void setExPoints(int exPoints) {
 		this.exPoints = exPoints;
 	}
-	
+
+	protected int getFrequency() {
+		return frequency;
+	}
+
+	protected void setFrequency(int frequency) {
+		this.frequency = frequency;
+	}
 }

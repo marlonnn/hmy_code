@@ -812,6 +812,7 @@ public class ChatRoomPanel {
     private void updateVideoStatus(ChatRoomMember master, boolean isLeave)
     {
     	//是主播进入聊天室才发送聊天室状态到后台
+    	XLog.i("this is master: " + container.chatRoom.isMaster() );
     	if (container.chatRoom.isMaster())
     	{
         	HashMap<String, String> entity = new HashMap<String, String>();
@@ -860,9 +861,10 @@ public class ChatRoomPanel {
     	}
     }
     
-    private void addToThreadPool(int taskType, String Tag, List<NameValuePair> params)
+    private void addToThreadPool(int taskType, String tag, List<NameValuePair> params)
     {
-    	HttpBaseTask httpTask = new HttpBaseTask(ThreadPoolConst.THREAD_TYPE_FILE_HTTP, Tag, params, UrlUtil.GetUrl(taskType));
+    	XLog.i("add to thread pool: " + tag);
+    	HttpBaseTask httpTask = new HttpBaseTask(ThreadPoolConst.THREAD_TYPE_FILE_HTTP, tag, params, UrlUtil.GetUrl(taskType));
     	httpTask.setTaskType(taskType);
     	InfoHandler handler = new InfoHandler(new InfoReceiver() {
 			
@@ -976,7 +978,7 @@ public class ChatRoomPanel {
 		.load(master.getAvatar())
 		.centerCrop().diskCacheStrategy(DiskCacheStrategy.ALL)
 		.placeholder(R.drawable.avatar_def).into(headPortrait);
-		XLog.i("fetch master portrait seccuss");
+		XLog.i("fetch master portrait seccuss, avator address: " + master.getAvatar());
     }
     
     /***********************************************************注册相关**********************************************************************/

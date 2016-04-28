@@ -1,4 +1,4 @@
-package com.BC.entertainment.chatroom.module;
+package com.BC.entertainment.cache;
 
 import java.util.ArrayList;
 import java.util.List;

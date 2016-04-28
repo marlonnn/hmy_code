@@ -180,7 +180,12 @@
             android:name=".ApplyActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="landscape" >
-        </activity>      
+        </activity>
+        <activity
+            android:name=".ChargeActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" >
+        </activity>    
     </application>
 
 </manifest>

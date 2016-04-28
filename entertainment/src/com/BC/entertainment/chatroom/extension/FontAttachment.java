@@ -1,6 +1,6 @@
 package com.BC.entertainment.chatroom.extension;
 
-import com.BC.entertainment.chatroom.module.GiftCache;
+import com.BC.entertainment.cache.GiftCache;
 import com.alibaba.fastjson.JSONObject;
 
 /**
