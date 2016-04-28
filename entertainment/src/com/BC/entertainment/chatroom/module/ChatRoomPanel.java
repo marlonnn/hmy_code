@@ -116,7 +116,7 @@ public class ChatRoomPanel {
 	
 	private TextView onlinePeople;//总的在线人数
 	
-	private DanmakuPanel danmakuPanel;
+	public DanmakuPanel danmakuPanel;
 	
     public ChatRoomPanel(Container container, View rootView, DanmakuPanel danmakuPanel) {
         this.container = container;
@@ -328,7 +328,7 @@ public class ChatRoomPanel {
         });
     }
     
-    private void showAnimate(BaseEmotion baseEmotion)
+    public void showAnimate(BaseEmotion baseEmotion)
     {
     	Pandamate.animate(getDrawable(baseEmotion.getCategory()), imageViewAnimation, new Runnable() {
 			
