@@ -185,7 +185,13 @@
             android:name=".ChargeActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait" >
-        </activity>    
+        </activity>
+        <!-- 个人中心 -->
+        <activity
+            android:name=".PersonalActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" >
+        </activity> 
     </application>
 
 </manifest>

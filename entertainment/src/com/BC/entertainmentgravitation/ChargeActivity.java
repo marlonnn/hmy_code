@@ -1,5 +1,7 @@
 package com.BC.entertainmentgravitation;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -8,9 +10,13 @@ import java.util.Locale;
 import java.util.Random;
 
 import org.apache.http.NameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
@@ -30,16 +36,21 @@ import com.BC.entertainment.adapter.ChargeRecycleAdapter;
 import com.BC.entertainment.adapter.ChargeRecycleAdapter.OnItemClickListener;
 import com.BC.entertainment.cache.InfoCache;
 import com.BC.entertainment.cache.YubiCache;
+import com.BC.entertainmentgravitation.entity.EditPersonal;
 import com.BC.entertainmentgravitation.entity.PayResult;
 import com.BC.entertainmentgravitation.entity.WxCheckOrder;
+import com.BC.entertainmentgravitation.entity.WxOrder;
 import com.BC.entertainmentgravitation.entity.WxPrePayOrder;
 import com.BC.entertainmentgravitation.entity.Yubi;
 import com.BC.entertainmentgravitation.util.SignUtils;
 import com.alipay.sdk.app.PayTask;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.summer.activity.BaseActivity;
 import com.summer.config.Config;
 import com.summer.factory.ThreadPoolFactory;
 import com.summer.handler.InfoHandler;
+import com.summer.json.Entity;
 import com.summer.logger.XLog;
 import com.summer.task.HttpBaseTask;
 import com.summer.treadpool.ThreadPoolConst;
@@ -47,6 +58,7 @@ import com.summer.utils.JsonUtil;
 import com.summer.utils.StringUtil;
 import com.summer.utils.ToastUtil;
 import com.summer.utils.UrlUtil;
+import com.tencent.mm.sdk.modelpay.PayReq;
 import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
 
@@ -58,8 +70,6 @@ public class ChargeActivity extends BaseActivity implements OnClickListener, OnI
 	private final String SELLER = "13911533774@163.com";
 	// 商户私钥，pkcs8格式
 	private final String RSA_PRIVATE = "MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBAM083JmW+LUJYG90UVsEBaZH1TvIFZmE8odQBMltupc4kXAZQppBh4DMhoQ8BpJRibZMnR2lqB+OwEP6ZfdKGGRW41XbEF1mXCKFwNZXyDoArlOFb8P/OPw22WbQAbtlZJndM15PGMONReje149FMoOD7SCdfTslTSyvVisI8atnAgMBAAECgYEAxvV1NT9xoq6QWft80qq3f1ark+SHa+fB5QLhYROKiwY/l1glhLx5y5Z54L7/7+AzjBIBTbhFnzIXmM6pAm1F7mMJS1nxELHqytikxpyynHvmUJj976ZL2rrG3RsDaQXF/mrM1+Y6Ajps1hwt+uOtnBDJRnPM9mBD0wGAH9OKBCECQQDoDYEgxePw8LgmmseNhET00VHdE8CL6pcZ46ttivYYpR9mckRy2C9VlQiOYDGbk10H1chXih1erruOEDCd/bWNAkEA4mrxnS4tTk25LJak36pApSYlt1KdOuEtG+wDbIT4a78ffdEgnhP2gKTmBBVXPbHImspSFGO9OZQpYk/7Zv8lwwJAWXC7EJK1pKxjjh2iRJ1yppn3X6q5UDR/QO9Lp9EjwaQDUk1ArLM+q1HiFl5lQH2wIdD4gyUs5M2cZMlAs+SSEQJBAJeeIbmtqG0dIvk2z6VvLuboiq0eR2ecTka6XviWenw8eewY1IzGtXUj91uYptkLalgtT5WTzKz4CFZrVOB9z10CQFD3aoS4/4ya4H6/TvxL254wz+qtL6pxUc7mI5HWpd17lZFfB2aFwQ8UaNjDZfr5v5fzM6oFWF11JcoyBlLgGhM=";
-	// 支付宝公钥
-	private final String RSA_PUBLIC = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCnxj/9qwVfgoUh/y2W89L6BkRAFljhNhgPdyPuBV64bfQNN1PjbCzkIM6qRdKBoLPXmKKMiFYnkd6rAoprih3/PrQEB/VsW8OoM8fxn67UDYuyBTqA23MML9q1+ilIZwBC2AQ2UBVOrFXfFl75p6/B5KsiNG9zpgmLCUYuLkxpLQIDAQAB";
 	
 	private final int SDK_PAY_FLAG = 1;
 
@@ -85,6 +95,13 @@ public class ChargeActivity extends BaseActivity implements OnClickListener, OnI
 	
 	private List<Yubi> mYubi;
 	
+	/**
+	 * 需要充值的娛币对象
+	 */
+	private Yubi chargeYubi;
+	
+	private Gson gson;
+	
 	private Handler mHandler = new Handler() {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
@@ -97,6 +114,7 @@ public class ChargeActivity extends BaseActivity implements OnClickListener, OnI
 					ToastUtil.show(ChargeActivity.this, 
 							StringUtil.getXmlResource(ChargeActivity.this, R.string.activity_recharge_pay_success));
 //					showEmotionsView();
+					getUserInfoRequest();
 					senAlipayOKRequest();
 				} else {
 					// 判断resultStatus 为非“9000”则代表可能支付失败
@@ -122,13 +140,6 @@ public class ChargeActivity extends BaseActivity implements OnClickListener, OnI
 			case Config.WX_EXCEPTION_ERROR:
 				Toast.makeText(ChargeActivity.this, "微信支付失败，支付异常",
 						Toast.LENGTH_SHORT).show();
-				break;
-				
-			case Config.PAY_WX:
-				createWxPrePay();
-				break;
-			case Config.PAY_ALI:
-//				pay();
 				break;
 			default:
 				break;
@@ -187,7 +198,11 @@ public class ChargeActivity extends BaseActivity implements OnClickListener, OnI
 		{
 			textViewAccount.setText(InfoCache.getInstance().getPersonalInfo().getEntertainment_dollar() + " 娱币");
 		}
+		
 		findViewById(R.id.imageViewBack).setOnClickListener(this);
+		
+		findViewById(R.id.imageViewWx).setOnClickListener(this);
+		findViewById(R.id.imageViewAli).setOnClickListener(this);
 		
 		yubiRecycleList = (RecyclerView)findViewById(R.id.listViewCharge);
 		
@@ -205,19 +220,51 @@ public class ChargeActivity extends BaseActivity implements OnClickListener, OnI
         
 	}
 	
+	@Override
+	protected void onPause() {
+		super.onPause();
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+	}
+
+	@Override
+	protected void onRestart() {
+		super.onRestart();
+	}
+
+	@Override
+	protected void onStart() {
+		super.onStart();
+	}
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
+	}
+
 	/**
 	 * 创建预支付订单
 	 */
-	private void createWxPrePay()
+	private void createWxPrePay(Yubi yubi)
 	{
 		wxPrePayOrder = new WxPrePayOrder();
 		wxPrePayOrder.setClientID(Config.User.getClientID());
 		wxPrePayOrder.setProductname(Config.BODY);
-//		wxPrePayOrder.setPrice(Integer.parseInt(price) * 100);
-//		wxPrePayOrder.setAmount(Integer.parseInt(amount));
-//		
-//		String content = getJSONObject(wxPrePayOrder);
-//		addToThreadPool(Config.wx_pre_pay, "create wx prePay", content);
+//		wxPrePayOrder.setPrice(Integer.parseInt(yubi.getPrice()) * 100);
+		wxPrePayOrder.setPrice(1);
+		wxPrePayOrder.setAmount(yubi.getAmount());
+		
+		String content = JsonUtil.toString(wxPrePayOrder);
+		addToThreadPool(Config.wx_pre_pay, "create wx prePay", content);
 	}
 	
 	/**
@@ -386,14 +433,199 @@ public class ChargeActivity extends BaseActivity implements OnClickListener, OnI
 		return "sign_type=\"RSA\"";
 	}
 
-	
-	
+	/**
+	 * call alipay sdk pay. 调用SDK支付
+	 * 
+	 */
+	public void createAliPay(final Yubi yubi) {
+		if (TextUtils.isEmpty(PARTNER) || TextUtils.isEmpty(RSA_PRIVATE)
+				|| TextUtils.isEmpty(SELLER)) {
+			new AlertDialog.Builder(this)
+					.setTitle("警告")
+					.setMessage("需要配置PARTNER | RSA_PRIVATE| SELLER")
+					.setPositiveButton("确定",
+							new DialogInterface.OnClickListener() {
+								public void onClick(
+										DialogInterface dialoginterface, int i) {
+									//
+									finish();
+								}
+							}).show();
+			return;
+		}
+		// 订单
+		String orderInfo = getOrderInfo("购买" + yubi.getAmount() + "个娱币",
+				Config.User.getNickName() + "购买价值" + yubi.getPrice() + "的娱币",
+				yubi.getPrice());
 
+		// 对订单做RSA 签名
+		String sign = sign(orderInfo);
+		try {
+			// 仅需对sign 做URL编码
+			sign = URLEncoder.encode(sign, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+
+		// 完整的符合支付宝参数规范的订单信息
+		final String payInfo = orderInfo + "&sign=\"" + sign + "\"&"
+				+ getSignType();
+
+		Runnable payRunnable = new Runnable() {
+
+			@Override
+			public void run() {
+				// 构造PayTask 对象
+				sendAlipayRequest(yubi);
+				PayTask alipay = new PayTask(ChargeActivity.this);
+				// 调用支付接口，获取支付结果
+				String result = alipay.pay(payInfo);
+
+				Message msg = new Message();
+				msg.what = SDK_PAY_FLAG;
+				msg.obj = result;
+				mHandler.sendMessage(msg);
+			}
+		};
+		// 必须异步调用
+		Thread payThread = new Thread(payRunnable);
+		payThread.start();
+	}
+	
+	/**
+	 * 充值
+	 */
+	private void sendAlipayRequest(Yubi yubi) {
+		if (Config.User == null) {
+			ToastUtil.show(this, this.getString(R.string.activity_recharge_get_user_fail));
+			return;
+		}
+		HashMap<String, String> entity = new HashMap<String, String>();
+
+		entity.put("clientID", Config.User.getClientID());
+		entity.put("amount", "" + yubi.getAmount());
+		entity.put("price", yubi.getPrice());
+		entity.put("order_sn", orderID);
+		ShowProgressDialog(this.getString(R.string.activity_recharge_get_charging));
+		List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
+		addToThreadPool(Config.top_up, "send alipay request", params);
+	}
+	
+	/**
+	 * 正式开始微信支付
+	 * @param jsonString
+	 */
+    private void startWxPayThread(final String jsonString)
+    {
+    	
+    	Runnable payRunnable = new Runnable(){
+
+			@Override
+			public void run() {
+				startWxOrder(jsonString);
+			}
+    	};
+		Thread payThread = new Thread(payRunnable);
+		payThread.start();
+    }
+
+    private void startWxOrder(String jsonString)
+    {
+    	WxOrder wxOrder = GetWxOrder(jsonString);
+		PayReq req = new PayReq();
+		req.appId			= wxOrder.getAppid();
+		req.partnerId		= wxOrder.getPartnerid();
+		req.prepayId		= wxOrder.getPrepayid();
+		req.nonceStr		= wxOrder.getNoncestr();
+		req.timeStamp		= wxOrder.getTimestamp();
+		req.packageValue	= wxOrder.getWxPackage();
+		req.sign			= wxOrder.getSign();
+		api.sendReq(req);
+    }
+    
+    public WxOrder GetWxOrder(String jsonString)
+    {
+    	WxOrder wxOrder = new WxOrder();
+    	JSONObject jsonObject = null;
+		try {
+			jsonObject = new JSONObject(jsonString).getJSONObject("data");
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			Message message = new Message();
+        	message.what = Config.WX_EXCEPTION_ERROR;
+        	mHandler.sendMessage(message);
+			e.printStackTrace();
+		} 
+    	if(jsonObject != null)
+    	{
+			try {
+				wxOrder.setPrepayid(jsonObject.getString("prepayid"));
+				wxOrder.setNoncestr(jsonObject.getString("noncestr"));
+				wxOrder.setTimeStamp(jsonObject.getString("timestamp"));
+				wxOrder.setSign(jsonObject.getString("sign"));
+				wxCheckOrder.setClientID(Config.User.getClientID());
+				wxCheckOrder.setRechargesn(jsonObject.getString("preorder"));
+			} catch (JSONException e) {
+	        	Message message = new Message();
+	        	message.what = Config.WX_EXCEPTION_ERROR;
+	        	mHandler.sendMessage(message);
+				e.printStackTrace();
+			}
+    	}
+    	return wxOrder;
+    }
+    
+    /**
+     * 支付完毕，获取用户信息
+     */
+    private void getUserInfoRequest()
+    {
+    	if (Config.User == null)
+    	{
+			ToastUtil.show(this, StringUtil.getXmlResource(this, R.string.mainactivity_login_invalidate));
+			finish();
+			return;
+    	}
+    	HashMap<String, String> entity = new HashMap<String, String>();
+    	entity.put("clientID", Config.User.getClientID());
+    	List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
+    	ShowProgressDialog(this.getString(R.string.mainactivity_get_user_info));
+    	addToThreadPool(Config.personal_information, "get user info", params);
+    }
+    
 	@Override
 	public void onClick(View v) {
 		switch(v.getId())
 		{
-		//返回
+		/**
+		 * 微信支付
+		 */
+		case R.id.imageViewWx:
+			if (chargeYubi != null)
+			{
+				createWxPrePay(chargeYubi);
+			}
+			else
+			{
+				ToastUtil.show(ChargeActivity.this, "请先点击您需要充值的数量");
+			}
+			break;
+		/**
+		 * 支付宝支付
+		 */
+		case R.id.imageViewAli:
+			if (chargeYubi != null)
+			{
+				createAliPay(chargeYubi);
+			}
+			else
+			{
+				ToastUtil.show(ChargeActivity.this, "请先点击您需要充值的数量");
+			}
+			break;
+		/**
+		 * 返回键
+		 */
 		case R.id.imageViewBack:
 			finish();
 			break;
@@ -402,12 +634,43 @@ public class ChargeActivity extends BaseActivity implements OnClickListener, OnI
 
 	@Override
 	public void RequestSuccessful(String jsonString, int taskType) {
-		
+		gson = new Gson();
+		switch(taskType)
+		{
+		case Config.wx_pre_pay:
+			//接受到微信预支付订单信息
+			ToastUtil.show(ChargeActivity.this, "正常调起支付");
+			startWxPayThread(jsonString);
+			break;
+		case Config.wx_pay:
+			//接受到微信支付完成订单信息
+			ToastUtil.show(ChargeActivity.this, "支付完成，充值成功");
+			getUserInfoRequest();
+			break;
+			
+		case Config.personal_information:
+			Entity<EditPersonal> baseEntity = gson.fromJson(jsonString,
+					new TypeToken<Entity<EditPersonal>>() {
+					}.getType());
+			if (baseEntity.getData() != null)
+			{
+				InfoCache.getInstance().setPersonalInfo(baseEntity.getData());
+				if (InfoCache.getInstance().getPersonalInfo() != null) {
+					textViewAccount.setText(InfoCache.getInstance().getPersonalInfo().getEntertainment_dollar() + " 娱币");
+				}
+			}
+		}
 	}
 
 	@Override
 	public void onItemClick(View view, int position) {
-		
+		try {
+			chargeYubi = (Yubi) view.getTag();
+			ToastUtil.show(ChargeActivity.this, "您选择了充值： " + chargeYubi.getAmount() + " 个娛币，请选择支付方式。");
+		} catch (Exception e) {
+			e.printStackTrace();
+			XLog.e("get tag exception on item click: ");
+		}
 	}
 
 	@Override

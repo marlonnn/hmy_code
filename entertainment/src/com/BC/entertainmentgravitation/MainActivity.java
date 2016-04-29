@@ -415,6 +415,8 @@ public class MainActivity extends BaseActivity implements OnClickListener, Updat
 		 * 个人中心
 		 */
 		case R.id.Center:
+			intent = new Intent(this, PersonalActivity.class);
+			startActivity(intent);
 			break;
 		/**
 		 * 签到

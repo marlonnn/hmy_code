@@ -10,7 +10,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -41,7 +40,6 @@ public class BaseSelectItem extends LinearLayout implements OnClickListener {
 	private List<String> select2Content = new ArrayList<String>();
 	private List<String> select3Content = new ArrayList<String>();
 	private List<String> select4Content = new ArrayList<String>();
-	private TextView title2;
 	private TextView wheelTitle1;
 	private TextView wheelTitle2;
 	private TextView wheelTitle3;
