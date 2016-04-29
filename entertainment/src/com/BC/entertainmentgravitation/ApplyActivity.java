@@ -12,6 +12,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.BC.entertainment.cache.InfoCache;
 import com.summer.activity.BaseActivity;
 import com.summer.config.Config;
 import com.summer.factory.ThreadPoolFactory;
@@ -37,7 +38,7 @@ public class ApplyActivity extends BaseActivity{
 			
 			@Override
 			public void onClick(View v) {
-				
+				sendApplyRequest();
 			}
 		});
 		initView();
@@ -45,25 +46,25 @@ public class ApplyActivity extends BaseActivity{
 	
 	private void initView()
 	{
-		if (MainActivity.personalInformation == null) {
+		if (InfoCache.getInstance().getPersonalInfo() == null) {
 			ToastUtil.show(this, "获取数据失败");
 			return;
 		}
-		setText(R.id.Stage_name, MainActivity.personalInformation.getNickname());
+		setText(R.id.Stage_name, InfoCache.getInstance().getPersonalInfo().getNickname());
 		setText(R.id.professional,
-				MainActivity.personalInformation.getProfessional());
+				InfoCache.getInstance().getPersonalInfo().getProfessional());
 		setText(R.id.Starting_price,
-				MainActivity.personalInformation.getStarting_price());
+				InfoCache.getInstance().getPersonalInfo().getStarting_price());
 		setText(R.id.The_constellation,
-				MainActivity.personalInformation.getThe_constellation());
-		setText(R.id.height, MainActivity.personalInformation.getHeight());
-		setText(R.id.weight, MainActivity.personalInformation.getWeight());
-		setText(R.id.gender, MainActivity.personalInformation.getGender());
-		setText(R.id.language, MainActivity.personalInformation.getLanguage());
+				InfoCache.getInstance().getPersonalInfo().getThe_constellation());
+		setText(R.id.height, InfoCache.getInstance().getPersonalInfo().getHeight());
+		setText(R.id.weight, InfoCache.getInstance().getPersonalInfo().getWeight());
+		setText(R.id.gender, InfoCache.getInstance().getPersonalInfo().getGender());
+		setText(R.id.language, InfoCache.getInstance().getPersonalInfo().getLanguage());
 		setText(R.id.nationality,
-				MainActivity.personalInformation.getNationality());
-		setText(R.id.region, MainActivity.personalInformation.getRegion());
-		setText(R.id.age, MainActivity.personalInformation.getAge());
+				InfoCache.getInstance().getPersonalInfo().getNationality());
+		setText(R.id.region, InfoCache.getInstance().getPersonalInfo().getRegion());
+		setText(R.id.age, InfoCache.getInstance().getPersonalInfo().getAge());
 	}
 	
 	private void sendApplyRequest()

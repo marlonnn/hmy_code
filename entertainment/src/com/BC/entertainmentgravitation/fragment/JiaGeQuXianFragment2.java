@@ -17,9 +17,9 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.BC.entertainment.cache.InfoCache;
 import com.BC.entertainment.view.CoordinateSystemView;
 import com.BC.entertainmentgravitation.JiaGeQuXianActivity;
-import com.BC.entertainmentgravitation.MainActivity;
 import com.BC.entertainmentgravitation.R;
 import com.BC.entertainmentgravitation.TopUpActivity;
 import com.BC.entertainmentgravitation.UpdataMainActivity;
@@ -80,7 +80,7 @@ public class JiaGeQuXianFragment2 extends BaseFragment implements
 	}
 
 	public void showStarInformation() {
-		if (MainActivity.starInformation == null) {
+		if (InfoCache.getInstance().getStartInfo() == null) {
 			getStarInfoRequest();
 		} else {
 			initStarInformation();
@@ -153,14 +153,14 @@ public class JiaGeQuXianFragment2 extends BaseFragment implements
 	}
 
 	public void initStarInformation() {
-		if (MainActivity.starInformation != null) {
+		if (InfoCache.getInstance().getStartInfo() != null) {
 			setText(R.id.Stage_name,
-					MainActivity.starInformation.getStage_name());
+					InfoCache.getInstance().getStartInfo().getStage_name());
 			setText(R.id.professional,
-					MainActivity.starInformation.getProfessional());
+					InfoCache.getInstance().getStartInfo().getProfessional());
 			setText(R.id.prices,
 					"当前指数："
-							+ MainActivity.starInformation
+							+ InfoCache.getInstance().getStartInfo()
 									.getThe_current_hooted_thumb_up_prices()
 							+ "\n点击查看大图");
 			contentView.findViewById(R.id.prices).setOnClickListener(
@@ -170,16 +170,16 @@ public class JiaGeQuXianFragment2 extends BaseFragment implements
 						public void onClick(View v) {
 							Intent intent = new Intent(v.getContext(),
 									JiaGeQuXianActivity.class);
-							JiaGeQuXianActivity.starID = MainActivity.starInformation
+							JiaGeQuXianActivity.starID = InfoCache.getInstance().getStartInfo()
 									.getStar_ID();
 							startActivity(intent);
 						}
 					});
 			applauseGiveConcern = new ApplauseGiveConcern(getActivity(),
-					MainActivity.starInformation.getStar_ID(), this,
-					MainActivity.starInformation
+					InfoCache.getInstance().getStartInfo().getStar_ID(), this,
+					InfoCache.getInstance().getStartInfo()
 							.getThe_current_hooted_thumb_up_prices(),
-					MainActivity.starInformation.getStage_name());
+					InfoCache.getInstance().getStartInfo().getStage_name());
 			type = 1;
 			sendKLineGraphRequest();
 
@@ -192,16 +192,16 @@ public class JiaGeQuXianFragment2 extends BaseFragment implements
 	 * 获取价格曲线
 	 */
 	public void sendKLineGraphRequest() {
-		if (MainActivity.starInformation == null) {
+		if (InfoCache.getInstance().getStartInfo() == null) {
 			ToastUtil.show(getActivity(), "无法获取数据");
 			return;
 		}
 		HashMap<String, String> entity = new HashMap<String, String>();
-		entity.put("star_id", MainActivity.starInformation.getStar_ID());
+		entity.put("star_id", InfoCache.getInstance().getStartInfo().getStar_ID());
 		entity.put("type", type + "");
 
 		XLog.i(entity.toString());
-		XLog.i(MainActivity.starInformation.getStar_ID());
+		XLog.i(InfoCache.getInstance().getStartInfo().getStar_ID());
     	List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
     	ShowProgressDialog("获取折线图...");
     	addToThreadPool(Config.k_line_graph, "send kLine request", params);
@@ -253,14 +253,14 @@ public class JiaGeQuXianFragment2 extends BaseFragment implements
 	 * 获取明星信息
 	 */
 	public void getStarInfoRequest() {
-		if (MainActivity.starInformation == null) {
+		if (InfoCache.getInstance().getStartInfo() == null) {
 			ToastUtil.show(getActivity(), "无法获取数据");
 			return;
 		}
 		HashMap<String, String> entity = new HashMap<String, String>();
 
 		entity.put("clientID", Config.User.getClientID());
-		entity.put("Star_ID", MainActivity.starInformation.getStar_ID());
+		entity.put("Star_ID", InfoCache.getInstance().getStartInfo().getStar_ID());
     	List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
     	ShowProgressDialog(this.getString(R.string.mainactivity_get_start_info));
     	addToThreadPool(Config.star_information, "get user info", params);
@@ -334,8 +334,11 @@ public class JiaGeQuXianFragment2 extends BaseFragment implements
 			Entity<StarInformation> baseEntity2 = gson.fromJson(jsonString,
 					new TypeToken<Entity<StarInformation>>() {
 					}.getType());
-			MainActivity.starInformation = baseEntity2.getData();
-			initStarInformation();
+			if (baseEntity2.getData() != null)
+			{
+				InfoCache.getInstance().setStartInfo(baseEntity2.getData());
+				initStarInformation();
+			}
 			break;
 		case Config.k_line_graph:
 			XLog.i("get k line success");

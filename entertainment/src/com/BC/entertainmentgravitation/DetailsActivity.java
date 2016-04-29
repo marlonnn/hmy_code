@@ -32,6 +32,7 @@ import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 
 import com.BC.entertainment.adapter.PictureAdapter;
+import com.BC.entertainment.cache.InfoCache;
 import com.BC.entertainmentgravitation.dialog.ApplauseGiveConcern;
 import com.BC.entertainmentgravitation.dialog.PromptDialog;
 import com.BC.entertainmentgravitation.entity.Album;
@@ -75,7 +76,7 @@ public class DetailsActivity extends BaseActivity implements OnClickListener{
 		if (intent != null) {
 			userID = intent.getStringExtra("userID");
 			if (userID == null) {
-				userID = MainActivity.starInformation.getStar_ID();
+				userID = InfoCache.getInstance().getStartInfo().getStar_ID();
 			}
 		}
 		radio3.setOnClickListener(new OnClickListener() {
@@ -96,10 +97,10 @@ public class DetailsActivity extends BaseActivity implements OnClickListener{
 			}
 		});
 		applauseGiveConcern = new ApplauseGiveConcern(this,
-				MainActivity.starInformation.getStar_ID(), this,
-				MainActivity.starInformation
+				InfoCache.getInstance().getStartInfo().getStar_ID(), this,
+				InfoCache.getInstance().getStartInfo()
 						.getThe_current_hooted_thumb_up_prices(),
-				MainActivity.starInformation.getStage_name());
+				InfoCache.getInstance().getStartInfo().getStage_name());
 		radioGroup1.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
 			@Override
@@ -283,7 +284,7 @@ public class DetailsActivity extends BaseActivity implements OnClickListener{
 	 * 加关注
 	 */
 	private void sendFocusRequest() {
-		if (Config.User == null || MainActivity.starInformation == null) {
+		if (Config.User == null || InfoCache.getInstance().getStartInfo() == null) {
 			ToastUtil.show(this, "抱歉，提交失败");
 			return;
 		}
@@ -300,7 +301,7 @@ public class DetailsActivity extends BaseActivity implements OnClickListener{
 	 * 鼓掌、喝倒彩
 	 */
 	private void sendApplaudOrBoosRrequest(int type) {
-		if (Config.User == null || MainActivity.starInformation == null) {
+		if (Config.User == null || InfoCache.getInstance().getStartInfo() == null) {
 			ToastUtil.show(this, "抱歉，提交失败");
 			return;
 		}
@@ -484,7 +485,7 @@ public class DetailsActivity extends BaseActivity implements OnClickListener{
 //			showOutConnectDialog();
 			break;
 		case R.id.vidoConnect:
-			if (MainActivity.starInformation.getVideo_link() != null) {
+			if (InfoCache.getInstance().getStartInfo().getVideo_link() != null) {
 				Intent intent = new Intent(this, BrowserAcitvity.class);
 				intent.putExtra("url", starInformation.getVideo_link()
 						.getLink());

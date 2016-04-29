@@ -33,6 +33,14 @@ public class ChargeRecycleAdapter extends RecyclerView.Adapter<ListViewHolder>{
     }
     
     private OnItemClickListener mOnItemClickListener;
+    
+	public OnItemClickListener getmOnItemClickListener() {
+		return mOnItemClickListener;
+	}
+
+	public void setmOnItemClickListener(OnItemClickListener mOnItemClickListener) {
+		this.mOnItemClickListener = mOnItemClickListener;
+	}
 
 	@Override
 	public int getItemCount() {
@@ -59,8 +67,10 @@ public class ChargeRecycleAdapter extends RecyclerView.Adapter<ListViewHolder>{
 		if (yubi != null)
 		{
 			viewGroup.txtPrice.setText(yubi.getPrice() + "元");
-			viewGroup.txtYubi.setText(yubi.getAmount() + "娱币");	
+			viewGroup.txtYubi.setText(yubi.getAmount() + "娱币");
+			viewGroup.itemView.setTag(yubi);
 		}
+		
 		
 		setUpitemEvent(viewGroup);
 

@@ -26,13 +26,13 @@ import android.widget.TextView;
 
 import com.BC.entertainment.adapter.RecyclerViewAdapter;
 import com.BC.entertainment.adapter.RecyclerViewAdapter.OnItemClickListener;
+import com.BC.entertainment.cache.InfoCache;
 import com.BC.entertainment.chatroom.extension.BaseEmotion;
 import com.BC.entertainment.chatroom.extension.CustomAttachment;
 import com.BC.entertainment.chatroom.extension.CustomAttachmentType;
 import com.BC.entertainment.chatroom.extension.EmotionAttachment;
 import com.BC.entertainment.chatroom.extension.FontAttachment;
 import com.BC.entertainment.chatroom.gift.GiftCategory;
-import com.BC.entertainmentgravitation.MainActivity;
 import com.BC.entertainmentgravitation.R;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -299,7 +299,7 @@ public class ChatRoomPanel {
     {
     	headPortrait = (CircularImage) rootView.findViewById(R.id.portrait);
 		Glide.with(container.activity)
-		.load(MainActivity.personalInformation.getHead_portrait())
+		.load(InfoCache.getInstance().getPersonalInfo().getHead_portrait())
 		.centerCrop().diskCacheStrategy(DiskCacheStrategy.ALL)
 		.placeholder(R.drawable.avatar_def).into(headPortrait);
     }

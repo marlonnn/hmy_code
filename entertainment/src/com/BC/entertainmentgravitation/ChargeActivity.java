@@ -23,12 +23,12 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.BC.entertainment.adapter.ChargeAdapter;
 import com.BC.entertainment.adapter.ChargeRecycleAdapter;
+import com.BC.entertainment.adapter.ChargeRecycleAdapter.OnItemClickListener;
+import com.BC.entertainment.cache.InfoCache;
 import com.BC.entertainment.cache.YubiCache;
 import com.BC.entertainmentgravitation.entity.PayResult;
 import com.BC.entertainmentgravitation.entity.WxCheckOrder;
@@ -50,7 +50,7 @@ import com.summer.utils.UrlUtil;
 import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
 
-public class ChargeActivity extends BaseActivity implements OnClickListener{
+public class ChargeActivity extends BaseActivity implements OnClickListener, OnItemClickListener{
 	
 	// 商户PID
 	private final String PARTNER = "2088711408262791";
@@ -182,7 +182,11 @@ public class ChargeActivity extends BaseActivity implements OnClickListener{
 	private void initView()
 	{
 		textViewAccount = (TextView) findViewById(R.id.textViewAccount);
-//		textViewAccount.setText(Config.User.get)
+		
+		if (InfoCache.getInstance().getPersonalInfo() != null && InfoCache.getInstance().getPersonalInfo().getEntertainment_dollar() != null)
+		{
+			textViewAccount.setText(InfoCache.getInstance().getPersonalInfo().getEntertainment_dollar() + " 娱币");
+		}
 		findViewById(R.id.imageViewBack).setOnClickListener(this);
 		
 		yubiRecycleList = (RecyclerView)findViewById(R.id.listViewCharge);
@@ -191,13 +195,14 @@ public class ChargeActivity extends BaseActivity implements OnClickListener{
 		
 		adapter = new ChargeRecycleAdapter(this, mYubi);
         adapter.notifyDataSetChanged();
+        adapter.setmOnItemClickListener(this);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         yubiRecycleList.setLayoutManager(linearLayoutManager);
         
         yubiRecycleList.setItemAnimator(new DefaultItemAnimator());//more的动画效果
         
         yubiRecycleList.setAdapter(adapter);
-		
+        
 	}
 	
 	/**
@@ -397,6 +402,16 @@ public class ChargeActivity extends BaseActivity implements OnClickListener{
 
 	@Override
 	public void RequestSuccessful(String jsonString, int taskType) {
+		
+	}
+
+	@Override
+	public void onItemClick(View view, int position) {
+		
+	}
+
+	@Override
+	public void onItemLongClick(View view, int position) {
 		
 	}
 

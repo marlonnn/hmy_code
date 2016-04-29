@@ -1,6 +1,5 @@
 package com.BC.entertainmentgravitation.fragment;
 
-import com.BC.entertainmentgravitation.MainActivity;
 import com.BC.entertainmentgravitation.R;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -19,6 +18,7 @@ import java.util.List;
 
 import org.apache.http.NameValuePair;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ClipboardManager;
@@ -31,6 +31,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.BC.entertainment.cache.InfoCache;
 import com.BC.entertainment.view.BaseSelectItem;
 import com.BC.entertainmentgravitation.entity.EditPersonal;
 import com.BC.entertainmentgravitation.util.ConstantArrayListsUtil;
@@ -79,7 +80,6 @@ public class BaseInfoFragment extends BaseFragment implements OnClickListener{
 
 	private CircularImage Head_portrait;
 	private Bitmap Head_portraitbmp;
-	private String headFile;
 
 	Button editButton, exitEditButton;
 	boolean canEdit = false;
@@ -94,6 +94,7 @@ public class BaseInfoFragment extends BaseFragment implements OnClickListener{
 		this.fragmentSelectPicture = fragmentSelectPicture;
 	}
 
+	@SuppressLint("InflateParams")
 	@Override
 	@Nullable
 	public View onCreateView(LayoutInflater inflater,
@@ -107,7 +108,7 @@ public class BaseInfoFragment extends BaseFragment implements OnClickListener{
 	public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 		init();
-		if (MainActivity.personalInformation != null) {
+		if (InfoCache.getInstance().getPersonalInfo() != null) {
 			initPersonalInformation();
 		} else {
 			sendReqUser();
@@ -168,38 +169,38 @@ public class BaseInfoFragment extends BaseFragment implements OnClickListener{
 	}
 	
 	public void initPersonalInformation() {
-		if (MainActivity.personalInformation == null) {
+		if (InfoCache.getInstance().getPersonalInfo() == null) {
 			ToastUtil.show(activity, "获取数据失败");
 			return;
 		}
-		nickname.setText(MainActivity.personalInformation.getNickname());
-		In_the_mood.setText(MainActivity.personalInformation.getIn_the_mood());
+		nickname.setText(InfoCache.getInstance().getPersonalInfo().getNickname());
+		In_the_mood.setText(InfoCache.getInstance().getPersonalInfo().getIn_the_mood());
 
-		gender.setContent(MainActivity.personalInformation.getGender().equals(
+		gender.setContent(InfoCache.getInstance().getPersonalInfo().getGender().equals(
 				"男") ? "男" : "女");
-		birthday.setContent(MainActivity.personalInformation.getBirthday());
-		constellation.setContent(MainActivity.personalInformation
+		birthday.setContent(InfoCache.getInstance().getPersonalInfo().getBirthday());
+		constellation.setContent(InfoCache.getInstance().getPersonalInfo()
 				.getThe_constellation());
-		national.setContent(MainActivity.personalInformation.getNational());
-		height.setContent(MainActivity.personalInformation.getHeight());
-		weight.setContent(MainActivity.personalInformation.getWeight());
-		region.setContent(MainActivity.personalInformation.getRegion());
+		national.setContent(InfoCache.getInstance().getPersonalInfo().getNational());
+		height.setContent(InfoCache.getInstance().getPersonalInfo().getHeight());
+		weight.setContent(InfoCache.getInstance().getPersonalInfo().getWeight());
+		region.setContent(InfoCache.getInstance().getPersonalInfo().getRegion());
 
-		professional.setContent(MainActivity.personalInformation
+		professional.setContent(InfoCache.getInstance().getPersonalInfo()
 				.getProfessional());
-		nationality.setContent(MainActivity.personalInformation
+		nationality.setContent(InfoCache.getInstance().getPersonalInfo()
 				.getNationality());
-		region.setContent(MainActivity.personalInformation.getRegion());
-		language.setContent(MainActivity.personalInformation.getLanguage());
+		region.setContent(InfoCache.getInstance().getPersonalInfo().getRegion());
+		language.setContent(InfoCache.getInstance().getPersonalInfo().getLanguage());
 
-		email.setText(MainActivity.personalInformation.getEmail());
+		email.setText(InfoCache.getInstance().getPersonalInfo().getEmail());
 		Mobile_phone
-				.setText(MainActivity.personalInformation.getMobile_phone());
+				.setText(InfoCache.getInstance().getPersonalInfo().getMobile_phone());
 
-		level.setText("Lv." + MainActivity.personalInformation.getLevel());
+		level.setText("Lv." + InfoCache.getInstance().getPersonalInfo().getLevel());
 
 		Glide.with(activity)
-				.load(MainActivity.personalInformation.getHead_portrait())
+				.load(InfoCache.getInstance().getPersonalInfo().getHead_portrait())
 				.centerCrop().diskCacheStrategy(DiskCacheStrategy.ALL)
 				.placeholder(R.drawable.home_image).into(Head_portrait);
 	}
@@ -224,36 +225,36 @@ public class BaseInfoFragment extends BaseFragment implements OnClickListener{
 	}
 	
 	public void save() {
-		if (MainActivity.personalInformation == null) {
-			MainActivity.personalInformation = new EditPersonal();
+		if (InfoCache.getInstance().getPersonalInfo() == null) {
+			InfoCache.getInstance().CreateEditPersonalInstance();
 		}
 
-		MainActivity.personalInformation.setNickname(nickname.getText()
+		InfoCache.getInstance().getPersonalInfo().setNickname(nickname.getText()
 				.toString());
-		MainActivity.personalInformation.setIn_the_mood(In_the_mood.getText()
+		InfoCache.getInstance().getPersonalInfo().setIn_the_mood(In_the_mood.getText()
 				.toString());
-		MainActivity.personalInformation.setGender(gender.getContent().equals(
+		InfoCache.getInstance().getPersonalInfo().setGender(gender.getContent().equals(
 				"男") ? "男" : "女");
-		MainActivity.personalInformation.setBirthday(birthday.getContent());
-		MainActivity.personalInformation.setAge(""
+		InfoCache.getInstance().getPersonalInfo().setBirthday(birthday.getContent());
+		InfoCache.getInstance().getPersonalInfo().setAge(""
 				+ TimestampTool.dateDiffYear(birthday.getContent(),
 						TimestampTool.getCurrentDate()));
 
-		MainActivity.personalInformation.setProfessional(professional
+		InfoCache.getInstance().getPersonalInfo().setProfessional(professional
 				.getContent());
-		MainActivity.personalInformation.setLanguage(language.getContent());
-		MainActivity.personalInformation.setThe_constellation(constellation
+		InfoCache.getInstance().getPersonalInfo().setLanguage(language.getContent());
+		InfoCache.getInstance().getPersonalInfo().setThe_constellation(constellation
 				.getContent());
-		MainActivity.personalInformation.setNational(national.getContent());
-		MainActivity.personalInformation.setHeight(height.getContent());
-		MainActivity.personalInformation.setWeight(weight.getContent());
+		InfoCache.getInstance().getPersonalInfo().setNational(national.getContent());
+		InfoCache.getInstance().getPersonalInfo().setHeight(height.getContent());
+		InfoCache.getInstance().getPersonalInfo().setWeight(weight.getContent());
 
-		MainActivity.personalInformation.setLanguage(language.getContent());
-		MainActivity.personalInformation.setNationality(nationality
+		InfoCache.getInstance().getPersonalInfo().setLanguage(language.getContent());
+		InfoCache.getInstance().getPersonalInfo().setNationality(nationality
 				.getContent());
-		MainActivity.personalInformation.setRegion(region.getContent());
-		MainActivity.personalInformation.setEmail(email.getText().toString());
-		MainActivity.personalInformation.setMobile_phone(Mobile_phone.getText()
+		InfoCache.getInstance().getPersonalInfo().setRegion(region.getContent());
+		InfoCache.getInstance().getPersonalInfo().setEmail(email.getText().toString());
+		InfoCache.getInstance().getPersonalInfo().setMobile_phone(Mobile_phone.getText()
 				.toString());
 		sendReqSaveUser();
 	}
@@ -378,13 +379,13 @@ public class BaseInfoFragment extends BaseFragment implements OnClickListener{
 	 */
 	private void sendReqSaveUser() {
 		if (Config.User== null
-				|| MainActivity.personalInformation == null) {
+				|| InfoCache.getInstance().getPersonalInfo() == null) {
 			ToastUtil.show(activity, "无法获取信息");
 			return;
 		}
-		EditPersonal entity = MainActivity.personalInformation;
+		EditPersonal entity = InfoCache.getInstance().getPersonalInfo();
 		entity.setClientID(Config.User.getClientID());
-		entity.setHead_portrait(Head_portraitbmp == null ? MainActivity.personalInformation
+		entity.setHead_portrait(Head_portraitbmp == null ? InfoCache.getInstance().getPersonalInfo()
 				.getHead_portrait() : ("data:image/jpg;base64," + getBtye64String(Head_portraitbmp)));
 		ShowProgressDialog("提交基本信息...");
 		String content = JsonUtil.toString(entity);
@@ -429,12 +430,16 @@ public class BaseInfoFragment extends BaseFragment implements OnClickListener{
 			Entity<EditPersonal> baseEntity = gson.fromJson(jsonString,
 					new TypeToken<Entity<EditPersonal>>() {
 					}.getType());
-			MainActivity.personalInformation = baseEntity.getData();
-			if (MainActivity.personalInformation != null) {
-				initPersonalInformation();
-			} else {
-				ToastUtil.show(activity, "获取数据失败");
+			if (baseEntity.getData() != null)
+			{
+				InfoCache.getInstance().setPersonalInfo(baseEntity.getData());
+				if (InfoCache.getInstance().getPersonalInfo() != null) {
+					initPersonalInformation();
+				} else {
+					ToastUtil.show(activity, "获取数据失败");
+				}
 			}
+
 			break;
 		case Config.edit_personal_information:
 			ToastUtil.show(getActivity(), "提交成功");
@@ -446,8 +451,6 @@ public class BaseInfoFragment extends BaseFragment implements OnClickListener{
 	@Override
 	public void obtainImage(String imagePath) {
 		Glide.clear(Head_portrait);
-
-		headFile = imagePath;
 
 		File fe = new File(Environment.getExternalStorageDirectory(), imagePath);
 		Head_portraitbmp = BitmapFactory.decodeFile(fe.getPath());

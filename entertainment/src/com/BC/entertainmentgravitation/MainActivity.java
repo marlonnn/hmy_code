@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import com.BC.entertainment.cache.InfoCache;
 import com.BC.entertainment.chatroom.helper.LogoutHelper;
 import com.BC.entertainmentgravitation.R;
 import org.apache.http.NameValuePair;
@@ -52,8 +53,6 @@ public class MainActivity extends BaseActivity implements OnClickListener, Updat
 			ToApplyFor, gift, redEnvelope, LuckyDraw, toLevel, searchButton,
 			account;
 	private EditText searchEdit;
-	public static EditPersonal personalInformation;
-	public static StarInformation starInformation;
 	public static AuthoritativeInformation authoritativeInformation;
 
 	public static final String PACKAGE_NAME = "com.BC.entertainmentgravitation";
@@ -223,7 +222,10 @@ public class MainActivity extends BaseActivity implements OnClickListener, Updat
 					if(isSlipping){
 //						Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
 //						startActivity(intent);
-						watchLiveVideoRequest(MainActivity.starInformation.getUser_name());
+						if (InfoCache.getInstance().getStartInfo() != null && InfoCache.getInstance().getStartInfo().getUser_name() != null)
+						{
+							watchLiveVideoRequest(InfoCache.getInstance().getStartInfo().getUser_name());	
+						}
 					}
 					break;
 				default:
@@ -556,32 +558,38 @@ public class MainActivity extends BaseActivity implements OnClickListener, Updat
 			Entity<EditPersonal> baseEntity = gson.fromJson(jsonString,
 					new TypeToken<Entity<EditPersonal>>() {
 					}.getType());
-			personalInformation = baseEntity.getData();
-			if (personalInformation != null) {
-				personalInformation.getBirthday();
-				nickname.setText(personalInformation.getNickname());
-				levelText.setText("Lv." + personalInformation.getLevel());
-				
-				UpdateDallorTask task = new UpdateDallorTask(this,
-						Long.valueOf(personalInformation.getEntertainment_dollar()));
-				task.execute();
-				Glide.with(this).load(personalInformation.getHead_portrait())
-						.centerCrop().diskCacheStrategy(DiskCacheStrategy.ALL)
-						.placeholder(R.drawable.home_image).into(Head_portrait);
-
+			if (baseEntity.getData() != null)
+			{
+				InfoCache.getInstance().setPersonalInfo(baseEntity.getData());
+				if (InfoCache.getInstance().getPersonalInfo() != null) {
+					InfoCache.getInstance().getPersonalInfo().getBirthday();
+					nickname.setText(InfoCache.getInstance().getPersonalInfo().getNickname());
+					levelText.setText("Lv." + InfoCache.getInstance().getPersonalInfo().getLevel());
+					
+					UpdateDallorTask task = new UpdateDallorTask(this,
+							Long.valueOf(InfoCache.getInstance().getPersonalInfo().getEntertainment_dollar()));
+					task.execute();
+					Glide.with(this).load(InfoCache.getInstance().getPersonalInfo().getHead_portrait())
+							.centerCrop().diskCacheStrategy(DiskCacheStrategy.ALL)
+							.placeholder(R.drawable.home_image).into(Head_portrait);
+				}
 			}
+
 			break;
 		case Config.star_information:
 			Entity<StarInformation> startInfo = gson.fromJson(jsonString,
 					new TypeToken<Entity<StarInformation>>() {
 					}.getType());
-			starInformation = startInfo.getData();
-			if (starInformation != null) {
-
-				Glide.with(this).load(starInformation.getFirst_album())
-						.centerCrop().diskCacheStrategy(DiskCacheStrategy.ALL)
-						.placeholder(R.drawable.home_image).into(details);
-				jiaGeQuXianFragment.initStarInformation();
+			if (startInfo != null)
+			{
+				InfoCache.getInstance().setStartInfo(startInfo.getData());
+				if(InfoCache.getInstance().getStartInfo() != null)
+				{
+					Glide.with(this).load(InfoCache.getInstance().getStartInfo().getFirst_album())
+					.centerCrop().diskCacheStrategy(DiskCacheStrategy.ALL)
+					.placeholder(R.drawable.home_image).into(details);
+			        jiaGeQuXianFragment.initStarInformation();
+				}
 			}
 			break;
 		case Config.activities:
