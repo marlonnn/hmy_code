@@ -50,7 +50,7 @@
             android:textSize="20dip" />
     </LinearLayout>
 
-    <com.BC.entertainmentgravitation.dialog.SelectWheel4
+    <com.BC.entertainment.view.SelectWheel4
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/selectWheel"
         android:layout_width="match_parent"
@@ -84,6 +84,6 @@
             android:layout_height="200dp"
             android:layout_gravity="center_vertical"
             android:layout_weight="1" />
-    </com.BC.entertainmentgravitation.dialog.SelectWheel4>
+    </com.BC.entertainment.view.SelectWheel4>
 
 </LinearLayout>

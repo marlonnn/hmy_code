@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:select="http://schemas.android.com/apk/res/com.BC.entertainmentgravitation"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/activity_charge_bg"
@@ -9,7 +10,43 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical" >
-
+		<RelativeLayout
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:paddingTop="10dp"
+		        android:paddingBottom="10dp" >
+		
+		        <ImageView
+		            android:id="@+id/imageViewBack"
+		            android:layout_width="28dp"
+		            android:layout_height="28dp"
+		            android:layout_alignParentLeft="true"
+		            android:layout_centerVertical="true"
+		            android:layout_marginLeft="15dp"
+		            android:src="@drawable/activity_charge_back" />
+		
+		        <LinearLayout
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:layout_centerHorizontal="true"
+		            android:layout_centerVertical="true" >
+		
+		            <ImageView
+		                android:id="@+id/imageViewIcon"
+		                android:layout_width="28dp"
+		                android:layout_height="28dp"
+		                android:src="@drawable/activity_personal_info_base" />
+		
+		            <TextView
+		                android:id="@+id/textViewCharge"
+		                android:layout_width="wrap_content"
+		                android:layout_height="wrap_content"
+		                android:layout_gravity="center"
+		                android:textSize="22dp"
+		                android:text="基本信息" />
+		        </LinearLayout>
+		
+		    </RelativeLayout>
 		<LinearLayout
 		    android:layout_width="match_parent"
 		    android:layout_height="match_parent"
@@ -24,7 +61,7 @@
 				android:layout_margin="5dip" />
 			<EditText
 				android:id="@+id/nickname"
-				android:layout_width="match_parent"
+				android:layout_width="80dp"
 				android:layout_height="wrap_content"
 				android:layout_weight="1"
 				android:background="@null"
@@ -34,119 +71,150 @@
 				android:textSize="14dip" >
 				<requestFocus />
 			</EditText>
-		
+			<TextView
+				android:id="@+id/level"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_weight="1"
+				android:background="@null"
+				android:ems="10"
+				android:text="Lv.99"
+				android:textColor="@color/white"
+				android:textSize="14dip"
+				android:visibility="gone" />
+			<TextView
+				android:id="@+id/copy"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_weight="1"
+				android:textSize="15dp"
+				android:background="@null"
+				android:layout_gravity="center"
+				android:text="@string/fragment_base_info_copy"
+				android:textColor="@color/white"/>
 		</LinearLayout>
 		<View
 			android:layout_width="match_parent"
 			android:layout_height="1dp"
-			android:background="@color/gray" />
-		<com.BC.entertainmentgravitation.view.BaseSelectItem
+			android:background="@color/gray"/>
+		<com.BC.entertainment.view.BaseSelectItem
 			android:id="@+id/gender"
 			android:layout_weight="1" 
 			android:layout_width="match_parent"
 			android:layout_height="40dp"
 			select:content="@string/fragment_base_info_select"
 			select:dialogContent="@layout/wheel_select"
-			select:title="@string/fragment_base_info_gender" />
+			select:mytitle="性别"
+			android:gravity="center"
+			android:text="@string/fragment_base_info_gender" />
 		<View
 			android:layout_width="match_parent"
 			android:layout_height="1dp"
 			android:background="@color/gray" />
-		<com.BC.entertainmentgravitation.view.BaseSelectItem
+		<com.BC.entertainment.view.BaseSelectItem
 			android:id="@+id/birthday"
 			android:layout_width="match_parent"
 			android:layout_height="40dp"
 			select:content="2015-08-12"
+			android:gravity="center"
 			select:dialogContent="@layout/wheel_date"
-			select:title="生日" />
+			select:mytitle="生日" />
 		<View
 			android:layout_width="match_parent"
 			android:layout_height="1dp"
 			android:background="@color/gray" />
-		<com.BC.entertainmentgravitation.view.BaseSelectItem
+		<com.BC.entertainment.view.BaseSelectItem
 			android:id="@+id/professional"
 			android:layout_width="match_parent"
 			android:layout_height="40dp"
+			android:gravity="center"
 			select:content="@string/fragment_base_info_select"
 			select:dialogContent="@layout/wheel_select"
-			select:title="职业" />
+			select:mytitle="职业" />
 		<View
 			android:layout_width="match_parent"
 			android:layout_height="1dp"
 			android:background="@color/gray" />
-		<com.BC.entertainmentgravitation.view.BaseSelectItem
+		<com.BC.entertainment.view.BaseSelectItem
 			android:id="@+id/constellation"
 			android:layout_width="match_parent"
 			android:layout_height="40dp"
+			android:gravity="center"
 			select:content="@string/fragment_base_info_select"
 			select:dialogContent="@layout/wheel_select"
-			select:title="星座" />	
+			select:mytitle="星座" />	
 		<View
 			android:layout_width="match_parent"
 			android:layout_height="1dp"
 			android:background="@color/gray" />
-		<com.BC.entertainmentgravitation.view.BaseSelectItem
+		<com.BC.entertainment.view.BaseSelectItem
 		    android:id="@+id/nationality"
 		    android:layout_width="match_parent"
 		    android:layout_height="40dp"
+		    android:gravity="center"
 		    select:content="@string/fragment_base_info_select"
 		    select:dialogContent="@layout/wheel_select"
-		    select:title="国籍" />			
+		    select:mytitle="国籍" />			
 		<View
 			android:layout_width="match_parent"
 			android:layout_height="1dp"
 			android:background="@color/gray" />
-		<com.BC.entertainmentgravitation.view.BaseSelectItem
+		<com.BC.entertainment.view.BaseSelectItem
 			android:id="@+id/national"
 			android:layout_width="match_parent"
 			android:layout_height="40dp"
+			android:gravity="center"
 			select:content="@string/fragment_base_info_select"
 			select:dialogContent="@layout/wheel_select"
-			select:title="民族" />						
+			select:mytitle="民族" />						
 		<View
 			android:layout_width="match_parent"
 			android:layout_height="1dp"
 			android:background="@color/gray" />
-		<com.BC.entertainmentgravitation.view.BaseSelectItem
+		<com.BC.entertainment.view.BaseSelectItem
             android:id="@+id/region"
             android:layout_width="match_parent"
             android:layout_height="40dp"
+            android:gravity="center"
             select:content="@string/fragment_base_info_select"
             select:dialogContent="@layout/wheel_city"
-            select:title="地区" />
+            select:mytitle="地区" />
         <View
 			android:layout_width="match_parent"
 			android:layout_height="1dp"
 			android:background="@color/gray" />
-		<com.BC.entertainmentgravitation.view.BaseSelectItem
+		<com.BC.entertainment.view.BaseSelectItem
 			android:id="@+id/height"
 			android:layout_width="match_parent"
 			android:layout_height="40dp"
+			android:gravity="center"
 			select:content="@string/fragment_base_info_select"
 			select:dialogContent="@layout/wheel_select3"
-			select:title="身高" />       
+			select:mytitle="身高" />       
         <View
 			android:layout_width="match_parent"
 			android:layout_height="1dp"
 			android:background="@color/gray" />
-		<com.BC.entertainmentgravitation.view.BaseSelectItem
+		<com.BC.entertainment.view.BaseSelectItem
 			android:id="@+id/language"
 			android:layout_width="match_parent"
 			android:layout_height="40dp"
+			android:gravity="center"
 			select:content="@string/fragment_base_info_select"
 			select:dialogContent="@layout/wheel_select"
-			select:title="语言" />      
+			select:mytitle="语言" />      
         <View
 			android:layout_width="match_parent"
 			android:layout_height="1dp"
 			android:background="@color/gray" />
- 		<com.BC.entertainmentgravitation.view.BaseSelectItem
+ 		<com.BC.entertainment.view.BaseSelectItem
 			android:id="@+id/weight"
 			android:layout_width="match_parent"
 			android:layout_height="40dp"
+			android:gravity="center"
 			select:content="@string/fragment_base_info_select"
 			select:dialogContent="@layout/wheel_select2"
-			select:title="@string/fragment_base_info_weight" />     
+			select:mytitle="@string/fragment_base_info_weight" />     
         <View
 			android:layout_width="match_parent"
 			android:layout_height="1dp"
@@ -206,5 +274,39 @@
 			android:layout_width="match_parent"
 			android:layout_height="1dp"
 			android:background="@color/gray" />
+		<EditText
+			android:id="@+id/In_the_mood"
+			android:layout_width="wrap_content"
+			android:layout_height="40dp"
+			android:layout_weight="1"
+			android:background="@null"
+			android:hint="留下你的心情"
+			android:textColor="@color/red2" />
+		<View
+			android:layout_width="match_parent"
+			android:layout_height="1dp"
+			android:background="@color/gray" />
+	    <LinearLayout
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content" >
+	
+	        <Button
+	            android:id="@+id/editButton"
+	            android:layout_width="100dip"
+	            android:layout_height="30dip"
+	            android:layout_marginLeft="10dip"
+	            android:background="@color/white"
+	            android:text="@string/fragment_base_info_change"
+	            android:textColor="#e1157f" />
+	
+	        <Button
+	            android:id="@+id/exitEditButton"
+	            android:layout_width="100dip"
+	            android:layout_height="30dip"
+	            android:layout_marginLeft="10dip"
+	            android:background="#e1157f"
+	            android:text="@string/fragment_base_info_exit"
+	            android:textColor="@color/white" />
+	    </LinearLayout>
     </LinearLayout>
 </ScrollView>

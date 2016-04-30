@@ -1,15 +1,16 @@
 package com.BC.entertainment.view;
 
-
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -29,8 +30,7 @@ public class BaseSelectItem extends LinearLayout implements OnClickListener {
 
 	private LayoutInflater inflater;
 	private LinearLayout contentnLayout;
-	private TextView title;
-	// private View itemImage;
+	private TextView mytitle;
 	private TextView content;
 	private int dialogContentId = 0;
 	private float textSize = 0;
@@ -171,7 +171,6 @@ public class BaseSelectItem extends LinearLayout implements OnClickListener {
 
 	public BaseSelectItem(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		// TODO Auto-generated constructor stub
 		inflater = LayoutInflater.from(context);
 		init();
 		attrCode(context, attrs);
@@ -186,10 +185,10 @@ public class BaseSelectItem extends LinearLayout implements OnClickListener {
 	public void showItemImage(boolean show) {
 	}
 
-	private void init() {
+	@SuppressLint("InflateParams") private void init() {
 		contentnLayout = (LinearLayout) inflater.inflate(
 				R.layout.base_select_item, null);
-		title = (TextView) contentnLayout.findViewById(R.id.title);
+		mytitle = (TextView) contentnLayout.findViewById(R.id.mytitle);
 		content = (TextView) contentnLayout.findViewById(R.id.content);
 		content2 = (EditText) contentnLayout.findViewById(R.id.content2);
 
@@ -210,9 +209,10 @@ public class BaseSelectItem extends LinearLayout implements OnClickListener {
 		int n = a.getIndexCount();
 		for (int i = 0; i < n; i++) {
 			int attr = a.getIndex(i);
+			Log.i("MyRadioButton", "attr:" + attr);
 			switch (attr) {
-			case R.styleable.BaseSelectItem_basetitle:
-				title.setText(a.getString(R.styleable.BaseSelectItem_basetitle));
+			case R.styleable.BaseSelectItem_mytitle:
+				mytitle.setText(a.getString(R.styleable.BaseSelectItem_mytitle));
 				break;
 			case R.styleable.BaseSelectItem_content:
 				content.setText(a.getString(R.styleable.BaseSelectItem_content));
@@ -226,7 +226,7 @@ public class BaseSelectItem extends LinearLayout implements OnClickListener {
 				textSize = a.getDimension(R.styleable.BaseSelectItem_textSize,
 						0);
 				if (textSize != 0) {
-					title.setTextSize(textSize);
+					mytitle.setTextSize(textSize);
 					content.setTextSize(textSize);
 				}
 				break;
@@ -247,14 +247,12 @@ public class BaseSelectItem extends LinearLayout implements OnClickListener {
 
 	@Override
 	public void onClick(View v) {
-		// TODO Auto-generated method stub
 		if (canClick) {
 			showAlertDialog();
 		}
 	}
 
 	private void showAlertDialog() {
-		// TODO Auto-generated method stub
 		AlertDialog.Builder builder = new AlertDialog.Builder(this.getContext());
 		final AlertDialog ad = builder.create();
 		ad.show();
@@ -267,7 +265,6 @@ public class BaseSelectItem extends LinearLayout implements OnClickListener {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				if (result != null) {
 					result.result(dialogContent, content);
 				}
@@ -278,7 +275,6 @@ public class BaseSelectItem extends LinearLayout implements OnClickListener {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				ad.dismiss();
 			}
 		});
@@ -375,7 +371,6 @@ public class BaseSelectItem extends LinearLayout implements OnClickListener {
 		public void selectValue(int selectID, String selectItem,
 				boolean oneString) {
 			synchronized (this) {
-				// TODO Auto-generated method stub
 				if (selectItem != null) {
 					selectItem = selectItem.replace(" ", "");
 				}
@@ -436,13 +431,11 @@ public class BaseSelectItem extends LinearLayout implements OnClickListener {
 		public void selectValue(int selectID, String selectItem,
 				boolean oneString) {
 			synchronized (this) {
-				// TODO Auto-generated method stub
 				if (selectItem != null) {
 					selectItem = selectItem.replace(" ", "");
 					try {
 						selectItem = new String(selectItem.getBytes(),"UTF-8");
 					} catch (UnsupportedEncodingException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
@@ -454,7 +447,6 @@ public class BaseSelectItem extends LinearLayout implements OnClickListener {
 						content2.setText("");
 						content2.setVisibility(View.GONE);
 					}
-					// title2.setText(content.getText());
 				} else {
 					String str = content.getText().toString();
 					List<String> s = Arrays.asList(str.split("[-]"));
@@ -512,4 +504,3 @@ public class BaseSelectItem extends LinearLayout implements OnClickListener {
 		}
 	};
 }
-

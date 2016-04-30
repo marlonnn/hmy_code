@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:select="http://schemas.android.com/apk/res/com.BC.entertainmentgravitation"
+      android:background="@drawable/activity_charge_bg"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:orientation="vertical" >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp" >
+
+        <ImageView
+            android:id="@+id/imageViewBack"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:src="@drawable/activity_charge_back" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true" >
+
+            <ImageView
+                android:id="@+id/imageViewIcon"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:src="@drawable/activity_personal_broker_base" />
+
+            <TextView
+                android:id="@+id/textViewCharge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textSize="22dp"
+                android:text="我的经纪" />
+        </LinearLayout>
+
+    </RelativeLayout>
+		<View
+			android:layout_width="match_parent"
+			android:layout_height="1dp"
+			android:background="@color/gray"/>
+		          <LinearLayout
+		              android:layout_width="match_parent"
+		              android:layout_height="40dp"
+		              android:layout_marginLeft="10dp"
+		              android:gravity="center"
+		              android:layout_weight="1" >
+		
+		              <TextView
+		                  android:id="@+id/textViewBroker"
+		                  android:layout_width="wrap_content"
+		                  android:layout_height="wrap_content"
+		                  android:text="经纪人    "
+		                  android:textColor="@color/white" />
+		
+		              <EditText
+		                  android:id="@+id/Agent_name"
+		                  android:layout_width="wrap_content"
+		                  android:layout_height="wrap_content"
+		                  android:layout_weight="1"
+		                  android:background="@null"
+		                  android:hint="经纪人或经纪公司"
+		                  android:textColor="@color/white" />
+		          </LinearLayout>
+		<View
+			android:layout_width="match_parent"
+			android:layout_height="1dp"
+			android:background="@color/gray" />
+	<LinearLayout
+	    android:layout_width="match_parent"
+	          android:layout_height="40dp"
+	          android:layout_marginLeft="10dp"
+	          android:gravity="center"
+	    android:layout_weight="1" >
+	
+	    <TextView
+	        android:id="@+id/textViewPhone"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="电    话    "
+	        android:textColor="@color/white" />
+	
+	    <EditText
+	        android:id="@+id/The_phone"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1"
+	        android:background="@null"
+	        android:hint="经纪人电话"
+	        android:textColor="@color/white" />
+	</LinearLayout>
+<View
+	android:layout_width="match_parent"
+	android:layout_height="1dp"
+	android:background="@color/gray" />
+          <LinearLayout
+              android:layout_width="match_parent"
+              android:layout_height="40dp"
+              android:layout_marginLeft="10dp"
+              android:gravity="center"
+              android:layout_weight="1" >
+
+              <TextView
+                  android:id="@+id/TextView01"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="QQ            "
+                  android:textColor="@color/white" />
+
+              <EditText
+                  android:id="@+id/QQ"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_weight="1"
+                  android:background="@null"
+                  android:hint="经纪人QQ"
+                  android:textColor="@color/white" />
+          </LinearLayout>
+<View
+	android:layout_width="match_parent"
+	android:layout_height="1dp"
+	android:background="@color/gray" />
+<LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="40dp"
+          android:layout_marginLeft="10dp"
+          android:gravity="center"
+          android:layout_weight="1" >
+
+          <TextView
+              android:id="@+id/textView2"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="微    信    "
+              android:textColor="@color/white" />
+
+          <EditText
+              android:id="@+id/WeChat"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_weight="1"
+              android:background="@null"
+              android:hint="经纪人微信"
+              android:textColor="@color/white" />
+      </LinearLayout>	
+<View
+	android:layout_width="match_parent"
+	android:layout_height="1dp"
+	android:background="@color/gray" />
+      <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="40dp"
+          android:layout_marginLeft="10dp"
+          android:gravity="center"
+          android:layout_weight="1" >
+
+          <TextView
+              android:id="@+id/TextViewMail"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="邮    箱    "
+              android:textColor="@color/white" />
+
+          <EditText
+              android:id="@+id/email"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_weight="1"
+              android:background="@null"
+              android:hint="经纪人邮箱"
+              android:textColor="@color/white" />
+      </LinearLayout>	
+<View
+	android:layout_width="match_parent"
+	android:layout_height="1dp"
+	android:background="@color/gray" />
+<LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="40dp"
+          android:layout_marginLeft="10dp"
+          android:gravity="center"
+          android:layout_weight="1" >
+
+          <TextView
+              android:id="@+id/textViewA"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="地    址    "
+              android:textColor="@color/white" />
+
+          <EditText
+              android:id="@+id/address"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_weight="1"
+              android:background="@null"
+              android:hint="经纪人/公司通讯地址"
+              android:textColor="@color/white" >
+          </EditText>
+      </LinearLayout>						
+<View
+	android:layout_width="match_parent"
+	android:layout_height="1dp"
+	android:background="@color/gray" />
+
+   
+      <View
+	android:layout_width="match_parent"
+	android:layout_height="1dp"
+	android:background="@color/gray" />
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="40dp"
+    android:gravity="center_vertical"
+    android:padding="5dp"
+    android:layout_weight="1" >
+
+    <TextView
+        android:id="@+id/TextViewP"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/fragment_base_info_phone"
+        android:textColor="@color/white" />
+
+    <EditText
+        android:id="@+id/phone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@null"
+        android:hint="@string/fragment_base_info_phone_hint"
+        android:textColor="@color/white" />
+</LinearLayout>       
+      <View
+	android:layout_width="match_parent"
+	android:layout_height="1dp"
+	android:background="@color/gray" />
+
+   <LinearLayout
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content" >
+
+       <Button
+           android:id="@+id/editButton"
+           android:layout_width="100dip"
+           android:layout_height="30dip"
+           android:layout_marginLeft="10dip"
+           android:background="@color/white"
+           android:text="更改"
+           android:textColor="#e1157f" />
+
+       <Button
+           android:id="@+id/exitEditButton"
+           android:layout_width="100dip"
+           android:layout_height="30dip"
+           android:layout_marginLeft="10dip"
+           android:background="#e1157f"
+           android:text="退出"
+           android:textColor="@color/white" />
+   </LinearLayout>
+  </LinearLayout>

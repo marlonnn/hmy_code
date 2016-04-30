@@ -2,6 +2,7 @@ package com.BC.entertainmentgravitation.dialog;
 
 import java.util.Arrays;
 
+import com.BC.entertainment.view.SelectWheel4;
 import com.BC.entertainmentgravitation.util.ConstantArrayListsUtil;
 import com.BC.entertainmentgravitation.R;
 import android.app.Dialog;

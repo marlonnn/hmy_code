@@ -191,6 +191,43 @@
             android:name=".PersonalActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait" >
+        </activity>
+        <!-- 基本信息 -->
+        <activity
+            android:name=".BaseInfoActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" >
+        </activity>
+        <!-- 相册管理 -->
+        <activity
+            android:name=".AlbumActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" >
+        </activity>
+        <!-- 演艺经历 -->
+        <activity
+            android:name=".CareerActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" >
+        </activity>
+        <!-- 我的经纪 -->
+        <activity
+            android:name=".BrokerActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" >
+        </activity>
+        
+        <!-- 意见反馈 -->
+        <activity
+            android:name=".FeedbackActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" >
+        </activity> 
+        <!-- 关于我们 -->
+        <activity
+            android:name=".AboutActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" >
         </activity> 
     </application>
 

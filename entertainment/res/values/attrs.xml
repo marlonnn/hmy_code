@@ -10,7 +10,7 @@
         <attr name="drawablePadding" format="dimension" />
     </declare-styleable>
     <declare-styleable name="BaseSelectItem">
-        <attr name="basetitle" format="string" />
+        <attr name="mytitle" format="string" />
         <attr name="content" format="string" />
         <attr name="dialogContent" format="reference" />
         <attr name="textSize" format="dimension" />

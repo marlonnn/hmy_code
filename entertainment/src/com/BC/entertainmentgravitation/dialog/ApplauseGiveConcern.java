@@ -4,8 +4,9 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.apache.http.NameValuePair;
+
+import com.BC.entertainment.view.SelectWheel4;
 import com.BC.entertainmentgravitation.R;
-import com.BC.entertainmentgravitation.MainActivity;
 import com.BC.entertainmentgravitation.dialog.AnimationDialog.Builder.AnimationOver;
 import com.summer.config.Config;
 import com.summer.factory.ThreadPoolFactory;

@@ -6,10 +6,10 @@
     android:orientation="horizontal" >
 
     <TextView
-        android:id="@+id/title"
+        android:id="@+id/mytitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/base_select_item_title"
+        android:text="@string/base_select_item_mytitle"
         android:textColor="@color/white"
         android:textSize="14dip" />
 

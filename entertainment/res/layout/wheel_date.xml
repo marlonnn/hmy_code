@@ -40,7 +40,7 @@
             android:textSize="20dip" />
     </LinearLayout>
 
-    <com.BC.entertainmentgravitation.view.DateSelectWheel
+    <com.BC.entertainment.view.DateSelectWheel
         android:id="@+id/selectWheel"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -73,6 +73,6 @@
             android:layout_width="wrap_content"
             android:layout_height="150dp"
             android:layout_weight="1" />
-    </com.BC.entertainmentgravitation.view.DateSelectWheel>
+    </com.BC.entertainment.view.DateSelectWheel>
 
 </LinearLayout>

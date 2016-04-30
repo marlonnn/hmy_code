@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.BC.entertainment.view.SelectWheel4;
 import com.BC.entertainmentgravitation.R;
 import com.BC.entertainmentgravitation.util.ConstantArrayListsUtil;
 
@@ -159,7 +160,7 @@ public class PayDialog extends Dialog {
 			selectWheel4.wheelInterfasc = this;
 
 			TextView shuliang = (TextView) findViewById(R.id.shuliang);
-			shuliang.setText("½ð¶î:");
+			shuliang.setText("ï¿½ï¿½ï¿½:");
 
 			editText = (EditText) layout.findViewById(R.id.message);
 			// set the confirm button

@@ -241,6 +241,7 @@ public class PersonalActivity extends BaseActivity implements OnClickListener, O
 	@Override
 	public void onItemClick(View view, int position) {
 		Personal personal = (Personal)view.getTag();
+		Intent intent = null;
 		if(personal != null)
 		{
 			switch(personal.getResource())
@@ -249,31 +250,43 @@ public class PersonalActivity extends BaseActivity implements OnClickListener, O
 			 * 基本信息
 			 */
 			case R.drawable.activity_personal_info:
+				intent = new Intent(this, BaseInfoActivity.class);
+				startActivity(intent);
 				break;
 			/**
 			 * 相册管理
 			 */
 			case R.drawable.activity_personal_album:
+				intent = new Intent(this, AlbumActivity.class);
+				startActivity(intent);
 				break;
 			/**
 			 * 演艺经历
 			 */
 			case R.drawable.activity_personal_career:
+				intent = new Intent(this, CareerActivity.class);
+				startActivity(intent);
 				break;
 			/**
 			 * 我的经纪
 			 */
 			case R.drawable.activity_personal_broker:
+				intent = new Intent(this, BrokerActivity.class);
+				startActivity(intent);
 				break;
 			/**
 			 * 意见反馈
 			 */
 			case R.drawable.activity_personal_feedback:
+				intent = new Intent(this, FeedbackActivity.class);
+				startActivity(intent);
 				break;
 			/**
 			 * 关于我们
 			 */
 			case R.drawable.activity_personal_about:
+				intent = new Intent(this, AboutActivity.class);
+				startActivity(intent);
 				break;
 			}
 		}
