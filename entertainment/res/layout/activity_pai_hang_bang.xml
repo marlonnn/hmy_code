@@ -1,0 +1,208 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".MainActivity" >
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="40dip"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/title_bg" >
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:text="贡献排行榜"
+            android:textColor="@color/white"
+            android:textSize="20dip" />
+
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="25dip"
+            android:layout_height="25dip"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dip"
+            android:layout_toLeftOf="@+id/textView1"
+            android:src="@drawable/apply_icon2" />
+
+        <Button
+            android:id="@+id/nav_back_view"
+            android:layout_width="25dip"
+            android:layout_height="25dip"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dip"
+            android:background="@drawable/icin_close" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignLeft="@+id/relativeLayout1"
+        android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/relativeLayout1"
+        android:layout_below="@+id/relativeLayout1"
+        android:layout_marginLeft="30dip"
+        android:layout_marginRight="30dip"
+        android:background="@color/blackcover"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="80dip" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="bottom|right"
+                android:orientation="vertical" >
+
+                <com.summer.view.CircularImage
+                    android:id="@+id/imageView2"
+                    android:layout_width="40dip"
+                    android:layout_height="40dip" />
+
+                <TextView
+                    android:id="@+id/name2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical" >
+
+                <com.summer.view.CircularImage
+                    android:id="@+id/imageView3"
+                    android:layout_width="60dip"
+                    android:layout_height="60dip" />
+
+                <TextView
+                    android:id="@+id/name3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="bottom|left"
+                android:orientation="vertical" >
+
+                <com.summer.view.CircularImage
+                    android:id="@+id/imageView4"
+                    android:layout_width="40dip"
+                    android:layout_height="40dip" />
+
+                <TextView
+                    android:id="@+id/name4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dip"
+            android:background="#c94e062b"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="10dip"
+            android:paddingRight="10dip" >
+
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="152dip"
+                android:layout_height="wrap_content"
+                android:text="给明星鼓掌排行"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:id="@+id/Star_names"
+                android:layout_width="100dip"
+                android:layout_height="wrap_content"
+                android:text="名字"
+                android:textColor="@color/white"
+                android:textSize="20dip"
+                android:visibility="invisible" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center" >
+
+                    <TextView
+                        android:id="@+id/textView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dip"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="个人贡献"
+                        android:textColor="@color/white" />
+
+                    <TextView
+                        android:id="@+id/textView2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dip"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="最高掌声"
+                        android:visibility="gone"
+                        android:textColor="@color/white" />
+
+                    <TextView
+                        android:id="@+id/textView3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dip"
+                        android:layout_marginRight="5dip"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="获得掌声"
+                        android:textColor="@color/white" />
+                </LinearLayout>
+            </FrameLayout>
+        </LinearLayout>
+
+        <com.netease.nim.uikit.common.ui.ptr.PullToRefreshListView
+            xmlns:ptr="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/pullToRefreshListView1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:dividerHeight="0px"
+            android:layoutAnimation="@anim/layout_anim_ctrl"
+            android:listSelector="#00000000"
+            ptr:dividerHeight="1px"
+            ptr:ptrAnimationStyle="flip"
+            ptr:ptrMode="both"
+            ptr:scrollbars="false" >
+        </com.netease.nim.uikit.common.ui.ptr.PullToRefreshListView>
+    </LinearLayout>
+
+</RelativeLayout>

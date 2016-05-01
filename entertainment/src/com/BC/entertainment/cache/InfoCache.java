@@ -1,5 +1,8 @@
 package com.BC.entertainment.cache;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.BC.entertainmentgravitation.entity.EditPersonal;
 import com.BC.entertainmentgravitation.entity.StarInformation;
 
@@ -14,6 +17,57 @@ public class InfoCache {
 	 * 明星信息
 	 */
 	private StarInformation startInfo;
+	
+	private List<StarInformation> starInfoList;
+	
+	public List<StarInformation> CreateStarInfoList()
+	{
+		if (starInfoList == null)
+		{
+			starInfoList = new ArrayList<StarInformation>();
+		}
+		return starInfoList;
+	}
+	
+	
+	public void AddToStarInfoList(StarInformation starInfo)
+	{
+		CreateStarInfoList();
+		for (int i=0; i<starInfoList.size(); i++)
+		{
+			if(!starInfoList.get(i).getStar_ID().contains(starInfo.getStar_ID()))
+			{
+				starInfoList.add(starInfo);
+			}
+		}
+
+	}
+	
+	public StarInformation GetStarInfo(StarInformation starInfo)
+	{
+		CreateStarInfoList();
+		for (int i=0; i<starInfoList.size(); i++)
+		{
+			if(starInfoList.get(i).getUser_name().contains(starInfo.getUser_name()))
+			{
+				return starInfoList.get(i);
+			}
+		}
+		return null;
+	}
+	
+	public StarInformation GetStarInfo(String userName)
+	{
+		CreateStarInfoList();
+		for (int i=0; i<starInfoList.size(); i++)
+		{
+			if(starInfoList.get(i).getUser_name().contains(userName))
+			{
+				return starInfoList.get(i);
+			}
+		}
+		return null;
+	}
 	
 	/**
 	 * 个人信息

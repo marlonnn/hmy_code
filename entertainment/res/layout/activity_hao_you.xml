@@ -1,0 +1,97 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".MainActivity" >
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:background="@color/blackcover"
+        android:orientation="vertical" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dip" >
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:text="好友"
+                android:textColor="@color/white"
+                android:textSize="20dip" />
+
+            <Button
+                android:id="@+id/nav_back_view"
+                android:layout_width="25dip"
+                android:layout_height="25dip"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dip"
+                android:background="@drawable/icin_close" />
+
+            <ImageView
+                android:id="@+id/imageView1"
+                android:layout_width="25dip"
+                android:layout_height="25dip"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dip"
+                android:layout_toLeftOf="@+id/textView1"
+                android:src="@drawable/icon_like" />
+        </RelativeLayout>
+
+        <com.netease.nim.uikit.common.ui.ptr.PullToRefreshGridView
+            android:id="@+id/pullToRefreshGridView1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:dividerHeight="0px"
+            android:layoutAnimation="@anim/layout_anim_ctrl"
+            android:listSelector="#00000000"
+            android:paddingBottom="-5dip"
+            android:paddingTop="-5dp" >
+        </com.netease.nim.uikit.common.ui.ptr.PullToRefreshGridView>
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="60dip"
+            android:layout_height="30dip"
+            android:layout_marginBottom="3dip"
+            android:layout_marginLeft="3dip"
+            android:layout_marginRight="3dip"
+            android:layout_marginTop="3dip"
+            android:background="@color/white"
+            android:text="添    加"
+            android:textColor="@color/red2"
+            android:textSize="12dip" />
+    </LinearLayout>
+
+    <include
+        android:id="@+id/add"
+        android:layout_width="400dip"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        layout="@layout/dialog_alert1"
+        android:visibility="gone" />
+
+    <include
+        android:id="@+id/give"
+        android:layout_width="200dip"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        layout="@layout/dialog_alert2"
+        android:visibility="gone" />
+
+</RelativeLayout>

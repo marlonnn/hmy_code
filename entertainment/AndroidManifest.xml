@@ -228,7 +228,41 @@
             android:name=".AboutActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait" >
+        </activity>
+        <!-- 签到 -->
+        <activity
+            android:name=".SignInActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="landscape" >
         </activity> 
+        <!-- 活动 -->
+        <activity
+            android:name=".HuodongActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="landscape" >
+        </activity> 
+        <activity
+            android:name=".FriendsActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="landscape" >
+        </activity> 
+        <!-- 明星排行榜 -->
+        <activity
+            android:name=".StarLevelActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="landscape" >
+        </activity>
+        <!--消息 -->
+        <activity
+            android:name=".InformationActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="landscape" >
+        </activity>
+        <activity
+            android:name=".LevelActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="landscape" >
+        </activity>
     </application>
 
 </manifest>

@@ -1,12 +1,23 @@
 package com.BC.entertainmentgravitation;
 
 
+import java.util.HashMap;
+import java.util.List;
+
+import org.apache.http.NameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.BC.entertainmentgravitation.entity.ChatRoom;
+import com.BC.entertainmentgravitation.entity.EditPersonal;
+import com.BC.entertainmentgravitation.entity.VideoStatus;
 import com.BC.entertainmentgravitation.fragment.ExitFragmentListener;
 import com.BC.entertainmentgravitation.fragment.ScrollListener;
 import com.BC.entertainmentgravitation.fragment.SurfaceFragment;
 import com.BC.entertainmentgravitation.fragment.TopSurfaceFragment;
 import com.BC.entertainmentgravitation.fragment.WatchVideoFragment;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.netease.nim.uikit.common.ui.dialog.DialogMaker;
 import com.netease.nimlib.sdk.AbortableFuture;
 import com.netease.nimlib.sdk.NIMClient;
@@ -22,8 +33,18 @@ import com.netease.nimlib.sdk.chatroom.model.ChatRoomMember;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomStatusChangeData;
 import com.netease.nimlib.sdk.chatroom.model.EnterChatRoomData;
 import com.netease.nimlib.sdk.chatroom.model.EnterChatRoomResultData;
+import com.summer.activity.BaseActivity;
+import com.summer.config.Config;
+import com.summer.factory.ThreadPoolFactory;
+import com.summer.handler.InfoHandler;
+import com.summer.json.Entity;
 import com.summer.logger.XLog;
+import com.summer.task.HttpBaseTask;
+import com.summer.treadpool.ThreadPoolConst;
+import com.summer.utils.JsonUtil;
 import com.summer.utils.StringUtil;
+import com.summer.utils.ToastUtil;
+import com.summer.utils.UrlUtil;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -38,7 +59,7 @@ import android.widget.Toast;
  * @author zhongwen
  *
  */
-public class WatchVideoActivity extends FragmentActivity implements ExitFragmentListener{
+public class WatchVideoActivity extends BaseActivity implements ExitFragmentListener{
 	
 	public View rootView;
 	private ScrollListener listener;
@@ -59,7 +80,6 @@ public class WatchVideoActivity extends FragmentActivity implements ExitFragment
 
 				@Override
 				public void handleMessage(Message msg) {
-//					super.handleMessage(msg);
 				}
             	
             };
@@ -89,11 +109,36 @@ public class WatchVideoActivity extends FragmentActivity implements ExitFragment
 				finish();
 			}
         }
-        enterChatRoom();
-        registerObservers(true);
+//        queryVideoStatus();
         
         handler = getHandler();
-
+        
+		enterChatRoom();
+		registerObservers(true);
+    }
+    
+    private void queryVideoStatus()
+    {
+    	if (chatRoom == null || chatRoom.getCid() == null)
+    	{
+			ToastUtil.show(this, "直播间不在直播中，请稍后重试");
+			return;
+    	}
+    	
+		HashMap<String, String> entity = new HashMap<String, String>();
+		entity.put("cid", chatRoom.getCid());
+		ShowProgressDialog("查询直播中...");
+		List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
+		addToThreadPool(Config.query_video_status, "send search request", params);
+    }
+    
+    private void addToThreadPool(int taskType, String Tag, List<NameValuePair> params)
+    {
+    	HttpBaseTask httpTask = new HttpBaseTask(ThreadPoolConst.THREAD_TYPE_FILE_HTTP, Tag, params, UrlUtil.GetUrl(taskType));
+    	httpTask.setTaskType(taskType);
+    	InfoHandler handler = new InfoHandler(this);
+    	httpTask.setInfoHandler(handler);
+    	ThreadPoolFactory.getThreadPoolManager().addTask(httpTask);
     }
     
     private void initializeWatchVideoFragment()
@@ -226,5 +271,49 @@ public class WatchVideoActivity extends FragmentActivity implements ExitFragment
 			finish();
 		}
 		
+	}
+
+	@SuppressWarnings("unused")
+	@Override
+	public void RequestSuccessful(String jsonString, int taskType) {
+		Gson gson = new Gson();
+		switch(taskType)
+		{
+
+		case Config.query_video_status:
+			
+			if (jsonString != null)
+			{
+				try {
+					JSONObject jsonObj = new JSONObject(jsonString);
+					String data =  jsonObj.getString("data");
+					int status =   jsonObj.getInt("status");
+					if (status == 0 && data != null)
+					{
+						JSONObject ret = jsonObj.getJSONObject("data").getJSONObject("ret"); 
+						if (ret != null)
+						{
+							if( ret.getInt("status") == 0)
+							{
+								enterChatRoom();
+								registerObservers(true);
+							}
+							else
+							{
+								Toast.makeText(WatchVideoActivity.this, "主播不在直播间，请稍后再试", Toast.LENGTH_SHORT).show();
+								finish();
+							}
+						}
+					}
+
+				} catch (JSONException e) {
+					e.printStackTrace();
+					XLog.e("JSONException");
+					finish();
+				} 
+
+			}
+			break;
+		}
 	}
 }

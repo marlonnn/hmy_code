@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/bg"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/blackcover"
+    android:gravity="center"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="300dip"
+        android:layout_height="45dip"
+        android:layout_marginLeft="10dip"
+        android:layout_marginRight="10dip"
+        android:background="#350847"
+        android:orientation="vertical" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginLeft="10dip"
+                android:gravity="left"
+                android:text="说点什么吧"
+                android:textColor="@color/white"
+                android:textSize="16dip" />
+
+            <Button
+                android:id="@+id/negativeButton"
+                android:layout_width="20dip"
+                android:layout_height="20dip"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginRight="5dip"
+                android:layout_marginTop="5dip"
+                android:background="@drawable/icin_close" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/selectContent"
+        android:layout_width="300dip"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dip"
+        android:layout_marginRight="10dip"
+        android:background="#350847"
+        android:gravity="center"
+        android:orientation="vertical" >
+
+        <EditText
+            android:id="@+id/addNewMessage"
+            android:layout_width="match_parent"
+            android:layout_height="80dip"
+            android:layout_marginLeft="10dip"
+            android:layout_marginRight="10dip"
+            android:background="#b4a2bb"
+            android:ems="10" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <LinearLayout
+                android:id="@+id/addImage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center" >
+
+                <ImageView
+                    android:id="@+id/titleImage"
+                    android:layout_width="30dip"
+                    android:layout_height="20dip"
+                    android:src="@drawable/activity_personal_album_base" />
+
+                <TextView
+                    android:id="@+id/textView1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="  添加图片"
+                    android:textColor="@color/white" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/button3"
+                android:layout_width="90dip"
+                android:layout_height="40dip"
+                android:layout_marginBottom="3dip"
+                android:layout_marginLeft="3dip"
+                android:layout_marginRight="10dip"
+                android:layout_marginTop="3dip"
+                android:background="@color/red2"
+                android:text="发布"
+                android:textColor="@color/white" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

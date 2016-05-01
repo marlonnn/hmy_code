@@ -142,34 +142,36 @@
 		        <ImageView
 		            android:layout_width="40dp"
 		            android:layout_height="40dp"
-		            android:id="@+id/imageView_share"
-		            android:src="@drawable/fragment_share"
+		            android:id="@+id/imageView_close"
+		            android:src="@drawable/fragment_close"
 		            android:layout_alignParentTop="true"
 		            android:layout_alignParentEnd="true" />
 		
 		        <ImageView
 		            android:layout_width="40dp"
 		            android:layout_height="40dp"
-		            android:id="@+id/imageView_focus"
-		            android:src="@drawable/fragment_focus"
+		            android:id="@+id/imageView_share"
+		            android:src="@drawable/fragment_share"
+		            android:layout_alignParentTop="true"
+		            android:layout_toStartOf="@+id/imageView_close" />
+		
+		        <ImageView
+		            android:layout_width="40dp"
+		            android:layout_height="40dp"
+		            android:id="@+id/imageView_gift"
+		            android:src="@drawable/fragment_gift"
 		            android:layout_alignParentTop="true"
 		            android:layout_toStartOf="@+id/imageView_share" />
 		
 		        <ImageView
 		            android:layout_width="40dp"
 		            android:layout_height="40dp"
-		            android:id="@+id/imageView_boos"
-		            android:src="@drawable/fragment_boos"
+		            android:id="@+id/imageView_camera"
+		            android:src="@drawable/fragment_camera"
 		            android:layout_alignParentTop="true"
-		            android:layout_toStartOf="@+id/imageView_focus" />
-		
-		        <ImageView
-		            android:layout_width="40dp"
-		            android:layout_height="40dp"
-		            android:id="@+id/imageView"
-		            android:src="@drawable/fragment_applaud"
-		            android:layout_alignParentTop="true"
-		            android:layout_toStartOf="@+id/imageView_boos" />
+		            android:layout_toStartOf="@+id/imageView_gift" />
+
+
 		    </RelativeLayout>
 		
 		    <master.flame.danmaku.ui.widget.DanmakuView

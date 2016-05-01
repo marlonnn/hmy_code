@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical" >
+
+        <com.summer.view.CircularImage
+            android:id="@+id/Head_portrait"
+            android:layout_width="70dip"
+            android:layout_height="70dip"
+            android:layout_margin="5dip" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/The_name_of_the"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@null"
+                android:ems="10"
+                android:gravity="center_vertical"
+                android:hint="昵称"
+                android:textColor="@color/white"
+                android:textSize="14dip" />
+
+            <TextView
+                android:id="@+id/level"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@null"
+                android:ems="10"
+                android:gravity="center_vertical"
+                android:text="Lv.99"
+                android:visibility="gone"
+                android:textColor="@color/white"
+                android:textSize="14dip" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right" >
+
+                <Button
+                    android:id="@+id/editButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dip"
+                    android:layout_marginRight="10dip"
+                    android:background="#e1157f"
+                    android:paddingLeft="10dip"
+                    android:paddingRight="10dip"
+                    android:text="赠送娱币"
+                    android:textColor="@color/white"
+                    android:visibility="gone" />
+
+                <Button
+                    android:id="@+id/exitEditButton"
+                    android:layout_width="0dip"
+                    android:layout_height="30dip"
+                    android:layout_marginLeft="10dip"
+                    android:layout_marginRight="10dip"
+                    android:layout_weight="1"
+                    android:background="#e1157f"
+                    android:text="赠送娱币"
+                    android:textColor="@color/white"
+                    android:visibility="gone" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

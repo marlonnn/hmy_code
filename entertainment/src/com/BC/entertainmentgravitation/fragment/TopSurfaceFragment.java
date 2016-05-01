@@ -1,5 +1,10 @@
 package com.BC.entertainmentgravitation.fragment;
 
+import java.util.HashMap;
+import java.util.List;
+
+import org.apache.http.NameValuePair;
+
 import com.BC.entertainment.cache.GiftCache;
 import com.BC.entertainment.chatroom.gift.Gift;
 import com.BC.entertainment.chatroom.module.ChatRoomPanel;
@@ -16,13 +21,21 @@ import com.netease.nimlib.sdk.chatroom.ChatRoomService;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomMessage;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
+import com.summer.config.Config;
+import com.summer.factory.ThreadPoolFactory;
+import com.summer.fragment.BaseFragment;
+import com.summer.handler.InfoHandler;
 import com.summer.logger.XLog;
+import com.summer.task.HttpBaseTask;
+import com.summer.task.HttpTask;
+import com.summer.treadpool.ThreadPoolConst;
+import com.summer.utils.JsonUtil;
+import com.summer.utils.UrlUtil;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -32,9 +45,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
-public class TopSurfaceFragment extends Fragment implements OnClickListener, ModuleProxy{
+public class TopSurfaceFragment extends BaseFragment implements OnClickListener, ModuleProxy{
 	
 	private ChatRoom chatRoom;
 	
@@ -46,15 +60,19 @@ public class TopSurfaceFragment extends Fragment implements OnClickListener, Mod
 	
 	private ImageView btnShare;//分享
 	
-	private ImageView btnFocus;//关注
+//	private ImageView btnFocus;//关注
 	
-	private ImageView btnBoos;//喝倒彩
+	private ImageView btnClose;
 	
-	private ImageView btnApplaud;//鼓掌
+	private ImageView btnSwitch;
+	
+	private ImageView btnGift;
 	
 	private LinearLayout layoutInput;
 	
 	private RelativeLayout rootView;
+	
+	private TextView totalPiao;//yupiao
 	
 	private RelativeLayout functionView;//底部功能键根布局
     
@@ -66,6 +84,8 @@ public class TopSurfaceFragment extends Fragment implements OnClickListener, Mod
     private DanmakuPanel danmakuPanel;
     
     private SwitchCamera switchCamera;
+    
+    private HttpTask httpTask;//更新娱票线程
     
 	public TopSurfaceFragment(ChatRoom chatRoom, boolean isWatchVideo)
 	{
@@ -165,16 +185,35 @@ public class TopSurfaceFragment extends Fragment implements OnClickListener, Mod
 		
 		btnChat = (ImageView)view.findViewById(R.id.imageView_chart);
 		
+		totalPiao = (TextView)view.findViewById(R.id.textView_total_value);
+		
 		btnShare = (ImageView)view.findViewById(R.id.imageView_share);
-		btnFocus = (ImageView)view.findViewById(R.id.imageView_focus);
-		btnBoos = (ImageView)view.findViewById(R.id.imageView_boos);
-		btnApplaud = (ImageView)view.findViewById(R.id.imageView);
+		
+		btnClose = (ImageView)view.findViewById(R.id.imageView_close);
+		
+		btnSwitch = (ImageView)view.findViewById(R.id.imageView_camera);
+		
+		btnGift = (ImageView)view.findViewById(R.id.imageView_gift);
+		
+		if (chatRoom != null && chatRoom.isMaster())
+		{
+			//主播不需要送礼
+			btnGift.setVisibility(View.GONE);
+		}
+		else
+		{
+			//观众无法切换摄像头
+			btnSwitch.setVisibility(View.GONE);
+		}
+
+//		btnFocus = (ImageView)view.findViewById(R.id.imageView_focus);
 		
 		btnChat.setOnClickListener(this);
 		btnShare.setOnClickListener(this);
-		btnFocus.setOnClickListener(this);
-		btnBoos.setOnClickListener(this);
-		btnApplaud.setOnClickListener(this);
+//		btnFocus.setOnClickListener(this);
+		btnSwitch.setOnClickListener(this);
+		btnClose.setOnClickListener(this);
+		btnGift.setOnClickListener(this);
 		
         view.setOnTouchListener(new OnTouchListener() {
 			
@@ -190,6 +229,45 @@ public class TopSurfaceFragment extends Fragment implements OnClickListener, Mod
 		});
 		
 	}
+	
+	private void startGetYuPiao()
+	{
+    	HashMap<String, String> entity = new HashMap<String, String>();
+
+		
+		if (chatRoom.isMaster())
+		{
+	    	entity.put("username", Config.User.getUserName());
+		}
+		else
+		{
+			if (chatRoomPanel.GetMasterId() != null)
+			{
+				entity.put("username", chatRoomPanel.GetMasterId());
+			}
+		}
+		
+    	List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
+    	httpTask = new HttpTask(ThreadPoolConst.THREAD_TYPE_FILE_HTTP, "get yu piao info", params, UrlUtil.GetUrl(Config.query_piao));
+    	httpTask.setTaskType(Config.query_piao);
+    	InfoHandler handler = new InfoHandler(this);
+    	httpTask.setInfoHandler(handler);
+    	ThreadPoolFactory.getThreadPoolManager().addTask(httpTask);
+	}
+	
+	private void stopUpdateYuPiao()
+	{
+		httpTask.CancelTask();
+	}
+	
+    private void addToThreadPool(int taskType, String Tag, List<NameValuePair> params)
+    {
+    	HttpBaseTask httpTask = new HttpBaseTask(ThreadPoolConst.THREAD_TYPE_FILE_HTTP, Tag, params, UrlUtil.GetUrl(taskType));
+    	httpTask.setTaskType(taskType);
+    	InfoHandler handler = new InfoHandler(this);
+    	httpTask.setInfoHandler(handler);
+    	ThreadPoolFactory.getThreadPoolManager().addTask(httpTask);
+    }
 	
 	/**
 	 * 显示功能键
@@ -235,6 +313,21 @@ public class TopSurfaceFragment extends Fragment implements OnClickListener, Mod
 			break;
 		case R.id.imageView:
 			//暂时用鼓掌来测试礼物
+
+			break;
+			
+		case R.id.imageView_share:
+
+			break;
+			
+		case R.id.imageView_camera:
+			if( switchCamera != null)
+			{
+				switchCamera.onSwitchCamera();
+			}
+			break;
+			
+		case R.id.imageView_gift:
 			showFunctionView(false);
 			chatRoomPanel.showMessageListView(false);
 			layoutInput.setVisibility(View.VISIBLE);
@@ -242,12 +335,8 @@ public class TopSurfaceFragment extends Fragment implements OnClickListener, Mod
 			inputPanel.showGiftLayout();
 			break;
 			
-		case R.id.imageView_share:
-			//暂时用分享按钮来切换摄像头
-			if( switchCamera != null)
-			{
-				switchCamera.onSwitchCamera();
-			}
+		case R.id.imageView_close:
+			
 			break;
 		}
 	}
@@ -298,5 +387,10 @@ public class TopSurfaceFragment extends Fragment implements OnClickListener, Mod
 	@Override
 	public void showAnimation(Gift gift) {
 		//show local animation
+	}
+
+	@Override
+	public void RequestSuccessful(String jsonString, int taskType) {
+		
 	}
 }

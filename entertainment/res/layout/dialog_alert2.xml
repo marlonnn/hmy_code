@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/blackcover"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dip"
+        android:layout_marginLeft="10dip"
+        android:layout_marginRight="10dip"
+        android:orientation="vertical"
+        android:paddingTop="5dip" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="45dip"
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="10dip"
+                android:gravity="center"
+                android:text="输入赠送好友金额"
+                android:textColor="@color/white"
+                android:textSize="16dip" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <EditText
+            android:id="@+id/give1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dip"
+            android:layout_marginRight="10dip"
+            android:background="#00000000"
+            android:ems="10"
+            android:hint="请输入"
+            android:inputType="number" >
+        </EditText>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/selectContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dip"
+        android:layout_marginRight="10dip"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingBottom="5dip" >
+
+        <Button
+            android:id="@+id/button6"
+            android:layout_width="match_parent"
+            android:layout_height="30dip"
+            android:layout_marginBottom="3dip"
+            android:layout_marginLeft="3dip"
+            android:layout_marginRight="3dip"
+            android:layout_marginTop="3dip"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:text="确    定"
+            android:textColor="@color/red2"
+            android:textSize="12dip" />
+
+        <Button
+            android:id="@+id/button7"
+            android:layout_width="match_parent"
+            android:layout_height="30dip"
+            android:layout_marginBottom="3dip"
+            android:layout_marginLeft="3dip"
+            android:layout_marginRight="3dip"
+            android:layout_marginTop="3dip"
+            android:layout_weight="1"
+            android:background="@color/red2"
+            android:text="取    消"
+            android:textColor="@color/white"
+            android:textSize="12dip" />
+    </LinearLayout>
+
+</LinearLayout>

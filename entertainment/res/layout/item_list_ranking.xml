@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:padding="10dip" >
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" >
+
+        <ImageView
+            android:id="@+id/rankingImage"
+            android:layout_width="60dip"
+            android:layout_height="60dip"
+            android:src="@drawable/icon_1" />
+
+        <TextView
+            android:id="@+id/rankingText"
+            android:layout_width="60dip"
+            android:layout_height="60dip"
+            android:gravity="center"
+            android:text="4"
+            android:textColor="@color/white"
+            android:textSize="50dip"
+            android:visibility="gone" />
+    </FrameLayout>
+
+    <View
+        android:id="@+id/view1"
+        android:layout_width="1dip"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="10dip"
+        android:layout_marginRight="10dip"
+        android:background="@color/gray" />
+
+    <com.summer.view.CircularImage
+        android:id="@+id/Head_portrait"
+        android:layout_width="60dip"
+        android:layout_height="60dip" />
+
+    <View
+        android:id="@+id/View01"
+        android:layout_width="1dip"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="10dip"
+        android:layout_marginRight="10dip"
+        android:background="@color/gray" />
+
+    <TextView
+        android:id="@+id/Star_names"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="名字"
+        android:textColor="@color/white"
+        android:textSize="20dip" />
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center" >
+
+            <FrameLayout
+                android:layout_width="50dp"
+                android:layout_height="50dp" >
+
+                <ImageButton
+                    android:id="@+id/applause"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_margin="5dip"
+                    android:background="@drawable/home1_button"
+                    android:padding="10dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/home7" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="50dp"
+                android:layout_height="50dp" >
+
+                <ImageButton
+                    android:id="@+id/bigbird"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_margin="5dip"
+                    android:background="@drawable/home1_button"
+                    android:padding="10dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/home6" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="50dp"
+                android:layout_height="50dp" >
+
+                <ImageButton
+                    android:id="@+id/FocusOn"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_margin="5dip"
+                    android:background="@drawable/home1_button"
+                    android:padding="10dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/home8" />
+            </FrameLayout>
+        </LinearLayout>
+    </FrameLayout>
+
+</LinearLayout>

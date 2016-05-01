@@ -36,7 +36,6 @@ import com.BC.entertainment.chatroom.gift.GiftCategory;
 import com.BC.entertainmentgravitation.R;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.google.gson.Gson;
 import com.netease.nim.uikit.cache.SimpleCallback;
 import com.netease.nim.uikit.common.ui.listview.ListViewUtil;
 import com.netease.nimlib.sdk.NIMClient;
@@ -65,6 +64,7 @@ import com.summer.logger.XLog;
 import com.summer.task.HttpBaseTask;
 import com.summer.treadpool.ThreadPoolConst;
 import com.summer.utils.JsonUtil;
+import com.summer.utils.ToastUtil;
 import com.summer.utils.UrlUtil;
 import com.summer.view.CircularImage;
 import com.summer.view.Pandamate;
@@ -108,7 +108,9 @@ public class ChatRoomPanel {
 
 	private CircularImage headPortrait;
 	
-	private ChatRoomMember master;//管理员相关信息
+//	private ChatRoomMember master;//管理员相关信息
+	
+	private String masterId;//聊天室主播id
 	
 	private RecyclerView recycleView;
 	
@@ -118,6 +120,16 @@ public class ChatRoomPanel {
 	
 	public DanmakuPanel danmakuPanel;
 	
+	public String GetMasterId()
+	{
+		return masterId;
+	}
+	
+//	public ChatRoomMember GetMaster()
+//	{
+//		return master;
+//	}
+	
     public ChatRoomPanel(Container container, View rootView, DanmakuPanel danmakuPanel) {
         this.container = container;
         this.rootView = rootView;
@@ -126,10 +138,11 @@ public class ChatRoomPanel {
     }
     
     private void init() {
-        initListView();
+        updateVideoStatus(false);//更新聊天室状态
+        initListView();//初始化和处理聊天室消息列表
         initPortrait();
         this.uiHandler = new Handler();
-        initOnlinePortrait();
+        initOnlinePortrait();//初始化在线人数头像列表
         initOnlinePeople();
         fetchPortrait();
         fetchOnlinePeople();
@@ -278,7 +291,6 @@ public class ChatRoomPanel {
         		{
         			showAnimate(emotionAttachment.getEmotion());
         		}
-        		
         		break;
         	case CustomAttachmentType.font:
         		FontAttachment fontAttachment = (FontAttachment)customAttachment;
@@ -286,6 +298,34 @@ public class ChatRoomPanel {
         		{
         			showAnimate(fontAttachment.getEmotion());
         		}
+        		break;
+        	}
+    	}
+
+    }
+    
+    private void handlerSendCustomMessage(IMMessage message)
+    {
+    	if( message != null)
+    	{
+        	CustomAttachment customAttachment = (CustomAttachment)message.getAttachment();
+        	switch(customAttachment.getType())
+        	{
+        	case CustomAttachmentType.emotion:
+        		EmotionAttachment emotionAttachment = (EmotionAttachment)customAttachment;
+        		if (emotionAttachment != null)
+        		{
+        			showAnimate(emotionAttachment.getEmotion());
+        		}
+        		sendChatRoomGift(emotionAttachment.getEmotion(), customAttachment.getType());
+        		break;
+        	case CustomAttachmentType.font:
+        		FontAttachment fontAttachment = (FontAttachment)customAttachment;
+        		if (fontAttachment != null)
+        		{
+        			showAnimate(fontAttachment.getEmotion());
+        		}
+        		sendChatRoomGift(fontAttachment.getEmotion(), customAttachment.getType());
         		break;
         	}
     	}
@@ -353,11 +393,84 @@ public class ChatRoomPanel {
     	case GiftCategory.font_bxjj:
     		drawable = R.drawable.animation_bxjj;
     		break;
+    	case GiftCategory.font_cygs:
+    		drawable = R.drawable.animation_cygs;
+    		break;
+    	case GiftCategory.font_djxg:
+    		drawable = R.drawable.animation_djxg;
+    		break;
+    	case GiftCategory.font_fxlp:
+    		drawable = R.drawable.animation_fxlp;
+    		break;
+    	case GiftCategory.font_gjtl:
+    		drawable = R.drawable.animation_gjtl;
+    		break;
+    	case GiftCategory.font_hqmm:
+    		drawable = R.drawable.animation_hqmm;
+    		break;
+    	case GiftCategory.font_hsdd:
+    		drawable = R.drawable.animation_hsdd;
+    		break;
+    	case GiftCategory.font_jmny:
+    		drawable = R.drawable.animation_jmny;
+    		break;
+    	case GiftCategory.font_kxbd:
+    		drawable = R.drawable.animation_kxbd;
+    		break;
+    	case GiftCategory.font_lswz:
+    		drawable = R.drawable.animation_lswz;
+    		break;
+    	case GiftCategory.font_mfsw:
+    		drawable = R.drawable.animation_mfsw;
+    		break;
+    	case GiftCategory.font_mgsr:
+    		drawable = R.drawable.animation_mgsr;
+    		break;
+    	case GiftCategory.font_mkyx:
+    		drawable = R.drawable.animation_mkyx;
+    		break;
+    	case GiftCategory.font_nmes:
+    		drawable = R.drawable.animation_nmes;
+    		break;
+    	case GiftCategory.font_pfdx:
+    		drawable = R.drawable.animation_pfdx;
+    		break;
+    	case GiftCategory.font_swzd:
+    		drawable = R.drawable.animation_swzd;
+    		break;
+    	case GiftCategory.font_xhnf:
+    		drawable = R.drawable.animation_xhnf;
+    		break;
+    	case GiftCategory.font_xrdj:
+    		drawable = R.drawable.animation_xrdj;
+    		break;
+    	case GiftCategory.font_xxrk:
+    		drawable = R.drawable.animation_xxrk;
+    		break;
+    		
+    	case GiftCategory.emotion_rose:
+    		drawable = R.drawable.animation_rose;
+    		break;
+    	case GiftCategory.emotion_flowers:
+    		drawable = R.drawable.animation_flowers;
+    		break;
+    	case GiftCategory.emotion_kiss:
+    		drawable = R.drawable.animation_kiss;
+    		break;
+    	case GiftCategory.emotion_touch:
+    		drawable = R.drawable.animation_touch;
+    		break;
+    	case GiftCategory.emotion_shoes:
+    		drawable = R.drawable.animation_shoes;
+    		break;
     	case GiftCategory.emotion_mic:
     		drawable = R.drawable.animation_mic;
     		break;
     	case GiftCategory.emotion_car:
     		drawable = R.drawable.animation_car;
+    		break;
+    	case GiftCategory.emotion_plane:
+    		drawable = R.drawable.animation_plane;
     		break;
     		default:
     			drawable = R.drawable.animation_bxjj;
@@ -393,13 +506,14 @@ public class ChatRoomPanel {
      */
     public void fetchPortrait()
     {
-        container.activity.runOnUiThread(new Runnable() {
-
-            @Override
-            public void run() {
-            	fetchRoomInfo();
-            }
-        });
+//        container.activity.runOnUiThread(new Runnable() {
+//
+//            @Override
+//            public void run() {
+//            	fetchRoomInfo();
+//            }
+//        });
+    	fetchRoomInfo();
     }
     
     // 刷新消息列表
@@ -731,7 +845,7 @@ public class ChatRoomPanel {
         danmakuPanel.showDanmaku(message);
         if (message.getMsgType() == MsgTypeEnum.custom)
         {
-            handlerCustomMessage(message);
+            handlerSendCustomMessage(message);
         }
         ListViewUtil.scrollToBottom(messageListView);
     }
@@ -775,7 +889,10 @@ public class ChatRoomPanel {
 
 			@Override
 			public void onSuccess(ChatRoomInfo param) {
-				getChatRoomMaster(param);
+//				getChatRoomMaster(param);
+				masterId = param.getCreator();
+
+
 			}
     		
     	});
@@ -785,31 +902,32 @@ public class ChatRoomPanel {
      * 获取聊天室主播信息
      * @param roomInfo
      */
-    private void getChatRoomMaster(final ChatRoomInfo roomInfo) {
-    	master = getChatRoomMember(roomInfo.getRoomId(), roomInfo.getCreator());
-        if (master != null) {
-            updatePortraitView(roomInfo);
-        } else {
-            fetchMember(roomInfo.getRoomId(), roomInfo.getCreator(),
-                    new SimpleCallback<ChatRoomMember>() {
-                        @Override
-                        public void onResult(boolean success, ChatRoomMember result) {
-                            if (success) {
-                                master = result;
-                                updatePortraitView(roomInfo);
-                                updateVideoStatus(master, false);
-                            }
-                        }
-                    });
-        }
-    }
+//    private void getChatRoomMaster(final ChatRoomInfo roomInfo) {
+//    	master = getChatRoomMember(roomInfo.getRoomId(), roomInfo.getCreator());
+//        if (master != null) {
+//            updatePortraitView(roomInfo);
+//            XLog.i("get chat room master success");
+//        } else {
+//            fetchMember(roomInfo.getRoomId(), roomInfo.getCreator(),
+//                    new SimpleCallback<ChatRoomMember>() {
+//                        @Override
+//                        public void onResult(boolean success, ChatRoomMember result) {
+//                            if (success) {
+//                                master = result;
+//                                updatePortraitView(roomInfo);
+//                                XLog.i("get chat room master success: " + master.getAccount());
+//                            }
+//                        }
+//                    });
+//        }
+//    }
     
     /**
      * 主播进入聊天室更新聊天室状态
      * @param master
      * @param isLeave
      */
-    private void updateVideoStatus(ChatRoomMember master, boolean isLeave)
+    private void updateVideoStatus(boolean isLeave)
     {
     	//是主播进入聊天室才发送聊天室状态到后台
     	XLog.i("this is master: " + container.chatRoom.isMaster() );
@@ -818,13 +936,13 @@ public class ChatRoomPanel {
         	HashMap<String, String> entity = new HashMap<String, String>();
         	entity.put("username", Config.User.getUserName());
         	if(isLeave){
-        		entity.put("status", "0");
+        		entity.put("status", "1");
         	}
         	else
         	{
-            	entity.put("status", "1");
+            	entity.put("status", "0");
         	}
-
+        	XLog.i("this is master: " + entity.toString());
     		List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
     		addToThreadPool(Config.update_status, "send update status request", params);
     	}
@@ -851,13 +969,27 @@ public class ChatRoomPanel {
     	//非主播可以送礼物给主播
     	if ( !container.chatRoom.isMaster())
     	{
-        	HashMap<String, String> entity = new HashMap<String, String>();
-        	entity.put("username", Config.User.getUserName());
-        	entity.put("user_dollar", String.valueOf(baseEmotion.getValue()));
-        	entity.put("type", String.valueOf(type));
-        	entity.put("starid", master.getAccount());
-    		List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
-    		addToThreadPool(Config.send_gift, "send gift request", params);
+    		//送礼物之前先检查余额是否充足
+    		XLog.i("value: " + baseEmotion.getValue());
+    		XLog.i("my dollar: " + InfoCache.getInstance().getPersonalInfo().getEntertainment_dollar());
+    		if (baseEmotion.getValue() < Integer.parseInt(InfoCache.getInstance().getPersonalInfo().getEntertainment_dollar()))
+    		{
+            	HashMap<String, String> entity = new HashMap<String, String>();
+            	entity.put("username", Config.User.getUserName());
+            	entity.put("user_dollar", String.valueOf(baseEmotion.getValue()));
+            	entity.put("type", String.valueOf(type));
+//            	entity.put("starid", master.getAccount());
+            	entity.put("starid", masterId);
+        		List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
+        		addToThreadPool(Config.send_gift, "send gift request", params);
+        		XLog.i("send gift reques");
+    		}
+    		else
+    		{
+    			//余额不足，需要充值
+    			ToastUtil.show(container.activity, "余额不足，赶紧充值吧");
+    		}
+
     	}
     }
     
@@ -911,7 +1043,6 @@ public class ChatRoomPanel {
     }
     
 	private void RequestSuccessful(String jsonString, int taskType) {
-		Gson gson = new Gson();
 		XLog.i("taskType: " + taskType + " json string: " + jsonString);
 		switch(taskType)
 		{
@@ -920,6 +1051,18 @@ public class ChatRoomPanel {
 			break;
 		case Config.update_room:
 			XLog.i("taskType: " + taskType + " json string: " + jsonString);
+			break;
+		case Config.send_gift:
+			//礼物赠送成功，更新本地账户信息
+			XLog.i("taskType: " + taskType + " json string: " + jsonString);
+			try {
+				JSONObject jsonObj = new JSONObject(jsonString);
+				String data = jsonObj.getString("data");
+				InfoCache.getInstance().getPersonalInfo().setEntertainment_dollar(data);
+			} catch (JSONException e) {
+				e.printStackTrace();
+				XLog.e("JSONException");
+			}
 			break;
 		}
 	}
@@ -973,13 +1116,13 @@ public class ChatRoomPanel {
      * 更新聊天室主播头像
      * @param chatRoomInfo
      */
-    private void updatePortraitView(ChatRoomInfo chatRoomInfo){
-		Glide.with(container.activity)
-		.load(master.getAvatar())
-		.centerCrop().diskCacheStrategy(DiskCacheStrategy.ALL)
-		.placeholder(R.drawable.avatar_def).into(headPortrait);
-		XLog.i("fetch master portrait seccuss, avator address: " + master.getAvatar());
-    }
+//    private void updatePortraitView(ChatRoomInfo chatRoomInfo){
+//		Glide.with(container.activity)
+//		.load(master.getAvatar())
+//		.centerCrop().diskCacheStrategy(DiskCacheStrategy.ALL)
+//		.placeholder(R.drawable.avatar_def).into(headPortrait);
+//		XLog.i("fetch master portrait seccuss, avator address: " + master.getAvatar());
+//    }
     
     /***********************************************************注册相关**********************************************************************/
     public void registerObservers(boolean register) {
@@ -990,6 +1133,11 @@ public class ChatRoomPanel {
     }
     
 	private void logoutChatRoom() {
+		if (container.chatRoom != null && container.chatRoom.isMaster())
+		{
+			//主播离开需要更新直播间状态
+			updateVideoStatus(true);
+		}
 		NIMClient.getService(ChatRoomService.class).exitChatRoom(
 				container.chatRoom.getChatroomid());
 	}

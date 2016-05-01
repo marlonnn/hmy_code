@@ -422,6 +422,8 @@ public class MainActivity extends BaseActivity implements OnClickListener, Updat
 		 * 签到
 		 */
 		case R.id.SignIn:
+			intent = new Intent(this, SignInActivity.class);
+			startActivity(intent);
 			break;
 		/**
 		 * 充值
@@ -434,27 +436,29 @@ public class MainActivity extends BaseActivity implements OnClickListener, Updat
 		 * 活动
 		 */
 		case R.id.activitys:
+			intent = new Intent(this, HuodongActivity.class);
+			startActivity(intent);
 			break;
 		/**
 		 * 好友
 		 */
 		case R.id.friends:
-//			intent = new Intent(this, FriendsActivity.class);
-//			startActivity(intent);
+			intent = new Intent(this, FriendsActivity.class);
+			startActivity(intent);
 			break;
 		/**
 		 * 消息
 		 */
 		case R.id.information:
-//			intent = new Intent(this, InformationActivity.class);
-//			startActivity(intent);
+			intent = new Intent(this, InformationActivity.class);
+			startActivity(intent);
 			break;
 		/**
 		 * 点赞排行
 		 */
 		case R.id.level:
-//			intent = new Intent(this, LevelAcitivity.class);
-//			startActivity(intent);
+			intent = new Intent(this, LevelActivity.class);
+			startActivity(intent);
 			break;
 		/**
 		 * 申请
@@ -513,8 +517,8 @@ public class MainActivity extends BaseActivity implements OnClickListener, Updat
 		 * 排行榜
 		 */
 		case R.id.toLevel:
-//			intent = new Intent(this, ToLevelActivity.class);
-//			startActivity(intent);
+			intent = new Intent(this, StarLevelActivity.class);
+			startActivity(intent);
 			break;
 		/**
 		 * 明星详情
@@ -535,19 +539,56 @@ public class MainActivity extends BaseActivity implements OnClickListener, Updat
 		 * 搜索
 		 */
 		case R.id.searchButton:
-//			String search = searchEdit.getText().toString();
-//			selectIndex = 0;
-//			if (search.equals("")) {
-//				searchs = null;
-//				sendReqConnect();
-//			} else {
-//				sendReqSearch(search);
-//			}
+			String search = searchEdit.getText().toString();
+			selectIndex = 0;
+			if (search.equals("")) {
+				searchs = null;
+				sendReqConnect();
+			} else {
+				sendReqSearch(search);
+			}
 			break;
 
 		default:
 			break;
 		}
+	}
+	
+	/**
+	 * 获取明星排行信息
+	 */
+	private void sendReqConnect() {
+		if (Config.User == null) {
+			ToastUtil.show(this, "无法获取信息");
+			return;
+		}
+		HashMap<String, String> entity = new HashMap<String, String>();
+
+		entity.put("clientID", Config.User.getClientID());
+		entity.put("The_page_number", "" + pageIndex);
+		entity.put("type", "1");
+
+		ShowProgressDialog("获取信息...");
+    	List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
+    	addToThreadPool(Config.in_comparison_to_listApply_to_be_a_platform_star_, "get start rank info", params);
+	}
+
+	/**
+	 * 搜索
+	 */
+	private void sendReqSearch(String search) {
+		if (Config.User == null) {
+			ToastUtil.show(this, "无法获取信息");
+			return;
+		}
+		HashMap<String, String> entity = new HashMap<String, String>();
+
+		entity.put("search", search);
+
+		ShowProgressDialog("获取信息...");
+		
+    	List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
+    	addToThreadPool(Config.search, "get start rank info", params);
 	}
 
 	@Override
@@ -585,6 +626,7 @@ public class MainActivity extends BaseActivity implements OnClickListener, Updat
 			if (startInfo != null)
 			{
 				InfoCache.getInstance().setStartInfo(startInfo.getData());
+				InfoCache.getInstance().AddToStarInfoList(startInfo.getData());
 				if(InfoCache.getInstance().getStartInfo() != null)
 				{
 					Glide.with(this).load(InfoCache.getInstance().getStartInfo().getFirst_album())
@@ -643,7 +685,7 @@ public class MainActivity extends BaseActivity implements OnClickListener, Updat
 				if (selectIndex != 0) {
 					selectIndex++;
 				}
-				sendSearchRequest(searchs.get(selectIndex).getSearch());
+				getStarInfoRequest(searchs.get(selectIndex).getSearch());
 			} else {
 				searchs = null;
 				ToastUtil.show(this, this.getString(R.string.mainactivity_have_no_search_data));
