@@ -274,6 +274,12 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait" >
         </activity>
+       <!--  红包 -->
+        <activity
+            android:name=".RedEnvelopeActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="landscape" >
+        </activity>
     </application>
 
 </manifest>

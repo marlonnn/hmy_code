@@ -494,8 +494,8 @@ public class MainActivity extends BaseActivity implements OnClickListener, Updat
 		 * 红包
 		 */
 		case R.id.redEnvelope:
-//			intent = new Intent(this, RedEnvelopeActivity.class);
-//			startActivity(intent);
+			intent = new Intent(this, RedEnvelopeActivity.class);
+			startActivity(intent);
 			break;
 		/**
 		 * 抽奖
@@ -527,8 +527,8 @@ public class MainActivity extends BaseActivity implements OnClickListener, Updat
 		 * 明星详情
 		 */
 		case R.id.details:
-//			intent = new Intent(this, DetailsActivity.class);
-//			startActivity(intent);
+			intent = new Intent(this, DetailsActivity.class);
+			startActivity(intent);
 //			watchLiveVideoRequest();
 			break;
 		/**
@@ -593,6 +593,8 @@ public class MainActivity extends BaseActivity implements OnClickListener, Updat
     	List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
     	addToThreadPool(Config.search, "get start rank info", params);
 	}
+	
+	
 
 	@Override
 	public void RequestSuccessful(String jsonString, int taskType) {
