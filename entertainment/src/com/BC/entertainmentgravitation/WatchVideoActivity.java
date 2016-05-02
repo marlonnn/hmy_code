@@ -268,6 +268,10 @@ public class WatchVideoActivity extends BaseActivity implements ExitFragmentList
 	public void isExit(boolean exit) {
 		if (exit)
 		{
+			if (fragment != null)
+			{
+				fragment.Destory();
+			}
 			finish();
 		}
 		

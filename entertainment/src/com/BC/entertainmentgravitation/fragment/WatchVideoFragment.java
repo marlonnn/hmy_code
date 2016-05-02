@@ -123,6 +123,7 @@ public class WatchVideoFragment extends BaseFragment implements SurfaceHolder.Ca
 		mVideoView.setMediaType("livestream");
 		
 		mVideoView.setVideoPath(chatRoom.getHttpPullUrl());
+//		mVideoView.setVideoPath("http://v112.live.126.net/live/77934cf008bf4972abbc2af27eaee751.flv");
 		
 		SurfaceHolder holder = mVideoView.getHolder();
 		
@@ -148,6 +149,18 @@ public class WatchVideoFragment extends BaseFragment implements SurfaceHolder.Ca
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
+		try {
+			if(mVideoView != null)
+			{
+				mVideoView.release_resource();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void Destory()
+	{
 		try {
 			if(mVideoView != null)
 			{

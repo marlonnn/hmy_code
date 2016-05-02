@@ -40,7 +40,7 @@
 		            android:layout_height="wrap_content"
 		            android:layout_alignBottom="@+id/portrait"
 		            android:layout_alignLeft="@+id/textView1"
-		            android:text="99999999"
+		            android:text="0"
 		            android:textColor="@color/white" />
 		    </RelativeLayout>
 		
@@ -61,16 +61,27 @@
 		            android:background="@drawable/fragment_value_bg" />
 		
 		        <TextView
+		            android:id="@+id/textViewPiao"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:layout_alignParentStart="true"
+		            android:layout_centerVertical="true"
+		            android:layout_marginStart="40dp"
+		            android:text="@string/fragment_total_txt_piao"
+		            android:textAppearance="?android:attr/textAppearanceSmall"
+		            android:textColor="#fefdfd" />
+
+		        <TextView
 		            android:id="@+id/textView_total_value"
 		            android:layout_width="wrap_content"
 		            android:layout_height="wrap_content"
 		            android:layout_alignParentStart="true"
 		            android:layout_centerVertical="true"
-		            android:layout_marginStart="46dp"
+		            android:layout_marginStart="70dp"
 		            android:text="@string/fragment_total_value"
 		            android:textAppearance="?android:attr/textAppearanceSmall"
 		            android:textColor="#fefdfd" />
-		
+		        		
 		        <ImageView
 		            android:id="@+id/imageView_total_value"
 		            android:layout_width="wrap_content"
@@ -154,6 +165,14 @@
 		            android:src="@drawable/fragment_share"
 		            android:layout_alignParentTop="true"
 		            android:layout_toStartOf="@+id/imageView_close" />
+		        
+		        <ImageView
+		            android:layout_width="40dp"
+		            android:layout_height="40dp"
+		            android:id="@+id/imageView_focus"
+		            android:src="@drawable/fragment_focus"
+		            android:layout_alignParentTop="true"
+		            android:layout_toStartOf="@+id/imageView_share" />
 		
 		        <ImageView
 		            android:layout_width="40dp"
@@ -161,7 +180,7 @@
 		            android:id="@+id/imageView_gift"
 		            android:src="@drawable/fragment_gift"
 		            android:layout_alignParentTop="true"
-		            android:layout_toStartOf="@+id/imageView_share" />
+		            android:layout_toStartOf="@+id/imageView_focus" />
 		
 		        <ImageView
 		            android:layout_width="40dp"
@@ -171,7 +190,21 @@
 		            android:layout_alignParentTop="true"
 		            android:layout_toStartOf="@+id/imageView_gift" />
 
-
+		        <ImageView
+		            android:layout_width="40dp"
+		            android:layout_height="40dp"
+		            android:id="@+id/imageView_divest"
+		            android:src="@drawable/fragment_divest"
+		            android:layout_alignParentTop="true"
+		            android:layout_toStartOf="@+id/imageView_camera" />
+		        
+		        <ImageView
+		            android:layout_width="40dp"
+		            android:layout_height="40dp"
+		            android:id="@+id/imageView_invest"
+		            android:src="@drawable/fragment_invest"
+		            android:layout_alignParentTop="true"
+		            android:layout_toStartOf="@+id/imageView_divest" />		        
 		    </RelativeLayout>
 		
 		    <master.flame.danmaku.ui.widget.DanmakuView

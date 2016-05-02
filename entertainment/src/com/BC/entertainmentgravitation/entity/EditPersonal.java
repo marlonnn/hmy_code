@@ -19,6 +19,16 @@ public class EditPersonal extends PersonalInformation {
 	private String age = "";
 
 	private String Whether_the_application_for_the_star = "";
+	
+	private String piao = "";
+	
+	public String getPiao() {
+		return piao;
+	}
+
+	public void setPiao(String piao) {
+		this.piao = piao;
+	}
 
 	public String getClientID() {
 		return clientID;

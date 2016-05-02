@@ -51,7 +51,8 @@
 	<string name="pay_result_callback_msg" formatted="false">微信支付结果：%s</string>
     
     <!-- 直播相关 -->
-    <string name="fragment_total_value">99999999999</string>
+    <string name="fragment_total_txt_piao">娱票</string>
+    <string name="fragment_total_value">0</string>
     
     <!--引导页相关-->
     <string name="guidePagePoint">小圆点</string>

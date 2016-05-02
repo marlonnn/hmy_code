@@ -172,7 +172,7 @@ public class DanmakuPanel {
         danmaku.textColor = Color.parseColor("#EEB422");
 //        danmaku.textShadowColor = Color.WHITE;
         // danmaku.underlineColor = Color.GREEN;
-        danmaku.borderColor = Color.parseColor("#8B658B");
+//        danmaku.borderColor = Color.parseColor("#8B658B");
         danmakuView.addDanmaku(danmaku);
     }
     

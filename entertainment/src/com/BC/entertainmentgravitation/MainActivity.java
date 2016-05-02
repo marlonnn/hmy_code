@@ -76,6 +76,7 @@ public class MainActivity extends BaseActivity implements OnClickListener, Updat
 	private float mPosX;
 	private float mCurrentPosX;
 	private boolean isSlipping = false;
+	private View imageIcon;
 
     /* (non-Javadoc)
      * @see com.summer.activity.BaseActivity#onCreate(android.os.Bundle)
@@ -118,6 +119,7 @@ public class MainActivity extends BaseActivity implements OnClickListener, Updat
 		toLevel = findViewById(R.id.toLevel);
 		searchButton = findViewById(R.id.searchButton);
 		account = findViewById(R.id.account);
+		imageIcon = findViewById(R.id.imageViewicon);
 
 		Head_portrait.setImageResource(R.drawable.home_image);
 
@@ -148,6 +150,7 @@ public class MainActivity extends BaseActivity implements OnClickListener, Updat
 		if (Config.User != null && Config.User.getPermission().contains("2"))
 		{
 			aplayOrLive.setText("直播");
+			imageIcon.setBackgroundResource(R.drawable.icon_zhibo);
 		}
 		else
 		{

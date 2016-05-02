@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@drawable/activity_charge_item_bg"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:clickable="true"
+    android:layout_height="55dp">
+
+    <TextView
+        android:id="@+id/textViewYupiao"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignLeft="@+id/imageViewYubi"
+        android:layout_marginLeft="40dp"
+        android:text="3800娱票"
+        android:textColor="#fff2cc"
+        android:textSize="15dp" />
+
+    <ImageView
+        android:id="@+id/imageViewYubi"
+        android:layout_width="120dp"
+        android:layout_height="38dp"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="22dp"
+        android:src="@drawable/activity_charge_yubi_bg" />
+
+    <TextView
+        android:id="@+id/txtYubi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="20dp"
+        android:text="3800娱币"
+        android:textSize="18dp" />
+
+</RelativeLayout>

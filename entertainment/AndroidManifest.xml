@@ -216,7 +216,12 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait" >
         </activity>
-        
+        <!-- 我的收益 -->
+        <activity
+            android:name=".IncomeActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" >
+        </activity>       
         <!-- 意见反馈 -->
         <activity
             android:name=".FeedbackActivity"
@@ -262,6 +267,12 @@
             android:name=".LevelActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="landscape" >
+        </activity>
+        <!-- 兑换娱币 -->
+        <activity
+            android:name=".ExchangeActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" >
         </activity>
     </application>
 

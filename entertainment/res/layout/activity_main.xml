@@ -373,9 +373,10 @@
             android:orientation="vertical" >
 
             <ImageView
+                android:id="@+id/imageViewicon"
                 android:layout_width="28dip"
                 android:layout_height="28dip"
-                android:src="@drawable/apply" />
+                android:src="@drawable/icon_zhibo" />
 
             <TextView
                 android:id="@+id/main_aplay"
@@ -461,6 +462,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/home_button"
                 android:gravity="center"
+                android:visibility="gone"
                 android:orientation="vertical" >
 
                 <ImageView

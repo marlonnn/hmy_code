@@ -188,7 +188,7 @@ public class InputPanel {
 
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                messageEditText.setHint("");
+                messageEditText.setHint("一条消息10个娛币哦");
                 checkSendButtonEnable(messageEditText);
             }
         });

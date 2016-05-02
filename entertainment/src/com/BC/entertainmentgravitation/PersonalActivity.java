@@ -275,6 +275,13 @@ public class PersonalActivity extends BaseActivity implements OnClickListener, O
 				startActivity(intent);
 				break;
 			/**
+			 * 我的收益
+			 */
+			case R.drawable.activity_personal_income:
+				intent = new Intent(this, IncomeActivity.class);
+				startActivity(intent);
+				break;
+			/**
 			 * 意见反馈
 			 */
 			case R.drawable.activity_personal_feedback:

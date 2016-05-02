@@ -50,7 +50,25 @@ public class StarInformation {
 	private String address;
 	private String Describe_the_text;
 	
+	private String Entertainment_dollar;
 	
+	private String piao;
+	
+	public String getEntertainment_dollar() {
+		return Entertainment_dollar;
+	}
+
+	public void setEntertainment_dollar(String entertainment_dollar) {
+		Entertainment_dollar = entertainment_dollar;
+	}
+
+	public String getPiao() {
+		return piao;
+	}
+
+	public void setPiao(String piao) {
+		this.piao = piao;
+	}
 
 	public String getUser_name() {
 		return user_name;

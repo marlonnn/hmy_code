@@ -34,8 +34,13 @@ import com.BC.entertainment.chatroom.extension.EmotionAttachment;
 import com.BC.entertainment.chatroom.extension.FontAttachment;
 import com.BC.entertainment.chatroom.gift.GiftCategory;
 import com.BC.entertainmentgravitation.R;
+import com.BC.entertainmentgravitation.entity.Ranking;
+import com.BC.entertainmentgravitation.entity.YubiAssets;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
 import com.netease.nim.uikit.cache.SimpleCallback;
 import com.netease.nim.uikit.common.ui.listview.ListViewUtil;
 import com.netease.nimlib.sdk.NIMClient;
@@ -60,6 +65,7 @@ import com.summer.config.Config;
 import com.summer.factory.ThreadPoolFactory;
 import com.summer.handler.InfoHandler;
 import com.summer.handler.InfoHandler.InfoReceiver;
+import com.summer.json.Entity;
 import com.summer.logger.XLog;
 import com.summer.task.HttpBaseTask;
 import com.summer.treadpool.ThreadPoolConst;
@@ -79,6 +85,8 @@ public class ChatRoomPanel {
     private static final int MESSAGE_CAPACITY = 500;
     
     private static final int LIMIT = 100;
+    
+    private final int tipValue = 10;//一条消息10个娱币
 
     // container
     private Container container;
@@ -120,6 +128,8 @@ public class ChatRoomPanel {
 	
 	public DanmakuPanel danmakuPanel;
 	
+	private Gson gson;
+	
 	public String GetMasterId()
 	{
 		return masterId;
@@ -134,6 +144,7 @@ public class ChatRoomPanel {
         this.container = container;
         this.rootView = rootView;
         this.danmakuPanel = danmakuPanel;
+        gson = new Gson();
         init();
     }
     
@@ -847,6 +858,10 @@ public class ChatRoomPanel {
         {
             handlerSendCustomMessage(message);
         }
+        else if (message.getMsgType() == MsgTypeEnum.text)
+        {
+        	sendChatRoomMessage(message);
+        }
         ListViewUtil.scrollToBottom(messageListView);
     }
     
@@ -967,30 +982,65 @@ public class ChatRoomPanel {
     private void sendChatRoomGift(BaseEmotion baseEmotion, int type)
     {
     	//非主播可以送礼物给主播
-    	if ( !container.chatRoom.isMaster())
-    	{
-    		//送礼物之前先检查余额是否充足
-    		XLog.i("value: " + baseEmotion.getValue());
-    		XLog.i("my dollar: " + InfoCache.getInstance().getPersonalInfo().getEntertainment_dollar());
-    		if (baseEmotion.getValue() < Integer.parseInt(InfoCache.getInstance().getPersonalInfo().getEntertainment_dollar()))
-    		{
-            	HashMap<String, String> entity = new HashMap<String, String>();
-            	entity.put("username", Config.User.getUserName());
-            	entity.put("user_dollar", String.valueOf(baseEmotion.getValue()));
-            	entity.put("type", String.valueOf(type));
-//            	entity.put("starid", master.getAccount());
-            	entity.put("starid", masterId);
-        		List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
-        		addToThreadPool(Config.send_gift, "send gift request", params);
-        		XLog.i("send gift reques");
-    		}
-    		else
-    		{
-    			//余额不足，需要充值
-    			ToastUtil.show(container.activity, "余额不足，赶紧充值吧");
-    		}
+    	try {
+			if ( !container.chatRoom.isMaster())
+			{
+				//送礼物之前先检查余额是否充足
+				XLog.i("value: " + baseEmotion.getValue());
+				XLog.i("my dollar: " + InfoCache.getInstance().getPersonalInfo().getEntertainment_dollar());
+				if (baseEmotion.getValue() < Integer.parseInt(InfoCache.getInstance().getPersonalInfo().getEntertainment_dollar()))
+				{
+			    	HashMap<String, String> entity = new HashMap<String, String>();
+			    	entity.put("username", Config.User.getUserName());
+			    	entity.put("user_dollar", String.valueOf(baseEmotion.getValue()));
+			    	entity.put("type", String.valueOf(type));
+			    	entity.put("starid", masterId);
+					List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
+					addToThreadPool(Config.send_gift, "send gift request", params);
+					XLog.i("send gift reques");
+				}
+				else
+				{
+					//余额不足，需要充值
+					ToastUtil.show(container.activity, "余额不足，赶紧充值吧");
+				}
 
-    	}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			XLog.e("NumberFormatException");
+		}
+    }
+    
+    private void sendChatRoomMessage(IMMessage message)
+    {
+    	//非主播可以送礼物给主播
+    	try {
+			if ( !container.chatRoom.isMaster())
+			{
+				//送礼物之前先检查余额是否充足
+				XLog.i("my dollar: " + InfoCache.getInstance().getPersonalInfo().getEntertainment_dollar());
+				if (tipValue < Integer.parseInt(InfoCache.getInstance().getPersonalInfo().getEntertainment_dollar()))
+				{
+			    	HashMap<String, String> entity = new HashMap<String, String>();
+			    	entity.put("username", Config.User.getUserName());
+			    	entity.put("user_dollar", String.valueOf(tipValue));
+			    	entity.put("type", "-1");
+			    	entity.put("starid", masterId);
+					List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
+					addToThreadPool(Config.send_gift, "send gift request", params);
+					XLog.i("send gift reques");
+				}
+				else
+				{
+					//余额不足，需要充值
+					ToastUtil.show(container.activity, "余额不足，赶紧充值吧");
+				}
+			}
+		} catch (Exception e) {
+			XLog.e("NumberFormatException");
+			e.printStackTrace();
+		}
     }
     
     private void addToThreadPool(int taskType, String tag, List<NameValuePair> params)
@@ -1054,15 +1104,21 @@ public class ChatRoomPanel {
 			break;
 		case Config.send_gift:
 			//礼物赠送成功，更新本地账户信息
-			XLog.i("taskType: " + taskType + " json string: " + jsonString);
+			
 			try {
-				JSONObject jsonObj = new JSONObject(jsonString);
-				String data = jsonObj.getString("data");
-				InfoCache.getInstance().getPersonalInfo().setEntertainment_dollar(data);
-			} catch (JSONException e) {
-				e.printStackTrace();
+				Entity<YubiAssets> baseEntity = gson.fromJson(jsonString,
+						new TypeToken<Entity<YubiAssets>>() {
+						}.getType());
+				if(baseEntity != null)
+				{
+					YubiAssets assets = baseEntity.getData();
+					InfoCache.getInstance().getPersonalInfo().setEntertainment_dollar(assets.getUser());
+				}
+			} catch (JsonSyntaxException e1) {
+				e1.printStackTrace();
 				XLog.e("JSONException");
 			}
+			XLog.i("taskType: " + taskType + " json string: " + jsonString);
 			break;
 		}
 	}
