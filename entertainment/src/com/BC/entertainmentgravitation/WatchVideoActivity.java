@@ -9,15 +9,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.BC.entertainmentgravitation.entity.ChatRoom;
-import com.BC.entertainmentgravitation.entity.EditPersonal;
-import com.BC.entertainmentgravitation.entity.VideoStatus;
 import com.BC.entertainmentgravitation.fragment.ExitFragmentListener;
 import com.BC.entertainmentgravitation.fragment.ScrollListener;
 import com.BC.entertainmentgravitation.fragment.SurfaceFragment;
-import com.BC.entertainmentgravitation.fragment.TopSurfaceFragment;
 import com.BC.entertainmentgravitation.fragment.WatchVideoFragment;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.netease.nim.uikit.common.ui.dialog.DialogMaker;
 import com.netease.nimlib.sdk.AbortableFuture;
 import com.netease.nimlib.sdk.NIMClient;
@@ -37,7 +33,6 @@ import com.summer.activity.BaseActivity;
 import com.summer.config.Config;
 import com.summer.factory.ThreadPoolFactory;
 import com.summer.handler.InfoHandler;
-import com.summer.json.Entity;
 import com.summer.logger.XLog;
 import com.summer.task.HttpBaseTask;
 import com.summer.treadpool.ThreadPoolConst;
@@ -50,7 +45,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.Toast;
 
@@ -239,6 +233,7 @@ public class WatchVideoActivity extends BaseActivity implements ExitFragmentList
 						XLog.i("extension: " + roomInfo.getExtension());
 						member.setRoomId(roomInfo.getRoomId());
 						XLog.i("enter chat room success" + roomInfo.getRoomId());
+						chatRoom.setChatRoomInfo(roomInfo);
 						initializeWatchVideoFragment();
 
 					}
@@ -275,6 +270,22 @@ public class WatchVideoActivity extends BaseActivity implements ExitFragmentList
 			finish();
 		}
 		
+	}
+	
+	@Override
+	public void isExit(boolean exit, long totalPeople) {
+
+		if (exit)
+		{
+			if (fragment != null)
+			{
+				fragment.Destory();
+			}
+			Intent intent = new Intent(this, FinishActivity.class);
+			intent.putExtra("totalPeople", totalPeople);
+			startActivity(intent);
+			this.finish();
+		}
 	}
 
 	@SuppressWarnings("unused")
@@ -320,4 +331,5 @@ public class WatchVideoActivity extends BaseActivity implements ExitFragmentList
 			break;
 		}
 	}
+
 }

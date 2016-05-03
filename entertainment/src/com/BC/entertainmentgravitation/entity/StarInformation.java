@@ -3,8 +3,14 @@ package com.BC.entertainmentgravitation.entity;
 import java.util.List;
 
 public class StarInformation {
+	/**
+	 * 后台分配的账号
+	 */
 	private String Star_ID;
 	
+	/**
+	 * 明星的用户名，即手机号
+	 */
 	private String user_name;
 
 	private String Head_portrait;

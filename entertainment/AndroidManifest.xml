@@ -280,6 +280,12 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="landscape" >
         </activity>
+        <!-- 直播结束 -->
+        <activity
+            android:name=".FinishActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" >
+        </activity>
     </application>
 
 </manifest>

@@ -331,6 +331,11 @@ public class PushVideoActivity extends FragmentActivity implements ExitFragmentL
 			finish();
 		}
 	}
+	
+	@Override
+	public void isExit(boolean exit, long totalPeople) {
+
+	}
 
 	@Override
 	public void onSwitchCamera() {

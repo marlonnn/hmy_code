@@ -28,7 +28,7 @@
             android:gravity="center" >
 
             <TextView
-                android:id="@+id/textView1"
+                android:id="@+id/txtTotalPeople"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="82"
@@ -82,7 +82,7 @@
 
          <LinearLayout
              android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
+             android:layout_height="40dp"
              android:layout_below="@+id/txtShare"
              android:layout_centerHorizontal="true"
              android:layout_marginTop="20dp"
@@ -90,28 +90,34 @@
 
              <ImageView
                  android:id="@+id/imageViewWeibo"
-                 android:layout_width="wrap_content"
-                 android:layout_height="wrap_content"
+                 android:layout_width="40dp"
+                 android:layout_height="40dp"
+                 android:layout_marginLeft="15dp"
                  android:src="@drawable/activity_finish_weibo" />
              <ImageView
                  android:id="@+id/imageViewWeixin"
-                 android:layout_width="wrap_content"
-                 android:layout_height="wrap_content"
+                 android:layout_width="40dp"
+                 android:layout_height="40dp"
+                 android:layout_marginLeft="15dp"
                  android:src="@drawable/activity_finish_weixin" />
              <ImageView
                  android:id="@+id/imageViewQq"
-                 android:layout_width="wrap_content"
-                 android:layout_height="wrap_content"
+                 android:layout_width="40dp"
+                 android:layout_height="40dp"
+                 android:layout_marginLeft="15dp"
                  android:src="@drawable/activity_finish_qq" />
              <ImageView
                  android:id="@+id/imageViewZone"
-                 android:layout_width="wrap_content"
-                 android:layout_height="wrap_content"
+                 android:layout_width="40dp"
+                 android:layout_height="40dp"
+                 android:layout_marginLeft="15dp"
                  android:src="@drawable/activity_finish_zone" />
              <ImageView
                  android:id="@+id/imageViewPengyou"
-                 android:layout_width="wrap_content"
-                 android:layout_height="wrap_content"
+                 android:layout_width="40dp"
+                 android:layout_height="40dp"
+                 android:layout_marginLeft="15dp"
+                 android:layout_marginRight="15dp"
                  android:src="@drawable/activity_finish_pengyouquan" />             
          </LinearLayout>
 

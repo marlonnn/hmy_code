@@ -8,4 +8,6 @@ package com.BC.entertainmentgravitation.fragment;
 public interface ExitFragmentListener {
 
 	void isExit(boolean exit);
+	
+	void isExit(boolean exit, long totalPeople);
 }

@@ -185,10 +185,9 @@ public class TopSurfaceFragment extends BaseFragment implements OnClickListener,
 		}
 		
         if (chatRoomPanel == null) {
-            chatRoomPanel = new ChatRoomPanel(container, view, danmakuPanel);
+            chatRoomPanel = new ChatRoomPanel(container, view, danmakuPanel, exitListener);
             chatRoomPanel.showMessageListView(true);
         }
-		chatRoomPanel.registerObservers(true);
 		
 		if (inputPanel == null)
 		{

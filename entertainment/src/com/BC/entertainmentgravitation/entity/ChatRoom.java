@@ -1,5 +1,7 @@
 package com.BC.entertainmentgravitation.entity;
 
+import com.netease.nimlib.sdk.chatroom.model.ChatRoomInfo;
+
 public class ChatRoom {
 
 	private String cid;
@@ -17,6 +19,11 @@ public class ChatRoom {
 	private boolean filter;
 	
 	private boolean isMaster;//是否是主播
+	
+	/**
+	 * enterChatRoom成功之后回调的聊天室信息，里面包含了聊天室总人数、聊天室创建者等相关信息
+	 */
+	private ChatRoomInfo chatRoomInfo;
 
 	public String getCid() {
 		return cid;
@@ -80,6 +87,14 @@ public class ChatRoom {
 
 	public void setMaster(boolean isMaster) {
 		this.isMaster = isMaster;
+	}
+
+	public ChatRoomInfo getChatRoomInfo() {
+		return chatRoomInfo;
+	}
+
+	public void setChatRoomInfo(ChatRoomInfo chatRoomInfo) {
+		this.chatRoomInfo = chatRoomInfo;
 	}
 	
 }
