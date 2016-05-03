@@ -2,6 +2,7 @@ package com.BC.entertainment.adapter;
 
 import java.util.List;
 
+import com.BC.entertainment.cache.ChatRoomCache;
 import com.BC.entertainment.chatroom.extension.CustomAttachment;
 import com.BC.entertainment.chatroom.extension.CustomAttachmentType;
 import com.BC.entertainment.chatroom.extension.EmotionAttachment;
@@ -162,7 +163,7 @@ public class ChatRoomAdapter extends BaseAdapter {
     		viewHolder.txtName.setTextColor(Color.parseColor("#EEB422"));
     		viewHolder.txtName.setText("系统消息：");
         	CustomAttachment customAttachment = (CustomAttachment)item.getAttachment();
-        	ChatRoomMember chatRoomMember = chatRoomPanel.getChatRoomMember(item.getSessionId(), item.getFromAccount());
+        	ChatRoomMember chatRoomMember = ChatRoomCache.getInstance().getChatRoomMember(item.getFromAccount());
         	switch(customAttachment.getType())
         	{
         	case CustomAttachmentType.emotion:

@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.http.NameValuePair;
 import org.json.JSONException;
@@ -26,6 +25,7 @@ import android.widget.TextView;
 
 import com.BC.entertainment.adapter.RecyclerViewAdapter;
 import com.BC.entertainment.adapter.RecyclerViewAdapter.OnItemClickListener;
+import com.BC.entertainment.cache.ChatRoomCache;
 import com.BC.entertainment.cache.InfoCache;
 import com.BC.entertainment.chatroom.extension.BaseEmotion;
 import com.BC.entertainment.chatroom.extension.CustomAttachment;
@@ -34,8 +34,8 @@ import com.BC.entertainment.chatroom.extension.EmotionAttachment;
 import com.BC.entertainment.chatroom.extension.FontAttachment;
 import com.BC.entertainment.chatroom.gift.GiftCategory;
 import com.BC.entertainmentgravitation.R;
-import com.BC.entertainmentgravitation.entity.Ranking;
 import com.BC.entertainmentgravitation.entity.YubiAssets;
+import com.BC.entertainmentgravitation.fragment.ExitFragmentListener;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.Gson;
@@ -45,13 +45,11 @@ import com.netease.nim.uikit.cache.SimpleCallback;
 import com.netease.nim.uikit.common.ui.listview.ListViewUtil;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
-import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.RequestCallbackWrapper;
 import com.netease.nimlib.sdk.ResponseCode;
 import com.netease.nimlib.sdk.chatroom.ChatRoomService;
 import com.netease.nimlib.sdk.chatroom.ChatRoomServiceObserver;
 import com.netease.nimlib.sdk.chatroom.constant.MemberQueryType;
-import com.netease.nimlib.sdk.chatroom.model.ChatRoomInfo;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomMember;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomMessage;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomNotificationAttachment;
@@ -95,16 +93,13 @@ public class ChatRoomPanel {
     private ImageView imageViewAnimation;
     private Handler uiHandler;
     
-	private Map<String, Map<String, ChatRoomMember>> cache = new HashMap<String, Map<String, ChatRoomMember>>();
+//	private Map<String, Map<String, ChatRoomMember>> cache = new HashMap<String, Map<String, ChatRoomMember>>();
 
     // message list view
     private ListView messageListView;
     private LinkedList<IMMessage> items;//聊天室消息列表
     
-    private LinkedList<ChatRoomMember> onlinePeopleitems;
-    
-    //聊天室人数缓存
-    private Map<String, ChatRoomMember> memberCache = new ConcurrentHashMap<>();
+//    private LinkedList<ChatRoomMember> ChatRoomCache.getInstance().getOnlinePeopleitems();
     
     private boolean isNormalEmpty = false; // 固定成员是否拉取完
     
@@ -116,47 +111,72 @@ public class ChatRoomPanel {
 
 	private CircularImage headPortrait;
 	
-//	private ChatRoomMember master;//管理员相关信息
-	
-	private String masterId;//聊天室主播id
-	
 	private RecyclerView recycleView;
 	
 	private RecyclerViewAdapter recycleAdapter;
 	
 	private TextView onlinePeople;//总的在线人数
 	
+	private long totalPeople;//总的观看人数
+	
 	public DanmakuPanel danmakuPanel;
+	
+	private ExitFragmentListener exitListener;
 	
 	private Gson gson;
 	
-	public String GetMasterId()
-	{
-		return masterId;
-	}
+	public boolean fetch = false;
 	
-//	public ChatRoomMember GetMaster()
-//	{
-//		return master;
-//	}
-	
-    public ChatRoomPanel(Container container, View rootView, DanmakuPanel danmakuPanel) {
+    public ChatRoomPanel(Container container, View rootView, DanmakuPanel danmakuPanel, ExitFragmentListener exitListener) {
         this.container = container;
         this.rootView = rootView;
         this.danmakuPanel = danmakuPanel;
+        this.exitListener = exitListener;
         gson = new Gson();
         init();
     }
     
     private void init() {
+    	registerObservers(true);
         updateVideoStatus(false);//更新聊天室状态
         initListView();//初始化和处理聊天室消息列表
         initPortrait();
         this.uiHandler = new Handler();
         initOnlinePortrait();//初始化在线人数头像列表
-        initOnlinePeople();
-        fetchPortrait();
-        fetchOnlinePeople();
+//        fetchPortrait();
+//        fetchOnlinePeople();
+//        fetchRoomInfoTask();
+    }
+    
+    private void fetchRoomInfoTask()
+    {
+    	fetch = true;
+    	new Thread(new Runnable(){
+
+			@Override
+			public void run() {
+				while (fetch)
+				{
+					try {
+//						fetchData();
+//						if (container.chatRoom.isMaster())
+//						{
+//							getMembers(MemberQueryType.GUEST, enterTime, 0);
+//						}
+//						else
+						{
+							getMembers(MemberQueryType.ONLINE_NORMAL, updateTime, 0);
+						}
+						
+
+						Thread.sleep(1500);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+    		
+    	}).start();
     }
     
     /**
@@ -260,7 +280,7 @@ public class ChatRoomPanel {
         	holder.setTextColor(R.id.txtName, Color.parseColor("#EEB422"));
         	holder.setText(R.id.txtName, "系统消息：");
         	CustomAttachment customAttachment = (CustomAttachment)message.getAttachment();
-        	ChatRoomMember chatRoomMember = getChatRoomMember(message.getSessionId(), message.getFromAccount());
+        	ChatRoomMember chatRoomMember = ChatRoomCache.getInstance().getChatRoomMember(message.getFromAccount());
         	switch(customAttachment.getType())
         	{
         	case CustomAttachmentType.emotion:
@@ -349,10 +369,23 @@ public class ChatRoomPanel {
     private void initPortrait()
     {
     	headPortrait = (CircularImage) rootView.findViewById(R.id.portrait);
-		Glide.with(container.activity)
-		.load(InfoCache.getInstance().getPersonalInfo().getHead_portrait())
-		.centerCrop().diskCacheStrategy(DiskCacheStrategy.ALL)
-		.placeholder(R.drawable.avatar_def).into(headPortrait);
+    	if (container.chatRoom.isMaster())
+    	{
+    		Glide.with(container.activity)
+    		.load(Config.User.getImage())
+    		.centerCrop().diskCacheStrategy(DiskCacheStrategy.ALL)
+    		.placeholder(R.drawable.avatar_def).into(headPortrait);
+    		XLog.i("master portrait: " + " http://app.haimianyu.cn/" + Config.User.getImage());
+    	}
+    	else
+    	{
+    		Glide.with(container.activity)
+    		.load(InfoCache.getInstance().getStartInfo().getHead_portrait())
+    		.centerCrop().diskCacheStrategy(DiskCacheStrategy.ALL)
+    		.placeholder(R.drawable.avatar_def).into(headPortrait);
+    		XLog.i("custom portrait: " + InfoCache.getInstance().getPersonalInfo().getHead_portrait());
+    	}
+
     }
     
     /**
@@ -360,10 +393,17 @@ public class ChatRoomPanel {
      */
     private void initOnlinePortrait()
     {
-    	onlinePeopleitems = new LinkedList<ChatRoomMember>();
+    	try {
+			onlinePeople = (TextView)rootView.findViewById(R.id.txtViewOnlinePeople);
+			onlinePeople.setText(String.valueOf(container.chatRoom.getChatRoomInfo().getOnlineUserCount()));
+		} catch (Exception e) {
+			e.printStackTrace();
+			XLog.i("init on line people exception" + e.getMessage());
+		}
+//    	ChatRoomCache.getInstance().getOnlinePeopleitems() = ChatRoomCache.getInstance().getOnlinePeopleitems();
     	recycleView = (RecyclerView)rootView.findViewById(R.id.recyclerView);
     	
-    	recycleAdapter = new RecyclerViewAdapter(container.activity, onlinePeopleitems);
+    	recycleAdapter = new RecyclerViewAdapter(container.activity, ChatRoomCache.getInstance().getOnlinePeopleitems());
     	
     	recycleView.setAdapter(recycleAdapter);
     	
@@ -491,14 +531,6 @@ public class ChatRoomPanel {
     }
     
     /**
-     * 初始化在线人数
-     */
-    private void initOnlinePeople()
-    {
-    	onlinePeople = (TextView)rootView.findViewById(R.id.txtViewOnlinePeople);
-    }
-    
-    /**
      * 获取在线人数
      */
     private void fetchOnlinePeople()
@@ -515,17 +547,17 @@ public class ChatRoomPanel {
     /**
      * 获取主播头像
      */
-    public void fetchPortrait()
-    {
-//        container.activity.runOnUiThread(new Runnable() {
-//
-//            @Override
-//            public void run() {
-//            	fetchRoomInfo();
-//            }
-//        });
-    	fetchRoomInfo();
-    }
+//    public void fetchPortrait()
+//    {
+////        container.activity.runOnUiThread(new Runnable() {
+////
+////            @Override
+////            public void run() {
+////            	fetchRoomInfo();
+////            }
+////        });
+//    	fetchRoomInfo();
+//    }
     
     // 刷新消息列表
     public void refreshMessageList() {
@@ -595,93 +627,70 @@ public class ChatRoomPanel {
             return;
         }
 
-        String roomId = message.getSessionId();
         String account = message.getFromAccount();
         ChatRoomNotificationAttachment attachment = (ChatRoomNotificationAttachment) message.getAttachment();
         danmakuPanel.showDanmaku(attachment);
-        List<String> targets = attachment.getTargets();
-        if (targets != null) {
-            for (String target : targets) {
-                ChatRoomMember member = getChatRoomMember(roomId, target);
-                if (attachment.getType() == NotificationType.ChatRoomMemberIn)
-                {
-                	//进入聊天室
-            		addMembers(member, false);
-            		fetchMember(roomId, account, new SimpleCallback<ChatRoomMember>() {
+        ChatRoomMember member = ChatRoomCache.getInstance().getChatRoomMember(account);
+        if (attachment.getType() == NotificationType.ChatRoomMemberIn)
+        {
+        	totalPeople ++;
+        	//进入聊天室
+    		addMembers(member, false);
+//    		if (member == null)
+//    		{
+//        		fetchMember(message.getSessionId(), account, new SimpleCallback<ChatRoomMember>() {
+//    			
+//    							@Override
+//    							public void onResult(boolean success,
+//    									ChatRoomMember result) {
+//    								try {
+//    									addMembers(result, false);
+//    									XLog.i("fetch room member success: " + result.getNick());
+//    								} catch (Exception e) {
+//    									e.printStackTrace();
+//    								}
+//    							}
+//    						});
+//    		}
+//    		fetchMember(roomId, account, new SimpleCallback<ChatRoomMember>() {
+//
+//				@Override
+//				public void onResult(boolean success,
+//						ChatRoomMember result) {
+//					try {
+//						addMembers(result, false);
+//						XLog.i("fetch room member success: " + result.getNick());
+//					} catch (Exception e) {
+//						e.printStackTrace();
+//					}
+//				}
+//			});
+    		//更新聊天室人数到后台
+    		updateRoomMember();
+    		
+    		try {
+    			XLog.i("some one in chat room, username : " + member.getAccount());
+				XLog.i("some one in chat room, avatar: " + member.getAvatar());
+			} catch (Exception e) {
+				e.printStackTrace();
+				XLog.e("exception: " + e.getMessage());
+			}
+        }
+        else if(attachment.getType() == NotificationType.ChatRoomMemberExit)
+        {
+        	if(!container.chatRoom.isMaster())
+        	{
+            	if (exitListener != null && member != null && member.getAccount().contains(Config.User.getUserName()))
+            	{
+            		XLog.i("exit chat room");
+            		exitListener.isExit(true, totalPeople);
+            	}
+        	}
 
-						@Override
-						public void onResult(boolean success,
-								ChatRoomMember result) {
-							try {
-								addMembers(result, false);
-								XLog.i("fetch room member success: " + result.getNick());
-							} catch (Exception e) {
-								e.printStackTrace();
-							}
-						}
-					});
-            		//更新聊天室人数到后台
-            		updateRoomMember();
-                }
-                else if(attachment.getType() == NotificationType.ChatRoomMemberExit)
-                {
-                	 removeMembers(member);	
-                	 //更新聊天室人数到后台
-                	 updateRoomMember();
-                }
-            }
+        	 removeMembers(member);	
+        	 //更新聊天室人数到后台
+        	 updateRoomMember();
         }
-    }
-    
-    /**
-     * 根据聊天室id和用户id获取聊天室成员ChatRoomMember
-     * @param roomId 聊天室id
-     * @param account 用户云信账号
-     * @return
-     */
-    public ChatRoomMember getChatRoomMember(String roomId, String account) {
-        if (cache.containsKey(roomId)) {
-            return cache.get(roomId).get(account);
-        }
-
-        return null;
-    }
-    
-    public void clearRoomCache(String roomId) {
-        if (cache.containsKey(roomId)) {
-            cache.remove(roomId);
-        }
-    }
-    
-    public void clear() {
-        cache.clear();
-    }
-    
-    public void saveMyMember(ChatRoomMember chatRoomMember) {
-        saveMember(chatRoomMember);
-    }
-    
-    private void saveMembers(List<ChatRoomMember> members) {
-        if (members == null || members.isEmpty()) {
-            return;
-        }
-
-        for (ChatRoomMember m : members) {
-            saveMember(m);
-        }
-    }
-    
-    private void saveMember(ChatRoomMember member)
-    {
-    	if (member != null && !TextUtils.isEmpty(member.getRoomId()) && !TextUtils.isEmpty(member.getAccount()))
-    	{
-    		Map<String, ChatRoomMember> members = cache.get(member.getRoomId());
-            if (members == null) {
-                members = new HashMap<String, ChatRoomMember>();
-                cache.put(member.getRoomId(), members);
-            }
-            members.put(member.getAccount(), member);
-    	}
     }
     
     public boolean isMyMessage(IMMessage message) {
@@ -745,7 +754,8 @@ public class ChatRoomPanel {
 								boolean success = code == ResponseCode.RES_SUCCESS;
 
 								if (success) {
-									saveMembers(result);
+									ChatRoomCache.getInstance().saveMemberCache(result);
+//									saveMembers(result);
 								} else {
 									XLog.i("fetch members by page failed, code:"+ code);
 								}
@@ -768,15 +778,19 @@ public class ChatRoomPanel {
             } else {
                 enterTime = member.getEnterTime();
             }
-
-            if (memberCache.containsKey(member.getAccount())) {
-                items.remove(memberCache.get(member.getAccount()));
+            Map<String, ChatRoomMember> memberCache = ChatRoomCache.getInstance().getMemberCache();
+//            if (memberCache.containsKey(member.getAccount())) {
+//                items.remove(ChatRoomCache.getInstance().getMemberCache().get(member.getAccount()));
+//            }
+//            ChatRoomCache.getInstance().saveMemberCache(member);
+//            ChatRoomCache.getInstance().getOnlinePeopleitems().add(member);
+            if (!memberCache.containsKey(member.getAccount())) {
+                ChatRoomCache.getInstance().saveMemberCache(member);
+                ChatRoomCache.getInstance().getOnlinePeopleitems().add(member);
             }
-            memberCache.put(member.getAccount(), member);
 
-            onlinePeopleitems.add(member);
         }
-        Collections.sort(onlinePeopleitems, ChatRoomComparator.comp);
+        Collections.sort(ChatRoomCache.getInstance().getOnlinePeopleitems(), ChatRoomComparator.comp);
 //        recycleAdapter.notifyDataSetChanged();
         recycleAdapter.UpdateData();
         if (onlinePeople != null)
@@ -794,15 +808,15 @@ public class ChatRoomPanel {
         if (member == null) {
             return;
         }
-        if (onlinePeopleitems.size() >= 1) {
+        Map<String, ChatRoomMember> memberCache = ChatRoomCache.getInstance().getMemberCache();
+        if (ChatRoomCache.getInstance().getOnlinePeopleitems().size() >= 1) {
             if (memberCache.containsKey(member.getAccount())) {
-            	onlinePeopleitems.remove(memberCache.get(member.getAccount()));
-                memberCache.remove(member.getAccount());
-//                recycleAdapter.notifyDataSetChanged();
+            	ChatRoomCache.getInstance().getOnlinePeopleitems().remove(memberCache.get(member.getAccount()));
+            	ChatRoomCache.getInstance().RemoveMemberCache(member.getAccount());
                 recycleAdapter.UpdateData();
                 if (onlinePeople != null)
                 {
-                	onlinePeople.setText(String.valueOf(onlinePeopleitems == null ? 0 : onlinePeopleitems.size()));
+                	onlinePeople.setText(String.valueOf(ChatRoomCache.getInstance().getOnlinePeopleitems() == null ? 0 : ChatRoomCache.getInstance().getOnlinePeopleitems().size()));
                 }
             }
         }
@@ -818,30 +832,38 @@ public class ChatRoomPanel {
             return;
         }
 
-        if (onlinePeopleitems.size() >= LIMIT) {
-        	onlinePeopleitems.poll();
+        Map<String, ChatRoomMember> memberCache = ChatRoomCache.getInstance().getMemberCache();
+        if (ChatRoomCache.getInstance().getOnlinePeopleitems().size() >= LIMIT) {
+        	ChatRoomCache.getInstance().getOnlinePeopleitems().poll();
         }
-
         if (addFirst) {
-            if (memberCache.containsKey(member.getAccount())) {
-            	onlinePeopleitems.remove(memberCache.get(member.getAccount()));
+//            if (memberCache.containsKey(member.getAccount())) {
+//            	ChatRoomCache.getInstance().getOnlinePeopleitems().remove(memberCache.get(member.getAccount()));
+//            }
+//            ChatRoomCache.getInstance().saveMemberCache(member);
+//            ChatRoomCache.getInstance().getOnlinePeopleitems().add(0, member);
+            if (!memberCache.containsKey(member.getAccount())) {
+                ChatRoomCache.getInstance().saveMemberCache(member);
+                ChatRoomCache.getInstance().getOnlinePeopleitems().add(0, member);
             }
-            memberCache.put(member.getAccount(), member);
-            onlinePeopleitems.add(0, member);
         } else {
-            if (memberCache.containsKey(member.getAccount())) {
-            	onlinePeopleitems.remove(memberCache.get(member.getAccount()));
+//            if (memberCache.containsKey(member.getAccount())) {
+//            	ChatRoomCache.getInstance().getOnlinePeopleitems().remove(memberCache.get(member.getAccount()));
+//            }
+//            ChatRoomCache.getInstance().saveMemberCache(member);
+//            ChatRoomCache.getInstance().getOnlinePeopleitems().add(member);
+            if (!memberCache.containsKey(member.getAccount())) {
+                ChatRoomCache.getInstance().saveMemberCache(member);
+                ChatRoomCache.getInstance().getOnlinePeopleitems().add(member);
             }
-            memberCache.put(member.getAccount(), member);
-            onlinePeopleitems.add(member);
         }
-        Collections.sort(onlinePeopleitems, ChatRoomComparator.comp);
+        Collections.sort(ChatRoomCache.getInstance().getOnlinePeopleitems(), ChatRoomComparator.comp);
         recycleAdapter.UpdateData();
         XLog.i("have notifiy data set changed");
-        XLog.i("amount people: " + onlinePeopleitems.size());
+        XLog.i("amount people: " + ChatRoomCache.getInstance().getOnlinePeopleitems().size());
         if (onlinePeople != null)
         {
-        	onlinePeople.setText(String.valueOf(onlinePeopleitems == null ? 0 : onlinePeopleitems.size()));
+        	onlinePeople.setText(String.valueOf(ChatRoomCache.getInstance().getOnlinePeopleitems() == null ? 0 : ChatRoomCache.getInstance().getOnlinePeopleitems().size()));
         }
     }
     
@@ -889,29 +911,29 @@ public class ChatRoomPanel {
     /**
      * 获取聊天室主播信息
      */
-    public void fetchRoomInfo(){
-    	NIMClient.getService(ChatRoomService.class).fetchRoomInfo(container.chatRoom.getChatroomid()).setCallback(new RequestCallback<ChatRoomInfo>(){
-
-			@Override
-			public void onException(Throwable code) {
-				XLog.i("fetch room info failed:" + code);
-			}
-
-			@Override
-			public void onFailed(int code) {
-				XLog.i("fetch room info failed:" + code);
-			}
-
-			@Override
-			public void onSuccess(ChatRoomInfo param) {
-//				getChatRoomMaster(param);
-				masterId = param.getCreator();
-
-
-			}
-    		
-    	});
-    }
+//    public void fetchRoomInfo(){
+//    	NIMClient.getService(ChatRoomService.class).fetchRoomInfo(container.chatRoom.getChatroomid()).setCallback(new RequestCallback<ChatRoomInfo>(){
+//
+//			@Override
+//			public void onException(Throwable code) {
+//				XLog.i("fetch room info failed:" + code);
+//			}
+//
+//			@Override
+//			public void onFailed(int code) {
+//				XLog.i("fetch room info failed:" + code);
+//			}
+//
+//			@Override
+//			public void onSuccess(ChatRoomInfo param) {
+////				getChatRoomMaster(param);
+//				masterId = param.getCreator();
+//
+//
+//			}
+//    		
+//    	});
+//    }
 
     /**
      * 获取聊天室主播信息
@@ -973,7 +995,7 @@ public class ChatRoomPanel {
     	{
         	HashMap<String, String> entity = new HashMap<String, String>();
         	entity.put("username", Config.User.getUserName());
-        	entity.put("peoples", String.valueOf(onlinePeopleitems.size()));
+        	entity.put("peoples", String.valueOf(ChatRoomCache.getInstance().getOnlinePeopleitems().size()));
     		List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
     		addToThreadPool(Config.update_room, "send update room member request", params);
     	}
@@ -994,7 +1016,7 @@ public class ChatRoomPanel {
 			    	entity.put("username", Config.User.getUserName());
 			    	entity.put("user_dollar", String.valueOf(baseEmotion.getValue()));
 			    	entity.put("type", String.valueOf(type));
-			    	entity.put("starid", masterId);
+			    	entity.put("starid", InfoCache.getInstance().getStartInfo().getUser_name());
 					List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
 					addToThreadPool(Config.send_gift, "send gift request", params);
 					XLog.i("send gift reques");
@@ -1026,7 +1048,7 @@ public class ChatRoomPanel {
 			    	entity.put("username", Config.User.getUserName());
 			    	entity.put("user_dollar", String.valueOf(tipValue));
 			    	entity.put("type", "-1");
-			    	entity.put("starid", masterId);
+			    	entity.put("starid", InfoCache.getInstance().getStartInfo().getUser_name());
 					List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
 					addToThreadPool(Config.send_gift, "send gift request", params);
 					XLog.i("send gift reques");
@@ -1161,7 +1183,7 @@ public class ChatRoomPanel {
 	                
 	                // cache
 	                if (success) {
-	                    saveMembers(members);
+	                	ChatRoomCache.getInstance().saveMemberCache(members);
 	                } else {
 	                    XLog.i("fetch chat room member failed, code=" + code);
 	                }
@@ -1194,6 +1216,7 @@ public class ChatRoomPanel {
 			//主播离开需要更新直播间状态
 			updateVideoStatus(true);
 		}
+		fetch  = false;
 		NIMClient.getService(ChatRoomService.class).exitChatRoom(
 				container.chatRoom.getChatroomid());
 	}

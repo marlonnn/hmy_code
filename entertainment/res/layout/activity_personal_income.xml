@@ -115,7 +115,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="10dp"
             android:clickable="true"
-            android:background="@drawable/activity_charge_wx_selector" />
+            android:background="@drawable/activity_income_exchange" />
         
         <ImageButton
             android:id="@+id/imageViewWithDraw"
@@ -127,7 +127,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="60dp"
             android:clickable="true"
-            android:background="@drawable/activity_charge_ali_selector" />
+            android:background="@drawable/activity_income_with_draw" />
     </RelativeLayout>
  
 </LinearLayout>

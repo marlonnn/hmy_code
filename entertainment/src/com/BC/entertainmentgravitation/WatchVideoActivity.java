@@ -8,6 +8,7 @@ import org.apache.http.NameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.BC.entertainment.cache.ChatRoomCache;
 import com.BC.entertainmentgravitation.entity.ChatRoom;
 import com.BC.entertainmentgravitation.fragment.ExitFragmentListener;
 import com.BC.entertainmentgravitation.fragment.ScrollListener;
@@ -231,6 +232,9 @@ public class WatchVideoActivity extends BaseActivity implements ExitFragmentList
 						final ChatRoomMember member = result.getMember();
 						member.setExtension(roomInfo.getExtension());
 						XLog.i("extension: " + roomInfo.getExtension());
+		                ChatRoomCache.getInstance().ClearOnlinePeople();
+		                ChatRoomCache.getInstance().getOnlinePeopleitems().add(member);
+		                ChatRoomCache.getInstance().getMemberCache().put(member.getAccount(), member);
 						member.setRoomId(roomInfo.getRoomId());
 						XLog.i("enter chat room success" + roomInfo.getRoomId());
 						chatRoom.setChatRoomInfo(roomInfo);
