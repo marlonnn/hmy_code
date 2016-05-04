@@ -9,6 +9,7 @@ import com.BC.entertainment.chatroom.extension.EmotionAttachment;
 import com.BC.entertainment.chatroom.extension.FontAttachment;
 import com.BC.entertainment.chatroom.module.ChatRoomPanel;
 import com.BC.entertainmentgravitation.R;
+import com.BC.entertainmentgravitation.entity.Member;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomMember;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomMessage;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomNotificationAttachment;
@@ -163,7 +164,7 @@ public class ChatRoomAdapter extends BaseAdapter {
     		viewHolder.txtName.setTextColor(Color.parseColor("#EEB422"));
     		viewHolder.txtName.setText("系统消息：");
         	CustomAttachment customAttachment = (CustomAttachment)item.getAttachment();
-        	ChatRoomMember chatRoomMember = ChatRoomCache.getInstance().getChatRoomMember(item.getFromAccount());
+        	Member member = ChatRoomCache.getInstance().getMember(item.getFromAccount());
         	switch(customAttachment.getType())
         	{
         	case CustomAttachmentType.emotion:
@@ -171,7 +172,7 @@ public class ChatRoomAdapter extends BaseAdapter {
         		if (emotionAttachment != null)
         		{
         			String emotionName = emotionAttachment.getEmotion().getName();
-        			viewHolder.txtContent.setText((chatRoomMember == null ? "" : chatRoomMember.getNick()) + " 送来了 " + emotionAttachment.getEmotion().getName());
+        			viewHolder.txtContent.setText((member == null ? "" : member.getNick()) + " 送来了 " + emotionAttachment.getEmotion().getName());
         			XLog.i("font gift name: " + emotionName);
         			viewHolder.txtContent.setTextColor(Color.parseColor("#8B658B"));
         		}
@@ -186,7 +187,7 @@ public class ChatRoomAdapter extends BaseAdapter {
         		if (fontAttachment != null)
         		{
         			String fontName = fontAttachment.getEmotion().getName();
-        			viewHolder.txtContent.setText((chatRoomMember == null ? "" : chatRoomMember.getNick()) + " 送来了 " + fontAttachment.getEmotion().getName());
+        			viewHolder.txtContent.setText((member == null ? "" : member.getNick()) + " 送来了 " + fontAttachment.getEmotion().getName());
         			XLog.i("font gift name: " + fontName);
         			viewHolder.txtContent.setTextColor(Color.parseColor("#8B658B"));
         		}

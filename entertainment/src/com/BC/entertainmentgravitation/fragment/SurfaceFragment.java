@@ -79,7 +79,7 @@ public class SurfaceFragment extends DialogFragment {
                 else if (position == 1)
                 {
                 	XLog.i("position == 1");
-                	return new TopSurfaceFragment(chatRoom, isWatchVideo);
+                	return new TopSurfaceFragment(exitListener, chatRoom, isWatchVideo);
                 }
                 return null;
             }

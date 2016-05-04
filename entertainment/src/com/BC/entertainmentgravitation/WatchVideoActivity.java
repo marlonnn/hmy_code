@@ -9,7 +9,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.BC.entertainment.cache.ChatRoomCache;
+import com.BC.entertainment.cache.InfoCache;
 import com.BC.entertainmentgravitation.entity.ChatRoom;
+import com.BC.entertainmentgravitation.entity.Member;
 import com.BC.entertainmentgravitation.fragment.ExitFragmentListener;
 import com.BC.entertainmentgravitation.fragment.ScrollListener;
 import com.BC.entertainmentgravitation.fragment.SurfaceFragment;
@@ -232,17 +234,33 @@ public class WatchVideoActivity extends BaseActivity implements ExitFragmentList
 						final ChatRoomMember member = result.getMember();
 						member.setExtension(roomInfo.getExtension());
 						XLog.i("extension: " + roomInfo.getExtension());
-		                ChatRoomCache.getInstance().ClearOnlinePeople();
-		                ChatRoomCache.getInstance().getOnlinePeopleitems().add(member);
-		                ChatRoomCache.getInstance().getMemberCache().put(member.getAccount(), member);
+//		                ChatRoomCache.getInstance().ClearOnlinePeople();
+//		                ChatRoomCache.getInstance().getOnlinePeopleitems().add(member);
+//		                ChatRoomCache.getInstance().getMemberCache().put(member.getAccount(), member);
 						member.setRoomId(roomInfo.getRoomId());
 						XLog.i("enter chat room success" + roomInfo.getRoomId());
 						chatRoom.setChatRoomInfo(roomInfo);
+						ChatRoomCache.getInstance().saveMemberCache(createMasterMember());
 						initializeWatchVideoFragment();
 
 					}
 				});
 	}
+	
+  private Member createMasterMember()
+  {
+//	  ChatRoomInfo roomInfo = result.getRoomInfo();
+//      ChatRoomMember member = result.getMember();
+      Member m = new Member();
+      m.setId(Config.User.getClientID());
+      m.setName(Config.User.getUserName());
+      m.setPortrait(InfoCache.getInstance().getPersonalInfo().getHead_portrait());
+      m.setAge(InfoCache.getInstance().getPersonalInfo().getAge());
+      m.setNick(InfoCache.getInstance().getPersonalInfo().getNickname());
+      m.setDollar(InfoCache.getInstance().getPersonalInfo().getEntertainment_dollar());
+      m.setPiao(InfoCache.getInstance().getPersonalInfo().getPiao());
+      return m;
+  }
 
 	private void onLoginDone() {
 		enterRequest = null;

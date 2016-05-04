@@ -99,11 +99,20 @@ public class TopSurfaceFragment extends BaseFragment implements OnClickListener,
     
     private ApplauseGiveConcern applauseGiveConcern;//投资或者撤资
     
-	public TopSurfaceFragment(ChatRoom chatRoom, boolean isWatchVideo)
+	public TopSurfaceFragment(ExitFragmentListener exitListener, ChatRoom chatRoom, boolean isWatchVideo)
 	{
+		this.exitListener = exitListener;
 		this.chatRoom = chatRoom;
 		
 		this.isWatchVideo = isWatchVideo;
+		if (exitListener == null)
+		{
+			XLog.i("---------------------null");
+		}
+		else
+		{
+			XLog.i("---------------------not null");
+		}
 	}
 	
 	/**
@@ -123,10 +132,10 @@ public class TopSurfaceFragment extends BaseFragment implements OnClickListener,
 		try {
 			switchCamera = (SwitchCamera)activity;
 			
-			if (activity instanceof ExitFragmentListener)
-			{
-				this.exitListener = (ExitFragmentListener) getActivity();
-			}
+//			if (activity instanceof ExitFragmentListener)
+//			{
+//				this.exitListener = (ExitFragmentListener) getActivity();
+//			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			XLog.e("get switch camera exception");

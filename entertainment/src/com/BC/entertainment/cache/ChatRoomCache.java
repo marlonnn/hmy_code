@@ -1,14 +1,14 @@
 package com.BC.entertainment.cache;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import android.text.TextUtils;
-
+import com.BC.entertainmentgravitation.entity.Member;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomMember;
+
+import android.text.TextUtils;
 
 public class ChatRoomCache {
 	
@@ -19,12 +19,12 @@ public class ChatRoomCache {
     /**
      * 聊天室人数缓存
      */
-    private Map<String, ChatRoomMember> memberCache = new ConcurrentHashMap<>();
+    private Map<String, Member> memberCache = new ConcurrentHashMap<>();
     
     /**
      * 在线人数缓存
      */
-    private LinkedList<ChatRoomMember> onlinePeopleitems = new LinkedList<ChatRoomMember>();
+    private LinkedList<Member> onlinePeopleitems = new LinkedList<Member>();
 
     public static ChatRoomCache getInstance() {
         return InstanceHolder.instance;
@@ -34,19 +34,19 @@ public class ChatRoomCache {
         final static ChatRoomCache instance = new ChatRoomCache();
     }
 
-	public Map<String, ChatRoomMember> getMemberCache() {
+	public Map<String, Member> getMemberCache() {
 		return memberCache;
 	}
 
-	public void setMemberCache(Map<String, ChatRoomMember> memberCache) {
+	public void setMemberCache(Map<String, Member> memberCache) {
 		this.memberCache = memberCache;
 	}
 
-	public LinkedList<ChatRoomMember> getOnlinePeopleitems() {
+	public LinkedList<Member> getOnlinePeopleitems() {
 		return onlinePeopleitems;
 	}
 
-	public void setOnlinePeopleitems(LinkedList<ChatRoomMember> onlinePeopleitems) {
+	public void setOnlinePeopleitems(LinkedList<Member> onlinePeopleitems) {
 		this.onlinePeopleitems = onlinePeopleitems;
 	}
 
@@ -58,23 +58,64 @@ public class ChatRoomCache {
 		this.totalPeople = totalPeople;
 	}
 	
-    public void saveMemberCache(List<ChatRoomMember> members)
+    public void saveMemberCache(List<Member> members)
     {
-    	for (ChatRoomMember member : members)
+    	for (Member member : members)
     	{
     		saveMemberCache(member);
     	}
     }
     
-    public void saveMemberCache(ChatRoomMember member)
+    public void saveMemberCache(Member member)
     {
-    	if (member != null && !TextUtils.isEmpty(member.getRoomId()) && !TextUtils.isEmpty(member.getAccount()))
+    	if (member != null && !TextUtils.isEmpty(member.getName()))
     	{
-    		if (!memberCache.containsKey(member.getAccount()))
+    		if (!memberCache.containsKey(member.getName()))
     		{
-        		memberCache.put(member.getAccount(), member);
+        		memberCache.put(member.getName(), member);
+        		onlinePeopleitems.add(member);
     		}
 
+    	}
+    }
+    
+    public void saveMemberCache(List<ChatRoomMember> chatRoomMembers, boolean flag)
+    {
+    	for (ChatRoomMember member : chatRoomMembers)
+    	{
+        	if (member != null && !TextUtils.isEmpty(member.getAccount()))
+        	{
+        		if (!memberCache.containsKey(member.getAccount()))
+        		{
+        			Member m = new Member();
+        			m.setName(member.getAccount());
+        			m.setNick(member.getNick());
+        			m.setPortrait(member.getAvatar());
+            		memberCache.put(member.getAccount(), m);
+            		onlinePeopleitems.add(m);
+        		}
+
+        	}
+    	}
+    }
+    
+    public void saveOnlinePeople(List<ChatRoomMember> chatRoomMembers)
+    {
+    	for (ChatRoomMember member : chatRoomMembers)
+    	{
+        	if (member != null && !TextUtils.isEmpty(member.getAccount()))
+        	{
+        		if (!memberCache.containsKey(member.getAccount()))
+        		{
+        			Member m = new Member();
+        			m.setName(member.getAccount());
+        			m.setNick(member.getNick());
+        			m.setPortrait(member.getAvatar());
+            		memberCache.put(member.getAccount(), m);
+            		onlinePeopleitems.add(m);
+        		}
+
+        	}
     	}
     }
     
@@ -86,18 +127,18 @@ public class ChatRoomCache {
 		}
     }
     
-    public void RemoveMemberCache(ChatRoomMember member)
+    public void RemoveMemberCache(Member member)
     {
     	if (member != null)
     	{
-    		if (memberCache.containsKey(member.getAccount()))
+    		if (memberCache.containsKey(member.getName()))
     		{
-        		memberCache.remove(member.getAccount());
+        		memberCache.remove(member.getName());
     		}
     	}
     }
 	
-    public ChatRoomMember getChatRoomMember(String account) {
+    public Member getMember(String account) {
         if (memberCache.containsKey(account)) {
             return memberCache.get(account);
         }

@@ -11,7 +11,9 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.BC.entertainment.cache.ChatRoomCache;
+import com.BC.entertainment.cache.InfoCache;
 import com.BC.entertainmentgravitation.entity.ChatRoom;
+import com.BC.entertainmentgravitation.entity.Member;
 import com.BC.entertainmentgravitation.fragment.ExitFragmentListener;
 import com.BC.entertainmentgravitation.fragment.PushVideoFragment;
 import com.BC.entertainmentgravitation.fragment.ScrollListener;
@@ -32,6 +34,7 @@ import com.netease.nimlib.sdk.chatroom.model.ChatRoomMember;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomStatusChangeData;
 import com.netease.nimlib.sdk.chatroom.model.EnterChatRoomData;
 import com.netease.nimlib.sdk.chatroom.model.EnterChatRoomResultData;
+import com.summer.config.Config;
 import com.summer.logger.XLog;
 import com.summer.utils.StringUtil;
 
@@ -224,14 +227,25 @@ public class PushVideoActivity extends FragmentActivity implements ExitFragmentL
 				roomInfo = result.getRoomInfo();
                 ChatRoomMember member = result.getMember();
                 member.setRoomId(roomInfo.getRoomId());
-//                ChatRoomMemberCache.getInstance().saveMyMember(member);
                 ChatRoomCache.getInstance().ClearOnlinePeople();
-                ChatRoomCache.getInstance().getOnlinePeopleitems().add(member);
-                ChatRoomCache.getInstance().saveMemberCache(member);
+                ChatRoomCache.getInstance().saveMemberCache(createMasterMember());
                 chatRoom.setChatRoomInfo(roomInfo);
                 initializePushVideoFragment();
                 XLog.i("enter chat room success" + roomInfo.getRoomId());
 			}});
+    }
+    
+    private Member createMasterMember()
+    {
+    	Member m = new Member();
+    	m.setId(Config.User.getClientID());
+    	m.setName(Config.User.getUserName());
+        m.setPortrait(InfoCache.getInstance().getPersonalInfo().getHead_portrait());
+        m.setAge(InfoCache.getInstance().getPersonalInfo().getAge());
+        m.setNick(InfoCache.getInstance().getPersonalInfo().getNickname());
+        m.setDollar(InfoCache.getInstance().getPersonalInfo().getEntertainment_dollar());
+        m.setPiao(InfoCache.getInstance().getPersonalInfo().getPiao());
+    	return m;
     }
     
     private void onLoginDone() {

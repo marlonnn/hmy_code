@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.apache.http.NameValuePair;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -20,11 +19,15 @@ import com.BC.entertainment.adapter.ExchangeRecycleAdapter.OnItemClickListener;
 import com.BC.entertainment.cache.InfoCache;
 import com.BC.entertainment.cache.YubiCache;
 import com.BC.entertainmentgravitation.entity.EditPersonal;
+import com.BC.entertainmentgravitation.entity.Exchange;
 import com.BC.entertainmentgravitation.entity.Yubi;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.summer.activity.BaseActivity;
 import com.summer.config.Config;
 import com.summer.factory.ThreadPoolFactory;
 import com.summer.handler.InfoHandler;
+import com.summer.json.Entity;
 import com.summer.logger.XLog;
 import com.summer.task.HttpBaseTask;
 import com.summer.treadpool.ThreadPoolConst;
@@ -48,6 +51,8 @@ public class ExchangeActivity extends BaseActivity implements OnClickListener, O
 	 */
 	private Yubi chargeYubi;
 	
+	private Gson gson;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -57,11 +62,13 @@ public class ExchangeActivity extends BaseActivity implements OnClickListener, O
 	
 	private void initView()
 	{
+		gson = new Gson();
+		
 		textViewAccount = (TextView) findViewById(R.id.textViewAccount);
 		
 		if (InfoCache.getInstance().getPersonalInfo() != null && InfoCache.getInstance().getPersonalInfo().getEntertainment_dollar() != null)
 		{
-			textViewAccount.setText(InfoCache.getInstance().getPersonalInfo().getPiao() + " 娱票 ");
+			textViewAccount.setText(InfoCache.getInstance().getPersonalInfo().getPiaoLeft() + " 娱票 ");
 		}
 		
 		findViewById(R.id.imageViewBack).setOnClickListener(this);
@@ -162,17 +169,19 @@ public class ExchangeActivity extends BaseActivity implements OnClickListener, O
 		{
 		case Config.exchange_piao:
 			try {
-				JSONObject jsonObj = new JSONObject(jsonString);
-				String data = jsonObj.getString("data");
-				if (data != null)
+				
+				Entity<Exchange> baseEntity = gson.fromJson(jsonString,
+						new TypeToken<Entity<Exchange>>() {
+						}.getType());
+				if (baseEntity != null && baseEntity.getData() != null)
 				{
-					InfoCache.getInstance().getPersonalInfo().setPiao(data);
-					
-					textViewAccount.setText(data + " 娱票");
-					
+					Exchange exchange = baseEntity.getData();
+					InfoCache.getInstance().getPersonalInfo().setEntertainment_dollar(exchange.getUser_dollar());
+					InfoCache.getInstance().getPersonalInfo().setPiaoLeft(exchange.getUser_piao_left());
+					textViewAccount.setText(exchange.getUser_piao_left() + " 娱票");
 					ToastUtil.show(ExchangeActivity.this, "兑换成功， 您兑换了： " + chargeYubi.getAmount() + " 个娛币。");
 				}
-			} catch (JSONException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 				XLog.e("json exception");
 			}

@@ -3,9 +3,9 @@ package com.BC.entertainment.adapter;
 import java.util.LinkedList;
 
 import com.BC.entertainmentgravitation.R;
+import com.BC.entertainmentgravitation.entity.Member;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.netease.nimlib.sdk.chatroom.model.ChatRoomMember;
 import com.summer.view.CircularImage;
 
 import android.content.Context;
@@ -19,7 +19,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<MyViewHolder>{
 	
     private LayoutInflater mInflater;
     private Context mContext;
-    protected LinkedList<ChatRoomMember> mDatas;
+    protected LinkedList<Member> mDatas;
 	
     public interface OnItemClickListener {
         void onItemClick(View view, int position);
@@ -34,7 +34,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<MyViewHolder>{
     }
     
     //构造方法
-    public RecyclerViewAdapter(Context context, LinkedList<ChatRoomMember> datas) {
+    public RecyclerViewAdapter(Context context, LinkedList<Member> datas) {
         //成员变量进行赋值
         this.mContext = context;
         this.mDatas = datas;
@@ -58,7 +58,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<MyViewHolder>{
     @Override
     public void onBindViewHolder(final MyViewHolder myViewHolder, final int pos) {
 		Glide.with(mContext)
-		.load(mDatas.get(pos).getAvatar())
+		.load(mDatas.get(pos).getPortrait())
 		.centerCrop().diskCacheStrategy(DiskCacheStrategy.ALL)
 		.placeholder(R.drawable.avatar_def).into(myViewHolder.circularImage);
 

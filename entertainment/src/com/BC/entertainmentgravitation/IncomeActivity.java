@@ -1,5 +1,12 @@
 package com.BC.entertainmentgravitation;
 
+import java.util.HashMap;
+import java.util.List;
+
+import org.apache.http.NameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -10,7 +17,16 @@ import android.widget.TextView;
 import com.BC.entertainment.cache.InfoCache;
 import com.BC.entertainmentgravitation.entity.EditPersonal;
 import com.summer.activity.BaseActivity;
+import com.summer.config.Config;
+import com.summer.factory.ThreadPoolFactory;
+import com.summer.handler.InfoHandler;
 import com.summer.logger.XLog;
+import com.summer.task.HttpBaseTask;
+import com.summer.treadpool.ThreadPoolConst;
+import com.summer.utils.JsonUtil;
+import com.summer.utils.StringUtil;
+import com.summer.utils.ToastUtil;
+import com.summer.utils.UrlUtil;
 
 /**
  * 基本信息  —— 我的收益
@@ -50,17 +66,7 @@ public class IncomeActivity extends BaseActivity implements OnClickListener{
 	
 	private void initData()
 	{
-		try {
-			EditPersonal personal = InfoCache.getInstance().getPersonalInfo();
-			if( personal != null && personal.getEntertainment_dollar() != null)
-			{
-				yuPiao.setText(personal.getPiao());
-				withDraw.setText(String.valueOf(getValue(personal.getPiao())));
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			XLog.e("init data exception");
-		}
+		queryPiaoLeftRequest();
 	}
 	
 	@Override
@@ -70,47 +76,38 @@ public class IncomeActivity extends BaseActivity implements OnClickListener{
 		initData();
 	}
 	
+	/**
+	 * 查询可兑换的娱票
+	 */
+    private void queryPiaoLeftRequest()
+    {
+    	if (Config.User == null)
+    	{
+			ToastUtil.show(this, StringUtil.getXmlResource(this, R.string.mainactivity_login_invalidate));
+			finish();
+			return;
+    	}
+    	HashMap<String, String> entity = new HashMap<String, String>();
+    	entity.put("username", Config.User.getUserName());
+    	List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
+    	ShowProgressDialog(this.getString(R.string.mainactivity_get_user_info));
+    	addToThreadPool(Config.query_piao_left, "get user info", params);
+    }
+	
+    private void addToThreadPool(int taskType, String Tag, List<NameValuePair> params)
+    {
+    	HttpBaseTask httpTask = new HttpBaseTask(ThreadPoolConst.THREAD_TYPE_FILE_HTTP, Tag, params, UrlUtil.GetUrl(taskType));
+    	httpTask.setTaskType(taskType);
+    	InfoHandler handler = new InfoHandler(this);
+    	httpTask.setInfoHandler(handler);
+    	ThreadPoolFactory.getThreadPoolManager().addTask(httpTask);
+    }
+	
 	@Override
 	protected void onResume() {
 		super.onResume();
 	}
 
-	private int getValue(String yupiao)
-	{
-		int value = 0;
-		try {
-			double piao = Double.parseDouble(yupiao);
-			
-			if (piao <= 10000)
-			{
-				value = (int) (piao * 0.4);
-			}
-			else if( piao <= 1000000 && piao >10000)
-			{
-				value = (int) (piao * 0.45);
-			}
-			else if( piao <= 2000000 && piao >1000000)
-			{
-				value = (int) (piao * 0.5);
-			}
-			else if( piao <= 3000000 && piao >1000000)
-			{
-				value = (int) (piao * 0.55);
-			}
-			else if( piao <= 4000000 && piao >3000000)
-			{
-				value = (int) (piao * 0.6);
-			}
-			else if(piao >4000000)
-			{
-				value = (int) (piao * 0.7);
-			}
-		} catch (NumberFormatException e) {
-			e.printStackTrace();
-		}
-		return value;
-	}
-	
 	@Override
 	public void onClick(View v) {
 		Intent intent;
@@ -142,6 +139,25 @@ public class IncomeActivity extends BaseActivity implements OnClickListener{
 	@Override
 	public void RequestSuccessful(String jsonString, int taskType) {
 		switch (taskType) {
+		case Config.query_piao_left:
+			try {
+				JSONObject jsonObj = new JSONObject(jsonString);
+				String data =  jsonObj.getString("data");
+				int status =   jsonObj.getInt("status");
+				if (status == 0 && data != null)
+				{
+					EditPersonal personal = InfoCache.getInstance().getPersonalInfo();
+					if( personal != null && personal.getEntertainment_dollar() != null)
+					{
+						yuPiao.setText(personal.getPiao());
+					}
+					InfoCache.getInstance().getPersonalInfo().setPiaoLeft(data);
+					withDraw.setText(data);
+				}
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+			break;
 		}
 	}
 

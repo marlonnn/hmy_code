@@ -22,6 +22,16 @@ public class EditPersonal extends PersonalInformation {
 	
 	private String piao = "";
 	
+	private String piaoLeft = "";
+	
+	public String getPiaoLeft() {
+		return piaoLeft;
+	}
+
+	public void setPiaoLeft(String piaoLeft) {
+		this.piaoLeft = piaoLeft;
+	}
+
 	public String getPiao() {
 		return piao;
 	}
