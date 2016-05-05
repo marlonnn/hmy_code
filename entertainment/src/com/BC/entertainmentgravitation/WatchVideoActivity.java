@@ -330,7 +330,7 @@ public class WatchVideoActivity extends BaseActivity implements ExitFragmentList
 						JSONObject ret = jsonObj.getJSONObject("data").getJSONObject("ret"); 
 						if (ret != null)
 						{
-							if( ret.getInt("status") == 0)
+							if( ret.getInt("status") == 1)
 							{
 								enterChatRoom();
 								registerObservers(true);

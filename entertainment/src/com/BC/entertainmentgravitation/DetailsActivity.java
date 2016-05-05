@@ -1,5 +1,8 @@
 package com.BC.entertainmentgravitation;
 
+import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.onekeyshare.OnekeyShare;
+
 import com.summer.activity.BaseActivity;
 import com.summer.config.Config;
 import com.summer.factory.ThreadPoolFactory;
@@ -46,7 +49,7 @@ import com.google.gson.reflect.TypeToken;
 
 public class DetailsActivity extends BaseActivity implements OnClickListener{
 	Album album;
-	Button radio3;
+	Button radio3, share;
 	ImageButton Applause, BigBird, FocusOn;
 	ImageButton previous, next;
 	RadioGroup radioGroup1;
@@ -67,6 +70,7 @@ public class DetailsActivity extends BaseActivity implements OnClickListener{
 		radioGroup1 = (RadioGroup) findViewById(R.id.radioGroup1);
 		Head_portrait = (CircularImage) findViewById(R.id.Head_portrait);
 		radio3 = (Button) findViewById(R.id.radio3);
+		share = (Button) findViewById(R.id.fenxiang);
 		previous = (ImageButton) findViewById(R.id.previous);
 		next = (ImageButton) findViewById(R.id.next);
 		details = (ImageView) findViewById(R.id.details);
@@ -118,26 +122,34 @@ public class DetailsActivity extends BaseActivity implements OnClickListener{
 				showImageDialog();
 			}
 		});
+		
+		share.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				showShare();
+			}
+		});
 		sendGetStartInfoRequest(userID);
 	}
 
-//	private void showShare(Context context) {
-//		ShareSDK.initSDK(context, "10ee118b8af16");
-//
-//		OnekeyShare oks = new OnekeyShare();
-//		// 关闭sso授权
-//		oks.disableSSOWhenAuthorize();
-//		// 分享时Notification的图标和文字
-//		oks.setTitle("看演员，去海绵娱直播APP!");
-//		oks.setText("看演员，去海绵娱直播APP!" + "(" + Config.User.getNickName()
-//				+ "正在直播中)");
-//		oks.setSite(getString(R.string.app_name));
-//		// 分享链接地址
-//		oks.setUrl("http://shouji.baidu.com/soft/item?docid=9008168");
-//		// logo地址
-//		oks.setImageUrl("http://app.haimianyu.cn/DOWNLOAD/app_logo.png");
-//		oks.show(context);
-//	}
+	private void showShare() {
+		ShareSDK.initSDK(this, "10ee118b8af16");
+
+		OnekeyShare oks = new OnekeyShare();
+		// 关闭sso授权
+		oks.disableSSOWhenAuthorize();
+		// 分享时Notification的图标和文字
+		oks.setTitle("看演员，去海绵娱直播APP!");
+		oks.setText("看演员，去海绵娱直播APP!" + "(" + Config.User.getNickName()
+				+ "正在直播中)");
+		oks.setSite(getString(R.string.app_name));
+		// 分享链接地址
+		oks.setUrl("http://shouji.baidu.com/soft/item?docid=9008168");
+		// logo地址
+		oks.setImageUrl("http://app.haimianyu.cn/DOWNLOAD/app_logo.png");
+		oks.show(this);
+	}
 
 	private void initImages(List<Photo_images> abums) {
 		if (pageIndex == 1) {

@@ -5,11 +5,11 @@
  *
  * Copyright (c) 2013年 mob.com. All rights reserved.
  */
-
 package com.BC.entertainmentgravitation.wxapi;
 
 import android.content.Intent;
 import android.widget.Toast;
+
 import cn.sharesdk.wechat.utils.WXAppExtendObject;
 import cn.sharesdk.wechat.utils.WXMediaMessage;
 import cn.sharesdk.wechat.utils.WechatHandlerActivity;
@@ -46,5 +46,4 @@ public class WXEntryActivity extends WechatHandlerActivity {
 			Toast.makeText(this, obj.extInfo, Toast.LENGTH_SHORT).show();
 		}
 	}
-
 }

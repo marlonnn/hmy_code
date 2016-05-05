@@ -55,9 +55,9 @@ public class ApplauseGiveConcern {
 	public void showApplaudDialog(final int type) {
 		final ApplaudDialog.Builder builder = new ApplaudDialog.Builder(context);
 		if (type == 1) {
-			builder.setTitle("请输入鼓掌次数");
+			builder.setTitle("请输入投资次数");
 		} else {
-			builder.setTitle("请输入踢红包个数");
+			builder.setTitle("请输入红包个数");
 		}
 		builder.setMessage("请输入次数");
 
@@ -95,10 +95,10 @@ public class ApplauseGiveConcern {
 				.findViewById(R.id.TextView04);
 		if (type == 1) {
 			editText.setText("6");
-			textView1.setText("需要花费娱币数量：");
+			textView1.setText("需要娱币：");
 			if (name != null) {
 				textView2.setText("" + (price * 6 + 15));
-				textView4.setText("能兑换" + name + "的红包数量：");
+				textView4.setText("可兑换" + name + "的红包数量：");
 				textView3.setText(6 + "");
 				textView4.setVisibility(View.GONE);
 				textView3.setVisibility(View.GONE);
@@ -121,7 +121,7 @@ public class ApplauseGiveConcern {
 					if (!ts.equals("")) {
 						int v = Integer.valueOf(ts);
 						textView2.setText("" + (price * v + v * (v - 1) / 2));
-						textView4.setText("能兑换" + name + "的红包数量：");
+						textView4.setText("可兑换" + name + "的红包数量：");
 						textView3.setText(v + "");
 					}
 				}

@@ -8,6 +8,8 @@ import com.BC.entertainment.cache.InfoCache;
 import com.BC.entertainment.chatroom.helper.LogoutHelper;
 import com.BC.entertainmentgravitation.R;
 import org.apache.http.NameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.BC.entertainmentgravitation.entity.EditPersonal;
 import com.BC.entertainmentgravitation.entity.Ranking;
@@ -23,6 +25,7 @@ import com.summer.activity.BaseActivity;
 import com.summer.config.Config;
 import com.summer.factory.ThreadPoolFactory;
 import com.summer.handler.InfoHandler;
+import com.summer.handler.InfoHandler.InfoReceiver;
 import com.summer.json.Entity;
 import com.summer.logger.XLog;
 import com.summer.task.HttpBaseTask;
@@ -45,6 +48,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends BaseActivity implements OnClickListener, UpdataMainActivity{
 	
@@ -77,6 +81,9 @@ public class MainActivity extends BaseActivity implements OnClickListener, Updat
 	private float mCurrentPosX;
 	private boolean isSlipping = false;
 	private View imageIcon;
+	
+	private InfoReceiver infoRreceiver;
+	private StarLiveVideoInfo watchVideo;
 
     /* (non-Javadoc)
      * @see com.summer.activity.BaseActivity#onCreate(android.os.Bundle)
@@ -156,9 +163,68 @@ public class MainActivity extends BaseActivity implements OnClickListener, Updat
 		{
 			aplayOrLive.setText("申请");
 		}
+		
+		infoRreceiver = new InfoReceiver() {
+			
+			@Override
+			public void onNotifyText(String notify) {
+				
+			}
+			
+			@Override
+			public void onInfoReceived(int errorCode, HashMap<String, Object> items) {
+				RemoveProgressDialog();
+		        if (errorCode == 0)
+		        {
+		            XLog.i(errorCode);
+		            String jsonString = (String) items.get("content");
+		            if (jsonString != null)
+		            {
+		                JSONObject object;
+		                try {
+		                    object = new JSONObject(jsonString);
+		                    String msg = object.optString("msg");
+		                    int code = object.optInt("status", -1);
+		                    int taskType = (Integer) items.get("taskType");
+		                    if (code == 0)
+		                    {
+		                        RequestSuccessful(jsonString, taskType);
+		                    }
+		                    else
+		                    {
+		                    	if (code == 500 && msg.contains("没有记录"))
+		                    	{
+		    						Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
+		    						startActivity(intent);
+		                    	}
+		                        RequestFailed(code, msg, taskType);
+		                    }
+		                } catch (JSONException e) {
+		                    //parse error
+		                    XLog.e(e);
+		                    e.printStackTrace();
+		                    RequestFailed(-1, "Json Parse Error", -1);
+		                }
+		            }
+		        }
+			}
+		};
     }
     
-    
+    private void queryVideoStatus(StarLiveVideoInfo watchVideo)
+    {
+    	if (watchVideo == null || watchVideo.getCid() == null)
+    	{
+			ToastUtil.show(this, "直播间不在直播中，请稍后重试");
+			return;
+    	}
+    	
+		HashMap<String, String> entity = new HashMap<String, String>();
+		entity.put("cid", watchVideo.getCid());
+		ShowProgressDialog("查询直播中...");
+		List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
+		addToThreadPool(Config.query_video_status, "send search request", params);
+    }
     
 	@Override
 	protected void onResume() {
@@ -404,7 +470,7 @@ public class MainActivity extends BaseActivity implements OnClickListener, Updat
     {
     	HttpBaseTask httpTask = new HttpBaseTask(ThreadPoolConst.THREAD_TYPE_FILE_HTTP, Tag, params, UrlUtil.GetUrl(taskType));
     	httpTask.setTaskType(taskType);
-    	InfoHandler handler = new InfoHandler(this);
+    	InfoHandler handler = new InfoHandler(infoRreceiver);
     	httpTask.setInfoHandler(handler);
     	ThreadPoolFactory.getThreadPoolManager().addTask(httpTask);
     }
@@ -710,8 +776,44 @@ public class MainActivity extends BaseActivity implements OnClickListener, Updat
 			Entity<StarLiveVideoInfo> watchVideoEntity = gson.fromJson(jsonString,
 					new TypeToken<Entity<StarLiveVideoInfo>>() {
 					}.getType());
-			StarLiveVideoInfo watchVideo = watchVideoEntity.getData();
-			startWatchVideo(watchVideo);
+			watchVideo = watchVideoEntity.getData();
+			queryVideoStatus(watchVideo);
+//			startWatchVideo(watchVideo);
+			break;
+			
+			
+		case Config.query_video_status:
+			
+			if (jsonString != null)
+			{
+				try {
+					JSONObject jsonObj = new JSONObject(jsonString);
+					String data =  jsonObj.getString("data");
+					int status =   jsonObj.getInt("status");
+					if (status == 0 && data != null)
+					{
+						JSONObject ret = jsonObj.getJSONObject("data").getJSONObject("ret"); 
+						if (ret != null)
+						{
+							if( ret.getInt("status") == 1)
+							{
+								startWatchVideo(watchVideo);
+							}
+							else
+							{
+								Toast.makeText(MainActivity.this, "主播不在直播间，请稍后再试", Toast.LENGTH_SHORT).show();
+//								finish();
+							}
+						}
+					}
+
+				} catch (JSONException e) {
+					e.printStackTrace();
+					XLog.e("JSONException");
+					finish();
+				} 
+
+			}
 			break;
 		}
 		
@@ -813,4 +915,5 @@ public class MainActivity extends BaseActivity implements OnClickListener, Updat
 	public void updataMainActivity() {
 		getUserInfoRequest();
 	}
+	
 }

@@ -7,6 +7,9 @@ import org.apache.http.NameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.onekeyshare.OnekeyShare;
+
 import com.BC.entertainment.cache.GiftCache;
 import com.BC.entertainment.cache.InfoCache;
 import com.BC.entertainment.chatroom.gift.Gift;
@@ -105,14 +108,6 @@ public class TopSurfaceFragment extends BaseFragment implements OnClickListener,
 		this.chatRoom = chatRoom;
 		
 		this.isWatchVideo = isWatchVideo;
-		if (exitListener == null)
-		{
-			XLog.i("---------------------null");
-		}
-		else
-		{
-			XLog.i("---------------------not null");
-		}
 	}
 	
 	/**
@@ -132,10 +127,6 @@ public class TopSurfaceFragment extends BaseFragment implements OnClickListener,
 		try {
 			switchCamera = (SwitchCamera)activity;
 			
-//			if (activity instanceof ExitFragmentListener)
-//			{
-//				this.exitListener = (ExitFragmentListener) getActivity();
-//			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			XLog.e("get switch camera exception");
@@ -386,7 +377,8 @@ public class TopSurfaceFragment extends BaseFragment implements OnClickListener,
 		 */
 		case R.id.imageView_share:
 
-			ToastUtil.show(getActivity(), "此功能正在完善中...");
+//			ToastUtil.show(getActivity(), "此功能正在完善中...");
+			showShare();
 			break;
 		/**
 		 * 切换摄像头
@@ -429,6 +421,33 @@ public class TopSurfaceFragment extends BaseFragment implements OnClickListener,
 			stopUpdateYuPiao();
 			break;
 		}
+	}
+	
+	private void showShare() {
+		String name;
+		if (chatRoom.isMaster())
+		{
+			name = Config.User.getNickName();
+		}
+		else
+		{
+			name = InfoCache.getInstance().getStartInfo().getUser_name();
+		}
+		ShareSDK.initSDK(getActivity(), "10ee118b8af16");
+
+		OnekeyShare oks = new OnekeyShare();
+		// 关闭sso授权
+		oks.disableSSOWhenAuthorize();
+		// 分享时Notification的图标和文字
+		oks.setTitle("看演员，去海绵娱直播APP!");
+		oks.setText("看演员，去海绵娱直播APP!" + "(" + name
+				+ "正在直播中)");
+		oks.setSite(getString(R.string.app_name));
+		// 分享链接地址
+		oks.setUrl("http://a.app.qq.com/o/simple.jsp?pkgname=com.BC.entertainmentgravitation");
+		// logo地址
+		oks.setImageUrl("http://app.haimianyu.cn/DOWNLOAD/app_logo.png");
+		oks.show(getActivity());
 	}
 
 	@Override
