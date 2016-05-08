@@ -59,7 +59,7 @@
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="30dp"
-                android:text="娱票" />
+                android:text="可提现娱票" />
 
             <TextView
                 android:id="@+id/txtYupiao"
@@ -85,7 +85,7 @@
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="30dp"
-                android:text="可提现" />
+                android:text="可提现金额" />
 
             <TextView
                 android:id="@+id/txtWithDraw"

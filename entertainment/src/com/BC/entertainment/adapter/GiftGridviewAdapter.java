@@ -1,6 +1,5 @@
 package com.BC.entertainment.adapter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.BC.entertainment.chatroom.gift.BaseGift;

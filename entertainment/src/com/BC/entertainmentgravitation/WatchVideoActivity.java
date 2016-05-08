@@ -234,7 +234,7 @@ public class WatchVideoActivity extends BaseActivity implements ExitFragmentList
 						final ChatRoomMember member = result.getMember();
 						member.setExtension(roomInfo.getExtension());
 						XLog.i("extension: " + roomInfo.getExtension());
-//		                ChatRoomCache.getInstance().ClearOnlinePeople();
+		                ChatRoomCache.getInstance().ClearOnlinePeople();
 //		                ChatRoomCache.getInstance().getOnlinePeopleitems().add(member);
 //		                ChatRoomCache.getInstance().getMemberCache().put(member.getAccount(), member);
 						member.setRoomId(roomInfo.getRoomId());

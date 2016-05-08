@@ -102,6 +102,12 @@ public class PushVideoFragment extends BaseFragment implements View.OnClickListe
 		this.chatRoom = chatRoom;
 	}
 	
+	public static PushVideoFragment newInstance(ChatRoom chatRoom)
+	{
+		PushVideoFragment f = new PushVideoFragment(chatRoom);
+		return f;
+	}
+	
     public ScrollListener CreateScrollListener() {
         listener = new ScrollListener() {
             @Override
@@ -390,7 +396,7 @@ public class PushVideoFragment extends BaseFragment implements View.OnClickListe
 	}
       
     @Override
-	public void onResume(){   
+	public void onResume(){
         super.onResume(); 
     }  
       

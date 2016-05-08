@@ -168,7 +168,7 @@ public class DanmakuPanel {
         danmaku.priority = 1;  // 可能会被各种过滤器过滤并隐藏显示
         danmaku.isLive = islive;
         danmaku.time = danmakuView.getCurrentTime() + 1200;
-        danmaku.textSize = 25f * (mParser.getDisplayer().getDensity() - 0.6f);
+        danmaku.textSize = 20f * (mParser.getDisplayer().getDensity() - 0.6f);
         danmaku.textColor = Color.parseColor("#EEB422");
 //        danmaku.textShadowColor = Color.WHITE;
         // danmaku.underlineColor = Color.GREEN;

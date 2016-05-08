@@ -124,7 +124,7 @@ public class IncomeActivity extends BaseActivity implements OnClickListener{
 		 * 微信提现
 		 */
 		case R.id.imageViewWithDraw:
-			
+			ToastUtil.show(this, "微信搜索关注 海绵娱 公众号兑换 ");
 			break;
 		/**
 		 * 返回键

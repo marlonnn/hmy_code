@@ -57,6 +57,8 @@ public class PushVideoActivity extends FragmentActivity implements ExitFragmentL
     
     private ChatRoomInfo roomInfo;
     
+    private boolean hasPush = false;
+    
 	public interface TouchListener
 	{
 		boolean onTouchEvent(MotionEvent event);  
@@ -158,6 +160,10 @@ public class PushVideoActivity extends FragmentActivity implements ExitFragmentL
 
 	@Override
 	protected void onStart() {
+		if (hasPush)
+		{
+			initializePushVideoFragment();
+		}
 		super.onStart();
 	}
 
@@ -175,14 +181,14 @@ public class PushVideoActivity extends FragmentActivity implements ExitFragmentL
 	private void initializePushVideoFragment()
     {
     	try {
-			fragment = new PushVideoFragment(chatRoom);
+			fragment = PushVideoFragment.newInstance(chatRoom);
 			XLog.i("room id: " + chatRoom.getChatroomid());
 			listener = fragment.CreateScrollListener();
 			getSupportFragmentManager()
 			        .beginTransaction()
 			        .add(R.id.layout_video_play, fragment)
 			        .commit();
-			new SurfaceFragment(listener, chatRoom, false).show(getSupportFragmentManager(), "push video");
+			SurfaceFragment.newInstance(listener, chatRoom, false).show(getSupportFragmentManager(), "push video");
 		} catch (Exception e) {
 			e.printStackTrace();
 			XLog.i("initialize push video fragment exception");
@@ -231,6 +237,7 @@ public class PushVideoActivity extends FragmentActivity implements ExitFragmentL
                 ChatRoomCache.getInstance().saveMemberCache(createMasterMember());
                 chatRoom.setChatRoomInfo(roomInfo);
                 initializePushVideoFragment();
+                hasPush = true;
                 XLog.i("enter chat room success" + roomInfo.getRoomId());
 			}});
     }

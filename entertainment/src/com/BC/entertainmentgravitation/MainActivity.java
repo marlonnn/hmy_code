@@ -539,15 +539,18 @@ public class MainActivity extends BaseActivity implements OnClickListener, Updat
 //			} else {
 //				ToastUtil.show(this, "您已出道成为明星了");
 //			}
-			if (Config.User.getPermission().equals("2")) 
-			{
-				createLiveVideoRequest();
-			}
-			else
-			{
-				intent = new Intent(this, ApplyActivity.class);
-				startActivity(intent);
-			}
+//			if (Config.User.getPermission().equals("2")) 
+//			{
+//				createLiveVideoRequest();
+//			}
+//			else
+//			{
+//				intent = new Intent(this, ApplyActivity.class);
+//				startActivity(intent);
+//			}
+			
+			intent = new Intent(this, PushActivity.class);
+			startActivity(intent);
 			break;
 		/**
 		 * 礼品
@@ -777,8 +780,8 @@ public class MainActivity extends BaseActivity implements OnClickListener, Updat
 					new TypeToken<Entity<StarLiveVideoInfo>>() {
 					}.getType());
 			watchVideo = watchVideoEntity.getData();
-			queryVideoStatus(watchVideo);
-//			startWatchVideo(watchVideo);
+//			queryVideoStatus(watchVideo);
+			startWatchVideo(watchVideo);
 			break;
 			
 			

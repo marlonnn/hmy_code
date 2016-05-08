@@ -7,7 +7,6 @@ import com.BC.entertainment.chatroom.gift.BaseGift;
 import com.BC.entertainmentgravitation.R;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.Gravity;

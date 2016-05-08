@@ -31,6 +31,10 @@ public class FontAttachment extends CustomAttachment{
 	protected JSONObject packData() {
         JSONObject data = new JSONObject();
         data.put("category", emotion.getCategory());
+        data.put("name", emotion.getName());
+        data.put("value", emotion.getValue());
+        data.put("exPoints", emotion.getExPoints());
+//        data.put("frequency", emotion.getFrequency());
         return data;
 	}
 	

@@ -37,7 +37,11 @@ public class SurfaceFragment extends DialogFragment {
 		this.isWatchVideo = isWatchVideo;
 	}
 	
-	
+	public static SurfaceFragment newInstance(ScrollListener listener, ChatRoom chatRoom,  boolean isWatchVideo)
+	{
+		SurfaceFragment f = new SurfaceFragment(listener, chatRoom, isWatchVideo);
+		return f;
+	}
 
 	@Override
 	public void onAttach(Activity activity) {
