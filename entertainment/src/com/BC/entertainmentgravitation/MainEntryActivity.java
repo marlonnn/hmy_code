@@ -545,21 +545,15 @@ public class MainEntryActivity extends BaseActivity implements OnClickListener, 
 		 * 申请
 		 */
 		case R.id.ToApplyFor:
-//			if (!user.getPermission().equals("2")) {
-//				intent = new Intent(this, ToApplyForActivity.class);
-//				startActivity(intent);
-//			} else {
-//				ToastUtil.show(this, "您已出道成为明星了");
-//			}
-//			if (Config.User.getPermission().equals("2")) 
-//			{
-//				createLiveVideoRequest();
-//			}
-//			else
-//			{
-//				intent = new Intent(this, ApplyActivity.class);
-//				startActivity(intent);
-//			}
+			if (Config.User.getPermission().equals("2")) 
+			{
+				createLiveVideoRequest();
+			}
+			else
+			{
+				intent = new Intent(this, ApplyActivity.class);
+				startActivity(intent);
+			}
 			
 			intent = new Intent(this, PushActivity.class);
 			startActivity(intent);

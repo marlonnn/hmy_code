@@ -4,8 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.apache.http.NameValuePair;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,11 +14,15 @@ import android.widget.TextView;
 
 import com.BC.entertainment.cache.InfoCache;
 import com.BC.entertainmentgravitation.entity.EditPersonal;
+import com.BC.entertainmentgravitation.entity.WithDraw;
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
 import com.summer.activity.BaseActivity;
 import com.summer.config.Config;
 import com.summer.factory.ThreadPoolFactory;
 import com.summer.handler.InfoHandler;
-import com.summer.logger.XLog;
+import com.summer.json.Entity;
 import com.summer.task.HttpBaseTask;
 import com.summer.treadpool.ThreadPoolConst;
 import com.summer.utils.JsonUtil;
@@ -39,6 +41,7 @@ public class IncomeActivity extends BaseActivity implements OnClickListener{
 	private TextView withDraw;
 	private ImageButton imageBtnExchange;
 	private ImageButton imageBtnWithDraw;
+	private Gson gson;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +52,7 @@ public class IncomeActivity extends BaseActivity implements OnClickListener{
 	
 	private void initView()
 	{
+		gson = new Gson();
 		yuPiao = (TextView) findViewById(R.id.txtYupiao);
 		withDraw = (TextView) findViewById(R.id.txtWithDraw);
 		
@@ -141,21 +145,18 @@ public class IncomeActivity extends BaseActivity implements OnClickListener{
 		switch (taskType) {
 		case Config.query_piao_left:
 			try {
-				JSONObject jsonObj = new JSONObject(jsonString);
-				String data =  jsonObj.getString("data");
-				int status =   jsonObj.getInt("status");
-				if (status == 0 && data != null)
+				Entity<WithDraw> baseEntity = gson.fromJson(jsonString,
+						new TypeToken<Entity<EditPersonal>>() {
+						}.getType());
+				if (baseEntity != null && baseEntity.getData() != null)
 				{
-					EditPersonal personal = InfoCache.getInstance().getPersonalInfo();
-					if( personal != null && personal.getEntertainment_dollar() != null)
-					{
-						yuPiao.setText(personal.getPiao());
-					}
-					InfoCache.getInstance().getPersonalInfo().setPiaoLeft(data);
-					withDraw.setText(data);
+					WithDraw w = baseEntity.getData();
+					yuPiao.setText(w.getUser_piao());
+					InfoCache.getInstance().getPersonalInfo().setPiaoLeft(w.getUser_piao_left());
+					withDraw.setText(w.getCash());
 				}
-			} catch (JSONException e) {
-				e.printStackTrace();
+			} catch (JsonSyntaxException e1) {
+				e1.printStackTrace();
 			}
 			break;
 		}
