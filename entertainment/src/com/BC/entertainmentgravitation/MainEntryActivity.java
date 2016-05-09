@@ -12,6 +12,7 @@ import org.apache.http.NameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.BC.entertainmentgravitation.entity.ChatRoom;
 import com.BC.entertainmentgravitation.entity.EditPersonal;
 import com.BC.entertainmentgravitation.entity.Member;
 import com.BC.entertainmentgravitation.entity.Ranking;
@@ -228,21 +229,6 @@ public class MainEntryActivity extends BaseActivity implements OnClickListener, 
 		};
     }
     
-    private void queryVideoStatus(StarLiveVideoInfo watchVideo)
-    {
-    	if (watchVideo == null || watchVideo.getCid() == null)
-    	{
-			ToastUtil.show(this, "直播间不在直播中，请稍后重试");
-			return;
-    	}
-    	
-		HashMap<String, String> entity = new HashMap<String, String>();
-		entity.put("cid", watchVideo.getCid());
-		ShowProgressDialog("查询直播中...");
-		List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
-		addToThreadPool(Config.query_video_status, "send search request", params);
-    }
-    
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -433,24 +419,6 @@ public class MainEntryActivity extends BaseActivity implements OnClickListener, 
     	addToThreadPool(Config.in_comparison_to_listApply_to_be_a_platform_star_, "get start rank info", params);
     }
     
-	/**
-	 * 搜索
-	 */
-	private void sendSearchRequest(String search) 
-	{
-    	if (Config.User == null)
-    	{
-			ToastUtil.show(this, StringUtil.getXmlResource(this, R.string.mainactivity_fail_get_sart_info));
-			return;
-    	}
-    	
-		HashMap<String, String> entity = new HashMap<String, String>();
-		entity.put("search", search);
-		ShowProgressDialog(this.getString(R.string.mainactivity_get_sart_info));
-		List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
-		addToThreadPool(Config.in_comparison_to_listApply_to_be_a_platform_star_, "send search request", params);
-	}
-	
 	private void createLiveVideoRequest()
 	{
     	if (Config.User == null)
@@ -555,8 +523,8 @@ public class MainEntryActivity extends BaseActivity implements OnClickListener, 
 				startActivity(intent);
 			}
 			
-			intent = new Intent(this, PushActivity.class);
-			startActivity(intent);
+//			intent = new Intent(this, PushActivity.class);
+//			startActivity(intent);
 			break;
 		/**
 		 * 礼品
@@ -837,12 +805,16 @@ public class MainEntryActivity extends BaseActivity implements OnClickListener, 
 	private void startLiveVideo(StarLiveVideoInfo startLiveVideoInfo)
 	{
 		Intent intent = new Intent(MainEntryActivity.this, PushActivity.class);
-		Bundle bundle=new Bundle();
-		bundle.putString("cid", startLiveVideoInfo.getCid());
-		bundle.putString("pushUrl", startLiveVideoInfo.getPushUrl());
-		bundle.putString("chatroomid", startLiveVideoInfo.getChatroomid());
-		bundle.putBoolean("isMaster", true);
-		intent.putExtras(bundle);
+//		Bundle bundle=new Bundle();
+//		bundle.putString("cid", startLiveVideoInfo.getCid());
+//		bundle.putString("pushUrl", startLiveVideoInfo.getPushUrl());
+//		bundle.putString("chatroomid", startLiveVideoInfo.getChatroomid());
+//		bundle.putBoolean("isMaster", true);
+//		intent.putExtras(bundle);
+		ChatCache.getInstance().getChatRoom().setChatroomid(startLiveVideoInfo.getChatroomid());
+		ChatCache.getInstance().getChatRoom().setCid(startLiveVideoInfo.getCid());
+		ChatCache.getInstance().getChatRoom().setPushUrl(startLiveVideoInfo.getPushUrl());
+		ChatCache.getInstance().getChatRoom().setMaster(true);
 		startActivity(intent); 
 	}
 	
@@ -855,12 +827,17 @@ public class MainEntryActivity extends BaseActivity implements OnClickListener, 
 		if(startLiveVideoInfo != null && startLiveVideoInfo.getHttpPullUrl() != null && !startLiveVideoInfo.getHttpPullUrl().isEmpty())
 		{
 			Intent intent = new Intent(MainEntryActivity.this, PullActivity.class);
-			Bundle bundle=new Bundle();
-			bundle.putString("cid", startLiveVideoInfo.getCid());
-			bundle.putString("httpPullUrl", startLiveVideoInfo.getHttpPullUrl());
-			bundle.putString("chatroomid", startLiveVideoInfo.getChatroomid());
-			bundle.putBoolean("isMaster", false);
-			intent.putExtras(bundle);
+//			Bundle bundle=new Bundle();
+//			bundle.putString("cid", startLiveVideoInfo.getCid());
+//			bundle.putString("httpPullUrl", startLiveVideoInfo.getHttpPullUrl());
+//			bundle.putString("chatroomid", startLiveVideoInfo.getChatroomid());
+//			bundle.putBoolean("isMaster", false);
+//			intent.putExtras(bundle);
+			
+			ChatCache.getInstance().getChatRoom().setChatroomid(startLiveVideoInfo.getChatroomid());
+			ChatCache.getInstance().getChatRoom().setCid(startLiveVideoInfo.getCid());
+			ChatCache.getInstance().getChatRoom().setHttpPullUrl(startLiveVideoInfo.getHttpPullUrl());
+			ChatCache.getInstance().getChatRoom().setMaster(true);
 			startActivity(intent); 
 		}
 		else
@@ -888,7 +865,7 @@ public class MainEntryActivity extends BaseActivity implements OnClickListener, 
 
 			@Override
 			public void onFailed(int code) {
-                onLoginDone();
+//                onLoginDone();
                 if (code == ResponseCode.RES_CHATROOM_BLACKLIST) {
                     Toast.makeText(MainEntryActivity.this, 
                     		StringUtil.getXmlResource(MainEntryActivity.this, R.string.push_video_nim_black_list), 
@@ -902,13 +879,13 @@ public class MainEntryActivity extends BaseActivity implements OnClickListener, 
 
 			@Override
 			public void onSuccess(EnterChatRoomResultData result) {
-				onLoginDone();
+//				onLoginDone();
 				ChatRoomInfo roomInfo = result.getRoomInfo();
                 ChatRoomMember member = result.getMember();
                 member.setRoomId(roomInfo.getRoomId());
                 ChatCache.getInstance().ClearMember();
                 ChatCache.getInstance().AddMember(createMasterMember());
-                
+                ChatRoom chatRoom = ChatCache.getInstance().getChatRoom();
                 ChatCache.getInstance().getChatRoom().setChatRoomInfo(roomInfo);
                 if (isPush)
                 {
@@ -977,11 +954,9 @@ public class MainEntryActivity extends BaseActivity implements OnClickListener, 
     
 	
 	class UpdateDallorTask extends AsyncTask<Void, Integer, Integer> {
-		private Context context;
 		private long dollars;
 
 		UpdateDallorTask(Context context, long dollars) {
-			this.context = context;
 			this.dollars = dollars;
 		}
 

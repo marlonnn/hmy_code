@@ -304,12 +304,18 @@
         <activity
             android:name=".PushActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
+            android:windowSoftInputMode="adjustPan"
             android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".PullActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".MainEntryActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="landscape" >
         </activity>
     </application>
 

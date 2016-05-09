@@ -99,7 +99,7 @@ import com.summer.view.Pandamate;
 
 public class PullActivity extends BaseActivity implements OnClickListener, ModuleProxy{
 
-	private View view;
+	private View rootView;
 	private Context mContext;
 	
 	private ChatRoom chatRoom;
@@ -115,7 +115,6 @@ public class PullActivity extends BaseActivity implements OnClickListener, Modul
 	private ImageView btnInvest;//投资
 	private ImageView btnDivest;//撤资
 	private LinearLayout layoutInput;
-	private RelativeLayout rootView;
 	private TextView totalPiao;//yupiao
 	private RelativeLayout functionView;//底部功能键根布局
     private static final int MESSAGE_CAPACITY = 500;
@@ -186,27 +185,14 @@ public class PullActivity extends BaseActivity implements OnClickListener, Modul
 	protected void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_pull_video);
-		view = findViewById(R.id.layout_root);
+		rootView = findViewById(R.id.layout_root);
 		registerObservers(true);
 		mContext = this;
+		gson = new Gson();
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);   //应用运行时，保持屏幕高亮，不锁屏
 		
-        Intent intent = getIntent();
-        if (intent != null)
-        {
-        	chatRoom = new ChatRoom();
-        	try {
-				chatRoom.setCid(intent.getStringExtra("cid"));
-				chatRoom.setChatroomid(intent.getStringExtra("chatroomid"));
-				chatRoom.setHttpPullUrl(intent.getStringExtra("httpPullUrl"));
-				chatRoom.setMaster(intent.getBooleanExtra("isMaster", false));
-			} catch (Exception e) {
-				Toast.makeText(this, "直播间错误", Toast.LENGTH_LONG).show();
-				e.printStackTrace();
-				finish();
-			}
-        }
-        mVideoView = (NEVideoView) findViewById(R.id.video_view);
+		chatRoom = ChatCache.getInstance().getChatRoom();
+        mVideoView = (NEVideoView) findViewById(R.id.videoview);
         mVideoView.setBufferStrategy(0); //直播低延时
 		mVideoView.setMediaType("livestream");
 		mVideoView.setHardwareDecoder(false);
@@ -234,7 +220,7 @@ public class PullActivity extends BaseActivity implements OnClickListener, Modul
 	
     private void fetchOnlinePeople()
     {
-    	fetchRoomMembers(container.chatRoom.getChatroomid(), MemberQueryType.ONLINE_NORMAL, 0, 100, null);
+    	fetchRoomMembers(chatRoom.getChatroomid(), MemberQueryType.ONLINE_NORMAL, 0, 100, null);
     }
 	
     /**
@@ -284,7 +270,7 @@ public class PullActivity extends BaseActivity implements OnClickListener, Modul
     	
     	imageViewAnimation = (ImageView)rootView.findViewById(R.id.imageViewAnimation);
     	
-    	adapter = new CommonAdapter<IMMessage>(container.activity, R.layout.fragment_message_item, 
+    	adapter = new CommonAdapter<IMMessage>(this, R.layout.fragment_message_item, 
 				items){
 					@Override
 					public void convert(
@@ -353,7 +339,7 @@ public class PullActivity extends BaseActivity implements OnClickListener, Modul
     private void initPortrait()
     {
     	headPortrait = (CircularImage) rootView.findViewById(R.id.portrait);
-		Glide.with(container.activity)
+		Glide.with(this)
 		.load(InfoCache.getInstance().getStartInfo().getHead_portrait())
 		.centerCrop().diskCacheStrategy(DiskCacheStrategy.ALL)
 		.placeholder(R.drawable.avatar_def).into(headPortrait);
@@ -367,14 +353,14 @@ public class PullActivity extends BaseActivity implements OnClickListener, Modul
     {
     	try {
 			onlinePeople = (TextView)rootView.findViewById(R.id.txtViewOnlinePeople);
-			onlinePeople.setText(String.valueOf(container.chatRoom.getChatRoomInfo().getOnlineUserCount()));
+			onlinePeople.setText(String.valueOf(chatRoom.getChatRoomInfo().getOnlineUserCount()));
 		} catch (Exception e) {
 			e.printStackTrace();
 			XLog.i("init on line people exception" + e.getMessage());
 		}
     	recycleView = (RecyclerView)rootView.findViewById(R.id.recyclerView);
     	
-    	recycleAdapter = new RecyclerViewAdapter(container.activity, ChatCache.getInstance().getOnlinePeopleitems());
+    	recycleAdapter = new RecyclerViewAdapter(this, ChatCache.getInstance().getOnlinePeopleitems());
     	
     	recycleView.setAdapter(recycleAdapter);
     	
@@ -408,17 +394,17 @@ public class PullActivity extends BaseActivity implements OnClickListener, Modul
     
 	private void initializeView()
 	{
-		Container container = new Container(this, chatRoom, SessionTypeEnum.ChatRoom, this);
+		container = new Container(this, chatRoom, SessionTypeEnum.ChatRoom, this);
 		if (danmakuPanel == null)
 		{
-			danmakuPanel = new DanmakuPanel(container, view);
+			danmakuPanel = new DanmakuPanel(container, rootView);
 		}
 		
 		showMessageListView(true);
 		
 		if (inputPanel == null)
 		{
-			inputPanel = new InputPannel(container, view, GiftCache.getInstance().getListGifts());
+			inputPanel = new InputPannel(container, rootView, GiftCache.getInstance().getListGifts());
 		}
 		layoutInput = (LinearLayout) findViewById(R.id.layout_input);
 		functionView = (RelativeLayout) findViewById(R.id.layout_bottom);
@@ -452,7 +438,7 @@ public class PullActivity extends BaseActivity implements OnClickListener, Modul
 						.getThe_current_hooted_thumb_up_prices(),
 				InfoCache.getInstance().getStartInfo().getStage_name());
 		
-        view.setOnTouchListener(new OnTouchListener() {
+		rootView.setOnTouchListener(new OnTouchListener() {
 			
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
@@ -614,7 +600,7 @@ public class PullActivity extends BaseActivity implements OnClickListener, Modul
     
 	private void logoutChatRoom() {
 		NIMClient.getService(ChatRoomService.class).exitChatRoom(
-				container.chatRoom.getChatroomid());
+				chatRoom.getChatroomid());
 	}
     
     @SuppressWarnings("serial")
@@ -673,7 +659,7 @@ public class PullActivity extends BaseActivity implements OnClickListener, Modul
      public boolean isMyMessage(IMMessage message) {
          return message.getSessionType() == container.sessionType
                  && message.getSessionId() != null
-                 && message.getSessionId().equals(container.chatRoom.getChatroomid());
+                 && message.getSessionId().equals(chatRoom.getChatroomid());
      }
      
      private void handlerCustomMessage(IMMessage message)
@@ -1100,7 +1086,7 @@ public class PullActivity extends BaseActivity implements OnClickListener, Modul
 			else
 			{
 				//余额不足，需要充值
-				ToastUtil.show(container.activity, "余额不足，赶紧充值吧");
+				ToastUtil.show(this, "余额不足，赶紧充值吧");
 				return false;
 			}
 		} catch (Exception e) {
@@ -1129,7 +1115,7 @@ public class PullActivity extends BaseActivity implements OnClickListener, Modul
 			else
 			{
 				//余额不足，需要充值
-				ToastUtil.show(container.activity, "余额不足，赶紧充值吧");
+				ToastUtil.show(this, "余额不足，赶紧充值吧");
 			}
 		} catch (Exception e) {
 			XLog.e("NumberFormatException");

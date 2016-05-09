@@ -146,7 +146,7 @@ public class IncomeActivity extends BaseActivity implements OnClickListener{
 		case Config.query_piao_left:
 			try {
 				Entity<WithDraw> baseEntity = gson.fromJson(jsonString,
-						new TypeToken<Entity<EditPersonal>>() {
+						new TypeToken<Entity<WithDraw>>() {
 						}.getType());
 				if (baseEntity != null && baseEntity.getData() != null)
 				{

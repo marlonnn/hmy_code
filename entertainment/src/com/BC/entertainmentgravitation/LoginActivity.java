@@ -362,7 +362,7 @@ import org.apache.http.NameValuePair;
 					saveLoginInfo(account, token);
 	                DataCacheManager.buildDataCacheAsync();
 	        		saveNimAccount(Config.User);
-	    			Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+	    			Intent intent = new Intent(LoginActivity.this, MainEntryActivity.class);
 	    			startActivity(intent);
 	        		ToastUtil.show(LoginActivity.this, LoginActivity.this.getString(R.string.loginSuccess));
 				}

@@ -9,7 +9,6 @@ import org.apache.http.NameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.media.AudioFormat;
 import android.os.Bundle;
@@ -26,6 +25,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 import cn.sharesdk.framework.ShareSDK;
@@ -52,7 +52,6 @@ import com.BC.entertainment.view.LiveSurfaceView;
 import com.BC.entertainmentgravitation.dialog.ApplauseGiveConcern;
 import com.BC.entertainmentgravitation.entity.ChatRoom;
 import com.BC.entertainmentgravitation.entity.Member;
-import com.BC.entertainmentgravitation.fragment.TopSurfaceFragment.SwitchCamera;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.Gson;
@@ -96,7 +95,7 @@ import com.summer.view.Pandamate;
 public class PushActivity extends BaseActivity implements View.OnClickListener, lsMessageHandler, ModuleProxy{
 	
 	private Context mContext;
-	private View view;
+	private View rootView;
 	private ChatRoom chatRoom;
 	private LiveSurfaceView mVideoView;
 	private lsMediaCapture mLSMediaCapture;
@@ -117,7 +116,6 @@ public class PushActivity extends BaseActivity implements View.OnClickListener, 
 	private ImageView btnInvest;//投资
 	private ImageView btnDivest;//撤资
 	private LinearLayout layoutInput;
-	private RelativeLayout rootView;
 	private TextView totalPiao;//yupiao
 	private RelativeLayout functionView;//底部功能键根布局
 	
@@ -140,7 +138,6 @@ public class PushActivity extends BaseActivity implements View.OnClickListener, 
 //	private ChatRoomPanel chatRoomPanel;
     private InputPannel inputPanel;
     private DanmakuPanel danmakuPanel;
-    private SwitchCamera switchCamera;
     private HttpTask httpTask;//更新娱票线程
     private ApplauseGiveConcern applauseGiveConcern;//投资或者撤资
     
@@ -184,32 +181,19 @@ public class PushActivity extends BaseActivity implements View.OnClickListener, 
 	        }
 		}
 	});
+	private ScrollView scrollView;
     
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_push_video);
 		registerObservers(true);
-		view = findViewById(R.id.layout_root);
+		rootView = findViewById(R.id.layout_root);
+		scrollView = (ScrollView)findViewById(R.id.scrollView);
 		gson = new Gson();
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);   //应用运行时，保持屏幕高亮，不锁屏
-		
-        Intent intent = getIntent();
-        if (intent != null)
-        {
-        	chatRoom = ChatCache.getInstance().getChatRoom();
-        	try {
-				chatRoom.setCid(intent.getStringExtra("cid"));
-				chatRoom.setChatroomid(intent.getStringExtra("chatroomid"));
-				chatRoom.setPushUrl(intent.getStringExtra("pushUrl"));
-				chatRoom.setMaster(intent.getBooleanExtra("isMaster", false));
-			} catch (Exception e) {
-				Toast.makeText(this, "直播间错误", Toast.LENGTH_LONG).show();
-				e.printStackTrace();
-				finish();
-			}
-        }
-        
+		chatRoom = ChatCache.getInstance().getChatRoom();
+		container = new Container(this, chatRoom, SessionTypeEnum.ChatRoom, this);
         mVideoView = (LiveSurfaceView) findViewById(R.id.videoview);
         /**
          * 初始化推流
@@ -330,7 +314,7 @@ public class PushActivity extends BaseActivity implements View.OnClickListener, 
             //设置日志级别
         	mLSMediaCapture.setTraceLevel(PushConfig.LS_LOG_INFO);
             //初始化直播推流
-	        ret = mLSMediaCapture.initLiveStream("rtmp://p112.live.126.net/live/77934cf008bf4972abbc2af27eaee751?wsSecret=d5352b9f5b36a232286df0321432696c&wsTime=1462724959",
+	        ret = mLSMediaCapture.initLiveStream(chatRoom.getPushUrl(),
 	        		mLSLiveStreamingParaCtx);
 	        XLog.i("------ret---------" + ret);
 	        if(ret) 
@@ -385,17 +369,16 @@ public class PushActivity extends BaseActivity implements View.OnClickListener, 
 	
 	private void initializeView()
 	{
-		Container container = new Container(this, chatRoom, SessionTypeEnum.ChatRoom, this);
 		if (danmakuPanel == null)
 		{
-			danmakuPanel = new DanmakuPanel(container, view);
+			danmakuPanel = new DanmakuPanel(container, rootView);
 		}
 		
 		showMessageListView(true);
 		
 		if (inputPanel == null)
 		{
-			inputPanel = new InputPannel(container, view, GiftCache.getInstance().getListGifts());
+			inputPanel = new InputPannel(container, rootView, GiftCache.getInstance().getListGifts());
 		}
 		layoutInput = (LinearLayout) findViewById(R.id.layout_input);
 		functionView = (RelativeLayout) findViewById(R.id.layout_bottom);
@@ -429,7 +412,20 @@ public class PushActivity extends BaseActivity implements View.OnClickListener, 
 						.getThe_current_hooted_thumb_up_prices(),
 				InfoCache.getInstance().getStartInfo().getStage_name());
 		
-        view.setOnTouchListener(new OnTouchListener() {
+		rootView.setOnTouchListener(new OnTouchListener() {
+			
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				showMessageListView(true);
+				showFunctionView(true);
+				inputPanel.hideInputMethod();
+				inputPanel.hideInputBar();
+				inputPanel.hideGiftLayout();
+				return false;
+			}
+		});
+		
+		scrollView.setOnTouchListener(new OnTouchListener() {
 			
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
@@ -459,7 +455,7 @@ public class PushActivity extends BaseActivity implements View.OnClickListener, 
     	
     	imageViewAnimation = (ImageView)rootView.findViewById(R.id.imageViewAnimation);
     	
-    	adapter = new CommonAdapter<IMMessage>(container.activity, R.layout.fragment_message_item, 
+    	adapter = new CommonAdapter<IMMessage>(this, R.layout.fragment_message_item, 
 				items){
 					@Override
 					public void convert(
@@ -527,12 +523,16 @@ public class PushActivity extends BaseActivity implements View.OnClickListener, 
      */
     private void initPortrait()
     {
-    	headPortrait = (CircularImage) rootView.findViewById(R.id.portrait);
-		Glide.with(container.activity)
-		.load(Config.User.getImage())
-		.centerCrop().diskCacheStrategy(DiskCacheStrategy.ALL)
-		.placeholder(R.drawable.avatar_def).into(headPortrait);
-		XLog.i("master portrait: " + " http://app.haimianyu.cn/" + Config.User.getImage());
+    	try {
+			headPortrait = (CircularImage) rootView.findViewById(R.id.portrait);
+			Glide.with(this)
+			.load(Config.User.getImage())
+			.centerCrop().diskCacheStrategy(DiskCacheStrategy.ALL)
+			.placeholder(R.drawable.avatar_def).into(headPortrait);
+			XLog.i("master portrait: " + " http://app.haimianyu.cn/" + Config.User.getImage());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
     }
     
     /**
@@ -549,7 +549,7 @@ public class PushActivity extends BaseActivity implements View.OnClickListener, 
 		}
     	recycleView = (RecyclerView)rootView.findViewById(R.id.recyclerView);
     	
-    	recycleAdapter = new RecyclerViewAdapter(container.activity, ChatCache.getInstance().getOnlinePeopleitems());
+    	recycleAdapter = new RecyclerViewAdapter(this, ChatCache.getInstance().getOnlinePeopleitems());
     	
     	recycleView.setAdapter(recycleAdapter);
     	
@@ -1106,9 +1106,9 @@ public class PushActivity extends BaseActivity implements View.OnClickListener, 
 		 * 切换摄像头
 		 */
 		case R.id.imageView_camera:
-			if( switchCamera != null)
+			if( mLSMediaCapture != null)
 			{
-				switchCamera.onSwitchCamera();
+				mLSMediaCapture.switchCamera();
 			}
 			break;
 		/**
