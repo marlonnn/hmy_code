@@ -87,7 +87,7 @@
     <string name="signUpPhoneNumber">手机号</string>
     <string name="signUpValidateCode">验证码</string>
     <string name="signUpPasswordDifferent">两次密码不同</string>
-    <string name="signUpValidateError">证码错误</string>
+    <string name="signUpValidateError">验证码错误</string>
     <string name="signUping">注册中...</string>
     <string name="signUpSuccess">注册成功</string>
     <string name="signUpgetPassword">找回密码成功</string>

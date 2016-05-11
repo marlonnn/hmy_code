@@ -1,7 +1,6 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layout_root"
-    android:fitsSystemWindows="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
@@ -9,6 +8,8 @@
         android:id="@+id/videoview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_above="@+id/root_view"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true" />
 
@@ -120,128 +121,130 @@
 			android:layout_alignParentRight="true"
 			android:layout_toRightOf="@+id/relativelayout_head" >
 	    </android.support.v7.widget.RecyclerView>
-	    <ScrollView
+        <ScrollView
 	        android:id="@+id/scrollView"
+	        android:layout_below="@+id/relativeLayout1"
 		    android:layout_width="match_parent"
 		    android:layout_height="match_parent"
 		    android:layout_weight="1"
-		    android:fillViewport="true"
-		    android:layout_below="@+id/relativeLayout1">
-			<RelativeLayout
+		    android:isScrollContainer="true"
+		    android:fillViewport="true"  >
+		<RelativeLayout
+			android:layout_width="match_parent"
+			android:layout_height="match_parent" >
+		    <RelativeLayout
+				android:id="@+id/layout_bottom"
+				android:layout_width="match_parent"
+				android:layout_height="40dp"
+				android:orientation="horizontal"
+				android:gravity="center_horizontal|bottom"
+				android:layout_marginBottom="20dp"
+				android:layout_alignParentBottom="true"
+				android:layout_alignParentStart="true">
+		
+				<ImageView
+					android:layout_width="40dp"
+					android:layout_height="40dp"
+					android:id="@+id/imageView_chart"
+					android:src="@drawable/fragment_chart"
+					android:layout_alignParentTop="true"
+					android:layout_alignParentStart="true" />
+		
+				<ImageView
+					android:layout_width="40dp"
+					android:layout_height="40dp"
+					android:id="@+id/imageView_close"
+					android:src="@drawable/fragment_close"
+					android:layout_alignParentTop="true"
+					android:layout_alignParentEnd="true" />
+		
+				<ImageView
+					android:layout_width="40dp"
+					android:layout_height="40dp"
+					android:id="@+id/imageView_share"
+					android:src="@drawable/fragment_share"
+					android:layout_alignParentTop="true"
+					android:layout_toStartOf="@+id/imageView_close" />
+				
+				<ImageView
+					android:layout_width="40dp"
+					android:layout_height="40dp"
+					android:id="@+id/imageView_focus"
+					android:src="@drawable/fragment_focus"
+					android:layout_alignParentTop="true"
+					android:layout_toStartOf="@+id/imageView_share" />
+		
+				<ImageView
+					android:layout_width="40dp"
+					android:layout_height="40dp"
+					android:id="@+id/imageView_gift"
+					android:src="@drawable/fragment_gift"
+					android:layout_alignParentTop="true"
+					android:layout_toStartOf="@+id/imageView_focus" />
+		
+				<ImageView
+					android:layout_width="40dp"
+					android:layout_height="40dp"
+					android:id="@+id/imageView_camera"
+					android:src="@drawable/fragment_camera"
+					android:layout_alignParentTop="true"
+					android:layout_toStartOf="@+id/imageView_gift" />
+		
+				<ImageView
+					android:layout_width="40dp"
+					android:layout_height="40dp"
+					android:id="@+id/imageView_divest"
+					android:src="@drawable/fragment_divest"
+					android:layout_alignParentTop="true"
+					android:layout_toStartOf="@+id/imageView_camera" />
+				
+				<ImageView
+					android:layout_width="40dp"
+					android:layout_height="40dp"
+					android:id="@+id/imageView_invest"
+					android:src="@drawable/fragment_invest"
+					android:layout_alignParentTop="true"
+					android:layout_toStartOf="@+id/imageView_divest" />		        
+			</RelativeLayout>
+			<ListView
+				android:id="@+id/messageListView"
+				android:layout_width="match_parent"
+				android:layout_height="80dp"
+				android:layout_alignParentBottom="true"
+				android:layout_alignParentLeft="true"
+				android:divider="@null"
+				android:layout_marginBottom="90dp" >
+	        </ListView>
+	        <master.flame.danmaku.ui.widget.DanmakuView
+				android:id="@+id/danmaku"
 				android:layout_width="match_parent"
 				android:layout_height="match_parent"
-				android:layout_alignParentStart="true" >
-				<LinearLayout
-					android:id="@+id/layout_input"
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:gravity="center_horizontal|bottom"
-					android:layout_marginBottom="20dp"
-					android:layout_alignParentBottom="true"
-					android:orientation="vertical"
-					android:visibility="gone" >
+				android:layout_above="@+id/messageListView"
+				android:layout_alignParentLeft="true"
+				android:layout_alignParentRight="true" />
 
-			        <include layout="@layout/fragment_top_surface_input" />
-		        </LinearLayout>
-			    <RelativeLayout
-					android:id="@+id/layout_bottom"
-					android:layout_width="match_parent"
-					android:layout_height="40dp"
-					android:orientation="horizontal"
-					android:gravity="center_horizontal|bottom"
-					android:layout_marginBottom="20dp"
-					android:layout_alignParentBottom="true"
-					android:layout_alignParentStart="true">
-			
-					<ImageView
-						android:layout_width="40dp"
-						android:layout_height="40dp"
-						android:id="@+id/imageView_chart"
-						android:src="@drawable/fragment_chart"
-						android:layout_alignParentTop="true"
-						android:layout_alignParentStart="true" />
-			
-					<ImageView
-						android:layout_width="40dp"
-						android:layout_height="40dp"
-						android:id="@+id/imageView_close"
-						android:src="@drawable/fragment_close"
-						android:layout_alignParentTop="true"
-						android:layout_alignParentEnd="true" />
-			
-					<ImageView
-						android:layout_width="40dp"
-						android:layout_height="40dp"
-						android:id="@+id/imageView_share"
-						android:src="@drawable/fragment_share"
-						android:layout_alignParentTop="true"
-						android:layout_toStartOf="@+id/imageView_close" />
-					
-					<ImageView
-						android:layout_width="40dp"
-						android:layout_height="40dp"
-						android:id="@+id/imageView_focus"
-						android:src="@drawable/fragment_focus"
-						android:layout_alignParentTop="true"
-						android:layout_toStartOf="@+id/imageView_share" />
-			
-					<ImageView
-						android:layout_width="40dp"
-						android:layout_height="40dp"
-						android:id="@+id/imageView_gift"
-						android:src="@drawable/fragment_gift"
-						android:layout_alignParentTop="true"
-						android:layout_toStartOf="@+id/imageView_focus" />
-			
-					<ImageView
-						android:layout_width="40dp"
-						android:layout_height="40dp"
-						android:id="@+id/imageView_camera"
-						android:src="@drawable/fragment_camera"
-						android:layout_alignParentTop="true"
-						android:layout_toStartOf="@+id/imageView_gift" />
-			
-					<ImageView
-						android:layout_width="40dp"
-						android:layout_height="40dp"
-						android:id="@+id/imageView_divest"
-						android:src="@drawable/fragment_divest"
-						android:layout_alignParentTop="true"
-						android:layout_toStartOf="@+id/imageView_camera" />
-					
-					<ImageView
-						android:layout_width="40dp"
-						android:layout_height="40dp"
-						android:id="@+id/imageView_invest"
-						android:src="@drawable/fragment_invest"
-						android:layout_alignParentTop="true"
-						android:layout_toStartOf="@+id/imageView_divest" />		        
-				</RelativeLayout>
-				<ListView
-					android:id="@+id/messageListView"
-					android:layout_width="match_parent"
-					android:layout_height="80dp"
-					android:layout_alignParentBottom="true"
-					android:layout_alignParentLeft="true"
-					android:divider="@null"
-					android:layout_marginBottom="90dp" >
-		        </ListView>
-		        <master.flame.danmaku.ui.widget.DanmakuView
-					android:id="@+id/danmaku"
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:layout_above="@+id/messageListView"
-					android:layout_alignParentLeft="true"
-					android:layout_alignParentRight="true" />
-			</RelativeLayout>
-        </ScrollView>
-        <ImageView
-	        android:id="@+id/imageViewAnimation"
-	        android:layout_width="match_parent"
-	        android:layout_height="match_parent"
-	        android:visibility="gone"
-	        android:layout_centerHorizontal="true"
-	        android:layout_centerVertical="true"/>
+	        <LinearLayout
+	            android:id="@+id/layout_input"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:layout_alignParentLeft="true"
+	            android:layout_alignParentTop="true"
+	            android:layout_marginTop="69dp"
+	            android:orientation="vertical" >
+
+	            <include layout="@layout/fragment_top_surface_input" />
+	        </LinearLayout>
+
+		</RelativeLayout>
+    </ScrollView>
+
 	</RelativeLayout>
 
-</FrameLayout>
+    <ImageView
+        android:id="@+id/imageViewAnimation"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"/>
+</RelativeLayout>

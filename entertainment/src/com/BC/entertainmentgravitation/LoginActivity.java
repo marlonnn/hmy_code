@@ -183,7 +183,7 @@ import org.apache.http.NameValuePair;
     private void initializeSignUpView() {
         signUpPhoneNumber = (EditText) findViewById(R.id.signUp_editText_phone);
         signUpValidate = (EditText) findViewById(R.id.signUp_editText_validate);
-        signUpPassword = (EditText) findViewById(R.id.signUp_editText_phone);
+        signUpPassword = (EditText) findViewById(R.id.signUp_editText_passWord);
 
         signUpPasswordAgain = (EditText) findViewById(R.id.signUp_editText_passWord_againt);
         signUpShareCode = (EditText) findViewById(R.id.signUp_editText_shareCode);

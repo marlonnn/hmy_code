@@ -317,6 +317,19 @@
                 android:paddingLeft="10dip"
                 android:paddingRight="20dip"
                 android:src="@drawable/home_select_l" />
+
+            <TextView
+                android:id="@+id/txtLive"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginRight="28dp"
+                android:layout_marginTop="20dp"
+                android:visibility="gone"
+                android:textColor="@color/white"
+                android:text="直播中" />
+
         </RelativeLayout>
 
         <LinearLayout

@@ -181,14 +181,14 @@ public class PushVideoActivity extends FragmentActivity implements ExitFragmentL
 	private void initializePushVideoFragment()
     {
     	try {
-			fragment = PushVideoFragment.newInstance(chatRoom);
+			fragment = new PushVideoFragment(chatRoom);
 			XLog.i("room id: " + chatRoom.getChatroomid());
 			listener = fragment.CreateScrollListener();
 			getSupportFragmentManager()
 			        .beginTransaction()
 			        .add(R.id.layout_video_play, fragment)
 			        .commit();
-			SurfaceFragment.newInstance(listener, chatRoom, false).show(getSupportFragmentManager(), "push video");
+			new SurfaceFragment(listener, chatRoom, false).show(getSupportFragmentManager(), "push video");
 		} catch (Exception e) {
 			e.printStackTrace();
 			XLog.i("initialize push video fragment exception");

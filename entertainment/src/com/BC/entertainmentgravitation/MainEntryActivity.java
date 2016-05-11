@@ -83,7 +83,7 @@ public class MainEntryActivity extends BaseActivity implements OnClickListener, 
 			+ PACKAGE_NAME;
 
 	private TextView nickname, levelText, Entertainment_dollar, Stage_name,
-			star_information, professional, prices, aplayOrLive;
+			star_information, professional, prices, aplayOrLive, txtLive;
 	private int pageIndex = 1;
 	private int selectIndex = 0;
 	private CircularImage Head_portrait;
@@ -112,6 +112,7 @@ public class MainEntryActivity extends BaseActivity implements OnClickListener, 
         registerObservers(true);
 		nickname = (TextView) findViewById(R.id.nickname);
 		levelText = (TextView) findViewById(R.id.levelText);
+		txtLive = (TextView) findViewById(R.id.txtLive);
 		Entertainment_dollar = (TextView) findViewById(R.id.Entertainment_dollar);
 		Stage_name = (TextView) findViewById(R.id.Stage_name);
 		star_information = (TextView) findViewById(R.id.star_information);
@@ -805,12 +806,6 @@ public class MainEntryActivity extends BaseActivity implements OnClickListener, 
 	private void startLiveVideo(StarLiveVideoInfo startLiveVideoInfo)
 	{
 		Intent intent = new Intent(MainEntryActivity.this, PushActivity.class);
-//		Bundle bundle=new Bundle();
-//		bundle.putString("cid", startLiveVideoInfo.getCid());
-//		bundle.putString("pushUrl", startLiveVideoInfo.getPushUrl());
-//		bundle.putString("chatroomid", startLiveVideoInfo.getChatroomid());
-//		bundle.putBoolean("isMaster", true);
-//		intent.putExtras(bundle);
 		ChatCache.getInstance().getChatRoom().setChatroomid(startLiveVideoInfo.getChatroomid());
 		ChatCache.getInstance().getChatRoom().setCid(startLiveVideoInfo.getCid());
 		ChatCache.getInstance().getChatRoom().setPushUrl(startLiveVideoInfo.getPushUrl());

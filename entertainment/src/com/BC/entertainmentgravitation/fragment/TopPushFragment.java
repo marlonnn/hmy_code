@@ -18,23 +18,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 
-public class SurfaceFragment extends DialogFragment {
+public class TopPushFragment extends DialogFragment {
 	
 	private ViewPager viewPager;
 	
-	private ScrollListener listener;
-	
-	private ChatRoom chatRoom;
-	
-	private boolean isWatchVideo;
-	
 	private ExitFragmentListener exitListener;
+
+	private PushFragment pushFragment;
 	
-	public SurfaceFragment(ScrollListener listener, ChatRoom chatRoom,  boolean isWatchVideo)
+	private SurfaceEmptyFragment emptyFragment;
+	
+	public TopPushFragment(Activity activity, ChatRoom chatRoom)
 	{
-		this.listener = listener;
-		this.chatRoom = chatRoom;
-		this.isWatchVideo = isWatchVideo;
+		pushFragment = new PushFragment(activity, chatRoom);
+		emptyFragment = new SurfaceEmptyFragment();
 	}
 
 	@Override
@@ -53,8 +50,21 @@ public class SurfaceFragment extends DialogFragment {
 		super.onCreate(savedInstanceState);
 	}
 
+	public void onResume() {
+		if (pushFragment != null)
+		{
+			pushFragment.onResume();
+		}
+		super.onResume();
+	}
 
-
+	public void Destroy()
+	{
+		if (pushFragment != null)
+		{
+			pushFragment.Destroy();
+		}
+	}
 	@Override
 	@Nullable
 	public View onCreateView(LayoutInflater inflater,
@@ -72,12 +82,12 @@ public class SurfaceFragment extends DialogFragment {
                 if(position == 0)
                 {
                 	XLog.i("position == 0");
-                	return new SurfaceEmptyFragment();
+                	return emptyFragment;
                 }
                 else if (position == 1)
                 {
                 	XLog.i("position == 1");
-                	return new TopSurfaceFragment(exitListener, chatRoom, isWatchVideo);
+                	return pushFragment;
                 }
                 return null;
             }
