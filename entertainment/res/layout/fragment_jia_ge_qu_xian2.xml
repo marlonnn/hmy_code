@@ -176,10 +176,9 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_margin="5dip"
-                    android:background="@drawable/home1_button"
+                    android:background="@drawable/fragment_focus"
                     android:padding="10dp"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/home8" />
+                    android:scaleType="fitCenter" />
 
                 <!--
                      <ImageView

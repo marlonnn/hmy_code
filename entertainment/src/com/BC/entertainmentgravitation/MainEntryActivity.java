@@ -23,6 +23,7 @@ import com.BC.entertainmentgravitation.fragment.JiaGeQuXianFragment2;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.netease.nim.uikit.common.ui.dialog.DialogMaker;
 import com.netease.nimlib.sdk.AbortableFuture;
@@ -318,6 +319,14 @@ public class MainEntryActivity extends BaseActivity implements OnClickListener, 
 			} else {
 				getStarInfoRequest(ranking.get(selectIndex)
 						.getStar_ID());
+				if (ranking.get(selectIndex).getVstatus().contains("0"))
+				{
+					txtLive.setVisibility(View.VISIBLE);
+				}
+				else
+				{
+					txtLive.setVisibility(View.GONE);
+				}
 			}
 		} else {
 			ToastUtil.show(this, "没有更多数据了");
@@ -341,6 +350,14 @@ public class MainEntryActivity extends BaseActivity implements OnClickListener, 
 				selectIndex++;
 				getStarInfoRequest(ranking.get(selectIndex)
 						.getStar_ID());
+				if (ranking.get(selectIndex).getVstatus().contains("0"))
+				{
+					txtLive.setVisibility(View.VISIBLE);
+				}
+				else
+				{
+					txtLive.setVisibility(View.GONE);
+				}
 			} else {
 				pageIndex++;
 				getStartRankInfoRequest();
@@ -729,17 +746,29 @@ public class MainEntryActivity extends BaseActivity implements OnClickListener, 
 			}
 			break;
 		case Config.in_comparison_to_listApply_to_be_a_platform_star_:
-			Entity<List<Ranking>> baseEntity4 = gson.fromJson(jsonString,
-					new TypeToken<Entity<List<Ranking>>>() {
-					}.getType());
-			ranking.addAll(baseEntity4.getData());
-			if (ranking != null && baseEntity4.getData().size() > 0) {
-				if (selectIndex != 0) {
-					selectIndex++;
+			try {
+				Entity<List<Ranking>> baseEntity4 = gson.fromJson(jsonString,
+						new TypeToken<Entity<List<Ranking>>>() {
+						}.getType());
+				ranking.addAll(baseEntity4.getData());
+				if (ranking != null && baseEntity4.getData().size() > 0) {
+					if (selectIndex != 0) {
+						selectIndex++;
+					}
+					getStarInfoRequest(ranking.get(selectIndex).getStar_ID());
+					if (ranking.get(selectIndex).getVstatus().contains("0"))
+					{
+						txtLive.setVisibility(View.VISIBLE);
+					}
+					else
+					{
+						txtLive.setVisibility(View.GONE);
+					}
+				} else {
+					ToastUtil.show(this, this.getString(R.string.mainactivity_have_no_data));
 				}
-				getStarInfoRequest(ranking.get(selectIndex).getStar_ID());
-			} else {
-				ToastUtil.show(this, this.getString(R.string.mainactivity_have_no_data));
+			} catch (Exception e1) {
+				e1.printStackTrace();
 			}
 			break;
 		case Config.search:

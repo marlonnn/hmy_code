@@ -137,71 +137,71 @@
 		    <RelativeLayout
 		        android:id="@+id/layout_bottom"
 		        android:layout_width="match_parent"
-		        android:layout_height="40dp"
+		        android:layout_height="45dp"
 		        android:orientation="horizontal"
 		        android:layout_marginBottom="10dp"
 		        android:layout_alignParentBottom="true"
 		        android:layout_alignParentStart="true">
 		
 		        <ImageView
-		            android:layout_width="40dp"
-		            android:layout_height="40dp"
+		            android:layout_width="45dp"
+		            android:layout_height="45dp"
 		            android:id="@+id/imageView_chart"
-		            android:src="@drawable/fragment_chart"
+		            android:src="@drawable/fragment_chat"
 		            android:layout_alignParentTop="true"
 		            android:layout_alignParentStart="true" />
 		
 		        <ImageView
-		            android:layout_width="40dp"
-		            android:layout_height="40dp"
+		            android:layout_width="45dp"
+		            android:layout_height="45dp"
 		            android:id="@+id/imageView_close"
 		            android:src="@drawable/fragment_close"
 		            android:layout_alignParentTop="true"
 		            android:layout_alignParentEnd="true" />
 		
 		        <ImageView
-		            android:layout_width="40dp"
-		            android:layout_height="40dp"
+		            android:layout_width="45dp"
+		            android:layout_height="45dp"
 		            android:id="@+id/imageView_share"
 		            android:src="@drawable/fragment_share"
 		            android:layout_alignParentTop="true"
 		            android:layout_toStartOf="@+id/imageView_close" />
 		        
 		        <ImageView
-		            android:layout_width="40dp"
-		            android:layout_height="40dp"
+		            android:layout_width="45dp"
+		            android:layout_height="45dp"
 		            android:id="@+id/imageView_focus"
 		            android:src="@drawable/fragment_focus"
 		            android:layout_alignParentTop="true"
 		            android:layout_toStartOf="@+id/imageView_share" />
 		
 		        <ImageView
-		            android:layout_width="40dp"
-		            android:layout_height="40dp"
+		            android:layout_width="45dp"
+		            android:layout_height="45dp"
 		            android:id="@+id/imageView_gift"
 		            android:src="@drawable/fragment_gift"
 		            android:layout_alignParentTop="true"
 		            android:layout_toStartOf="@+id/imageView_focus" />
 		
 		        <ImageView
-		            android:layout_width="40dp"
-		            android:layout_height="40dp"
+		            android:layout_width="45dp"
+		            android:layout_height="45dp"
 		            android:id="@+id/imageView_camera"
 		            android:src="@drawable/fragment_camera"
 		            android:layout_alignParentTop="true"
 		            android:layout_toStartOf="@+id/imageView_gift" />
 
 		        <ImageView
-		            android:layout_width="40dp"
-		            android:layout_height="40dp"
+		            android:layout_width="45dp"
+		            android:layout_height="45dp"
 		            android:id="@+id/imageView_divest"
 		            android:src="@drawable/fragment_divest"
 		            android:layout_alignParentTop="true"
 		            android:layout_toStartOf="@+id/imageView_camera" />
 		        
 		        <ImageView
-		            android:layout_width="40dp"
-		            android:layout_height="40dp"
+		            android:layout_width="45dp"
+		            android:layout_height="45dp"
 		            android:id="@+id/imageView_invest"
 		            android:src="@drawable/fragment_invest"
 		            android:layout_alignParentTop="true"

@@ -18,9 +18,14 @@ public class WithDraw {
 	private String user_piao_left;
 	
 	/**
+	 * 用户可以提现的娱票
+	 */
+	private float user_can_exchange;
+	
+	/**
 	 * 可体现金额
 	 */
-	private String cash;
+	private float cash;
 
 	public String getUser_piao() {
 		return user_piao;
@@ -38,11 +43,19 @@ public class WithDraw {
 		this.user_piao_left = user_piao_left;
 	}
 
-	public String getCash() {
+	public float getUser_can_exchange() {
+		return user_can_exchange;
+	}
+
+	public void setUser_can_exchange(float user_can_exchange) {
+		this.user_can_exchange = user_can_exchange;
+	}
+
+	public float getCash() {
 		return cash;
 	}
 
-	public void setCash(String cash) {
+	public void setCash(float cash) {
 		this.cash = cash;
 	}
 }

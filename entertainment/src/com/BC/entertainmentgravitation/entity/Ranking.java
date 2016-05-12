@@ -16,6 +16,8 @@ public class Ranking {
 	private String The_prize_ID;
 	
 	private int The_current_hooted_thumb_up_prices;
+	
+	private String vstatus;
 
 	public int getThe_current_hooted_thumb_up_prices() {
 		return The_current_hooted_thumb_up_prices;
@@ -82,5 +84,14 @@ public class Ranking {
 	public String getThe_prize_ID() {
 		return this.The_prize_ID;
 	}
+
+	public String getVstatus() {
+		return vstatus;
+	}
+
+	public void setVstatus(String vstatus) {
+		this.vstatus = vstatus;
+	}
+	
 }
 

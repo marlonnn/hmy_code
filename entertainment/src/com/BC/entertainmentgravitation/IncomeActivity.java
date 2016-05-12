@@ -13,7 +13,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.BC.entertainment.cache.InfoCache;
-import com.BC.entertainmentgravitation.entity.EditPersonal;
 import com.BC.entertainmentgravitation.entity.WithDraw;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -151,9 +150,9 @@ public class IncomeActivity extends BaseActivity implements OnClickListener{
 				if (baseEntity != null && baseEntity.getData() != null)
 				{
 					WithDraw w = baseEntity.getData();
-					yuPiao.setText(w.getUser_piao());
+					yuPiao.setText(String.valueOf(w.getUser_can_exchange()));
 					InfoCache.getInstance().getPersonalInfo().setPiaoLeft(w.getUser_piao_left());
-					withDraw.setText(w.getCash());
+					withDraw.setText(String.valueOf(w.getCash()));
 				}
 			} catch (JsonSyntaxException e1) {
 				e1.printStackTrace();
