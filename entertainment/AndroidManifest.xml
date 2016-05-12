@@ -144,12 +144,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        
-        <activity
-            android:name=".MainActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="landscape" >
-        </activity>
         <activity
             android:name=".AccountActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -180,16 +174,6 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="landscape" >
         </activity>    
-        <activity
-            android:name=".PushVideoActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="portrait" >
-        </activity> 
-        <activity
-            android:name=".WatchVideoActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="portrait" >
-        </activity>
         <activity
             android:name=".ApplyActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -300,12 +284,13 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait" >
         </activity>
-        
+        <!-- 推流 -->
         <activity
             android:name=".PushActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait" >
         </activity>
+        <!-- 拉流 -->
         <activity
             android:name=".PullActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"

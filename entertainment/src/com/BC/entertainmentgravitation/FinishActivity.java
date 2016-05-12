@@ -77,7 +77,7 @@ public class FinishActivity extends BaseActivity implements OnClickListener{
 			break;
 			
 		case R.id.imageViewBack:
-			intent = new Intent(this, MainActivity.class);
+			intent = new Intent(this, MainEntryActivity.class);
 			startActivity(intent);
 			this.finish();
 			break;

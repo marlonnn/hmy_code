@@ -638,7 +638,24 @@ public class MainEntryActivity extends BaseActivity implements OnClickListener, 
     	addToThreadPool(Config.search, "get start rank info", params);
 	}
 	
-	
+	/**
+	 * 查询直播间状态
+	 * @param watchVideo
+	 */
+    private void queryVideoStatus(StarLiveVideoInfo watchVideo)
+    {
+    	if (watchVideo == null || watchVideo.getCid() == null)
+    	{
+			ToastUtil.show(this, "直播间不在直播中，请稍后重试");
+			return;
+    	}
+    	
+		HashMap<String, String> entity = new HashMap<String, String>();
+		entity.put("cid", watchVideo.getCid());
+		ShowProgressDialog("查询直播中...");
+		List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
+		addToThreadPool(Config.query_video_status, "send search request", params);
+    }
 
 	@Override
 	public void RequestSuccessful(String jsonString, int taskType) {
@@ -777,7 +794,12 @@ public class MainEntryActivity extends BaseActivity implements OnClickListener, 
 						{
 							if( ret.getInt("status") == 1)
 							{
-								startWatchVideo(watchVideo);
+//								startWatchVideo(watchVideo);
+								
+								if (InfoCache.getInstance().getStartInfo() != null && InfoCache.getInstance().getStartInfo().getUser_name() != null)
+								{
+									watchLiveVideoRequest(InfoCache.getInstance().getStartInfo().getUser_name());	
+								}
 							}
 							else
 							{
@@ -822,12 +844,6 @@ public class MainEntryActivity extends BaseActivity implements OnClickListener, 
 		if(startLiveVideoInfo != null && startLiveVideoInfo.getHttpPullUrl() != null && !startLiveVideoInfo.getHttpPullUrl().isEmpty())
 		{
 			Intent intent = new Intent(MainEntryActivity.this, PullActivity.class);
-//			Bundle bundle=new Bundle();
-//			bundle.putString("cid", startLiveVideoInfo.getCid());
-//			bundle.putString("httpPullUrl", startLiveVideoInfo.getHttpPullUrl());
-//			bundle.putString("chatroomid", startLiveVideoInfo.getChatroomid());
-//			bundle.putBoolean("isMaster", false);
-//			intent.putExtras(bundle);
 			
 			ChatCache.getInstance().getChatRoom().setChatroomid(startLiveVideoInfo.getChatroomid());
 			ChatCache.getInstance().getChatRoom().setCid(startLiveVideoInfo.getCid());

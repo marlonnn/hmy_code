@@ -1,8 +1,6 @@
 package com.BC.entertainmentgravitation;
 
 import com.BC.entertainmentgravitation.fragment.ScrollListener;
-import com.BC.entertainmentgravitation.fragment.SurfaceFragment;
-import com.BC.entertainmentgravitation.fragment.WatchVideoFragment;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;

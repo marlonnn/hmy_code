@@ -42,9 +42,9 @@ public class HuodongActivity extends BaseActivity {
 		bannerAdapter = new BannerAdapter(getSupportFragmentManager(),
 				new ArrayList<Activitys>());
 		banner.setAdapter(bannerAdapter);
-		if (MainActivity.authoritativeInformation != null
-				&& MainActivity.authoritativeInformation.getActivity() != null) {
-			List<Activitys> activitys = MainActivity.authoritativeInformation
+		if (MainEntryActivity.authoritativeInformation != null
+				&& MainEntryActivity.authoritativeInformation.getActivity() != null) {
+			List<Activitys> activitys = MainEntryActivity.authoritativeInformation
 					.getActivity();
 			initBanner(activitys);
 		} else {
@@ -100,10 +100,10 @@ public class HuodongActivity extends BaseActivity {
 					jsonString,
 					new TypeToken<Entity<AuthoritativeInformation>>() {
 					}.getType());
-			MainActivity.authoritativeInformation = baseEntity3.getData();
-			if (MainActivity.authoritativeInformation != null
-					&& MainActivity.authoritativeInformation.getActivity() != null) {
-				List<Activitys> activitys = MainActivity.authoritativeInformation
+			MainEntryActivity.authoritativeInformation = baseEntity3.getData();
+			if (MainEntryActivity.authoritativeInformation != null
+					&& MainEntryActivity.authoritativeInformation.getActivity() != null) {
+				List<Activitys> activitys = MainEntryActivity.authoritativeInformation
 						.getActivity();
 				initBanner(activitys);
 			}
