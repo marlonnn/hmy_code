@@ -1,5 +1,7 @@
 package com.BC.entertainmentgravitation.fragment;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.http.NameValuePair;
@@ -11,19 +13,33 @@ import android.support.annotation.Nullable;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.BC.entertainmentgravitation.R;
+import com.BC.entertainmentgravitation.entity.FHNEntity;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.netease.nim.uikit.common.ui.ptr.PullToRefreshBase;
 import com.netease.nim.uikit.common.ui.ptr.PullToRefreshGridView;
 import com.netease.nim.uikit.common.ui.ptr.PullToRefreshBase.OnRefreshListener2;
+import com.summer.adapter.CommonAdapter;
+import com.summer.config.Config;
 import com.summer.factory.ThreadPoolFactory;
 import com.summer.fragment.BaseFragment;
 import com.summer.handler.InfoHandler;
+import com.summer.json.Entity;
 import com.summer.task.HttpBaseTask;
 import com.summer.treadpool.ThreadPoolConst;
+import com.summer.utils.JsonUtil;
+import com.summer.utils.ToastUtil;
 import com.summer.utils.UrlUtil;
+import com.summer.view.CircularImage;
 
 /**
  * 明星列表 热门
@@ -33,8 +49,11 @@ import com.summer.utils.UrlUtil;
 public class HotFragment extends BaseFragment{
 	
 	private View rootView;
+	private int pageIndex = 1;
 	private PullToRefreshGridView pGridViewHot;
-	
+	private CommonAdapter<FHNEntity> adapter;
+	private List<FHNEntity> hotList = new ArrayList<>();;
+	private Gson gson;
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
@@ -42,6 +61,8 @@ public class HotFragment extends BaseFragment{
 
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState) {
+		gson = new Gson();
+		sendHotStarListRequest();
 		super.onCreate(savedInstanceState);
 	}
 	
@@ -81,6 +102,7 @@ public class HotFragment extends BaseFragment{
 	@Override
 	public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
+		initAdapter();
 		initView();
 	}
 	
@@ -88,7 +110,10 @@ public class HotFragment extends BaseFragment{
 	{
 		pGridViewHot = (PullToRefreshGridView) rootView.findViewById(R.id.pGridView);
 		pGridViewHot.getRefreshableView().setNumColumns(1);
+		pGridViewHot.getRefreshableView().setVerticalSpacing(10);
+		pGridViewHot.setMode(PullToRefreshBase.Mode.BOTH);
 		pGridViewHot.setOnRefreshListener(refreshListener);
+		pGridViewHot.setAdapter(adapter);
 	}
 
 	OnRefreshListener2<GridView> refreshListener = new OnRefreshListener2<GridView>() {
@@ -107,7 +132,7 @@ public class HotFragment extends BaseFragment{
 					"释放开始刷新");
 			refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(
 					"最后更新时间:" + time);
-
+			pageIndex = 1;
 			sendHotStarListRequest();
 
 		}
@@ -132,9 +157,79 @@ public class HotFragment extends BaseFragment{
 
 	};
 	
-	private void sendHotStarListRequest()
+	
+	private void initAdapter()
 	{
+		adapter = new CommonAdapter<FHNEntity>(getActivity(), R.layout.fragment_hot_item, hotList) {
+
+			@Override
+			public void convert(
+					ViewHolder viewHolder,
+					FHNEntity item) {
+				try {
+					CircularImage cPortrait = (CircularImage) viewHolder.getView(R.id.cImagePortrait);
+					TextView Name = (TextView)viewHolder.getView(R.id.txtViewName);
+					TextView Location = (TextView)viewHolder.getView(R.id.txtViewLocation);
+					TextView People = (TextView)viewHolder.getView(R.id.txtViewPeople);
+					ImageView Status = (ImageView)viewHolder.getView(R.id.imgViewStatus);
+					ImageView imgPortrait = (ImageView)viewHolder.getView(R.id.imgViewPortrait);
+					if (item != null)
+					{
+						Name.setText(item.getStar_names());
+						Location.setText(item.getRegion());
+						if (item.getPeoples() == null || item.getPeoples().isEmpty())
+						{
+							People.setText(item.getPeoples());
+						}
+						
+						Glide.with(getActivity()).load(item.getPortrait())
+						.centerCrop()
+						.diskCacheStrategy(DiskCacheStrategy.ALL)
+						.placeholder(R.drawable.home_image).into(imgPortrait);
+						imgPortrait.setOnClickListener(new OnClickListener() {
+							
+							@Override
+							public void onClick(View v) {
+								
+							}
+						});
+						Glide.with(getActivity()).load(item.getHead_portrait())
+						.centerCrop()
+						.diskCacheStrategy(DiskCacheStrategy.ALL)
+						.placeholder(R.drawable.avatar_def).into(cPortrait);
+						imgPortrait.setOnClickListener(new OnClickListener() {
+							
+							@Override
+							public void onClick(View v) {
+								
+							}
+						});
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		};
+	}
+	
+	/**
+	 * 获取信息
+	 */
+	private void sendHotStarListRequest() {
+		if (Config.User == null) {
+			ToastUtil.show(getActivity(), "无法获取信息");
+			return;
+		}
+		HashMap<String, String> entity = new HashMap<String, String>();
+
+		entity.put("clientID", Config.User.getClientID());
+		entity.put("The_page_number", "" + pageIndex);
+		entity.put("type", "" + 1);
+
 		
+		ShowProgressDialog("获取热门用户基本信息...");		
+		List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
+		addToThreadPool(Config.in_comparison_to_listApply_to_be_a_platform_star_, "send search request", params);
 	}
 	
     private void addToThreadPool(int taskType, String Tag, List<NameValuePair> params)
@@ -146,9 +241,40 @@ public class HotFragment extends BaseFragment{
     	ThreadPoolFactory.getThreadPoolManager().addTask(httpTask);
     }
     
+	private void addRanking() {
+		if (hotList == null) {
+			return;
+		}
+		if (pageIndex == 1) {// 第一页时，先清空数据集
+			adapter.clearAll();
+		}
+		pageIndex++;
+		adapter.add(hotList);
+	}
+    
+	@Override
+	public void onInfoReceived(int errcode, HashMap<String, Object> items) {
+		// TODO Auto-generated method stub
+		super.onInfoReceived(errcode, items);
+		pGridViewHot.onRefreshComplete();
+	}
+	
 	@Override
 	public void RequestSuccessful(String jsonString, int taskType) {
-		
+		switch(taskType)
+		{
+		case Config.in_comparison_to_listApply_to_be_a_platform_star_:
+			Entity<List<FHNEntity>> baseEntity = gson.fromJson(jsonString,
+					new TypeToken<Entity<List<FHNEntity>>>() {
+					}.getType());
+			hotList = baseEntity.getData();
+			if (hotList != null && hotList.size() > 0) {
+				addRanking();
+			} else {
+				ToastUtil.show(getActivity(), "没有更多数据了");
+			}
+			break;
+		}
 	}
 
 }

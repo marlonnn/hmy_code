@@ -65,12 +65,12 @@
 	            android:layout_height="wrap_content"
 	            android:textColor="#FF34B3"
 	            android:textSize="20dp"
-	            android:text="9999" />
+	            android:text="0" />
 	        <TextView
 	            android:id="@+id/txtViewDescription"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
-	            android:text="人在看" />          
+	            android:text="在看" />          
         </LinearLayout>
 
 
@@ -79,22 +79,21 @@
    <RelativeLayout
        android:id="@+id/rLayoutBottom"
        android:layout_width="match_parent"
-       android:layout_height="match_parent">
+       android:layout_height="wrap_content">
        <ImageView
 	       android:id="@+id/imgViewPortrait"
 	       android:layout_width="match_parent"
-	       android:layout_height="match_parent"
-	       android:src="@drawable/avatar_def" />
+	       android:layout_height="300dp" />
 
-       <TextView
-           android:id="@+id/txtViewStatus"
+       <ImageView
+           android:id="@+id/imgViewStatus"
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
            android:layout_alignParentRight="true"
            android:layout_alignParentTop="true"
            android:layout_marginRight="20dp"
            android:layout_marginTop="20dp"
-           android:text="直播中" />
+           android:background="@drawable/fragment_live"/>
 
    </RelativeLayout>
 

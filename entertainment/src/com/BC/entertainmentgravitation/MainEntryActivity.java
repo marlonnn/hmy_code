@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.BC.entertainment.cache.ChatCache;
 import com.BC.entertainment.cache.InfoCache;
+import com.BC.entertainment.cache.StarCache;
 import com.BC.entertainment.chatroom.helper.LogoutHelper;
 import com.BC.entertainmentgravitation.R;
 import org.apache.http.NameValuePair;
@@ -581,7 +582,8 @@ public class MainEntryActivity extends BaseActivity implements OnClickListener, 
 		 * 排行榜
 		 */
 		case R.id.toLevel:
-			intent = new Intent(this, StarLevelActivity.class);
+//			intent = new Intent(this, StarLevelActivity.class);
+			intent = new Intent(this, StarListActivity.class);
 			startActivity(intent);
 			break;
 		/**
@@ -751,6 +753,7 @@ public class MainEntryActivity extends BaseActivity implements OnClickListener, 
 						new TypeToken<Entity<List<Ranking>>>() {
 						}.getType());
 				ranking.addAll(baseEntity4.getData());
+				StarCache.getInstance().setRanking(ranking);
 				if (ranking != null && baseEntity4.getData().size() > 0) {
 					if (selectIndex != 0) {
 						selectIndex++;

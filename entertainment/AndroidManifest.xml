@@ -301,6 +301,11 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="landscape" >
         </activity>
+        <activity
+            android:name=".StarListActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" >
+        </activity>
     </application>
 
 </manifest>

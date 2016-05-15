@@ -162,6 +162,7 @@
 		        <ImageView
 		            android:layout_width="45dp"
 		            android:layout_height="45dp"
+		            android:layout_marginEnd="3dp"
 		            android:id="@+id/imageView_share"
 		            android:src="@drawable/fragment_share"
 		            android:layout_alignParentTop="true"
@@ -170,6 +171,7 @@
 		        <ImageView
 		            android:layout_width="45dp"
 		            android:layout_height="45dp"
+		            android:layout_marginEnd="3dp"
 		            android:id="@+id/imageView_focus"
 		            android:src="@drawable/fragment_focus"
 		            android:layout_alignParentTop="true"
@@ -178,6 +180,7 @@
 		        <ImageView
 		            android:layout_width="45dp"
 		            android:layout_height="45dp"
+		            android:layout_marginEnd="3dp"
 		            android:id="@+id/imageView_gift"
 		            android:src="@drawable/fragment_gift"
 		            android:layout_alignParentTop="true"
@@ -186,6 +189,7 @@
 		        <ImageView
 		            android:layout_width="45dp"
 		            android:layout_height="45dp"
+		            android:layout_marginEnd="3dp"
 		            android:id="@+id/imageView_camera"
 		            android:src="@drawable/fragment_camera"
 		            android:layout_alignParentTop="true"
@@ -194,6 +198,7 @@
 		        <ImageView
 		            android:layout_width="45dp"
 		            android:layout_height="45dp"
+		            android:layout_marginEnd="3dp"
 		            android:id="@+id/imageView_divest"
 		            android:src="@drawable/fragment_divest"
 		            android:layout_alignParentTop="true"
@@ -202,6 +207,7 @@
 		        <ImageView
 		            android:layout_width="45dp"
 		            android:layout_height="45dp"
+		            android:layout_marginEnd="3dp"
 		            android:id="@+id/imageView_invest"
 		            android:src="@drawable/fragment_invest"
 		            android:layout_alignParentTop="true"

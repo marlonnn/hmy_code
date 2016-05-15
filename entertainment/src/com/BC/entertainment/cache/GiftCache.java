@@ -39,6 +39,16 @@ public class GiftCache {
 	{
 		gifts = new ArrayList<BaseGift>();
 		//一下是测试数据
+		
+		BaseGift gift20 = new Gift(CustomAttachmentType.emotion, GiftCategory.emotion_rose, "一枝鲜花", R.drawable.emotion_rose, 10, 100);
+		gifts.add(gift20);
+		
+		BaseGift gift21 = new Gift(CustomAttachmentType.emotion, GiftCategory.emotion_flowers, "一捧鲜花", R.drawable.emotion_flowers, 100, 1000);
+		gifts.add(gift21);
+		
+		BaseGift gift22 = new Gift(CustomAttachmentType.emotion, GiftCategory.emotion_touch, "摸摸", R.drawable.emotion_touch, 500, 5000);
+		gifts.add(gift22);
+		
 		BaseGift gift1 = new Gift(CustomAttachmentType.font, GiftCategory.font_bxjj, "悲喜交加", R.drawable.emotion_bxjj, 600, 6000);
 		gifts.add(gift1);
 		BaseGift gift2 = new Gift(CustomAttachmentType.font, GiftCategory.font_cygs, "察言观色", R.drawable.emotion_cygs, 600, 6000);
@@ -85,15 +95,6 @@ public class GiftCache {
 		gifts.add(gift18);
 		BaseGift gift19 = new Gift(CustomAttachmentType.font, GiftCategory.font_xxrk, "欣喜若狂", R.drawable.emotion_xxrk, 600, 6000);
 		gifts.add(gift19);
-		
-		BaseGift gift20 = new Gift(CustomAttachmentType.emotion, GiftCategory.emotion_rose, "一枝鲜花", R.drawable.emotion_rose, 10, 100);
-		gifts.add(gift20);
-		
-		BaseGift gift21 = new Gift(CustomAttachmentType.emotion, GiftCategory.emotion_flowers, "一捧鲜花", R.drawable.emotion_flowers, 100, 1000);
-		gifts.add(gift21);
-		
-		BaseGift gift22 = new Gift(CustomAttachmentType.emotion, GiftCategory.emotion_touch, "摸摸", R.drawable.emotion_touch, 500, 5000);
-		gifts.add(gift22);
 		
 		BaseGift gift23 = new Gift(CustomAttachmentType.emotion, GiftCategory.emotion_kiss, "亲亲", R.drawable.emotion_kiss, 1000, 10000);
 		gifts.add(gift23);

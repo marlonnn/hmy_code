@@ -63,9 +63,9 @@ public class AlbumActivity extends BaseActivity implements OnClickListener, OnIt
 	boolean canEdit = false;
 	String fileName = "";
 
-	ArrayList<Photo_images> more_pictures = new ArrayList<Photo_images>();
-	ArrayList<Photo_images> more_picturesImages = new ArrayList<Photo_images>();
-	ArrayList<Photo_images> more_picturesPhotographs = new ArrayList<Photo_images>();
+	ArrayList<Photo_images> more_pictures = new ArrayList<Photo_images>();//生活照
+	ArrayList<Photo_images> more_picturesImages = new ArrayList<Photo_images>();//写真
+	ArrayList<Photo_images> more_picturesPhotographs = new ArrayList<Photo_images>();//剧照
 
 	private CommonAdapter<Photo_images> adapter1;
 	private CommonAdapter<Photo_images> adapter2;

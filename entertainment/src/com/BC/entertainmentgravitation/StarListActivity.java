@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -23,7 +24,6 @@ import com.google.gson.Gson;
 import com.summer.activity.BaseActivity;
 import com.summer.factory.ThreadPoolFactory;
 import com.summer.handler.InfoHandler;
-import com.summer.logger.XLog;
 import com.summer.task.HttpBaseTask;
 import com.summer.treadpool.ThreadPoolConst;
 import com.summer.utils.UrlUtil;
@@ -52,14 +52,17 @@ public class StarListActivity extends BaseActivity implements OnClickListener, O
 	
 	private void initFragment()
 	{
-		
+		focusFragment = new FocusFragment();
+		hotFragment = new HotFragment();
+		newFragment = new NewFragment();
 	}
 	
+	@SuppressWarnings("deprecation")
 	private void initView()
 	{
 		gson = new Gson();
 		FragmentManager fragmentManager = this.getSupportFragmentManager();
-		findViewById(R.id.imageViewBack).setOnClickListener(this);
+		findViewById(R.id.imgViewBack).setOnClickListener(this);
 
 		radio = (RadioGroup) findViewById(R.id.rGroup);
 		radio.setOnCheckedChangeListener(new OnCheckedChangeListener() {
@@ -90,7 +93,7 @@ public class StarListActivity extends BaseActivity implements OnClickListener, O
 			}
 		});
 		
-		viewPager = (ViewPager) findViewById(R.id.view_pager);
+		viewPager = (ViewPager) findViewById(R.id.vPager);
         viewPager.setAdapter(new FragmentPagerAdapter(fragmentManager) {
             @Override
             public Fragment getItem(int position) {
@@ -101,18 +104,21 @@ public class StarListActivity extends BaseActivity implements OnClickListener, O
 				 * 关注
 				 */
             	case 0:
+//            		radio.check(R.id.tbtnFocus);
             		fragment = focusFragment;
             		break;
 				/**
 				 * 热门
 				 */
             	case 1:
+//            		radio.check(R.id.rbtnHot);
             		fragment = hotFragment;
             		break;
 				/**
 				 * 最新
 				 */
             	case 2:
+//            		radio.check(R.id.rbtnNew);
             		fragment = newFragment;
             		break;
             	}
@@ -125,6 +131,45 @@ public class StarListActivity extends BaseActivity implements OnClickListener, O
             }
         });
         viewPager.setCurrentItem(1);
+        radio.check(R.id.rbtnHot);
+        
+        viewPager.setOnPageChangeListener(new OnPageChangeListener() {
+			
+			@Override
+			public void onPageSelected(int arg0) {
+				switch(arg0)
+				{
+				/**
+				 * 关注
+				 */
+            	case 0:
+            		radio.check(R.id.tbtnFocus);
+            		break;
+				/**
+				 * 热门
+				 */
+            	case 1:
+            		radio.check(R.id.rbtnHot);
+            		break;
+				/**
+				 * 最新
+				 */
+            	case 2:
+            		radio.check(R.id.rbtnNew);
+            		break;
+				}
+			}
+			
+			@Override
+			public void onPageScrolled(int arg0, float arg1, int arg2) {
+				
+			}
+			
+			@Override
+			public void onPageScrollStateChanged(int arg0) {
+				
+			}
+		});
 	}
 	
     private void addToThreadPool(int taskType, String Tag, List<NameValuePair> params)

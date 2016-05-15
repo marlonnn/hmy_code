@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_gravity="center"
+    android:layout_width="165dp"
+    android:layout_height="300dp"
+    android:layout_marginLeft="10dp"
+    android:layout_marginTop="10dp"
+    android:layout_marginRight="10dp"
+    android:layout_marginBottom="10dp"
+    android:background="@drawable/fragment_new_corners"
+    android:orientation="vertical" >
+    <RelativeLayout
+        android:id="@+id/rLayoutTop"
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="205dp">
+        <ImageView
+	        android:id="@+id/imgViewPortrait"
+	        android:layout_centerHorizontal="true"
+	        android:layout_centerVertical="true"
+	        android:layout_width="match_parent"
+	        android:scaleType="fitXY"
+	        android:layout_height="205dp"/>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/lLayoutBottom"
+        android:layout_width="match_parent"
+        android:layout_height="95dp"
+        android:orientation="vertical" >
+
+        <RelativeLayout
+            android:id="@+id/rLayout"
+            android:layout_width="match_parent"
+            android:layout_height="40dp" >
+
+            <TextView
+                android:id="@+id/txtViewName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:textSize="14dp"
+                android:text="范冰冰" />
+
+            <ImageView
+                android:id="@+id/imgViewLocation"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="55dp"
+                android:background="@drawable/fragment_hot_location" />
+
+            <TextView
+                android:id="@+id/txtViewLocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                android:text="北京" />
+
+            <ImageView
+                android:id="@+id/imgViewDivider"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/fragment_new_divider" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="55dp" >
+
+            <ImageView
+                android:id="@+id/imgViewLabel"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:src="@drawable/fragment_new_label" />
+
+            <TextView
+                android:id="@+id/txtViewJob"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/imgViewLabel"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@+id/imgViewLabel"
+                android:text="演员" />
+
+            <ImageView
+                android:id="@+id/imgViewIndex"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_alignLeft="@+id/imgViewLabel"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="5dp"
+                android:src="@drawable/fragment_new_label" />
+
+            <TextView
+                android:id="@+id/txtViewIndex"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/imgViewIndex"
+                android:layout_alignLeft="@+id/txtViewJob"
+                android:text="指数：100" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

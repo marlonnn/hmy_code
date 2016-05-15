@@ -122,7 +122,7 @@ class HotViewHolder extends ViewHolder{
         Name = (TextView) v.findViewById(R.id.txtViewName);
         Location = (TextView) v.findViewById(R.id.txtViewLocation);
         People = (TextView) v.findViewById(R.id.txtViewPeople);
-        Status = (TextView) v.findViewById(R.id.txtViewStatus);
+//        Status = (TextView) v.findViewById(R.id.txtViewStatus);
         imgPortrait = (ImageView) v.findViewById(R.id.imgViewPortrait);
     }
 	

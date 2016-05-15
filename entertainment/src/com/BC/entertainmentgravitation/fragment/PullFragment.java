@@ -1,8 +1,11 @@
 package com.BC.entertainmentgravitation.fragment;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.http.NameValuePair;
 import org.json.JSONException;
@@ -137,6 +140,12 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
     
     
     private IPullMedia iPullMedia;
+    
+    private static final int LIMIT = 100;
+    private long updateTime = 0; // 非游客的updateTime
+    private long enterTime = 0; // 游客的enterTime
+
+    private boolean isNormalEmpty = false; // 固定成员是否拉取完
     
 	/**
 	 * 直播拉流时切换摄像头接口
@@ -278,13 +287,44 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
 	{
 		initListView();
 		initPortrait();
-		fetchOnlinePeople();
+//		fetchOnlinePeople();
+		fetchData();
 		initOnlinePortrait();
 	}
 	
     private void fetchOnlinePeople()
     {
     	fetchRoomMembers(container.chatRoom.getChatroomid(), MemberQueryType.ONLINE_NORMAL, 0, 100, null);
+    }
+    
+    private void fetchData() {
+        if (!isNormalEmpty) {
+            // 拉取固定在线成员
+            getMembers(MemberQueryType.ONLINE_NORMAL, updateTime, 0);
+        } else {
+            // 拉取非固定成员
+            getMembers(MemberQueryType.GUEST, enterTime, 0);
+        }
+    }
+    
+    /**
+     * 获取成员列表
+     */
+    private void getMembers(final MemberQueryType memberQueryType, final long time, int limit) {
+        fetchRoomMembers(container.chatRoom.getChatroomid(), memberQueryType, time, (LIMIT - limit), new SimpleCallback<List<ChatRoomMember>>() {
+            @Override
+            public void onResult(boolean success, List<ChatRoomMember> result) {
+                if (success) {
+
+                    ChatCache.getInstance().AddMember(result);
+                    if (memberQueryType == MemberQueryType.ONLINE_NORMAL && result.size() < LIMIT) {
+                        isNormalEmpty = true; // 固定成员已经拉完
+                        getMembers(MemberQueryType.GUEST, enterTime, result.size());
+                    }
+                }
+
+            }
+        });
     }
 	
     /**

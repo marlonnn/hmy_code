@@ -150,7 +150,7 @@ public class IncomeActivity extends BaseActivity implements OnClickListener{
 				if (baseEntity != null && baseEntity.getData() != null)
 				{
 					WithDraw w = baseEntity.getData();
-					yuPiao.setText(String.valueOf(w.getUser_can_exchange()));
+					yuPiao.setText(String.valueOf(w.getUser_piao_left()));
 					InfoCache.getInstance().getPersonalInfo().setPiaoLeft(w.getUser_piao_left());
 					withDraw.setText(String.valueOf(w.getCash()));
 				}
