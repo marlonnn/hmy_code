@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:orientation="vertical" >
+    
+    
+     <com.netease.nim.uikit.common.ui.ptr.PullToRefreshGridView
+        android:id="@+id/pGridViewFocus"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+    </com.netease.nim.uikit.common.ui.ptr.PullToRefreshGridView>
+
+    <RelativeLayout
+        android:id="@+id/rLayout"
+        android:visibility="gone"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="24dp"
+            android:layout_marginTop="22dp"
+            android:textColor="@color/white"
+            android:text="关注好友的直播" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_below="@+id/textView1" >
+
+            <ImageView
+                android:id="@+id/imgViewBg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scaleType="centerCrop"
+                android:src="@drawable/fragment_star_focus_bg" />
+
+            <TextView
+                android:id="@+id/textViewDesc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="60dp"
+                android:textColor="@color/white"
+                android:text="你的好友静悄悄\n此时还没有直播" />
+
+            <ImageView
+                android:id="@+id/imgViewBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textViewDesc"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="53dp"
+                android:src="@drawable/fragment_star_focus_img" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</LinearLayout>

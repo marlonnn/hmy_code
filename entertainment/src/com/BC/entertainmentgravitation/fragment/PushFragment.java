@@ -421,6 +421,7 @@ public class PushFragment extends BaseFragment implements OnClickListener, Modul
     {
     	try {
 			headPortrait = (CircularImage) rootView.findViewById(R.id.portrait);
+			headPortrait.setOnClickListener(this);
 			Glide.with(this)
 			.load(Config.User.getImage())
 			.centerCrop().diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -454,6 +455,7 @@ public class PushFragment extends BaseFragment implements OnClickListener, Modul
         recycleAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
+            	ToastUtil.show(container.activity, "此功能正在努力开发中，敬请期待...");
             }
             @Override
             public void onItemLongClick(View view, int position) {
@@ -849,6 +851,12 @@ public class PushFragment extends BaseFragment implements OnClickListener, Modul
 		 * 查看直播间娱票详情	
 		 */
 		case R.id.imageView3:
+			ToastUtil.show(container.activity, "此功能正在努力开发中，敬请期待...");
+			break;
+		/**
+		 * 点击主播头像
+		 */
+		case R.id.portrait:
 			ToastUtil.show(container.activity, "此功能正在努力开发中，敬请期待...");
 			break;
 		}

@@ -6,7 +6,6 @@ import java.util.List;
 
 import com.BC.entertainment.cache.ChatCache;
 import com.BC.entertainment.cache.InfoCache;
-import com.BC.entertainment.cache.StarCache;
 import com.BC.entertainment.chatroom.helper.LogoutHelper;
 import com.BC.entertainmentgravitation.R;
 import org.apache.http.NameValuePair;
@@ -24,7 +23,6 @@ import com.BC.entertainmentgravitation.fragment.JiaGeQuXianFragment2;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.netease.nim.uikit.common.ui.dialog.DialogMaker;
 import com.netease.nimlib.sdk.AbortableFuture;
@@ -753,7 +751,6 @@ public class MainEntryActivity extends BaseActivity implements OnClickListener, 
 						new TypeToken<Entity<List<Ranking>>>() {
 						}.getType());
 				ranking.addAll(baseEntity4.getData());
-				StarCache.getInstance().setRanking(ranking);
 				if (ranking != null && baseEntity4.getData().size() > 0) {
 					if (selectIndex != 0) {
 						selectIndex++;

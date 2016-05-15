@@ -46,6 +46,11 @@ public class ChatCache {
     	{
     		if (!memberCache.containsKey(member.getName()))
     		{
+    			String s[] = member.getPortrait().split("/");
+    			if (s[2] != null && !s[2].contains("app.haimianyu.cn"))
+    			{
+    				member.setPortrait("http://app.haimianyu.cn/" + member.getPortrait());
+    			}
         		memberCache.put(member.getName(), member);
         		onlinePeopleitems.add(member);
     		}
@@ -63,7 +68,15 @@ public class ChatCache {
         			Member m = new Member();
         			m.setName(member.getAccount());
         			m.setNick(member.getNick());
-        			m.setPortrait(member.getAvatar());
+        			String s[] = member.getAvatar().split("/");
+        			if (s[2] != null && !s[2].contains("app.haimianyu.cn"))
+        			{
+            			m.setPortrait("http://app.haimianyu.cn/" + member.getAvatar());
+        			}
+        			else
+        			{
+            			m.setPortrait(member.getAvatar());
+        			}
             		memberCache.put(member.getAccount(), m);
             		onlinePeopleitems.add(m);
         		}

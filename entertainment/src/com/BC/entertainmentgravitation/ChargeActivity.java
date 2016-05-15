@@ -259,8 +259,8 @@ public class ChargeActivity extends BaseActivity implements OnClickListener, OnI
 		wxPrePayOrder = new WxPrePayOrder();
 		wxPrePayOrder.setClientID(Config.User.getClientID());
 		wxPrePayOrder.setProductname(Config.BODY);
-//		wxPrePayOrder.setPrice(Integer.parseInt(yubi.getPrice()) * 100);
-		wxPrePayOrder.setPrice(1);
+		wxPrePayOrder.setPrice(Integer.parseInt(yubi.getPrice()) * 100);
+//		wxPrePayOrder.setPrice(1);
 		wxPrePayOrder.setAmount(yubi.getAmount());
 		
 		String content = JsonUtil.toString(wxPrePayOrder);

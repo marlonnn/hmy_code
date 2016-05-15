@@ -1,11 +1,8 @@
 package com.BC.entertainmentgravitation.fragment;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.http.NameValuePair;
 import org.json.JSONException;
@@ -443,6 +440,7 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
     private void initPortrait()
     {
     	headPortrait = (CircularImage) rootView.findViewById(R.id.portrait);
+    	headPortrait.setOnClickListener(this);
 		Glide.with(this)
 		.load(InfoCache.getInstance().getStartInfo().getHead_portrait())
 		.centerCrop().diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -473,6 +471,7 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
         recycleAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
+            	ToastUtil.show(container.activity, "此功能正在努力开发中，敬请期待...");
             }
             @Override
             public void onItemLongClick(View view, int position) {
@@ -520,7 +519,7 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
 		btnFocus = (ImageView) rootView.findViewById(R.id.imageView_focus);
 		btnInvest = (ImageView) rootView.findViewById(R.id.imageView_invest);
 		btnDivest = (ImageView) rootView.findViewById(R.id.imageView_divest);
-		btnYuPaoDetail = (ImageView) rootView.findViewById(R.id.imageView3);
+		btnYuPaoDetail = (ImageView) rootView.findViewById(R.id.imgViewMoneyDetail);
 		btnYuPaoDetail.setOnClickListener(this);
 		btnSwitch.setVisibility(View.GONE);
 		btnChat.setOnClickListener(this);
@@ -1017,7 +1016,13 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
 		/**
 		 * 查看直播间娱票详情	
 		 */
-		case R.id.imageView3:
+		case R.id.imgViewMoneyDetail:
+			ToastUtil.show(container.activity, "此功能正在努力开发中，敬请期待...");
+			break;
+		/**
+		 * 点击主播头像
+		 */
+		case R.id.portrait:
 			ToastUtil.show(container.activity, "此功能正在努力开发中，敬请期待...");
 			break;
 		}

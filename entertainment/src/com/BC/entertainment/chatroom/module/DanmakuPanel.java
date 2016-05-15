@@ -29,6 +29,8 @@ import android.text.style.ImageSpan;
 import android.view.View;
 
 import com.BC.entertainmentgravitation.R;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomMessage;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomNotificationAttachment;
 import com.netease.nimlib.sdk.msg.constant.MsgDirectionEnum;
@@ -36,6 +38,7 @@ import com.netease.nimlib.sdk.msg.constant.NotificationType;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.summer.config.Config;
 import com.summer.logger.XLog;
+import com.summer.view.CircularImage;
 
 /**
  * 

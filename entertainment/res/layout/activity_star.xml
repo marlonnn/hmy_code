@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/activity_charge_bg"
+    android:orientation="vertical" >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp" >
+
+        <ImageView
+            android:id="@+id/imgViewBack"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:src="@drawable/activity_charge_back" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true" >
+
+            <!-- <ImageView
+                android:id="@+id/imageViewIcon"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:src="@drawable/activity_personal_album_base" /> -->
+
+            <TextView
+                android:id="@+id/txtViewCharge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textSize="22dp"
+                android:text="明星列表" />
+        </LinearLayout>
+
+    </RelativeLayout>
+    <RadioGroup
+        android:id="@+id/rGroup"
+        android:layout_width="match_parent"
+        android:layout_height="40dip"
+        android:background="#4c0528"
+        android:gravity="center_vertical"
+        android:orientation="horizontal" >
+
+        <RadioButton
+            android:id="@+id/tbtnFocus"
+            style="@style/routine_select_btn_style"
+            android:layout_width="60dip"
+            android:layout_height="40dip"
+            android:layout_weight="1"
+            android:checked="true"
+            android:text="关注"
+            android:textSize="10dip" />
+
+        <RadioButton
+            android:id="@+id/rbtnHot"
+            style="@style/routine_select_btn_style"
+            android:layout_width="60dip"
+            android:layout_height="40dip"
+            android:layout_weight="1"
+            android:text="热门"
+            android:textSize="10dip" />
+
+        <RadioButton
+            android:id="@+id/rbtnNew"
+            style="@style/routine_select_btn_style"
+            android:layout_width="60dip"
+            android:layout_height="40dip"
+            android:layout_weight="1"
+            android:text="最新"
+            android:textSize="10dip" />
+    </RadioGroup>
+    <android.support.v4.view.ViewPager
+        android:id="@+id/vPager"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+<!--     <com.netease.nim.uikit.common.ui.ptr.PullToRefreshGridView
+        android:id="@+id/pullToRefreshGridView1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+    </com.netease.nim.uikit.common.ui.ptr.PullToRefreshGridView> -->
+</LinearLayout>

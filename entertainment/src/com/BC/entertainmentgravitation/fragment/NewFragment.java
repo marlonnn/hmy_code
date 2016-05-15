@@ -8,6 +8,7 @@ import org.apache.http.NameValuePair;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.format.DateUtils;
@@ -19,6 +20,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.BC.entertainmentgravitation.DetailsActivity;
 import com.BC.entertainmentgravitation.R;
 import com.BC.entertainmentgravitation.entity.FHNEntity;
 import com.bumptech.glide.Glide;
@@ -128,7 +130,7 @@ public class NewFragment extends BaseFragment{
 			@Override
 			public void convert(
 					ViewHolder viewHolder,
-					FHNEntity item) {
+					final FHNEntity item) {
 				try {
 					ImageView imgPortrait = (ImageView)viewHolder.getView(R.id.imgViewPortrait);
 					TextView Name = (TextView)viewHolder.getView(R.id.txtViewName);
@@ -148,7 +150,9 @@ public class NewFragment extends BaseFragment{
 							
 							@Override
 							public void onClick(View v) {
-								
+								Intent i = new Intent(getActivity(), DetailsActivity.class);
+								i.putExtra("userID", item.getStar_ID());
+								startActivity(i);
 							}
 						});
 					}
@@ -212,12 +216,12 @@ public class NewFragment extends BaseFragment{
 
 		entity.put("clientID", Config.User.getClientID());
 		entity.put("The_page_number", "" + pageIndex);
-		entity.put("type", "" + 1);
+		entity.put("type", "3");
 
 		
 		ShowProgressDialog("获取热门用户基本信息...");		
 		List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
-		addToThreadPool(Config.in_comparison_to_listApply_to_be_a_platform_star_, "send search request", params);
+		addToThreadPool(Config.stat_list, "send search request", params);
 	}
 	
     private void addToThreadPool(int taskType, String Tag, List<NameValuePair> params)
@@ -251,7 +255,7 @@ public class NewFragment extends BaseFragment{
 	public void RequestSuccessful(String jsonString, int taskType) {
 		switch(taskType)
 		{
-		case Config.in_comparison_to_listApply_to_be_a_platform_star_:
+		case Config.stat_list:
 			Entity<List<FHNEntity>> baseEntity = gson.fromJson(jsonString,
 					new TypeToken<Entity<List<FHNEntity>>>() {
 					}.getType());

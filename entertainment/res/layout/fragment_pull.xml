@@ -93,7 +93,7 @@
 		            android:src="@drawable/fragment_money" />
 		
 		        <ImageView
-		            android:id="@+id/imageView3"
+		            android:id="@+id/imgViewMoneyDetail"
 		            android:layout_width="wrap_content"
 		            android:layout_height="wrap_content"
 		            android:layout_alignEnd="@+id/imageView2"
