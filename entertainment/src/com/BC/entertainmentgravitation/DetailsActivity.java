@@ -140,7 +140,7 @@ public class DetailsActivity extends BaseActivity implements OnClickListener{
 		// 关闭sso授权
 		oks.disableSSOWhenAuthorize();
 		// 分享时Notification的图标和文字
-		oks.setTitle("看演员，去海绵娱直播APP!");
+		oks.setTitle("演员在直播！导演你快来......");
 		oks.setText("看演员，去海绵娱直播APP!" + "(" + Config.User.getNickName()
 				+ "正在直播中)");
 		oks.setSite(getString(R.string.app_name));

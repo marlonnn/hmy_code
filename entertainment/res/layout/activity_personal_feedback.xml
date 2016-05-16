@@ -39,38 +39,16 @@
                 android:layout_gravity="center"
                 android:textSize="22dp"
                 android:text="意见反馈" />
-        </LinearLayout>
-    </RelativeLayout>
-         <LinearLayout
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content"
-             android:layout_weight="1"
-             android:orientation="vertical" >
-
-             <TextView
-                 android:id="@+id/textView2"
-                 android:layout_width="wrap_content"
-                 android:layout_height="wrap_content"
-                 android:text="意见反馈"
-                 android:textColor="@color/white" />
-
-             <EditText
-                 android:id="@+id/Describe_the_text"
-                 android:layout_width="match_parent"
-                 android:layout_height="wrap_content"
-                 android:layout_weight="1"
-                 android:background="@null"
-                 android:hint="请输入您宝贵的意见"
-                 android:textColor="@color/white" />
          </LinearLayout>
-
-         <View
-             android:layout_width="match_parent"
-             android:layout_height="1dp"
-             android:background="@color/gray" />
+    </RelativeLayout>
     <LinearLayout
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content" >
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:orientation="vertical" >
+        <LinearLayout
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:orientation="horizontal" >
 	
 	    <Button
 	        android:id="@+id/editButton"
@@ -86,8 +64,20 @@
 	        android:layout_width="100dip"
 	        android:layout_height="30dip"
 	        android:layout_marginLeft="10dip"
+	        android:layout_marginRight="10dp"
 	        android:background="#e1157f"
 	        android:text="退出"
 	        android:textColor="@color/white" />
 	 </LinearLayout>
+
+     <EditText
+         android:id="@+id/Describe_the_text"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:layout_marginLeft="10dp"
+         android:layout_marginRight="10dp"
+         android:background="@null"
+         android:hint="请输入您宝贵的意见"
+         android:textColor="@color/white" />
+     </LinearLayout>
 </LinearLayout>
