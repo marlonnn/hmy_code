@@ -28,6 +28,9 @@ public class CustomAttachParser implements MsgAttachmentParser{
 			case CustomAttachmentType.font:
 				attachment = new FontAttachment(type);
 				break;
+			case CustomAttachmentType.bubble:
+				attachment = new BubbleAttachment(type);
+				break;
 			}
 			
             if (attachment != null) {

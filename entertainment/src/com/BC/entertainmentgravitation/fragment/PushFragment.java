@@ -46,6 +46,7 @@ import com.BC.entertainment.chatroom.extension.EmotionAttachment;
 import com.BC.entertainment.chatroom.extension.FontAttachment;
 import com.BC.entertainment.chatroom.gift.Gift;
 import com.BC.entertainment.chatroom.gift.GiftHelper;
+import com.BC.entertainment.chatroom.module.Bubbling;
 import com.BC.entertainment.chatroom.module.Container;
 import com.BC.entertainment.chatroom.module.DanmakuPanel;
 import com.BC.entertainment.chatroom.module.InputPannel;
@@ -108,6 +109,8 @@ public class PushFragment extends BaseFragment implements OnClickListener, Modul
 	private LinearLayout layoutInput;
 	private TextView totalPiao;//yupiao
 	private RelativeLayout functionView;//底部功能键根布局
+	
+	private Bubbling bubbling;//气泡
 	
     // container
     private Container container;
@@ -270,6 +273,7 @@ public class PushFragment extends BaseFragment implements OnClickListener, Modul
         
         updateVideoStatus(false);//更新聊天室状态
         
+        initBubbleView();
 //        container.activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 	}
 	
@@ -278,6 +282,18 @@ public class PushFragment extends BaseFragment implements OnClickListener, Modul
 		initListView();
 		initPortrait();
 		initOnlinePortrait();
+	}
+	
+	private void initBubbleView()
+	{
+		bubbling = (Bubbling) rootView.findViewById(R.id.bubbling);
+		bubbling.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				bubbling.start();
+			}
+		});
 	}
 	
     /**

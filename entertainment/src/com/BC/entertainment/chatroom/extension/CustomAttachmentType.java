@@ -7,6 +7,7 @@ package com.BC.entertainment.chatroom.extension;
  */
 public interface CustomAttachmentType {
 	
+    int bubble = 0;
     int emotion = 1;
     int font = 2;
 }
