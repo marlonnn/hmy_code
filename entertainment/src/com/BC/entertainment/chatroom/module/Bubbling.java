@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Random;
 
 import com.BC.entertainmentgravitation.R;
-
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
@@ -31,7 +30,7 @@ public class Bubbling extends RelativeLayout{
 	
 	private Context mContext;
 	
-	private final int DEFAULT_COUNT = 10;
+	private final int DEFAULT_COUNT = 9;
 	private final int MAX_DEGREES = 38;
 	private final long DURATION_TOTAL = 2000;
 	private final long DURATION_SCALE = 1500;
@@ -41,10 +40,26 @@ public class Bubbling extends RelativeLayout{
 	private int mCount;
 	
 	private int index = 0;
-	private int mIndex = random.nextInt(DEFAULT_COUNT);;
+	private int mIndex = random.nextInt(DEFAULT_COUNT);//当前的index
 	
 	private View view;
 	
+	public int getIndex() {
+		return index;
+	}
+
+	public void setIndex(int index) {
+		this.index = index;
+	}
+
+	public int getmIndex() {
+		return mIndex;
+	}
+
+	public void setmIndex(int mIndex) {
+		this.mIndex = mIndex;
+	}
+
 	public Bubbling(Context context) {
 		super(context);
 		this.mContext = context;
@@ -108,6 +123,16 @@ public class Bubbling extends RelativeLayout{
 	
 	public void startAnimation() {
 		index = random.nextInt(DEFAULT_COUNT);
+		View view = views.get(index);
+		view.setVisibility(View.VISIBLE);
+		startAnim(index, view);
+	}
+	
+	public void startAnimation(int index) {
+		if (index <0 || index >8)
+		{
+			index = 0;
+		}
 		View view = views.get(index);
 		view.setVisibility(View.VISIBLE);
 		startAnim(index, view);

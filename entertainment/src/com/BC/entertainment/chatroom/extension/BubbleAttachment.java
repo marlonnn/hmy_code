@@ -21,6 +21,7 @@ public class BubbleAttachment extends CustomAttachment {
 	@Override
 	protected void parseData(JSONObject data) {
 		bubble = BubbleCache.getInstance().GetBubble(type, data.getIntValue("category"));
+		bubble.setFirstSend(data.getBooleanValue("isFirstSend"));
 		try {
 			XLog.i("bubble category: " + data.getIntValue("category"));
 		} catch (Exception e) {
@@ -32,6 +33,12 @@ public class BubbleAttachment extends CustomAttachment {
 	protected JSONObject packData() {
         JSONObject data = new JSONObject();
         data.put("category", bubble.getCategory());
+        data.put("isFirstSend", bubble.isFirstSend());
         return data;
+	}
+	
+	public Bubble getBubble()
+	{
+		return bubble;
 	}
 }

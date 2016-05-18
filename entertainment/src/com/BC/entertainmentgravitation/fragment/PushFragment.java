@@ -40,12 +40,14 @@ import com.BC.entertainment.cache.ChatCache;
 import com.BC.entertainment.cache.GiftCache;
 import com.BC.entertainment.cache.InfoCache;
 import com.BC.entertainment.chatroom.extension.BaseEmotion;
+import com.BC.entertainment.chatroom.extension.BubbleAttachment;
 import com.BC.entertainment.chatroom.extension.CustomAttachment;
 import com.BC.entertainment.chatroom.extension.CustomAttachmentType;
 import com.BC.entertainment.chatroom.extension.EmotionAttachment;
 import com.BC.entertainment.chatroom.extension.FontAttachment;
 import com.BC.entertainment.chatroom.gift.Gift;
 import com.BC.entertainment.chatroom.gift.GiftHelper;
+import com.BC.entertainment.chatroom.module.BubbingPanel;
 import com.BC.entertainment.chatroom.module.Bubbling;
 import com.BC.entertainment.chatroom.module.Container;
 import com.BC.entertainment.chatroom.module.DanmakuPanel;
@@ -111,7 +113,7 @@ public class PushFragment extends BaseFragment implements OnClickListener, Modul
 	private RelativeLayout functionView;//底部功能键根布局
 	
 	private Bubbling bubbling;//气泡
-	
+	private boolean isFirst = true;
     // container
     private Container container;
     private ImageView imageViewAnimation;
@@ -129,6 +131,8 @@ public class PushFragment extends BaseFragment implements OnClickListener, Modul
     //module
     private InputPannel inputPanel;
     private DanmakuPanel danmakuPanel;
+    private BubbingPanel bubblePanel;
+    
     private HttpTask httpTask;//更新娱票线程
     private ApplauseGiveConcern applauseGiveConcern;//投资或者撤资
     
@@ -286,12 +290,21 @@ public class PushFragment extends BaseFragment implements OnClickListener, Modul
 	
 	private void initBubbleView()
 	{
+		if (bubblePanel == null)
+		{
+			bubblePanel = new BubbingPanel(container);
+		}
 		bubbling = (Bubbling) rootView.findViewById(R.id.bubbling);
 		bubbling.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
 				bubbling.start();
+				bubblePanel.sendBubbling(isFirst, bubbling.getmIndex());
+				if (isFirst)
+				{
+					isFirst = false;
+				}
 			}
 		});
 	}
@@ -531,6 +544,13 @@ public class PushFragment extends BaseFragment implements OnClickListener, Modul
         			holder.setTextColor(R.id.txtContent, Color.parseColor("#8B658B"));
         		}
         		break;
+        	case CustomAttachmentType.bubble:
+        		BubbleAttachment bubbleAttachment = (BubbleAttachment)customAttachment;
+        		if (bubbleAttachment != null)
+        		{
+        			holder.setText(R.id.txtContent, (member == null ? "" : member.getNick()) + " 我点亮了");
+        		}
+        		break;
         	}
     	}
 
@@ -555,6 +575,19 @@ public class PushFragment extends BaseFragment implements OnClickListener, Modul
         		if (fontAttachment != null)
         		{
         			showAnimate(fontAttachment.getEmotion());
+        		}
+        		break;
+        	case CustomAttachmentType.bubble:
+        		BubbleAttachment bubbleAttachment = (BubbleAttachment)customAttachment;
+        		if (bubbleAttachment != null)
+        		{
+        			bubbling.startAnimation(bubbleAttachment.getBubble().getCategory());
+        			if (bubbleAttachment.getBubble().isFirstSend())
+        			{
+        				//添加到消息列表中，显示 用户名：我点亮了
+//        				Member member = ChatCache.getInstance().getMember(message.getFromAccount());
+        				saveMessage(message, false);
+        			}
         		}
         		break;
         	}

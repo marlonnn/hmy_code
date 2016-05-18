@@ -7,11 +7,13 @@ public class Bubble implements Serializable{
 	
 	private int category;//emotion kind
 	private int customAttachmentType;
+	private boolean isFirstSend;
 	
-	public Bubble(int category)
+	public Bubble(int category, boolean isFirstSend)
 	{
 		this.category = category;
 		this.customAttachmentType = CustomAttachmentType.bubble;
+		this.isFirstSend = isFirstSend;
 	}
 
 	public int getCategory() {
@@ -29,4 +31,13 @@ public class Bubble implements Serializable{
 	public void setCustomAttachmentType(int customAttachmentType) {
 		this.customAttachmentType = customAttachmentType;
 	}
+
+	public boolean isFirstSend() {
+		return isFirstSend;
+	}
+
+	public void setFirstSend(boolean isFirstSend) {
+		this.isFirstSend = isFirstSend;
+	}
+	
 }
