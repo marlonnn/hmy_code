@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.BC.entertainment.adapter.ViewPagerAdapter;
+import com.umeng.analytics.MobclickAgent;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -198,7 +199,7 @@ ViewPager.OnPageChangeListener {
         }
         viewPager.setCurrentItem(position);
     }
-    
+	
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();

@@ -61,6 +61,7 @@ import com.summer.utils.UrlUtil;
 import com.tencent.mm.sdk.modelpay.PayReq;
 import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
+import com.umeng.analytics.MobclickAgent;
 
 public class ChargeActivity extends BaseActivity implements OnClickListener, OnItemClickListener{
 	
@@ -220,14 +221,16 @@ public class ChargeActivity extends BaseActivity implements OnClickListener, OnI
         
 	}
 	
-	@Override
-	protected void onPause() {
-		super.onPause();
-	}
-
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
+    
 	@Override
 	protected void onResume() {
 		super.onResume();
+        MobclickAgent.onResume(this);
 	}
 
 	@Override

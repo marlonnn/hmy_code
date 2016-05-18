@@ -2,11 +2,14 @@ package com.BC.entertainmentgravitation;
 
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.animation.AlphaAnimation;
@@ -41,6 +44,8 @@ import com.summer.utils.JsonUtil;
 import com.summer.utils.ToastUtil;
 import com.summer.utils.UrlUtil;
 import com.summer.utils.ValidateUtil;
+import com.umeng.analytics.MobclickAgent;
+import com.umeng.analytics.MobclickAgent.EScenarioType;
 
 import java.util.HashMap;
 import java.util.List;
@@ -79,11 +84,19 @@ import org.apache.http.NameValuePair;
 	private TextView readProtocolText;
 	
 	private AbortableFuture<LoginInfo> loginRequest;
+	private Context mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        mContext = this;
+        MobclickAgent.setDebugMode(true);
+        // SDK在统计Fragment时，需要关闭Activity自带的页面统计，
+        // 然后在每个页面中重新集成页面统计的代码(包括调用了 onResume 和 onPause 的Activity)。
+        MobclickAgent.openActivityDurationTrack(false);
+        MobclickAgent.setScenarioType(mContext, EScenarioType.E_UM_NORMAL);
+        
         initializeLoginView();
         initializeSignUpView();
 //        initialView(true);
@@ -426,6 +439,20 @@ import org.apache.http.NameValuePair;
     
     
     @Override
+	protected void onPause() {
+		super.onPause();
+        MobclickAgent.onPageEnd("Login Activity");
+        MobclickAgent.onPause(mContext);
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+        MobclickAgent.onPageStart("Login Activity");
+        MobclickAgent.onResume(mContext);
+	}
+
+	@Override
 	protected void onDestroy() {
 		super.onDestroy();
 		stopAllThreadPool();
@@ -580,5 +607,43 @@ import org.apache.http.NameValuePair;
         view2.startAnimation(out);
     }
     //endregion
+    
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+
+            Hook();
+
+            return true;
+        }
+
+        return super.onKeyDown(keyCode, event);
+    }
+
+    // /对于好多应用，会在程序中杀死 进程，这样会导致我们统计不到此时Activity结束的信息，
+    // /对于这种情况需要调用 'MobclickAgent.onKillProcess( Context )'
+    // /方法，保存一些页面调用的数据。正常的应用是不需要调用此方法的。
+    private void Hook() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        builder.setPositiveButton("退出应用", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                MobclickAgent.onKillProcess(mContext);
+
+                int pid = android.os.Process.myPid();
+                android.os.Process.killProcess(pid);
+            }
+        });
+        builder.setNeutralButton("后退一下", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                finish();
+            }
+        });
+        builder.setNegativeButton("点错了", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+            }
+        });
+        builder.show();
+    }
 }
 

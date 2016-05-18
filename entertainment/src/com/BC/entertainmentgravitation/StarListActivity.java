@@ -27,6 +27,7 @@ import com.summer.handler.InfoHandler;
 import com.summer.task.HttpBaseTask;
 import com.summer.treadpool.ThreadPoolConst;
 import com.summer.utils.UrlUtil;
+import com.umeng.analytics.MobclickAgent;
 
 /**
  * 明星列表
@@ -48,6 +49,18 @@ public class StarListActivity extends BaseActivity implements OnClickListener, O
 		setContentView(R.layout.activity_star_list);
 		initFragment();
 		initView();
+	}
+	
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
+    
+	@Override
+	protected void onResume() {
+		super.onResume();
+        MobclickAgent.onResume(this);
 	}
 	
 	private void initFragment()

@@ -14,6 +14,7 @@ import com.BC.entertainmentgravitation.fragment.PullFragment.IPullMedia;
 import com.BC.entertainmentgravitation.fragment.TopPullFragment;
 import com.netease.neliveplayer.NEMediaPlayer;
 import com.summer.activity.BaseActivity;
+import com.umeng.analytics.MobclickAgent;
 
 public class PullActivity extends BaseActivity implements OnClickListener, IPullMedia, ExitFragmentListener{
 
@@ -54,14 +55,16 @@ public class PullActivity extends BaseActivity implements OnClickListener, IPull
 	@Override
 	protected void onPause() {
 		super.onPause();
+		MobclickAgent.onPause(this);
 	}
 
 	@Override
 	protected void onResume() {
+		super.onResume();
 		if (!mVideoView.isPaused()) {
 			mVideoView.start(); //锁屏打开后恢复播放
 		}
-		super.onResume();
+		MobclickAgent.onResume(this);
 	}
 
 	@Override

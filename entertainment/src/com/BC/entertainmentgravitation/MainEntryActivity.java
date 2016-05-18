@@ -53,6 +53,7 @@ import com.summer.utils.StringUtil;
 import com.summer.utils.ToastUtil;
 import com.summer.utils.UrlUtil;
 import com.summer.view.CircularImage;
+import com.umeng.analytics.MobclickAgent;
 
 import android.content.Context;
 import android.content.Intent;
@@ -230,12 +231,17 @@ public class MainEntryActivity extends BaseActivity implements OnClickListener, 
 		};
     }
     
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
+    
 	@Override
 	protected void onResume() {
 		super.onResume();
+        MobclickAgent.onResume(this);
 	}
-
-
 
 	@Override
 	protected void onStart() {

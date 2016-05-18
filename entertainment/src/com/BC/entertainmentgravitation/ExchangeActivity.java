@@ -35,6 +35,7 @@ import com.summer.utils.JsonUtil;
 import com.summer.utils.StringUtil;
 import com.summer.utils.ToastUtil;
 import com.summer.utils.UrlUtil;
+import com.umeng.analytics.MobclickAgent;
 
 public class ExchangeActivity extends BaseActivity implements OnClickListener, OnItemClickListener{
 	
@@ -89,14 +90,16 @@ public class ExchangeActivity extends BaseActivity implements OnClickListener, O
         
 	}
 	
-	@Override
-	protected void onPause() {
-		super.onPause();
-	}
-
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
+    
 	@Override
 	protected void onResume() {
 		super.onResume();
+        MobclickAgent.onResume(this);
 	}
 
 	@Override

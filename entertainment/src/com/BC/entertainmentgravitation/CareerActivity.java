@@ -25,6 +25,7 @@ import com.summer.treadpool.ThreadPoolConst;
 import com.summer.utils.JsonUtil;
 import com.summer.utils.ToastUtil;
 import com.summer.utils.UrlUtil;
+import com.umeng.analytics.MobclickAgent;
 
 /**
  * 基本信息  —— 演艺经历
@@ -52,6 +53,18 @@ public class CareerActivity extends BaseActivity implements OnClickListener{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_personal_career);
 		initView();
+	}
+	
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
+    
+	@Override
+	protected void onResume() {
+		super.onResume();
+        MobclickAgent.onResume(this);
 	}
 	
 	private void initView()

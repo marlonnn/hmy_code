@@ -14,6 +14,7 @@ import com.BC.entertainment.adapter.SectionsPagerAdapter;
 import com.BC.entertainmentgravitation.fragment.RedALiatFragment;
 import com.BC.entertainmentgravitation.fragment.RedHoldListFragment;
 import com.summer.activity.BaseActivity;
+import com.umeng.analytics.MobclickAgent;
 
 /**
  * 红包
@@ -82,6 +83,18 @@ public class RedEnvelopeActivity extends BaseActivity {
 
 			}
 		});
+	}
+	
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
+    
+	@Override
+	protected void onResume() {
+		super.onResume();
+        MobclickAgent.onResume(this);
 	}
 
 	private void init() {

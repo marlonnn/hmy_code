@@ -14,6 +14,7 @@ import com.summer.utils.JsonUtil;
 import com.summer.utils.ToastUtil;
 import com.summer.utils.UrlUtil;
 import com.summer.view.CircularImage;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -131,6 +132,18 @@ public class DetailsActivity extends BaseActivity implements OnClickListener{
 			}
 		});
 		sendGetStartInfoRequest(userID);
+	}
+	
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
+    
+	@Override
+	protected void onResume() {
+		super.onResume();
+        MobclickAgent.onResume(this);
 	}
 
 	private void showShare() {

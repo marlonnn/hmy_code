@@ -28,6 +28,7 @@ import com.summer.utils.JsonUtil;
 import com.summer.utils.StringUtil;
 import com.summer.utils.ToastUtil;
 import com.summer.utils.UrlUtil;
+import com.umeng.analytics.MobclickAgent;
 
 /**
  * 基本信息  —— 我的收益
@@ -106,9 +107,16 @@ public class IncomeActivity extends BaseActivity implements OnClickListener{
     	ThreadPoolFactory.getThreadPoolManager().addTask(httpTask);
     }
 	
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
+    
 	@Override
 	protected void onResume() {
 		super.onResume();
+        MobclickAgent.onResume(this);
 	}
 
 	@Override

@@ -38,6 +38,7 @@ import com.summer.treadpool.ThreadPoolConst;
 import com.summer.utils.JsonUtil;
 import com.summer.utils.ToastUtil;
 import com.summer.utils.UrlUtil;
+import com.umeng.analytics.MobclickAgent;
 
 /**
  * 消息
@@ -118,6 +119,18 @@ public class InformationActivity extends BaseActivity  {
 				}
 			}
 		});
+	}
+	
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
+    
+	@Override
+	protected void onResume() {
+		super.onResume();
+        MobclickAgent.onResume(this);
 	}
 	
 	/**

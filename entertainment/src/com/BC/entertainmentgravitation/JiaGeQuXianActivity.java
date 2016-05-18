@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import com.BC.entertainmentgravitation.R;
 import com.BC.entertainmentgravitation.fragment.JiaGeQuXianFragment;
+import com.umeng.analytics.MobclickAgent;
 
 public class JiaGeQuXianActivity extends com.summer.activity.BaseActivity {
 	JiaGeQuXianFragment jiaGeQuXianFragment;
@@ -17,6 +18,18 @@ public class JiaGeQuXianActivity extends com.summer.activity.BaseActivity {
 		jiaGeQuXianFragment.showStarInformation(starID);
 	}
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
+    
+	@Override
+	protected void onResume() {
+		super.onResume();
+        MobclickAgent.onResume(this);
+	}
+	
 	@Override
 	public void RequestSuccessful(String jsonString, int taskType) {
 		

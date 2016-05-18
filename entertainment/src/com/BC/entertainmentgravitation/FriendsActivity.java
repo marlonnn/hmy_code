@@ -48,6 +48,7 @@ import com.summer.treadpool.ThreadPoolConst;
 import com.summer.utils.JsonUtil;
 import com.summer.utils.ToastUtil;
 import com.summer.utils.UrlUtil;
+import com.umeng.analytics.MobclickAgent;
 
 public class FriendsActivity extends BaseActivity implements
 		OnItemClickListener {
@@ -70,6 +71,18 @@ public class FriendsActivity extends BaseActivity implements
 		sendReqAlbum();
 	}
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
+    
+	@Override
+	protected void onResume() {
+		super.onResume();
+        MobclickAgent.onResume(this);
+	}
+	
 	private void init() {
 		// TODO Auto-generated method stub
 		add = findViewById(R.id.add);

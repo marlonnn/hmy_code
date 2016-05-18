@@ -11,6 +11,7 @@ import com.BC.entertainmentgravitation.dialog.ApplauseGiveConcern;
 import com.summer.activity.BaseActivity;
 import com.summer.logger.XLog;
 import com.summer.utils.ToastUtil;
+import com.umeng.analytics.MobclickAgent;
 
 public class FinishActivity extends BaseActivity implements OnClickListener{
 
@@ -23,6 +24,18 @@ public class FinishActivity extends BaseActivity implements OnClickListener{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_finish);
 		initView();
+	}
+	
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
+    
+	@Override
+	protected void onResume() {
+		super.onResume();
+        MobclickAgent.onResume(this);
 	}
 	
 	private void initView()

@@ -22,6 +22,7 @@ import com.summer.treadpool.ThreadPoolConst;
 import com.summer.utils.JsonUtil;
 import com.summer.utils.ToastUtil;
 import com.summer.utils.UrlUtil;
+import com.umeng.analytics.MobclickAgent;
 
 public class ApplyActivity extends BaseActivity{
 
@@ -42,6 +43,18 @@ public class ApplyActivity extends BaseActivity{
 			}
 		});
 		initView();
+	}
+	
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
+    
+	@Override
+	protected void onResume() {
+		super.onResume();
+        MobclickAgent.onResume(this);
 	}
 	
 	private void initView()

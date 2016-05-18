@@ -41,6 +41,7 @@ import com.summer.treadpool.ThreadPoolConst;
 import com.summer.utils.JsonUtil;
 import com.summer.utils.ToastUtil;
 import com.summer.utils.UrlUtil;
+import com.umeng.analytics.MobclickAgent;
 
 public class StarLevelActivity extends BaseActivity implements OnClickListener , OnItemClickListener{
 	
@@ -61,6 +62,18 @@ public class StarLevelActivity extends BaseActivity implements OnClickListener ,
 		setContentView(R.layout.activity_level);
 		init();
 		sendReqConnect();
+	}
+	
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
+    
+	@Override
+	protected void onResume() {
+		super.onResume();
+        MobclickAgent.onResume(this);
 	}
 	
 	private void init() {

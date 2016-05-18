@@ -33,6 +33,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.summer.activity.BaseActivity;
 import com.summer.view.CircularImage;
+import com.umeng.analytics.MobclickAgent;
 
 public class PersonalActivity extends BaseActivity implements OnClickListener, OnItemClickListener{
 	
@@ -98,14 +99,16 @@ public class PersonalActivity extends BaseActivity implements OnClickListener, O
 		
 	}
 	
-	@Override
-	protected void onPause() {
-		super.onPause();
-	}
-
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
+    
 	@Override
 	protected void onResume() {
 		super.onResume();
+        MobclickAgent.onResume(this);
 	}
 
 	@Override

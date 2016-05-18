@@ -33,6 +33,7 @@ import com.summer.utils.Audio;
 import com.summer.utils.JsonUtil;
 import com.summer.utils.ToastUtil;
 import com.summer.utils.UrlUtil;
+import com.umeng.analytics.MobclickAgent;
 
 /**
  * 签到
@@ -66,6 +67,18 @@ public class SignInActivity extends BaseActivity {
 		setText(R.id.month, strings[1] + "月签到");
 		sendReq();
 		
+	}
+	
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
+    
+	@Override
+	protected void onResume() {
+		super.onResume();
+        MobclickAgent.onResume(this);
 	}
 	
 	private void showEmotionsView() {

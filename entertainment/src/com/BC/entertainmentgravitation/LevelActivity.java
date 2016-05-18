@@ -41,6 +41,7 @@ import com.summer.utils.JsonUtil;
 import com.summer.utils.ToastUtil;
 import com.summer.utils.UrlUtil;
 import com.summer.view.CircularImage;
+import com.umeng.analytics.MobclickAgent;
 
 public class LevelActivity extends BaseActivity implements OnItemClickListener {
 	PullToRefreshListView pullToRefreshListView1;
@@ -60,6 +61,18 @@ public class LevelActivity extends BaseActivity implements OnItemClickListener {
 		setContentView(R.layout.activity_pai_hang_bang);
 		init();
 		sendReqConnect();
+	}
+	
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
+    
+	@Override
+	protected void onResume() {
+		super.onResume();
+        MobclickAgent.onResume(this);
 	}
 
 	private void init() {

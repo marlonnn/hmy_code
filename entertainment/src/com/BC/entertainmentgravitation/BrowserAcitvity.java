@@ -6,6 +6,7 @@ import org.apache.http.util.EncodingUtils;
 import com.summer.activity.BaseActivity;
 import com.summer.dialog.CustomProgressDialog;
 import com.summer.view.BaseWebView;
+import com.umeng.analytics.MobclickAgent;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -138,6 +139,18 @@ public class BrowserAcitvity extends BaseActivity{
 		if (progressbar != null) {
 			progressbar.setVisibility(View.GONE);
 		}
+	}
+	
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
+    
+	@Override
+	protected void onResume() {
+		super.onResume();
+        MobclickAgent.onResume(this);
 	}
 
 	@Override

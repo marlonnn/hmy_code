@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 
 import com.summer.activity.BaseActivity;
+import com.umeng.analytics.MobclickAgent;
 
 public class AboutActivity extends BaseActivity implements OnClickListener{
 
@@ -14,6 +15,18 @@ public class AboutActivity extends BaseActivity implements OnClickListener{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_personal_about);
 		findViewById(R.id.imageViewBack).setOnClickListener(this);
+	}
+	
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
+    
+	@Override
+	protected void onResume() {
+		super.onResume();
+        MobclickAgent.onResume(this);
 	}
 	
 	@Override

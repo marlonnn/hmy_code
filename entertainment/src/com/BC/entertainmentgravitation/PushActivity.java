@@ -18,6 +18,7 @@ import com.netease.LSMediaCapture.lsMessageHandler;
 import com.summer.activity.BaseActivity;
 import com.summer.logger.XLog;
 import com.summer.utils.ToastUtil;
+import com.umeng.analytics.MobclickAgent;
 
 public class PushActivity extends BaseActivity implements lsMessageHandler, IPushMedia, ExitFragmentListener{
 	
@@ -61,17 +62,19 @@ public class PushActivity extends BaseActivity implements lsMessageHandler, IPus
 	
 	@Override
 	protected void onPause() {
+		super.onPause();
         if(mLSMediaCapture != null) {
         	mLSMediaCapture.resumeVideoEncode();
         }
-		super.onPause();
+        MobclickAgent.onPause(this);
 	}
 
 
 	@Override
 	protected void onResume() {
-		topFragment.onResume();
 		super.onResume();
+		topFragment.onResume();
+		MobclickAgent.onResume(this);
 	}
 
 

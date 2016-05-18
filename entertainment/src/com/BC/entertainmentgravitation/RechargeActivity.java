@@ -61,6 +61,7 @@ import com.summer.utils.UrlUtil;
 import com.tencent.mm.sdk.modelpay.PayReq;
 import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
+import com.umeng.analytics.MobclickAgent;
 
 public class RechargeActivity extends BaseActivity implements OnClickListener{
 
@@ -166,6 +167,18 @@ public class RechargeActivity extends BaseActivity implements OnClickListener{
 		api.registerApp(Config.APP_ID);
 		LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
 			      new IntentFilter("wxPayEvent"));
+	}
+	
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
+    
+	@Override
+	protected void onResume() {
+		super.onResume();
+        MobclickAgent.onResume(this);
 	}
 	
 	BroadcastReceiver mMessageReceiver = new BroadcastReceiver(){
