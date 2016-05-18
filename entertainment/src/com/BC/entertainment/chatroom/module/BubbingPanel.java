@@ -24,7 +24,7 @@ public class BubbingPanel {
 		IMMessage message = ChatRoomMessageBuilder.createChatRoomCustomMessage(container.chatRoom.getChatroomid(), bubbleAttachment);
 		if (container != null && container.proxy != null)
 		{
-			container.proxy.sendMessage(message);
+			container.proxy.sendMessage(message, isFirst);
 		}
 	}
 

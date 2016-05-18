@@ -10,6 +10,8 @@ public interface ModuleProxy {
 
     // 发送消息
     boolean sendMessage(IMMessage msg);
+    
+    void sendMessage(IMMessage msg, boolean isFirst);
 
     // 消息输入区展开时候的处理
     void onInputPanelExpand();

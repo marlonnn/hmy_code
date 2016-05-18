@@ -270,14 +270,14 @@ public class PushFragment extends BaseFragment implements OnClickListener, Modul
 	public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
         initChatView();
+        
+        initBubbleView();
         /**
          * 初始化聊天室和输入框控件
          */
         initializeView();
         
         updateVideoStatus(false);//更新聊天室状态
-        
-        initBubbleView();
 //        container.activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 	}
 	
@@ -393,7 +393,7 @@ public class PushFragment extends BaseFragment implements OnClickListener, Modul
 		
 		if (inputPanel == null)
 		{
-			inputPanel = new InputPannel(container, rootView, GiftCache.getInstance().getListGifts());
+			inputPanel = new InputPannel(container, rootView, GiftCache.getInstance().getListGifts(), bubbling);
 		}
 		layoutInput = (LinearLayout) rootView.findViewById(R.id.layout_input);
 		functionView = (RelativeLayout) rootView.findViewById(R.id.layout_bottom);
@@ -545,10 +545,16 @@ public class PushFragment extends BaseFragment implements OnClickListener, Modul
         		}
         		break;
         	case CustomAttachmentType.bubble:
+        		
         		BubbleAttachment bubbleAttachment = (BubbleAttachment)customAttachment;
-        		if (bubbleAttachment != null)
+        		if (bubbleAttachment != null && bubbleAttachment.getBubble() != null)
         		{
-        			holder.setText(R.id.txtContent, (member == null ? "" : member.getNick()) + " 我点亮了");
+        			if (bubbleAttachment.getBubble().isFirstSend())
+        			{
+            			holder.setText(R.id.txtContent, (member == null ? "" : member.getNick()) + " 我点亮了");
+            			holder.setTextColor(R.id.txtContent, Color.parseColor("#8B658B"));
+        			}
+
         		}
         		break;
         	}
@@ -581,13 +587,13 @@ public class PushFragment extends BaseFragment implements OnClickListener, Modul
         		BubbleAttachment bubbleAttachment = (BubbleAttachment)customAttachment;
         		if (bubbleAttachment != null)
         		{
-        			bubbling.startAnimation(bubbleAttachment.getBubble().getCategory());
-        			if (bubbleAttachment.getBubble().isFirstSend())
-        			{
-        				//添加到消息列表中，显示 用户名：我点亮了
-//        				Member member = ChatCache.getInstance().getMember(message.getFromAccount());
-        				saveMessage(message, false);
-        			}
+        			bubbling.startAnimation();
+//        			if (bubbleAttachment.getBubble().isFirstSend())
+//        			{
+//        				//添加到消息列表中，显示 用户名：我点亮了
+////        				Member member = ChatCache.getInstance().getMember(message.getFromAccount());
+//        				saveMessage(message, false);
+//        			}
         		}
         		break;
         	}
@@ -1116,5 +1122,38 @@ public class PushFragment extends BaseFragment implements OnClickListener, Modul
  			break;
  		}
  	}
+
+	@Override
+	public void sendMessage(IMMessage msg, boolean isFirst) {
+        ChatRoomMessage message = (ChatRoomMessage) msg;
+
+		NIMClient.getService(ChatRoomService.class).sendMessage(message, false)
+				.setCallback(new RequestCallback<Void>() {
+					@Override
+					public void onSuccess(Void param) {
+						XLog.i("send messsage success");
+					}
+
+					@Override
+					public void onFailed(int code) {
+						if (code == ResponseCode.RES_CHATROOM_MUTED) {
+							Toast.makeText(container.activity.getBaseContext(), "用户被禁言",Toast.LENGTH_SHORT).show();
+						} else {
+							Toast.makeText(container.activity.getBaseContext(),"消息发送失败：code:" + code, Toast.LENGTH_SHORT).show();
+						}
+					}
+
+					@Override
+					public void onException(Throwable exception) {
+						Toast.makeText(container.activity.getBaseContext(), "消息发送失败！",
+								Toast.LENGTH_SHORT).show();
+					}
+				});
+		if (isFirst)
+		{
+			onMsgSend(msg);
+		}
+		
+	}
 
 }

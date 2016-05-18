@@ -608,18 +608,18 @@ import org.apache.http.NameValuePair;
     }
     //endregion
     
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-
-            Hook();
-
-            return true;
-        }
-
-        return super.onKeyDown(keyCode, event);
-    }
+//    @Override
+//    public boolean onKeyDown(int keyCode, KeyEvent event) {
+//
+//        if (keyCode == KeyEvent.KEYCODE_BACK) {
+//
+////            Hook();
+//
+//            return true;
+//        }
+//
+//        return super.onKeyDown(keyCode, event);
+//    }
 
     // /对于好多应用，会在程序中杀死 进程，这样会导致我们统计不到此时Activity结束的信息，
     // /对于这种情况需要调用 'MobclickAgent.onKillProcess( Context )'

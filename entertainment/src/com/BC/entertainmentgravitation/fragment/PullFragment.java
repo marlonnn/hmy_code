@@ -281,11 +281,12 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
 	public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
         initChatView();
+        
+        initBubbleView();
         /**
          * 初始化聊天室和输入框控件
          */
         initializeView();
-        initBubbleView();
 	}
 	
 	private void initBubbleView()
@@ -294,7 +295,7 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
 		{
 			bubblePanel = new BubbingPanel(container);
 		}
-		bubbling = (Bubbling) rootView.findViewById(R.id.bubbling);
+		bubbling = (Bubbling) rootView.findViewById(R.id.pullBubbling);
 		bubbling.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -406,13 +407,16 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
 					public void convert(
 							ViewHolder holder,
 							IMMessage item) {
-						holder.setTextColor(R.id.txtName, Color.parseColor("#EEB422"));
+//						holder.setTextColor(R.id.txtName, Color.parseColor("#EEB422"));
 						if (item.getMsgType() == MsgTypeEnum.notification)
 						{
 					 		try {
 								ChatRoomNotificationAttachment attachment = (ChatRoomNotificationAttachment) item
 										.getAttachment();
-								holder.setText(R.id.txtName, "系统消息：");
+//								holder.setText(R.id.txtName, "系统消息：");
+			        			holder.setImageResource(R.id.imageViewMessage, R.drawable.fragment_message_icon);
+			                	holder.setTextColor(R.id.txtName, Color.parseColor("#EEB422"));
+			                	holder.setText(R.id.txtName, "系统消息：");
 								if (attachment.getType() == NotificationType.ChatRoomMemberIn)
 								{
 									holder.setText(R.id.txtContent, "欢迎"+ attachment.getOperatorNick() + "进入直播间");
@@ -440,6 +444,9 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
 								if (message.getDirect() == MsgDirectionEnum.Out)
 								{
 									//发出去的消息
+				        			holder.setImageResource(R.id.imageViewMessage, R.drawable.fragment_message_icon);
+				                	holder.setTextColor(R.id.txtName, Color.parseColor("#EEB422"));
+				                	
 									holder.setText(R.id.txtName, Config.User.getNickName() + ":");
 									holder.setText(R.id.txtContent, message.getContent());
 									XLog.i("incoming text message out: " + message.getContent());
@@ -447,6 +454,8 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
 								else if (message.getDirect() == MsgDirectionEnum.In)
 								{
 									//接受到的消息
+				        			holder.setImageResource(R.id.imageViewMessage, R.drawable.fragment_message_icon);
+				                	holder.setTextColor(R.id.txtName, Color.parseColor("#EEB422"));
 									holder.setText(R.id.txtName, message.getChatRoomMessageExtension().getSenderNick() + ":");
 									holder.setText(R.id.txtContent, message.getContent());
 									XLog.i("incoming text message in: " + message.getContent());
@@ -535,7 +544,7 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
 		
 		if (inputPanel == null)
 		{
-			inputPanel = new InputPannel(container, rootView, GiftCache.getInstance().getListGifts());
+			inputPanel = new InputPannel(container, rootView, GiftCache.getInstance().getListGifts(), bubbling);
 		}
 		layoutInput = (LinearLayout) rootView.findViewById(R.id.layout_input);
 		functionView = (RelativeLayout) rootView.findViewById(R.id.layout_bottom);
@@ -765,6 +774,19 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
          			showAnimate(fontAttachment.getEmotion());
          		}
          		break;
+        	case CustomAttachmentType.bubble:
+        		BubbleAttachment bubbleAttachment = (BubbleAttachment)customAttachment;
+        		if (bubbleAttachment != null)
+        		{
+        			bubbling.startAnimation();
+//        			if (bubbleAttachment.getBubble().isFirstSend())
+//        			{
+//        				//添加到消息列表中，显示 用户名：我点亮了
+////        				Member member = ChatCache.getInstance().getMember(message.getFromAccount());
+//        				saveMessage(message, false);
+//        			}
+        		}
+        		break;
          	}
      	}
      }
@@ -799,8 +821,8 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
      {
      	if (message != null)
      	{
-         	holder.setTextColor(R.id.txtName, Color.parseColor("#EEB422"));
-         	holder.setText(R.id.txtName, "系统消息：");
+//         	holder.setTextColor(R.id.txtName, Color.parseColor("#EEB422"));
+//         	holder.setText(R.id.txtName, "系统消息：");
          	CustomAttachment customAttachment = (CustomAttachment)message.getAttachment();
          	Member member = ChatCache.getInstance().getMember(message.getFromAccount());
          	switch(customAttachment.getType())
@@ -809,6 +831,9 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
          		EmotionAttachment emotionAttachment = (EmotionAttachment)customAttachment;
          		if (emotionAttachment != null)
          		{
+        			holder.setImageResource(R.id.imageViewMessage, R.drawable.fragment_message_icon);
+                	holder.setTextColor(R.id.txtName, Color.parseColor("#EEB422"));
+                	holder.setText(R.id.txtName, "系统消息：");
          			String emotionName = emotionAttachment.getEmotion().getName();
          			holder.setText(R.id.txtContent, (member == null ? "" : member.getNick()) + " 送来了 " + emotionAttachment.getEmotion().getName());
          			XLog.i("font gift name: " + emotionName);
@@ -820,6 +845,9 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
          		FontAttachment fontAttachment = (FontAttachment)customAttachment;
          		if (fontAttachment != null)
          		{
+        			holder.setImageResource(R.id.imageViewMessage, R.drawable.fragment_message_icon);
+                	holder.setTextColor(R.id.txtName, Color.parseColor("#EEB422"));
+                	holder.setText(R.id.txtName, "系统消息：");
          			String fontName = fontAttachment.getEmotion().getName();
          			holder.setText(R.id.txtContent, (member == null ? "" : member.getNick()) + " 送来了 " + fontAttachment.getEmotion().getName());
          			XLog.i("font gift name: " + fontName);
@@ -828,10 +856,14 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
          		break;
         	case CustomAttachmentType.bubble:
         		BubbleAttachment bubbleAttachment = (BubbleAttachment)customAttachment;
-        		if (bubbleAttachment != null)
+        		if (bubbleAttachment != null && bubbleAttachment.getBubble() != null && bubbleAttachment.getBubble().isFirstSend())
         		{
+        			holder.setImageResource(R.id.imageViewMessage, R.drawable.fragment_message_icon);
+                	holder.setTextColor(R.id.txtName, Color.parseColor("#EEB422"));
+                	holder.setText(R.id.txtName, "系统消息：");
         			holder.setText(R.id.txtContent, (member == null ? "" : member.getNick()) + " 我点亮了");
         		}
+
         		break;
          	}
      	}
@@ -1255,6 +1287,38 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
 	@Override
 	public void showAnimation(Gift gift) {
 		
+	}
+
+	@Override
+	public void sendMessage(IMMessage msg, boolean isFirst) {
+        ChatRoomMessage message = (ChatRoomMessage) msg;
+
+		NIMClient.getService(ChatRoomService.class).sendMessage(message, false)
+				.setCallback(new RequestCallback<Void>() {
+					@Override
+					public void onSuccess(Void param) {
+						XLog.i("send messsage success");
+					}
+
+					@Override
+					public void onFailed(int code) {
+						if (code == ResponseCode.RES_CHATROOM_MUTED) {
+							Toast.makeText(container.activity.getBaseContext(), "用户被禁言",Toast.LENGTH_SHORT).show();
+						} else {
+							Toast.makeText(container.activity.getBaseContext(),"消息发送失败：code:" + code, Toast.LENGTH_SHORT).show();
+						}
+					}
+
+					@Override
+					public void onException(Throwable exception) {
+						Toast.makeText(container.activity.getBaseContext(), "消息发送失败！",
+								Toast.LENGTH_SHORT).show();
+					}
+				});
+		if (isFirst)
+		{
+			onMsgSend(msg);
+		}
 	}
 
 }

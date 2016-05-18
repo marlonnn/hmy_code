@@ -20,6 +20,10 @@ public class BubbleCache {
     
     public Bubble GetBubble(int type, int category)
     {
+    	if(bubbles == null)
+    	{
+    		bubbles = Bubbles();
+    	}
     	for(int i=0; i<bubbles.size(); i++)
     	{
     		if(bubbles.get(i).getCategory() == category)

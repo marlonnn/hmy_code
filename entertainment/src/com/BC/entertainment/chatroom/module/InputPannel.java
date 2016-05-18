@@ -41,7 +41,9 @@ public class InputPannel {
 	private ViewPager viewPager;//礼物的滑动页
 	private ViewGroup indicator;//滚动点
 	
-    public InputPannel(Container container, View view, List<BaseGift> gifts) {
+	private Bubbling bubble;
+	
+    public InputPannel(Container container, View view, List<BaseGift> gifts, Bubbling bubble) {
         this.container = container;
         this.view = view;
         this.gifts = gifts;
@@ -49,6 +51,7 @@ public class InputPannel {
         initViews();
     	initInputBarListener();
     	initTextEdit();//初始化输入框控件
+    	this.bubble = bubble;
     }
     
     /**
@@ -211,6 +214,8 @@ public class InputPannel {
         messageEditText.setVisibility(View.VISIBLE);
 
         messageInputBar.setVisibility(View.VISIBLE);
+        
+        bubble.setVisibility(View.GONE);
 
         if (needShowInput) {
             uiHandler.postDelayed(showTextRunnable, SHOW_LAYOUT_DELAY);
@@ -307,6 +312,10 @@ public class InputPannel {
     	{
         	messageInputBar.setVisibility(View.VISIBLE);
     	}
+    	if (bubble != null)
+    	{
+    		bubble.setVisibility(View.GONE);
+    	}
     }
     
     //隐藏输入条
@@ -315,6 +324,10 @@ public class InputPannel {
     	if (messageInputBar != null)
     	{
         	messageInputBar.setVisibility(View.GONE);
+    	}
+    	if (bubble != null)
+    	{
+    		bubble.setVisibility(View.VISIBLE);
     	}
     }
     
