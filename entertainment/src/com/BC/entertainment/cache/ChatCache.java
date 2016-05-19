@@ -46,11 +46,20 @@ public class ChatCache {
     	{
     		if (!memberCache.containsKey(member.getName()))
     		{
-    			String s[] = member.getPortrait().split("/");
-    			if (s[2] != null && !s[2].contains("app.haimianyu.cn"))
-    			{
-    				member.setPortrait("http://app.haimianyu.cn/" + member.getPortrait());
-    			}
+    			try {
+    				if (member.getPortrait() != null)
+    				{
+    					String s[] = member.getPortrait().split("/");
+    					
+    					if (s[2] != null && !s[2].contains("app.haimianyu.cn"))
+    					{
+    						member.setPortrait("http://app.haimianyu.cn/" + member.getPortrait());
+    					}
+    				}
+
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
         		memberCache.put(member.getName(), member);
         		onlinePeopleitems.add(member);
     		}
@@ -68,14 +77,21 @@ public class ChatCache {
         			Member m = new Member();
         			m.setName(member.getAccount());
         			m.setNick(member.getNick());
-        			String s[] = member.getAvatar().split("/");
-        			if (s[2] != null && !s[2].contains("app.haimianyu.cn"))
+        			if (member.getAvatar() != null)
         			{
-            			m.setPortrait("http://app.haimianyu.cn/" + member.getAvatar());
-        			}
-        			else
-        			{
-            			m.setPortrait(member.getAvatar());
+            			try {
+							String s[] = member.getAvatar().split("/");
+							if (s[2] != null && !s[2].contains("app.haimianyu.cn"))
+							{
+								m.setPortrait("http://app.haimianyu.cn/" + member.getAvatar());
+							}
+							else
+							{
+								m.setPortrait(member.getAvatar());
+							}
+						} catch (Exception e) {
+							e.printStackTrace();
+						}	
         			}
             		memberCache.put(member.getAccount(), m);
             		onlinePeopleitems.add(m);

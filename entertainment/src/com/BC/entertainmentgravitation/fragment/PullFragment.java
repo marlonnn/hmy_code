@@ -712,25 +712,32 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
          boolean needRefresh = false;
          for (IMMessage message : messages) {
          	
-         	 try {
-         		 XLog.i("sessioon type: " + message.getSessionType());
-         		 XLog.i("message type: " + message.getMsgType());
-         		 Log.i("ChatRoomPanel","message type: " + message.getContent());
- 			} catch (Exception e) {
- 				e.printStackTrace();
- 			}
+//         	 try {
+//         		 XLog.i("sessioon type: " + message.getSessionType());
+//         		 XLog.i("message type: " + message.getMsgType());
+//         		 Log.i("ChatRoomPanel","message type: " + message.getContent());
+// 			} catch (Exception e) {
+// 				e.printStackTrace();
+// 			}
          	
              if (isMyMessage(message)) {
-             	//保存消息到聊天室消息列表中
-                 saveMessage(message, false);
+
                  danmakuPanel.showDanmaku(message);
                  if (message.getMsgType() == MsgTypeEnum.notification)
                  {
                  	handleNotification(message);
+                 	//保存消息到聊天室消息列表中
+                    saveMessage(message, false);
                  }
                  else if(message.getMsgType() == MsgTypeEnum.custom)
                  {
  					handlerCustomMessage(message);
+ 	             	//保存消息到聊天室消息列表中
+                 }
+                 else if(message.getMsgType() == MsgTypeEnum.text)
+                 {
+                  	//保存消息到聊天室消息列表中
+                     saveMessage(message, false);
                  }
                  needRefresh = true;
                  XLog.i(message.getMsgType());
@@ -765,6 +772,8 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
          		if (emotionAttachment != null)
          		{
          			showAnimate(emotionAttachment.getEmotion());
+ 	             	//保存消息到聊天室消息列表中
+ 	                saveMessage(message, false);
          		}
          		break;
          	case CustomAttachmentType.font:
@@ -772,6 +781,8 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
          		if (fontAttachment != null)
          		{
          			showAnimate(fontAttachment.getEmotion());
+ 	             	//保存消息到聊天室消息列表中
+ 	                saveMessage(message, false);
          		}
          		break;
         	case CustomAttachmentType.bubble:
@@ -779,12 +790,15 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
         		if (bubbleAttachment != null)
         		{
         			bubbling.startAnimation();
-//        			if (bubbleAttachment.getBubble().isFirstSend())
-//        			{
-//        				//添加到消息列表中，显示 用户名：我点亮了
-////        				Member member = ChatCache.getInstance().getMember(message.getFromAccount());
-//        				saveMessage(message, false);
-//        			}
+        			if (bubbleAttachment.getBubble().isFirstSend())
+        			{
+        				if (message.getFromAccount() != null && !message.getFromAccount().contains(Config.User.getUserName()))
+        				{
+         	             	//保存消息到聊天室消息列表中
+        					//接收到的是别人的消息，同时是第一次点亮，则添加到列表中显示
+         	                saveMessage(message, false);
+        				}
+        			}
         		}
         		break;
          	}
