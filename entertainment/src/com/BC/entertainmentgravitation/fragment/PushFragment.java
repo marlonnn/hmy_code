@@ -1,6 +1,5 @@
 package com.BC.entertainmentgravitation.fragment;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -11,6 +10,8 @@ import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -55,6 +56,7 @@ import com.BC.entertainment.chatroom.module.InputPannel;
 import com.BC.entertainment.chatroom.module.ModuleProxy;
 import com.BC.entertainmentgravitation.R;
 import com.BC.entertainmentgravitation.dialog.ApplauseGiveConcern;
+import com.BC.entertainmentgravitation.dialog.InfoDialog;
 import com.BC.entertainmentgravitation.entity.ChatRoom;
 import com.BC.entertainmentgravitation.entity.Member;
 import com.bumptech.glide.Glide;
@@ -96,6 +98,7 @@ import com.summer.view.Pandamate;
 
 public class PushFragment extends BaseFragment implements OnClickListener, ModuleProxy{
 
+	private Context context;
 	private static final int MESSAGE_CAPACITY = 500;
 	
 	private View rootView;
@@ -137,6 +140,7 @@ public class PushFragment extends BaseFragment implements OnClickListener, Modul
     private ApplauseGiveConcern applauseGiveConcern;//投资或者撤资
     
 	private IPushMedia iPushMedia;
+	private InfoDialog dialog;
     
 	InfoHandler handler = new InfoHandler(new InfoReceiver() {
 		
@@ -184,6 +188,7 @@ public class PushFragment extends BaseFragment implements OnClickListener, Modul
 	public PushFragment(Activity activity, ChatRoom chatRoom)
 	{
 		container = new Container(activity, chatRoom, SessionTypeEnum.ChatRoom, this);
+		context = activity;
 	}
 
 	/**
@@ -490,6 +495,67 @@ public class PushFragment extends BaseFragment implements OnClickListener, Modul
             public void onItemLongClick(View view, int position) {
             }
         });
+    }
+    
+    private void showInfoDialog(Member member)
+    {
+    	if (member != null)
+    	{
+        	final InfoDialog.Builder builder = new InfoDialog.Builder(context);
+        	builder.setMember(member);
+        	/**
+        	 * 设置聊天室成员
+        	 */
+        	builder.setManagerListerner(new View.OnClickListener(){
+
+				@Override
+				public void onClick(View v) {
+					
+				}
+        		
+        	});
+        	/**
+        	 * 关闭
+        	 */
+        	builder.setCloseListerner(new View.OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					if (dialog != null)
+					{
+						dialog.dismiss();
+					}
+				}
+			});
+
+        	/**
+        	 * 跳转到个人主页
+        	 */
+        	builder.setPositiveClickListener(new DialogInterface.OnClickListener(){
+
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					
+				}
+        		
+        	});
+
+        	/**
+        	 * 关注 聊天室相关成员
+        	 */
+        	builder.setNegativeClickListener(new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					
+				}
+			});
+        	
+        	dialog = builder.create();
+
+    		dialog.show();
+    	}
+    	
     }
     
     /**

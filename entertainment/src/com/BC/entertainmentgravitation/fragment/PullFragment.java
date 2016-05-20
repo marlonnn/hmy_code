@@ -10,6 +10,8 @@ import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -57,6 +59,7 @@ import com.BC.entertainment.chatroom.module.ModuleProxy;
 import com.BC.entertainmentgravitation.FinishActivity;
 import com.BC.entertainmentgravitation.R;
 import com.BC.entertainmentgravitation.dialog.ApplauseGiveConcern;
+import com.BC.entertainmentgravitation.dialog.InfoDialog;
 import com.BC.entertainmentgravitation.entity.ChatRoom;
 import com.BC.entertainmentgravitation.entity.Member;
 import com.BC.entertainmentgravitation.entity.YubiAssets;
@@ -104,6 +107,7 @@ import com.summer.view.Pandamate;
 public class PullFragment extends BaseFragment implements OnClickListener, ModuleProxy{
 
 	private View rootView;
+	private Context context;
 	
 	private ImageView btnChat;//聊天
 	private ImageView btnShare;//分享
@@ -150,6 +154,8 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
     private long enterTime = 0; // 游客的enterTime
 
     private boolean isNormalEmpty = false; // 固定成员是否拉取完
+    
+    private InfoDialog dialog;
     
 	/**
 	 * 直播拉流时切换摄像头接口
@@ -207,6 +213,7 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
 	public PullFragment(Activity activity, ChatRoom chatRoom)
 	{
 		container = new Container(activity, chatRoom, SessionTypeEnum.ChatRoom, this);
+		context = activity;
 	}
 
 	@Override
@@ -515,6 +522,67 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
             public void onItemLongClick(View view, int position) {
             }
         });
+    }
+    
+    private void showInfoDialog(Member member)
+    {
+    	if (member != null)
+    	{
+        	final InfoDialog.Builder builder = new InfoDialog.Builder(context);
+        	builder.setMember(member);
+        	/**
+        	 * 设置聊天室成员
+        	 */
+        	builder.setManagerListerner(new View.OnClickListener(){
+
+				@Override
+				public void onClick(View v) {
+					
+				}
+        		
+        	});
+        	/**
+        	 * 关闭
+        	 */
+        	builder.setCloseListerner(new View.OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					if (dialog != null)
+					{
+						dialog.dismiss();
+					}
+				}
+			});
+
+        	/**
+        	 * 跳转到个人主页
+        	 */
+        	builder.setPositiveClickListener(new DialogInterface.OnClickListener(){
+
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					
+				}
+        		
+        	});
+
+        	/**
+        	 * 关注 聊天室相关成员
+        	 */
+        	builder.setNegativeClickListener(new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					
+				}
+			});
+        	
+        	dialog = builder.create();
+
+    		dialog.show();
+    	}
+    	
     }
     
     /**
