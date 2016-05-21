@@ -61,7 +61,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<MyViewHolder>{
 		.load(mDatas.get(pos).getPortrait())
 		.centerCrop().diskCacheStrategy(DiskCacheStrategy.ALL)
 		.placeholder(R.drawable.avatar_def).into(myViewHolder.circularImage);
-		myViewHolder.circularImage.setTag(mDatas.get(pos));
         setUpitemEvent(myViewHolder);
     }
     

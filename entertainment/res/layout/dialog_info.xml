@@ -16,7 +16,8 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_marginLeft="32dp"
-            android:layout_marginTop="19dp"
+            android:layout_marginTop="25dp"
+            android:textColor="#ff007f"
             android:text="管理" />
 
         <com.summer.view.CircularImage
@@ -25,7 +26,6 @@
             android:layout_height="80dip"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:background="@drawable/app_logo"
             android:layout_margin="5dip" />
 
         <ImageView
@@ -33,7 +33,7 @@
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_alignParentRight="true"
-            android:layout_marginTop="19dp"
+            android:layout_marginTop="25dp"
             android:layout_marginRight="32dp"
             android:src="@drawable/dialog_info_close" />
         <ImageView
@@ -173,6 +173,7 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
             android:textSize="20dp"
+            android:textColor="#ff007f"
             android:text="主页" />
         <TextView
             android:id="@+id/txtViewToFocus"
@@ -180,6 +181,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:textSize="20dp"
+            android:textColor="#ff007f"
             android:text="关注" />
     </LinearLayout>
 

@@ -308,11 +308,11 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
 			@Override
 			public void onClick(View v) {
 				bubbling.start();
-				bubblePanel.sendBubbling(isFirst, bubbling.getmIndex());
-				if (isFirst)
-				{
-					isFirst = false;
-				}
+				bubblePanel.sendBubbling(!isFirst, bubbling.getmIndex());
+//				if (isFirst)
+//				{
+//					isFirst = false;
+//				}
 			}
 		});
 	}
@@ -516,7 +516,8 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
         recycleAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-            	ToastUtil.show(container.activity, "此功能正在努力开发中，敬请期待...");
+            	showInfoDialog(ChatCache.getInstance().getOnlinePeopleitems().get(position));
+//            	ToastUtil.show(container.activity, "此功能正在努力开发中，敬请期待...");
             }
             @Override
             public void onItemLongClick(View view, int position) {

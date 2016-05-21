@@ -489,7 +489,8 @@ public class PushFragment extends BaseFragment implements OnClickListener, Modul
         recycleAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-            	ToastUtil.show(container.activity, "此功能正在努力开发中，敬请期待...");
+            	showInfoDialog(ChatCache.getInstance().getOnlinePeopleitems().get(position));
+//            	ToastUtil.show(container.activity, "此功能正在努力开发中，敬请期待...");
             }
             @Override
             public void onItemLongClick(View view, int position) {
@@ -994,9 +995,21 @@ public class PushFragment extends BaseFragment implements OnClickListener, Modul
 		 * 点击主播头像
 		 */
 		case R.id.portrait:
-			ToastUtil.show(container.activity, "此功能正在努力开发中，敬请期待...");
+//			ToastUtil.show(container.activity, "此功能正在努力开发中，敬请期待...");
+			showInfoDialog(CreateMember());
 			break;
 		}
+	}
+	
+	private Member CreateMember()
+	{
+		Member m = new Member();
+		m.setId(Config.User.getClientID());
+		m.setNick(Config.User.getNickName());
+		m.setPortrait(Config.User.getImage());
+//		m.setGender(Config.User)
+//		m.setRegion(Config.User);
+		return m;
 	}
 	
 	private void showShare() {

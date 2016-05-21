@@ -3,7 +3,10 @@ package com.BC.entertainmentgravitation;
 import android.content.Context;
 import android.media.AudioFormat;
 import android.os.Bundle;
+import android.os.Handler;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.RelativeLayout;
 
 import com.BC.entertainment.cache.ChatCache;
 import com.BC.entertainment.config.PushConfig;
@@ -37,6 +40,8 @@ public class PushActivity extends BaseActivity implements lsMessageHandler, IPus
 //    private PushFragment pushFragment;
 
     private TopPushFragment topFragment;
+	private RelativeLayout rlayoutLoading;
+	private Handler handler;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -48,16 +53,45 @@ public class PushActivity extends BaseActivity implements lsMessageHandler, IPus
 		chatRoom = ChatCache.getInstance().getChatRoom();
 //		pushFragment = new PushFragment(PushActivity.this, chatRoom);
         mVideoView = (LiveSurfaceView) findViewById(R.id.videoview);
+        rlayoutLoading = (RelativeLayout) findViewById(R.id.rLayoutPushLoading);
         /**
          * 初始化推流
          */
         initializeLive();
-        
+//        delayLiveVideo();
+//        handler = new Handler();
+//        handler.postDelayed(runnable, 10);
         /**
          * 初始化聊天室、输入框、送礼物等
          */
         topFragment = new TopPushFragment(PushActivity.this, chatRoom);
         topFragment.show(getSupportFragmentManager(), "push video");
+	}
+	
+	private Runnable runnable = new Runnable(){
+
+		@Override
+		public void run() {
+	        /**
+	         * 初始化推流
+	         */
+	        initializeLive();
+		}
+		
+	};
+	
+	private void delayLiveVideo()
+	{
+		this.runOnUiThread(new Runnable() {
+			
+			@Override
+			public void run() {
+		        /**
+		         * 初始化推流
+		         */
+		        initializeLive();
+			}
+		});
 	}
 	
 	@Override
@@ -205,6 +239,8 @@ public class PushActivity extends BaseActivity implements lsMessageHandler, IPus
 		if(mLSMediaCapture != null && m_liveStreamingInitFinished) {
 		    mLSMediaCapture.startLiveStreaming();
 		    m_liveStreamingOn = true;
+		    rlayoutLoading.setVisibility(View.GONE);
+		    mVideoView.setVisibility(View.VISIBLE);
 		    XLog.i("========================startAV=======================");
 		}
 	}

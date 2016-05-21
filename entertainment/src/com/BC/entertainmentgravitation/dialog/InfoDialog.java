@@ -2,6 +2,9 @@ package com.BC.entertainmentgravitation.dialog;
 
 import com.BC.entertainmentgravitation.R;
 import com.BC.entertainmentgravitation.entity.Member;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.summer.view.CircularImage;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
@@ -37,12 +40,6 @@ public class InfoDialog extends Dialog{
 		private DialogInterface.OnClickListener negativeClickListener;
 		private View.OnClickListener managerListerner;
 		private View.OnClickListener closeListerner;
-		
-/*		private String name;
-		private String gender;
-		private String id;
-		private String location;
-		private String fans;*/
 		
 		private Member member;
 		
@@ -103,17 +100,45 @@ public class InfoDialog extends Dialog{
 					LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 			if (member != null)
 			{
-				((TextView) view.findViewById(R.id.txtViewName)).setText(member.getName() == null ? "" : member.getName());
+				((TextView) view.findViewById(R.id.txtViewName)).setText(member.getNick() == null ? "" : member.getNick());
 				((TextView) view.findViewById(R.id.txtViewId)).setText(member.getId() == null ? "" : member.getId());
 				((TextView) view.findViewById(R.id.txtViewLocation)).setText(member.getRegion() == null ? "" : member.getRegion());
-//				((TextView) view.findViewById(R.id.txtViewFans)).setText(member.getName() == null ? "" : member.getName());
-//				((TextView) view.findViewById(R.id.txtViewFocus)).setText(member.getName() == null ? "" : member.getName());
-//				((TextView) view.findViewById(R.id.txtViewMood)).setText(member.getName() == null ? "" : member.getName());
+				
+				if (member.getGender() != null && member.getGender().contains("男"))
+				{
+					ImageView imgViewFemale = (ImageView) view.findViewById(R.id.imgViewFeMale);
+					imgViewFemale.setVisibility(View.GONE);
+				}
+				else if (member.getGender() != null && member.getGender().contains("女"))
+				{
+					ImageView imgViewMale = (ImageView) view.findViewById(R.id.imgViewMale);
+					imgViewMale.setVisibility(View.GONE);
+				}
+				((TextView) view.findViewById(R.id.txtViewFans)).setText(member.getFans() == null ? "" : member.getFans());
+				((TextView) view.findViewById(R.id.txtViewFocus)).setText(member.getFollow() == null ? "" : member.getFollow());
+				((TextView) view.findViewById(R.id.txtViewMood)).setText(member.getMood() == null ? "您还没有发表任何心情哦~" : member.getMood());
+				
+				ImageView imgViewAuthenticated = (ImageView) view.findViewById(R.id.imgViewAuthenticated);
+				if (member.getIs_validated() != null && member.getIs_validated().contains("1"))
+				{
+					imgViewAuthenticated.setVisibility(View.VISIBLE);
+				}
+				else
+				{
+					imgViewAuthenticated.setVisibility(View.GONE);
+				}
 			}
 			TextView manager = (TextView) view.findViewById(R.id.txtViewManager);
 			ImageView imgViewClose = (ImageView) view.findViewById(R.id.imgViewClose);
 			TextView home = (TextView) view.findViewById(R.id.txtViewHome);
 			TextView focus = (TextView) view.findViewById(R.id.txtViewToFocus);
+			CircularImage cImagePortrait = (CircularImage) view.findViewById(R.id.cImageportrait);
+			
+			Glide.with(context)
+			.load(member.getPortrait())
+			.centerCrop().diskCacheStrategy(DiskCacheStrategy.ALL)
+			.placeholder(R.drawable.avatar_def).into(cImagePortrait);
+	        
 			if (managerListerner != null)
 			{
 				manager.setOnClickListener(new View.OnClickListener(){

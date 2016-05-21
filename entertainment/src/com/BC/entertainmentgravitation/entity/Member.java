@@ -11,11 +11,15 @@ public class Member{
 	 * 用户账号，后台分配的
 	 */
 	private String id;
+	
 	/**
 	 * 用户名，即手机号
 	 */
 	private String name;
 	
+	/**
+	 * 昵称
+	 */
 	private String nick;
 	/**
 	 * 头像地址，绝对地址
@@ -59,6 +63,46 @@ public class Member{
 	 * 娱票
 	 */
 	private String piao;
+	
+	/**
+	 * 职业
+	 */
+	private String professional;
+	
+	/**
+	 * 关注数
+	 */
+	private String follow;
+	
+	/**
+	 * 粉丝数
+	 */
+	private String fans;
+	
+	/**
+	 * 心情
+	 */
+	private String mood;
+	
+	/**
+	 * 审核状态
+	 */
+	private String is_validated;
+	
+	/***
+	 * emial
+	 */
+	private String email;
+	
+	/**
+	 * 手机号码
+	 */
+	private String mobile;
+	
+	/**
+	 * 星座
+	 */
+	private String constellation;
 
 	public String getId() {
 		return id;
@@ -170,6 +214,70 @@ public class Member{
 
 	public void setPiao(String piao) {
 		this.piao = piao;
+	}
+
+	public String getProfessional() {
+		return professional;
+	}
+
+	public void setProfessional(String professional) {
+		this.professional = professional;
+	}
+
+	public String getFollow() {
+		return follow;
+	}
+
+	public void setFollow(String follow) {
+		this.follow = follow;
+	}
+
+	public String getFans() {
+		return fans;
+	}
+
+	public void setFans(String fans) {
+		this.fans = fans;
+	}
+
+	public String getMood() {
+		return mood;
+	}
+
+	public void setMood(String mood) {
+		this.mood = mood;
+	}
+
+	public String getIs_validated() {
+		return is_validated;
+	}
+
+	public void setIs_validated(String is_validated) {
+		this.is_validated = is_validated;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getMobile() {
+		return mobile;
+	}
+
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
+	}
+
+	public String getConstellation() {
+		return constellation;
+	}
+
+	public void setConstellation(String constellation) {
+		this.constellation = constellation;
 	}
 	
 }

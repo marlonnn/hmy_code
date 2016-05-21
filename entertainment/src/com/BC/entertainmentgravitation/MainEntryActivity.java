@@ -452,6 +452,7 @@ public class MainEntryActivity extends BaseActivity implements OnClickListener, 
     	HashMap<String, String> entity = new HashMap<String, String>();
     	entity.put("username", Config.User.getUserName());
 		List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
+		ShowProgressDialog("正在进入直播间，请稍等...");
 		addToThreadPool(Config.create_video, "send create live video request", params);
 	}
 	
@@ -466,6 +467,7 @@ public class MainEntryActivity extends BaseActivity implements OnClickListener, 
     	HashMap<String, String> entity = new HashMap<String, String>();
     	entity.put("username", starName);
 		List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
+		ShowProgressDialog("正在进入直播间，请稍等...");
 		addToThreadPool(Config.query_video, "send watch video request", params);
 	}
     
@@ -902,7 +904,7 @@ public class MainEntryActivity extends BaseActivity implements OnClickListener, 
 			@Override
 			public void onException(Throwable exception) {
 				 onLoginDone();
-				 XLog.i("enter chat room exception, e=" + exception.getMessage());
+				 XLog.e("enter chat room exception, e=" + exception.getMessage());
 	             Toast.makeText(MainEntryActivity.this, 
 	            		 StringUtil.getXmlResource(MainEntryActivity.this, R.string.push_video_nim_login_exception) + exception.getMessage(),
 	            		 Toast.LENGTH_SHORT).show();
@@ -911,13 +913,12 @@ public class MainEntryActivity extends BaseActivity implements OnClickListener, 
 
 			@Override
 			public void onFailed(int code) {
-//                onLoginDone();
                 if (code == ResponseCode.RES_CHATROOM_BLACKLIST) {
                     Toast.makeText(MainEntryActivity.this, 
                     		StringUtil.getXmlResource(MainEntryActivity.this, R.string.push_video_nim_black_list), 
                     		Toast.LENGTH_SHORT).show();
                 } else {
-                	XLog.i("enter chat room failed, code=" + code);
+                	XLog.e("enter chat room failed, code=" + code);
                     Toast.makeText(MainEntryActivity.this, "enter chat room failed, code=" + code, Toast.LENGTH_SHORT).show();
                 }
                 finish();
@@ -925,13 +926,11 @@ public class MainEntryActivity extends BaseActivity implements OnClickListener, 
 
 			@Override
 			public void onSuccess(EnterChatRoomResultData result) {
-//				onLoginDone();
 				ChatRoomInfo roomInfo = result.getRoomInfo();
                 ChatRoomMember member = result.getMember();
                 member.setRoomId(roomInfo.getRoomId());
                 ChatCache.getInstance().ClearMember();
                 ChatCache.getInstance().AddMember(createMasterMember());
-                ChatRoom chatRoom = ChatCache.getInstance().getChatRoom();
                 ChatCache.getInstance().getChatRoom().setChatRoomInfo(roomInfo);
                 if (isPush)
                 {
