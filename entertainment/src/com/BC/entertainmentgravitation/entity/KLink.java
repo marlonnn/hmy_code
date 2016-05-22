@@ -9,6 +9,7 @@ public class KLink {
 	private String max;
 	private String min;
 	private String difference;
+	private String bonus;
 
 	public String getDifference() {
 		return difference;
@@ -41,4 +42,13 @@ public class KLink {
 	public String getMax() {
 		return this.max;
 	}
+
+	public String getBonus() {
+		return bonus;
+	}
+
+	public void setBonus(String bonus) {
+		this.bonus = bonus;
+	}
+	
 }

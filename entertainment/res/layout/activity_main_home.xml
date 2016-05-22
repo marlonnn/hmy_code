@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/activity_charge_bg" >
+
+    <RelativeLayout
+        android:id="@+id/rLayoutTopPortrait"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" >
+
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/activity_main_home_portrait_bg" />
+
+        <com.summer.view.CircularImage
+            android:id="@+id/cImageportrait"
+            android:layout_width="40dip"
+            android:layout_height="40dip"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp" />
+
+        <TextView
+            android:id="@+id/txtViewName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/cImageportrait"
+            android:text="范冰冰"
+            android:textColor="@color/white" />
+
+        <TextView
+            android:id="@+id/txtViewCareer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/txtViewName"
+            android:text="影视演员"
+            android:textColor="@color/white" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" >
+
+        <ImageView
+            android:id="@+id/imgeViewBottomBg"
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/activity_main_home_bottom_bg" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal" >
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:orientation="vertical" >
+	            <ImageView
+	                android:id="@+id/imgViewLine"
+	                android:layout_width="20dp"
+	                android:layout_height="20dp"
+	                android:gravity="center"
+	                android:src="@drawable/activity_main_home_line" />
+	            <TextView
+	                android:id="@+id/txtViewLine"
+	                android:layout_marginTop="5dp"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:gravity="center"
+	                android:textColor="@color/white"
+	                android:text="曲线" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:orientation="vertical" >
+	            <ImageView
+	                android:id="@+id/imgViewVideo"
+	                android:layout_width="20dp"
+	                android:layout_height="20dp"
+	                android:gravity="center"
+	                android:src="@drawable/activity_main_home_video" />
+	            <TextView
+	                android:id="@+id/txtViewVideo"
+	                android:layout_marginTop="5dp"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:gravity="center"
+	                android:textColor="@color/white"
+	                android:text="列表" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:orientation="vertical" >
+	            <ImageView
+	                android:id="@+id/imgViewLive"
+	                android:layout_width="25dp"
+	                android:layout_height="25dp"
+	                android:gravity="center"
+	                android:src="@drawable/activity_main_home_live" />
+	            <TextView
+	                android:id="@+id/txtViewLive"
+	                android:layout_marginTop="2dp"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:gravity="center"
+	                android:textColor="@color/white"
+	                android:text="直播" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:orientation="vertical" >
+	            <ImageView
+	                android:id="@+id/imgViewFound"
+	                android:layout_width="20dp"
+	                android:layout_height="20dp"
+	                android:gravity="center"
+	                android:src="@drawable/activity_main_home_found" />
+	            <TextView
+	                android:id="@+id/txtViewFound"
+	                android:layout_marginTop="5dp"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:gravity="center"
+	                android:textColor="@color/white"
+	                android:text="发现" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:orientation="vertical" >
+	            <ImageView
+	                android:id="@+id/imgViewMyself"
+	                android:layout_width="20dp"
+	                android:layout_height="20dp"
+	                android:gravity="center"
+	                android:src="@drawable/activity_main_home_myself" />
+	            <TextView
+	                android:id="@+id/txtViewMyself"
+	                android:layout_marginTop="5dp"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:gravity="center"
+	                android:textColor="@color/white"
+	                android:text="我的" />
+            </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
+	<ImageView
+		android:id="@+id/imgViewPortrait"
+		android:layout_below="@id/rLayoutTopPortrait"
+		android:layout_width="match_parent"
+		android:scaleType="centerCrop"
+		android:layout_height="250dp" />
+
+	<ImageView
+	    android:id="@+id/imgViewLocation"
+	    android:layout_width="20dp"
+	    android:layout_height="20dp"
+	    android:layout_alignBottom="@+id/imgViewPortrait"
+	    android:layout_alignParentRight="true"
+	    android:layout_marginBottom="26dp"
+	    android:layout_marginRight="70dp"
+	    android:src="@drawable/fragment_hot_location" />
+
+	<TextView
+	    android:id="@+id/txtViewLocation"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignLeft="@+id/imgViewLocation"
+	    android:layout_alignTop="@+id/imgViewLocation"
+	    android:layout_marginLeft="26dp"
+	    android:text="北京"
+	    android:textColor="@color/white" />
+    <RelativeLayout
+        android:id="@+id/rLayoutHongBao"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@id/imgViewPortrait"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/activity_charge_item_bg" >
+
+        <ImageView
+            android:id="@+id/imgViewHongBao"
+            android:layout_width="30dp"
+            android:layout_height="28dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:background="@drawable/activity_line_hongbao" />
+
+        <TextView
+            android:id="@+id/txtViewChange"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"
+            android:text="昨日涨跌15点"
+            android:textColor="@color/white"
+            android:textSize="18dp" />
+
+        <TextView
+            android:id="@+id/txtViewHongBao"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/imgViewHongBao"
+            android:text="000000"
+            android:textColor="@color/white"
+            android:textSize="18dp" />
+    </RelativeLayout>
+    <HorizontalScrollView
+        android:id="@+id/hScrollView"
+        android:layout_below="@id/rLayoutHongBao"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+	    <LinearLayout
+	        android:id="@+id/linearLayout1"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:orientation="horizontal" >
+	
+	        <com.BC.entertainment.view.CoordinateSystemView
+	            android:id="@+id/coordinateSystemView"
+	            android:layout_width="680dp"
+	            android:layout_height="110dp" />
+	    </LinearLayout>
+	</HorizontalScrollView>
+    <LinearLayout
+        android:id="@+id/lLayoutLine"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/hScrollView"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:layout_marginTop="5dp" >
+
+        <TextView
+            android:id="@+id/txtViewIndex"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/home4"
+            android:gravity="center"
+            android:text="当前指数：\n点击查看大图"
+            android:textColor="@color/white"
+            android:textSize="15dp" />
+
+        <ImageButton
+            android:id="@+id/focus"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="15dp"
+            android:background="@drawable/fragment_focus"
+            android:scaleType="fitCenter" />
+
+        <ImageButton
+            android:id="@+id/invest"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="15dp"
+            android:background="@drawable/fragment_invest"
+            android:scaleType="fitCenter" />
+
+        <ImageButton
+            android:id="@+id/divest"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="15dp"
+            android:background="@drawable/fragment_divest"
+            android:scaleType="fitCenter" />
+    </LinearLayout>
+</RelativeLayout>

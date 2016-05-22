@@ -1,11 +1,14 @@
 package com.BC.entertainmentgravitation.entity;
 
+import java.io.Serializable;
+
 /**
  * 聊天室成员信息
  * @author zhongwen
  *
  */
-public class Member{
+@SuppressWarnings("serial")
+public class Member implements Serializable{
 	
 	/**
 	 * 用户账号，后台分配的

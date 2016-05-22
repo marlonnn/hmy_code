@@ -12,6 +12,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -54,6 +55,7 @@ import com.BC.entertainment.chatroom.module.Container;
 import com.BC.entertainment.chatroom.module.DanmakuPanel;
 import com.BC.entertainment.chatroom.module.InputPannel;
 import com.BC.entertainment.chatroom.module.ModuleProxy;
+import com.BC.entertainmentgravitation.HomeActivity;
 import com.BC.entertainmentgravitation.R;
 import com.BC.entertainmentgravitation.dialog.ApplauseGiveConcern;
 import com.BC.entertainmentgravitation.dialog.InfoDialog;
@@ -498,7 +500,7 @@ public class PushFragment extends BaseFragment implements OnClickListener, Modul
         });
     }
     
-    private void showInfoDialog(Member member)
+    private void showInfoDialog(final Member member)
     {
     	if (member != null)
     	{
@@ -536,7 +538,12 @@ public class PushFragment extends BaseFragment implements OnClickListener, Modul
 
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					
+					Intent intent = new Intent();
+					intent.setClass(container.activity, HomeActivity.class);
+					Bundle bundle = new Bundle();
+					bundle.putSerializable("member", member);
+					intent.putExtras(bundle);
+					startActivity(intent);
 				}
         		
         	});

@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/activity_charge_bg" >
+
+    <RelativeLayout
+        android:id="@+id/rLayoutTop"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp" >
+
+        <ImageView
+            android:id="@+id/imageViewBack"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:src="@drawable/activity_charge_back" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true" >
+
+            <ImageView
+                android:id="@+id/imageViewIcon"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:src="@drawable/activity_personal_income_base" />
+
+            <TextView
+                android:id="@+id/textViewCharge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="价值曲线"
+                android:textColor="@color/white"
+                android:textSize="22dp" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rLayoutHongBao"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@id/rLayoutTop"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/activity_charge_item_bg" >
+
+        <ImageView
+            android:id="@+id/imgViewHongBao"
+            android:layout_width="30dp"
+            android:layout_height="28dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:background="@drawable/activity_line_hongbao" />
+
+        <TextView
+            android:id="@+id/txtViewChange"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"
+            android:text="昨日涨跌15点"
+            android:textColor="@color/white"
+            android:textSize="18dp" />
+
+        <TextView
+            android:id="@+id/txtViewHongBao"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/imgViewHongBao"
+            android:text="000000"
+            android:textColor="@color/white"
+            android:textSize="18dp" />
+    </RelativeLayout>
+    <HorizontalScrollView
+        android:id="@+id/hScrollView"
+        android:layout_below="@id/rLayoutHongBao"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+	    <LinearLayout
+	        android:id="@+id/linearLayout1"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:orientation="horizontal" >
+	
+	        <com.BC.entertainment.view.CoordinateSystemView
+	            android:id="@+id/coordinateSystemView"
+	            android:layout_width="1000dp"
+	            android:layout_height="200dp" />
+	    </LinearLayout>
+	</HorizontalScrollView>
+    <LinearLayout
+        android:id="@+id/lLayoutLine"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/hScrollView"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:layout_marginTop="5dp" >
+
+        <TextView
+            android:id="@+id/txtViewIndex"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/home4"
+            android:gravity="center"
+            android:text="当前指数：\n点击查看大图"
+            android:textColor="@color/white"
+            android:textSize="15dp" />
+
+        <ImageButton
+            android:id="@+id/focus"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="15dp"
+            android:background="@drawable/fragment_focus"
+            android:scaleType="fitCenter" />
+
+        <ImageButton
+            android:id="@+id/invest"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="15dp"
+            android:background="@drawable/fragment_invest"
+            android:scaleType="fitCenter" />
+
+        <ImageButton
+            android:id="@+id/divest"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="15dp"
+            android:background="@drawable/fragment_divest"
+            android:scaleType="fitCenter" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/lLayoutExplain"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@+id/lLayoutLine"
+        android:gravity="center"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:background="@drawable/activity_charge_item_bg"
+        android:layout_marginTop="5dp" >
+
+        <TextView
+            android:id="@+id/txtViewCostTypeContent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:textColor="@color/white"
+            android:text="消费类型" />
+        <TextView
+            android:id="@+id/txtViewExplainContent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:textColor="@color/white"
+            android:text="发布者" />
+        <TextView
+            android:id="@+id/txtViewNumberContent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:textColor="@color/white"
+            android:text="数量" />
+        <TextView
+            android:id="@+id/txtViewTimeTypeContent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:textColor="@color/white"
+            android:text="时间" />
+    </LinearLayout>
+    <com.netease.nim.uikit.common.ui.ptr.PullToRefreshListView
+        xmlns:ptr="http://schemas.android.com/apk/res-auto"
+        android:layout_below="@id/lLayoutExplain"
+        android:id="@+id/pullToRefreshListView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:dividerHeight="0px"
+        android:layoutAnimation="@anim/layout_anim_ctrl"
+        android:listSelector="#00000000"
+        ptr:dividerHeight="1px"
+        ptr:ptrAnimationStyle="flip"
+        ptr:ptrMode="both"
+        ptr:scrollbars="false" >
+    </com.netease.nim.uikit.common.ui.ptr.PullToRefreshListView>
+</RelativeLayout>

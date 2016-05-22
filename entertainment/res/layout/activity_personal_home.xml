@@ -3,6 +3,7 @@
     android:background="@drawable/activity_charge_bg"
     android:layout_height="match_parent">
     <RelativeLayout
+        android:id="@+id/rLayoutTop"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="10dp"
@@ -37,8 +38,9 @@
     </RelativeLayout>
     <RelativeLayout
         android:id="@+id/rLayoutPortrait"
+        android:layout_below="@id/rLayoutTop"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="180dp"
         android:paddingTop="10dp"
         android:paddingBottom="10dp" 
         android:background="@drawable/activity_personal_portrait_bg" >
@@ -56,14 +58,127 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/cirImagePortrait"
             android:layout_centerHorizontal="true"
-            android:textSize="18dp"
+            android:textSize="15dp"
+            android:textColor="@color/white"
             android:layout_marginTop="15dp"
-            android:text="" />
-    </RelativeLayout>
+            android:text="范冰冰" />
 
-	<ScrollView
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/txtName"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="13dp" >
+
+            <TextView
+                android:id="@+id/txtViewFocusContent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:text="关注" />
+            <TextView
+                android:id="@+id/txtViewTopFocus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:textColor="@color/white"
+                android:text="29" />
+            <TextView
+                android:id="@+id/txtViewFansContent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:layout_marginLeft="10dp"
+                android:text="粉丝" />
+            <TextView
+                android:id="@+id/txtViewTopFans"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:layout_marginLeft="5dp"
+                android:text="55" />
+        </LinearLayout>
+
+    </RelativeLayout>
+	<LinearLayout
+	    android:id="@+id/lLayoutHomeBottom"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentBottom="true"
+	    android:layout_centerHorizontal="true"
+	    android:orientation="horizontal"
+	    android:layout_centerVertical="true"
+	    android:background="@drawable/activity_home_bottom_bg" >
+
+		<LinearLayout
+		    android:id="@+id/lLayoutFocus"
+		    android:layout_weight="1"
+		    android:layout_width="wrap_content"
+		    android:layout_height="match_parent"
+		    android:gravity="center" >
+
+			<ImageView
+			    android:id="@+id/imgViewFocus"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:src="@drawable/activity_home_bottom_focus" />
+
+			<TextView
+			    android:id="@+id/txtViewFocus"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:textColor="@color/white"
+			    android:text="关注" />
+
+		</LinearLayout>
+		<LinearLayout
+		    android:id="@+id/lLayoutLine"
+		    android:layout_weight="1"
+		    android:layout_width="wrap_content"
+		    android:layout_height="match_parent"
+		    android:gravity="center" >
+
+			<ImageView
+			    android:id="@+id/imgViewLine"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:src="@drawable/activity_home_bottom_line" />
+
+			<TextView
+			    android:id="@+id/txtViewLine"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:textColor="@color/white"
+			    android:textSize="10dp"
+			    android:text="价值曲线" />
+
+		</LinearLayout>
+		<LinearLayout
+		    android:layout_weight="1"
+		    android:id="@+id/lLayoutYupiao"
+		    android:layout_width="wrap_content"
+		    android:layout_height="match_parent"
+		    android:gravity="center" >
+
+			<ImageView
+			    android:id="@+id/imgViewYupiao"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:src="@drawable/activity_home_bottom_yupiao" />
+
+			<TextView
+			    android:id="@+id/txtViewYupiao"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:textColor="@color/white"
+			    android:textSize="10dp"
+			    android:text="娱票贡献榜" />
+
+		</LinearLayout>
+	</LinearLayout>
+ 	<ScrollView
 	    android:layout_below="@id/rLayoutPortrait"
-	    android:layout_above="@id/lLayoutBottom"
+	    android:layout_above="@id/lLayoutHomeBottom"
 	    android:layout_width="match_parent"
 	    android:layout_height="match_parent"
 	    android:orientation="vertical" >
@@ -325,83 +440,5 @@
 			</RelativeLayout>
 	    </LinearLayout>
 	
-	</ScrollView>
-	<LinearLayout
-	    android:id="@+id/lLayoutBottom"
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:layout_alignParentBottom="true"
-	    android:layout_centerHorizontal="true"
-	    android:orientation="horizontal"
-	    android:layout_centerVertical="true"
-	    android:layout_centerHorizontal="true"
-	    android:background="@drawable/activity_home_bottom_bg" >
-
-		<LinearLayout
-		    android:id="@+id/lLayoutFocus"
-		    android:layout_weight="1"
-		    android:layout_width="wrap_content"
-		    android:layout_height="match_parent"
-		    android:gravity="center" >
-
-			<ImageView
-			    android:id="@+id/imgViewFocus"
-			    android:layout_width="wrap_content"
-			    android:layout_height="wrap_content"
-			    android:src="@drawable/activity_home_bottom_focus" />
-
-			<TextView
-			    android:id="@+id/txtViewFocus"
-			    android:layout_width="wrap_content"
-			    android:layout_height="wrap_content"
-			    android:textColor="@color/white"
-			    android:text="关注" />
-
-		</LinearLayout>
-		<LinearLayout
-		    android:id="@+id/lLayoutLine"
-		    android:layout_weight="1"
-		    android:layout_width="wrap_content"
-		    android:layout_height="match_parent"
-		    android:gravity="center" >
-
-			<ImageView
-			    android:id="@+id/imgViewLine"
-			    android:layout_width="wrap_content"
-			    android:layout_height="wrap_content"
-			    android:src="@drawable/activity_home_bottom_line" />
-
-			<TextView
-			    android:id="@+id/txtViewLine"
-			    android:layout_width="wrap_content"
-			    android:layout_height="wrap_content"
-			    android:textColor="@color/white"
-			    android:textSize="10dp"
-			    android:text="价值曲线" />
-
-		</LinearLayout>
-		<LinearLayout
-		    android:layout_weight="1"
-		    android:id="@+id/lLayoutYupiao"
-		    android:layout_width="wrap_content"
-		    android:layout_height="match_parent"
-		    android:gravity="center" >
-
-			<ImageView
-			    android:id="@+id/imgViewYupiao"
-			    android:layout_width="wrap_content"
-			    android:layout_height="wrap_content"
-			    android:src="@drawable/activity_home_bottom_yupiao" />
-
-			<TextView
-			    android:id="@+id/txtViewYupiao"
-			    android:layout_width="wrap_content"
-			    android:layout_height="wrap_content"
-			    android:textColor="@color/white"
-			    android:textSize="10dp"
-			    android:text="娱票贡献榜" />
-
-		</LinearLayout>
-	</LinearLayout>
-    
+	</ScrollView>   
 </RelativeLayout>
