@@ -455,11 +455,32 @@ public class PushFragment extends BaseFragment implements OnClickListener, Modul
      */
     private void initPortrait()
     {
+    	String image = "";
     	try {
 			headPortrait = (CircularImage) rootView.findViewById(R.id.portrait);
 			headPortrait.setOnClickListener(this);
+			
+			try {
+				if (Config.User.getImage() != null)
+				{
+					String s[] = Config.User.getImage().split("/");
+					
+					if (s[2] != null && !s[2].contains("app.haimianyu.cn"))
+					{
+						image = "http://app.haimianyu.cn/" + Config.User.getImage();
+					}
+					else
+					{
+						image = Config.User.getImage();
+					}
+				}
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
 			Glide.with(this)
-			.load(Config.User.getImage())
+			.load(image)
 			.centerCrop().diskCacheStrategy(DiskCacheStrategy.ALL)
 			.placeholder(R.drawable.avatar_def).into(headPortrait);
 			XLog.i("master portrait: " + " http://app.haimianyu.cn/" + Config.User.getImage());
@@ -1011,11 +1032,15 @@ public class PushFragment extends BaseFragment implements OnClickListener, Modul
 	private Member CreateMember()
 	{
 		Member m = new Member();
-		m.setId(Config.User.getClientID());
-		m.setNick(Config.User.getNickName());
-		m.setPortrait(Config.User.getImage());
-//		m.setGender(Config.User)
-//		m.setRegion(Config.User);
+		m.setId(InfoCache.getInstance().getPersonalInfo().getClientID());
+		m.setNick(InfoCache.getInstance().getPersonalInfo().getNickname());
+		m.setPortrait(InfoCache.getInstance().getPersonalInfo().getHead_portrait());
+		m.setGender(InfoCache.getInstance().getPersonalInfo().getGender());
+		m.setRegion(InfoCache.getInstance().getPersonalInfo().getRegion());
+		m.setConstellation(InfoCache.getInstance().getPersonalInfo().getThe_constellation());
+		m.setNationality(InfoCache.getInstance().getPersonalInfo().getNationality());
+		m.setId(InfoCache.getInstance().getPersonalInfo().getClientID());
+//		m.setMood(InfoCache.getInstance().getPersonalInfo().get)
 		return m;
 	}
 	
@@ -1251,10 +1276,10 @@ public class PushFragment extends BaseFragment implements OnClickListener, Modul
 								Toast.LENGTH_SHORT).show();
 					}
 				});
-		if (isFirst)
-		{
-			onMsgSend(msg);
-		}
+//		if (isFirst)
+//		{
+//			onMsgSend(msg);
+//		}
 		
 	}
 
