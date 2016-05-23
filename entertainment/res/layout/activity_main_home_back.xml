@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/activity_charge_bg" >
-    <android.support.v4.view.ViewPager
+    <com.BC.entertainment.view.CustomViewPager
         android:id="@+id/vPagerContent"
         android:layout_gravity="center"
         android:layout_width="match_parent"
@@ -30,6 +30,7 @@
             android:orientation="horizontal" >
 
             <LinearLayout
+                android:id="@+id/rLayoutLine"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -40,8 +41,7 @@
                     android:id="@+id/imgViewLine"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:gravity="center"
-                    android:src="@drawable/activity_main_home_line" />
+                    android:gravity="center"/>
 
                 <TextView
                     android:id="@+id/txtViewLine"
@@ -54,6 +54,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/rLayoutVideo"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -64,8 +65,7 @@
                     android:id="@+id/imgViewVideo"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:gravity="center"
-                    android:src="@drawable/activity_main_home_video" />
+                    android:gravity="center"/>
 
                 <TextView
                     android:id="@+id/txtViewVideo"
@@ -73,11 +73,12 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:gravity="center"
-                    android:text="列表"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    android:text="列表"/>
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/rLayoutLive"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -88,8 +89,7 @@
                     android:id="@+id/imgViewLive"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
-                    android:gravity="center"
-                    android:src="@drawable/activity_main_home_live" />
+                    android:gravity="center"/>
 
                 <TextView
                     android:id="@+id/txtViewLive"
@@ -102,6 +102,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/rLayoutFound"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -112,8 +113,7 @@
                     android:id="@+id/imgViewFound"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:gravity="center"
-                    android:src="@drawable/activity_main_home_found" />
+                    android:gravity="center"/>
 
                 <TextView
                     android:id="@+id/txtViewFound"
@@ -126,6 +126,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/rLayoutMyself"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -136,8 +137,7 @@
                     android:id="@+id/imgViewMyself"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:gravity="center"
-                    android:src="@drawable/activity_main_home_myself" />
+                    android:gravity="center"/>
 
                 <TextView
                     android:id="@+id/txtViewMyself"

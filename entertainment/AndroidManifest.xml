@@ -317,7 +317,18 @@
             android:name=".CurveActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait" >
-        </activity>     
+        </activity>
+        <!-- 主页 -->
+        <activity
+            android:name=".HomeActivity_back"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".PushActivity_back"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" >
+        </activity>   
         <meta-data
             android:name="UMENG_APPKEY"
             android:value="57399e6d67e58e56fd0031e2" >

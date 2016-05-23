@@ -427,14 +427,14 @@ public class PushFragment extends BaseFragment implements OnClickListener, Modul
 		
 		startGetYuPiao();
 		
-		/**
-		 * 初始化投资和撤资弹出对话框
-		 */
-		applauseGiveConcern = new ApplauseGiveConcern( container.activity,
-				InfoCache.getInstance().getStartInfo().getStar_ID(), this,
-				InfoCache.getInstance().getStartInfo()
-						.getThe_current_hooted_thumb_up_prices(),
-				InfoCache.getInstance().getStartInfo().getStage_name());
+//		/**
+//		 * 初始化投资和撤资弹出对话框
+//		 */
+//		applauseGiveConcern = new ApplauseGiveConcern( container.activity,
+//				InfoCache.getInstance().getStartInfo().getStar_ID(), this,
+//				InfoCache.getInstance().getStartInfo()
+//						.getThe_current_hooted_thumb_up_prices(),
+//				InfoCache.getInstance().getStartInfo().getStage_name());
 		
 		rootView.setOnTouchListener(new OnTouchListener() {
 			

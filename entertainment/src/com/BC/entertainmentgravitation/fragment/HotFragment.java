@@ -16,10 +16,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.BC.entertainment.adapter.HotAdapter;
 import com.BC.entertainmentgravitation.DetailsActivity;
 import com.BC.entertainmentgravitation.R;
 import com.BC.entertainmentgravitation.entity.FHNEntity;
@@ -31,6 +34,7 @@ import com.netease.nim.uikit.common.ui.ptr.PullToRefreshBase;
 import com.netease.nim.uikit.common.ui.ptr.PullToRefreshGridView;
 import com.netease.nim.uikit.common.ui.ptr.PullToRefreshBase.OnRefreshListener2;
 import com.summer.adapter.CommonAdapter;
+import com.summer.adapter.CommonAdapter.ViewHolder;
 import com.summer.config.Config;
 import com.summer.factory.ThreadPoolFactory;
 import com.summer.fragment.BaseFragment;
@@ -54,6 +58,7 @@ public class HotFragment extends BaseFragment{
 	private int pageIndex = 1;
 	private PullToRefreshGridView pGridViewHot;
 	private CommonAdapter<FHNEntity> adapter;
+//	private HotAdapter adapter;
 	private List<FHNEntity> hotList = new ArrayList<>();;
 	private Gson gson;
 	@Override
@@ -115,6 +120,24 @@ public class HotFragment extends BaseFragment{
 		pGridViewHot.getRefreshableView().setVerticalSpacing(10);
 		pGridViewHot.setMode(PullToRefreshBase.Mode.BOTH);
 		pGridViewHot.setOnRefreshListener(refreshListener);
+		pGridViewHot.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				try {
+					FHNEntity entity = (FHNEntity)view.getTag();
+					if (entity != null)
+					{
+						Intent i = new Intent(getActivity(), DetailsActivity.class);
+						i.putExtra("userID", entity.getStar_ID());
+						startActivity(i);
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
 		pGridViewHot.setAdapter(adapter);
 	}
 
@@ -162,7 +185,13 @@ public class HotFragment extends BaseFragment{
 	
 	private void initAdapter()
 	{
+//		adapter = new HotAdapter(getActivity(), hotList);
 		adapter = new CommonAdapter<FHNEntity>(getActivity(), R.layout.fragment_hot_item, hotList) {
+			
+			public void setTag(ViewHolder viewHolder, final FHNEntity item)
+			{
+				viewHolder.getView(R.id.imgViewPortrait).setTag(R.id.tag_portrait, item);
+			}
 
 			@Override
 			public void convert(
@@ -199,9 +228,20 @@ public class HotFragment extends BaseFragment{
 
 							@Override
 							public void onClick(View v) {
-								Intent i = new Intent(getActivity(), DetailsActivity.class);
-								i.putExtra("userID", item.getStar_ID());
-								startActivity(i);
+								try {
+									FHNEntity entity = (FHNEntity)v.getTag(R.id.tag_portrait);
+									if (entity != null)
+									{
+										Intent i = new Intent(getActivity(), DetailsActivity.class);
+										i.putExtra("userID", entity.getStar_ID());
+										startActivity(i);
+									}
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+//								Intent i = new Intent(getActivity(), DetailsActivity.class);
+//								i.putExtra("userID", item.getStar_ID());
+//								startActivity(i);
 							}
 						});
 						Glide.with(getActivity()).load(item.getHead_portrait())

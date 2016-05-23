@@ -8,8 +8,9 @@ public class KLink {
 
 	private String max;
 	private String min;
-	private String difference;
-	private String bonus;
+	private String difference;//涨跌
+	private String bonus;//红包数
+	private String bid;//当前指数
 
 	public String getDifference() {
 		return difference;
@@ -50,5 +51,12 @@ public class KLink {
 	public void setBonus(String bonus) {
 		this.bonus = bonus;
 	}
-	
+
+	public String getBid() {
+		return bid;
+	}
+
+	public void setBid(String bid) {
+		this.bid = bid;
+	}
 }

@@ -1,11 +1,14 @@
 package com.BC.entertainmentgravitation.entity;
 
+import java.io.Serializable;
+
 /**
  * 明星创建的直播频道相关信息
  * @author zhongwen
  *
  */
-public class StarLiveVideoInfo {
+@SuppressWarnings("serial")
+public class StarLiveVideoInfo implements Serializable{
 
 	private String username;
 	

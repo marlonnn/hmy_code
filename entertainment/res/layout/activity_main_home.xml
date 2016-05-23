@@ -180,7 +180,7 @@
 		android:layout_below="@id/rLayoutTopPortrait"
 		android:layout_width="match_parent"
 		android:scaleType="centerCrop"
-		android:layout_height="250dp" />
+		android:layout_height="270dp" />
 
 	<ImageView
 	    android:id="@+id/imgViewLocation"

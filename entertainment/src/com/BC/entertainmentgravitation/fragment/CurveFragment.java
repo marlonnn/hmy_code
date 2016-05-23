@@ -1,5 +1,6 @@
 package com.BC.entertainmentgravitation.fragment;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -7,30 +8,37 @@ import org.apache.http.NameValuePair;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.BC.entertainment.cache.InfoCache;
 import com.BC.entertainment.view.CoordinateSystemView;
+import com.BC.entertainmentgravitation.PersonalActivity;
 import com.BC.entertainmentgravitation.R;
 import com.BC.entertainmentgravitation.entity.EditPersonal;
 import com.BC.entertainmentgravitation.entity.KLink;
 import com.BC.entertainmentgravitation.entity.Point;
+import com.BC.entertainmentgravitation.entity.Ranking;
+import com.BC.entertainmentgravitation.entity.StarInformation;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.summer.config.Config;
 import com.summer.factory.ThreadPoolFactory;
 import com.summer.fragment.BaseFragment;
 import com.summer.handler.InfoHandler;
 import com.summer.json.Entity;
-import com.summer.logger.XLog;
 import com.summer.task.HttpBaseTask;
 import com.summer.treadpool.ThreadPoolConst;
 import com.summer.utils.JsonUtil;
@@ -52,6 +60,7 @@ public class CurveFragment extends BaseFragment implements OnClickListener{
 	
 	private CoordinateSystemView coordinateSystemView;
 	private CircularImage cImagePortrait;
+	private ImageView imgViewPortrait;
 	private TextView txtViewName;
 	private TextView txtViewCareer;
 	private TextView txtViewHongBao;
@@ -60,6 +69,14 @@ public class CurveFragment extends BaseFragment implements OnClickListener{
 	private TextView txtViewLocation;
 	
 	private LineChart lineChart;
+	
+	ArrayList<Ranking> ranking = new ArrayList<Ranking>();
+	
+	private float mPosX;
+	private float mCurrentPosX;
+	private boolean isSlipping = false;
+	private int pageIndex = 1;
+	private int selectIndex = 0;
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -69,8 +86,10 @@ public class CurveFragment extends BaseFragment implements OnClickListener{
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState) {
 		gson = new Gson();
+		lineChart = new LineChart();
 		sendPersonalInfoRequest();
-		sendKLineGraphRequest();
+//		sendKLineGraphRequest();
+		sendStarRankRequest();
 		super.onCreate(savedInstanceState);
 	}
 	
@@ -117,22 +136,122 @@ public class CurveFragment extends BaseFragment implements OnClickListener{
 	{
 		coordinateSystemView = (CoordinateSystemView) rootView.findViewById(R.id.coordinateSystemView);
 		cImagePortrait = (CircularImage) rootView.findViewById(R.id.cImageportrait);
+		imgViewPortrait = (ImageView) rootView.findViewById(R.id.imgViewPortrait);
+		imgViewPortrait.setOnTouchListener(new OnTouchListener() {
+			
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				switch (event.getAction()) {
+				/**
+				 * 按下
+				 * */
+				case MotionEvent.ACTION_DOWN:
+					mPosX = event.getX();
+					isSlipping = true;
+					break;
+				/**
+				 * 移动
+				 * */
+				case MotionEvent.ACTION_MOVE:
+					mCurrentPosX = event.getX();
+					if(isSlipping){
+						if (mCurrentPosX - mPosX > 10){
+							isSlipping = false;
+							nextOne();
+						}
+						else if (mPosX - mCurrentPosX > 10){
+							isSlipping = false;
+							lastOne();
+						}
+					}
+				
+					break;
+				// 拿起
+				case MotionEvent.ACTION_UP:
+					if(isSlipping){
+
+					}
+					break;
+				default:
+					break;
+				}
+				return true;
+			}
+		});
 		txtViewName = (TextView) rootView.findViewById(R.id.txtViewName);
 		txtViewCareer = (TextView) rootView.findViewById(R.id.txtViewCareer);
 		txtViewHongBao = (TextView) rootView.findViewById(R.id.txtViewHongBao);
 		txtViewChange = (TextView) rootView.findViewById(R.id.txtViewChange);
 		txtViewIndex = (TextView) rootView.findViewById(R.id.txtViewIndex);
 		txtViewLocation = (TextView) rootView.findViewById(R.id.txtViewLocation);
+		cImagePortrait.setOnClickListener(this);
 		rootView.findViewById(R.id.focus).setOnClickListener(this);
 		rootView.findViewById(R.id.invest).setOnClickListener(this);
 		rootView.findViewById(R.id.divest).setOnClickListener(this);
 		
-		Glide.with(this).load(Config.User.getImage())
-		.centerCrop().diskCacheStrategy(DiskCacheStrategy.ALL)
-		.placeholder(R.drawable.avatar_def).into(cImagePortrait);
-		txtViewName.setText(Config.User.getNickName());
 	}
 	
+	/** 
+	 * 首页展示,切换明星
+	 * 上一个
+	 ***/
+	public void lastOne(){
+		if (selectIndex > 0) {
+			selectIndex--;
+			sendStarInfoRequest(ranking.get(selectIndex)
+					.getStar_ID());
+		} else {
+			ToastUtil.show(getActivity(), "没有更多数据了");
+		}
+	}
+	
+	/** 
+	 * 首页展示,切换明星
+	 * 下一个
+	 ***/
+	public void nextOne(){
+		if (selectIndex < ranking.size() - 1) {
+			selectIndex++;
+			sendStarInfoRequest(ranking.get(selectIndex)
+					.getStar_ID());
+		} else {
+			pageIndex++;
+			sendStarRankRequest();
+		}
+	}
+	
+	/**
+	 * 获取明星排行信息
+	 */
+	private void sendStarRankRequest() {
+		if (Config.User == null) {
+			ToastUtil.show(getActivity(), "无法获取信息");
+			return;
+		}
+		HashMap<String, String> entity = new HashMap<String, String>();
+
+		entity.put("clientID", Config.User.getClientID());
+		entity.put("The_page_number", "" + pageIndex);
+		entity.put("type", "1");
+
+		ShowProgressDialog("获取信息...");
+    	List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
+    	addToThreadPool(Config.in_comparison_to_listApply_to_be_a_platform_star_, "get start rank info", params);
+	}
+	
+    /**
+     * 获取明星信息
+     */
+    private void sendStarInfoRequest(String starID)
+    {
+    	HashMap<String, String> entity = new HashMap<String, String>();
+    	entity.put("clientID", Config.User.getClientID());
+		entity.put("Star_ID", starID);
+    	List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
+    	ShowProgressDialog(this.getString(R.string.mainactivity_get_start_info));
+    	addToThreadPool(Config.star_information, "get start info", params);
+    }
+    
 	/**
 	 * 初始化价值曲线
 	 * @param kLink
@@ -207,7 +326,8 @@ public class CurveFragment extends BaseFragment implements OnClickListener{
 	 */
 	private void sendKLineGraphRequest() {
 		HashMap<String, String> entity = new HashMap<String, String>();
-		entity.put("star_id", Config.User.getClientID());
+		entity.put("user_id", Config.User.getClientID());
+		entity.put("star_id", ranking.get(selectIndex).getStar_ID());
 		entity.put("type", "1");
     	List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
 //    	ShowProgressDialog("获取折线图...");
@@ -224,8 +344,13 @@ public class CurveFragment extends BaseFragment implements OnClickListener{
     }
 	@Override
 	public void onClick(View v) {
+		Intent intent;
 		switch(v.getId())
 		{
+		case R.id.cImageportrait:
+			intent = new Intent(getActivity(), PersonalActivity.class);
+			startActivity(intent);
+			break;
 		case R.id.focus:
 			ToastUtil.show(getActivity(), "此功能正在完善中，敬请期待...");
 			break;
@@ -250,22 +375,68 @@ public class CurveFragment extends BaseFragment implements OnClickListener{
 			if (baseEntity.getData() != null)
 			{
 				InfoCache.getInstance().setPersonalInfo(baseEntity.getData());
-				txtViewLocation.setText(baseEntity.getData().getRegion());
-				txtViewCareer.setText(baseEntity.getData().getProfessional());
 			}
 
 			break;
-		case Config.k_line_graph:
-			XLog.i("get k line success");
-			Entity<KLink> baseEntity3 = gson.fromJson(jsonString,
-					new TypeToken<Entity<KLink>>() {
+		case Config.star_information:
+			Entity<StarInformation> startInfo = gson.fromJson(jsonString,
+					new TypeToken<Entity<StarInformation>>() {
 					}.getType());
-			KLink kLink = baseEntity3.getData();
-			int diff = Integer.parseInt(kLink.getDifference());
-			txtViewChange.setText("昨日涨跌"+diff+"点");
-			txtViewHongBao.setText(kLink.getBonus() == null ? "" : kLink.getBonus());
-			setPriceCurve(kLink);
-			XLog.i(kLink.toString());
+			if (startInfo != null)
+			{
+				InfoCache.getInstance().setStartInfo(startInfo.getData());
+				InfoCache.getInstance().AddToStarInfoList(startInfo.getData());
+				
+				Glide.with(this).load(InfoCache.getInstance().getStartInfo().getHead_portrait())
+				.centerCrop().diskCacheStrategy(DiskCacheStrategy.ALL)
+				.placeholder(R.drawable.avatar_def).into(imgViewPortrait);
+				
+				txtViewName.setText(InfoCache.getInstance().getStartInfo().getStage_name());
+				txtViewLocation.setText(InfoCache.getInstance().getStartInfo().getRegion());
+				txtViewCareer.setText(InfoCache.getInstance().getStartInfo().getProfessional());
+				
+				Glide.with(this).load(InfoCache.getInstance().getStartInfo().getHead_portrait())
+				.centerCrop().diskCacheStrategy(DiskCacheStrategy.ALL)
+				.placeholder(R.drawable.avatar_def).into(cImagePortrait);
+				
+				sendKLineGraphRequest();
+			}
+			break;
+		case Config.k_line_graph:
+			KLink kLink;
+			try {
+				Entity<KLink> baseEntity3 = gson.fromJson(jsonString,
+						new TypeToken<Entity<KLink>>() {
+						}.getType());
+				kLink = baseEntity3.getData();
+				int diff = Integer.parseInt(kLink.getDifference());
+				txtViewChange.setText("昨日涨跌"+diff+"点");
+				txtViewHongBao.setText(kLink.getBonus() == null ? "" : kLink.getBonus());
+				txtViewIndex.setText("当前指数：" + kLink.getBid() + "\n点击查看大图");
+				setPriceCurve(kLink);
+			} catch (JsonSyntaxException e) {
+				e.printStackTrace();
+			} catch (NumberFormatException e) {
+				e.printStackTrace();
+			}
+			break;
+		case Config.in_comparison_to_listApply_to_be_a_platform_star_:
+			try {
+				Entity<List<Ranking>> baseEntity4 = gson.fromJson(jsonString,
+						new TypeToken<Entity<List<Ranking>>>() {
+						}.getType());
+				ranking.addAll(baseEntity4.getData());
+				if (ranking != null && baseEntity4.getData().size() > 0) {
+					if (selectIndex != 0) {
+						selectIndex++;
+					}
+					sendStarInfoRequest(ranking.get(selectIndex).getStar_ID());
+				} else {
+					ToastUtil.show(getActivity(), this.getString(R.string.mainactivity_have_no_data));
+				}
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
 			break;
 		}
 	}

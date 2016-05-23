@@ -23,14 +23,16 @@
             android:layout_height="40dip"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp" />
+            android:layout_marginLeft="3dp" />
 
         <TextView
             android:id="@+id/txtViewName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
+            android:layout_marginLeft="2dp"
             android:layout_toRightOf="@+id/cImageportrait"
+            android:textSize="15dp"
             android:text="范冰冰"
             android:textColor="@color/white" />
 
@@ -42,6 +44,7 @@
             android:layout_marginLeft="5dp"
             android:layout_toRightOf="@+id/txtViewName"
             android:text="影视演员"
+            android:textSize="13dp"
             android:textColor="@color/white" />
     </RelativeLayout>
 
@@ -51,7 +54,7 @@
 		android:layout_below="@id/rLayoutTopPortrait"
 		android:layout_width="match_parent"
 		android:scaleType="centerCrop"
-		android:layout_height="250dp" />
+		android:layout_height="300dp" />
 
 	<ImageView
 	    android:id="@+id/imgViewLocation"
@@ -71,7 +74,7 @@
 	    android:layout_alignTop="@+id/imgViewLocation"
 	    android:layout_marginLeft="26dp"
 	    android:text="北京"
-	    android:textColor="@color/white" />
+	    android:textColor="@color/hmy_red" />
     <RelativeLayout
         android:id="@+id/rLayoutHongBao"
         android:layout_width="match_parent"
@@ -109,66 +112,74 @@
             android:textColor="@color/white"
             android:textSize="18dp" />
     </RelativeLayout>
-    <HorizontalScrollView
-        android:id="@+id/hScrollView"
+    <RelativeLayout
+        android:id="@+id/rLayoutCurve"
         android:layout_below="@id/rLayoutHongBao"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/activity_charge_item_bg" >
+	    <HorizontalScrollView
+	        android:id="@+id/hScrollView"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content" >
+		    <LinearLayout
+		        android:id="@+id/linearLayout1"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:orientation="horizontal" >
+		
+		        <com.BC.entertainment.view.CoordinateSystemView
+		            android:id="@+id/coordinateSystemView"
+		            android:layout_width="680dp"
+		            android:layout_height="110dp" />
+		    </LinearLayout>
+		</HorizontalScrollView>
 	    <LinearLayout
-	        android:id="@+id/linearLayout1"
+	        android:id="@+id/lLayoutLine"
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
-	        android:orientation="horizontal" >
+	        android:layout_below="@+id/hScrollView"
+	        android:layout_centerHorizontal="true"
+	        android:gravity="center"
+	        android:layout_marginTop="5dp" >
 	
-	        <com.BC.entertainment.view.CoordinateSystemView
-	            android:id="@+id/coordinateSystemView"
-	            android:layout_width="680dp"
-	            android:layout_height="110dp" />
-	    </LinearLayout>
-	</HorizontalScrollView>
-    <LinearLayout
-        android:id="@+id/lLayoutLine"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/hScrollView"
-        android:layout_centerHorizontal="true"
-        android:gravity="center"
-        android:layout_marginTop="5dp" >
+	        <TextView
+	            android:id="@+id/txtViewIndex"
+	            android:layout_width="wrap_content"
+	            android:layout_height="40dp"
+	            android:layout_gravity="center"
+	            android:layout_marginLeft="10dp"
+	            android:background="@drawable/home4"
+	            android:gravity="center"
+	            android:text="当前指数：\n点击查看大图"
+	            android:textColor="@color/white"
+	            android:textSize="15dp" />
+	
+	        <ImageButton
+	            android:id="@+id/focus"
+	            android:layout_width="40dp"
+	            android:layout_height="40dp"
+	            android:layout_marginLeft="15dp"
+	            android:background="@drawable/fragment_focus"
+	            android:scaleType="fitCenter" />
+	
+	        <ImageButton
+	            android:id="@+id/invest"
+	            android:layout_width="40dp"
+	            android:layout_height="40dp"
+	            android:layout_marginLeft="15dp"
+	            android:background="@drawable/fragment_invest"
+	            android:scaleType="fitCenter" />
+	
+	        <ImageButton
+	            android:id="@+id/divest"
+	            android:layout_width="40dp"
+	            android:layout_height="40dp"
+	            android:layout_marginLeft="15dp"
+	            android:background="@drawable/fragment_divest"
+	            android:scaleType="fitCenter" />
+	    </LinearLayout>     
+    </RelativeLayout>
 
-        <TextView
-            android:id="@+id/txtViewIndex"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_gravity="center"
-            android:layout_marginLeft="10dp"
-            android:background="@drawable/home4"
-            android:gravity="center"
-            android:text="当前指数：\n点击查看大图"
-            android:textColor="@color/white"
-            android:textSize="15dp" />
 
-        <ImageButton
-            android:id="@+id/focus"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginLeft="15dp"
-            android:background="@drawable/fragment_focus"
-            android:scaleType="fitCenter" />
-
-        <ImageButton
-            android:id="@+id/invest"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginLeft="15dp"
-            android:background="@drawable/fragment_invest"
-            android:scaleType="fitCenter" />
-
-        <ImageButton
-            android:id="@+id/divest"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginLeft="15dp"
-            android:background="@drawable/fragment_divest"
-            android:scaleType="fitCenter" />
-    </LinearLayout>
 </RelativeLayout>
