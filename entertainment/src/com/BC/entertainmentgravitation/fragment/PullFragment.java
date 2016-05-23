@@ -57,7 +57,7 @@ import com.BC.entertainment.chatroom.module.DanmakuPanel;
 import com.BC.entertainment.chatroom.module.InputPannel;
 import com.BC.entertainment.chatroom.module.ModuleProxy;
 import com.BC.entertainmentgravitation.FinishActivity;
-import com.BC.entertainmentgravitation.HomeActivity;
+import com.BC.entertainmentgravitation.PersonalHomeActivity;
 import com.BC.entertainmentgravitation.R;
 import com.BC.entertainmentgravitation.dialog.ApplauseGiveConcern;
 import com.BC.entertainmentgravitation.dialog.InfoDialog;
@@ -565,7 +565,7 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					Intent intent = new Intent();
-					intent.setClass(container.activity, HomeActivity.class);
+					intent.setClass(container.activity, PersonalHomeActivity.class);
 					Bundle bundle = new Bundle();
 					bundle.putSerializable("member", member);
 					intent.putExtras(bundle);

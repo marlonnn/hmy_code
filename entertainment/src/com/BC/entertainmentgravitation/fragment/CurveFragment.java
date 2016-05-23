@@ -1,17 +1,23 @@
-package com.BC.entertainmentgravitation;
+package com.BC.entertainmentgravitation.fragment;
 
 import java.util.HashMap;
 import java.util.List;
 
 import org.apache.http.NameValuePair;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
 
 import com.BC.entertainment.cache.InfoCache;
 import com.BC.entertainment.view.CoordinateSystemView;
+import com.BC.entertainmentgravitation.R;
 import com.BC.entertainmentgravitation.entity.EditPersonal;
 import com.BC.entertainmentgravitation.entity.KLink;
 import com.BC.entertainmentgravitation.entity.Point;
@@ -19,9 +25,9 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.summer.activity.BaseActivity;
 import com.summer.config.Config;
 import com.summer.factory.ThreadPoolFactory;
+import com.summer.fragment.BaseFragment;
 import com.summer.handler.InfoHandler;
 import com.summer.json.Entity;
 import com.summer.logger.XLog;
@@ -33,15 +39,15 @@ import com.summer.utils.ToastUtil;
 import com.summer.utils.UrlUtil;
 import com.summer.view.CircularImage;
 import com.summer.view.LineChart;
-import com.umeng.analytics.MobclickAgent;
 
 /**
- * 
+ * 价值曲线
  * @author wen zhong
  *
  */
-public class HomeActivity extends BaseActivity implements OnClickListener{
+public class CurveFragment extends BaseFragment implements OnClickListener{
 	
+	private View rootView;
 	private Gson gson;
 	
 	private CoordinateSystemView coordinateSystemView;
@@ -54,31 +60,72 @@ public class HomeActivity extends BaseActivity implements OnClickListener{
 	private TextView txtViewLocation;
 	
 	private LineChart lineChart;
-	
+
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main_home);
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+	}
+
+	@Override
+	public void onCreate(@Nullable Bundle savedInstanceState) {
 		gson = new Gson();
-		lineChart = new LineChart();
-		findViewById();
 		sendPersonalInfoRequest();
 		sendKLineGraphRequest();
+		super.onCreate(savedInstanceState);
+	}
+	
+	@Override
+	public void onStart() {
+		super.onStart();
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+	}
+	
+	@Override
+	public void onPause() {
+		super.onPause();
+	}
+
+	@Override
+	public void onStop() {
+		super.onStop();
+	}
+	
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+	}
+	
+	@SuppressLint("InflateParams") @Override
+	@Nullable
+	public View onCreateView(LayoutInflater inflater,
+			@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+		rootView = inflater.inflate(R.layout.fragment_curve, null);
+		return rootView;
+	}
+	
+	@Override
+	public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+		super.onViewCreated(view, savedInstanceState);
+		findViewById();
 	}
 	
 	private void findViewById()
 	{
-		coordinateSystemView = (CoordinateSystemView) findViewById(R.id.coordinateSystemView);
-		cImagePortrait = (CircularImage) findViewById(R.id.cImageportrait);
-		txtViewName = (TextView) findViewById(R.id.txtViewName);
-		txtViewCareer = (TextView) findViewById(R.id.txtViewCareer);
-		txtViewHongBao = (TextView) findViewById(R.id.txtViewHongBao);
-		txtViewChange = (TextView) findViewById(R.id.txtViewChange);
-		txtViewIndex = (TextView) findViewById(R.id.txtViewIndex);
-		txtViewLocation = (TextView) findViewById(R.id.txtViewLocation);
-		findViewById(R.id.focus).setOnClickListener(this);
-		findViewById(R.id.invest).setOnClickListener(this);
-		findViewById(R.id.divest).setOnClickListener(this);
+		coordinateSystemView = (CoordinateSystemView) rootView.findViewById(R.id.coordinateSystemView);
+		cImagePortrait = (CircularImage) rootView.findViewById(R.id.cImageportrait);
+		txtViewName = (TextView) rootView.findViewById(R.id.txtViewName);
+		txtViewCareer = (TextView) rootView.findViewById(R.id.txtViewCareer);
+		txtViewHongBao = (TextView) rootView.findViewById(R.id.txtViewHongBao);
+		txtViewChange = (TextView) rootView.findViewById(R.id.txtViewChange);
+		txtViewIndex = (TextView) rootView.findViewById(R.id.txtViewIndex);
+		txtViewLocation = (TextView) rootView.findViewById(R.id.txtViewLocation);
+		rootView.findViewById(R.id.focus).setOnClickListener(this);
+		rootView.findViewById(R.id.invest).setOnClickListener(this);
+		rootView.findViewById(R.id.divest).setOnClickListener(this);
 		
 		Glide.with(this).load(Config.User.getImage())
 		.centerCrop().diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -93,7 +140,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener{
 	public void setPriceCurve(KLink kLink) {
 		if (kLink == null || kLink.getPoint() == null
 				|| kLink.getPoint().size() == 0) {
-			ToastUtil.show(this, "暂无数据");
+			ToastUtil.show(getActivity(), "暂无数据");
 			return;
 		}
 		List<Point> price_movements = kLink.getPoint();
@@ -137,34 +184,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener{
 		coordinateSystemView.setLineChart(lineChart);
 
 	}
-    @Override
-    protected void onPause() {
-        super.onPause();
-        MobclickAgent.onPause(this);
-    }
-    
-	@Override
-	protected void onResume() {
-		super.onResume();
-        MobclickAgent.onResume(this);
-	}
 
-	@Override
-	public void onClick(View v) {
-		switch(v.getId())
-		{
-		case R.id.focus:
-			
-			break;
-		case R.id.invest:
-			
-			break;
-		case R.id.divest:
-			
-			break;
-		}
-	}
-	
     /**
      * 获取用户信息
      */
@@ -172,7 +192,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener{
     {
     	if (Config.User == null)
     	{
-			ToastUtil.show(this, StringUtil.getXmlResource(this, R.string.mainactivity_login_invalidate));
+			ToastUtil.show(getActivity(), StringUtil.getXmlResource(getActivity(), R.string.mainactivity_login_invalidate));
 			return;
     	}
     	HashMap<String, String> entity = new HashMap<String, String>();
@@ -185,7 +205,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener{
 	/**
 	 * 获取价格曲线
 	 */
-	public void sendKLineGraphRequest() {
+	private void sendKLineGraphRequest() {
 		HashMap<String, String> entity = new HashMap<String, String>();
 		entity.put("star_id", Config.User.getClientID());
 		entity.put("type", "1");
@@ -202,7 +222,23 @@ public class HomeActivity extends BaseActivity implements OnClickListener{
     	httpTask.setInfoHandler(handler);
     	ThreadPoolFactory.getThreadPoolManager().addTask(httpTask);
     }
-
+	@Override
+	public void onClick(View v) {
+		switch(v.getId())
+		{
+		case R.id.focus:
+			ToastUtil.show(getActivity(), "此功能正在完善中，敬请期待...");
+			break;
+		case R.id.invest:
+			ToastUtil.show(getActivity(), "此功能正在完善中，敬请期待...");
+			break;
+		case R.id.divest:
+			ToastUtil.show(getActivity(), "此功能正在完善中，敬请期待...");
+			break;
+		}
+		
+	}
+	
 	@Override
 	public void RequestSuccessful(String jsonString, int taskType) {
 		switch(taskType)

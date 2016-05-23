@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/activity_charge_bg" >
+
+    <RelativeLayout
+        android:id="@+id/rLayoutTopPortrait"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" >
+
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/activity_main_home_portrait_bg" />
+
+        <com.summer.view.CircularImage
+            android:id="@+id/cImageportrait"
+            android:layout_width="40dip"
+            android:layout_height="40dip"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp" />
+
+        <TextView
+            android:id="@+id/txtViewName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/cImageportrait"
+            android:text="范冰冰"
+            android:textColor="@color/white" />
+
+        <TextView
+            android:id="@+id/txtViewCareer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/txtViewName"
+            android:text="影视演员"
+            android:textColor="@color/white" />
+    </RelativeLayout>
+
+
+	<ImageView
+		android:id="@+id/imgViewPortrait"
+		android:layout_below="@id/rLayoutTopPortrait"
+		android:layout_width="match_parent"
+		android:scaleType="centerCrop"
+		android:layout_height="250dp" />
+
+	<ImageView
+	    android:id="@+id/imgViewLocation"
+	    android:layout_width="20dp"
+	    android:layout_height="20dp"
+	    android:layout_alignBottom="@+id/imgViewPortrait"
+	    android:layout_alignParentRight="true"
+	    android:layout_marginBottom="26dp"
+	    android:layout_marginRight="70dp"
+	    android:src="@drawable/fragment_hot_location" />
+
+	<TextView
+	    android:id="@+id/txtViewLocation"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignLeft="@+id/imgViewLocation"
+	    android:layout_alignTop="@+id/imgViewLocation"
+	    android:layout_marginLeft="26dp"
+	    android:text="北京"
+	    android:textColor="@color/white" />
+    <RelativeLayout
+        android:id="@+id/rLayoutHongBao"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@id/imgViewPortrait"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/activity_charge_item_bg" >
+
+        <ImageView
+            android:id="@+id/imgViewHongBao"
+            android:layout_width="30dp"
+            android:layout_height="28dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:background="@drawable/activity_line_hongbao" />
+
+        <TextView
+            android:id="@+id/txtViewChange"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"
+            android:text="昨日涨跌15点"
+            android:textColor="@color/white"
+            android:textSize="18dp" />
+
+        <TextView
+            android:id="@+id/txtViewHongBao"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/imgViewHongBao"
+            android:text="000000"
+            android:textColor="@color/white"
+            android:textSize="18dp" />
+    </RelativeLayout>
+    <HorizontalScrollView
+        android:id="@+id/hScrollView"
+        android:layout_below="@id/rLayoutHongBao"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+	    <LinearLayout
+	        android:id="@+id/linearLayout1"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:orientation="horizontal" >
+	
+	        <com.BC.entertainment.view.CoordinateSystemView
+	            android:id="@+id/coordinateSystemView"
+	            android:layout_width="680dp"
+	            android:layout_height="110dp" />
+	    </LinearLayout>
+	</HorizontalScrollView>
+    <LinearLayout
+        android:id="@+id/lLayoutLine"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/hScrollView"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:layout_marginTop="5dp" >
+
+        <TextView
+            android:id="@+id/txtViewIndex"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/home4"
+            android:gravity="center"
+            android:text="当前指数：\n点击查看大图"
+            android:textColor="@color/white"
+            android:textSize="15dp" />
+
+        <ImageButton
+            android:id="@+id/focus"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="15dp"
+            android:background="@drawable/fragment_focus"
+            android:scaleType="fitCenter" />
+
+        <ImageButton
+            android:id="@+id/invest"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="15dp"
+            android:background="@drawable/fragment_invest"
+            android:scaleType="fitCenter" />
+
+        <ImageButton
+            android:id="@+id/divest"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="15dp"
+            android:background="@drawable/fragment_divest"
+            android:scaleType="fitCenter" />
+    </LinearLayout>
+</RelativeLayout>

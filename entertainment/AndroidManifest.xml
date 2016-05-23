@@ -308,7 +308,7 @@
         </activity>
         <!-- 个人主页 -->
         <activity
-            android:name=".HomeActivity"
+            android:name=".PersonalHomeActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait" >
         </activity>
