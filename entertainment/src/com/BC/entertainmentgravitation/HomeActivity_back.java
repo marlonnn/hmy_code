@@ -10,42 +10,28 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.BC.entertainment.cache.ChatCache;
 import com.BC.entertainment.cache.InfoCache;
 import com.BC.entertainment.view.CustomViewPager;
-import com.BC.entertainmentgravitation.entity.Member;
+import com.BC.entertainmentgravitation.dialog.ApplauseGiveConcern;
 import com.BC.entertainmentgravitation.entity.StarInformation;
 import com.BC.entertainmentgravitation.entity.StarLiveVideoInfo;
 import com.BC.entertainmentgravitation.fragment.CurveFragment;
-import com.BC.entertainmentgravitation.fragment.HotFragment;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.BC.entertainmentgravitation.fragment.FoundFragment;
+import com.BC.entertainmentgravitation.fragment.ListFragment;
+import com.BC.entertainmentgravitation.fragment.PersonalFragment;
+import com.BC.entertainmentgravitation.fragment.SurfaceEmptyFragment;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.netease.nim.uikit.common.ui.dialog.DialogMaker;
-import com.netease.nimlib.sdk.AbortableFuture;
-import com.netease.nimlib.sdk.NIMClient;
-import com.netease.nimlib.sdk.RequestCallback;
-import com.netease.nimlib.sdk.ResponseCode;
-import com.netease.nimlib.sdk.chatroom.ChatRoomService;
-import com.netease.nimlib.sdk.chatroom.model.ChatRoomInfo;
-import com.netease.nimlib.sdk.chatroom.model.ChatRoomMember;
-import com.netease.nimlib.sdk.chatroom.model.EnterChatRoomData;
-import com.netease.nimlib.sdk.chatroom.model.EnterChatRoomResultData;
 import com.summer.activity.BaseActivity;
 import com.summer.config.Config;
 import com.summer.factory.ThreadPoolFactory;
 import com.summer.handler.InfoHandler;
 import com.summer.json.Entity;
-import com.summer.logger.XLog;
 import com.summer.task.HttpBaseTask;
 import com.summer.treadpool.ThreadPoolConst;
 import com.summer.utils.JsonUtil;
@@ -63,7 +49,13 @@ public class HomeActivity_back extends BaseActivity implements OnClickListener{
 	
 	private CustomViewPager viewPager;
 	private CurveFragment curveFragment;
-	private HotFragment hotFragment;
+	private PersonalFragment personalFragment;
+	
+	private SurfaceEmptyFragment emptyFragment;
+	private FoundFragment foundFragment;
+	
+//	private HotFragment hotFragment;
+	private ListFragment listFragment;
 	private ImageView imgViewLine;
 	private ImageView imgViewVideo;
 	private ImageView imgViewLive;
@@ -177,7 +169,11 @@ public class HomeActivity_back extends BaseActivity implements OnClickListener{
 	private void findViewById()
 	{
 		curveFragment = new CurveFragment();
-		hotFragment = new HotFragment();
+//		hotFragment = new HotFragment();
+		listFragment = new ListFragment();
+		personalFragment = new PersonalFragment();
+		foundFragment = new FoundFragment();
+		emptyFragment = new SurfaceEmptyFragment();
 		
 		imgViewLine = (ImageView) findViewById(R.id.imgViewLine);
 		imgViewVideo = (ImageView) findViewById(R.id.imgViewVideo);
@@ -231,86 +227,37 @@ public class HomeActivity_back extends BaseActivity implements OnClickListener{
 				 * 直播列表
 				 */
             	case 1:
-            		fragment = hotFragment;
+//            		fragment = hotFragment;
+            		fragment = listFragment;
             		break;
-//				/**
-//				 * 直播
-//				 */
-//            	case 2:
-//            		fragment = curveFragment;
-//            		break;
-//				/**
-//				 * 发现
-//				 */
-//            	case 3:
-//            		fragment = curveFragment;
-//            		break;
-//				/**
-//				 * 我的
-//				 */
-//            	case 4:
-//            		fragment = curveFragment;
-//            		break;            		
+				/**
+				 * 直播
+				 */
+            	case 2:
+            		fragment = emptyFragment;
+            		break;
+				/**
+				 * 发现
+				 */
+            	case 3:
+            		fragment = foundFragment;
+            		break;
+				/**
+				 * 我的
+				 */
+            	case 4:
+            		fragment = personalFragment;
+            		break;            		
             	}
                 return fragment;
             }
 
             @Override
             public int getCount() {
-                return 2;
+                return 5;
             }
         });
         viewPager.setCurrentItem(0);
-        
-//        viewPager.setOnPageChangeListener(new OnPageChangeListener() {
-//			
-//			@Override
-//			public void onPageSelected(int arg0) {
-//				switch(arg0)
-//				{
-//				/**
-//				 * 曲线
-//				 */
-//            	case 0:
-//            		touchButton(R.id.rLayoutLine);
-//            		break;
-//				/**
-//				 * 直播列表
-//				 */
-//            	case 1:
-//            		touchButton(R.id.rLayoutVideo);
-//            		break;
-////				/**
-////				 * 直播
-////				 */
-////            	case 2:
-////            		touchButton(R.id.rLayoutLive);
-////            		break;
-////				/**
-////				 * 发现
-////				 */
-////            	case 3:
-////            		touchButton(R.id.rLayoutFound);
-////            		break;
-////				/**
-////				 * 我的
-////				 */
-////            	case 4:
-////            		touchButton(R.id.rLayoutMyself);
-////            		break;
-//				}
-//			}
-//			
-//			@Override
-//			public void onPageScrolled(int arg0, float arg1, int arg2) {
-//				
-//			}
-//			
-//			@Override
-//			public void onPageScrollStateChanged(int arg0) {
-//				
-//			}
-//		});
 	}
 	
     @Override
@@ -328,6 +275,7 @@ public class HomeActivity_back extends BaseActivity implements OnClickListener{
 	@Override
 	public void onClick(View v) {
 		touchButton(v.getId());
+		Intent intent;
 		switch(v.getId())
 		{
 
@@ -344,15 +292,15 @@ public class HomeActivity_back extends BaseActivity implements OnClickListener{
 			}
 			else
 			{
-				Intent intent = new Intent(this, ApplyActivity.class);
+				intent = new Intent(this, ApplyActivity.class);
 				startActivity(intent);
 			}
 			break;
 		case R.id.rLayoutFound:
-			
+			viewPager.setCurrentItem(3);
 			break;
 		case R.id.rLayoutMyself:
-			
+			viewPager.setCurrentItem(4);
 			break;
 		}
 	}

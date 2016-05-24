@@ -43,6 +43,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="10dp"
                 android:textSize="14dp"
+                android:textColor="@color/black"
                 android:text="范冰冰" />
 
             <ImageView
@@ -61,6 +62,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="10dp"
+                android:textColor="@color/black"
                 android:text="北京" />
 
             <ImageView
@@ -96,6 +98,7 @@
                 android:layout_alignBottom="@+id/imgViewLabel"
                 android:layout_marginLeft="10dp"
                 android:layout_toRightOf="@+id/imgViewLabel"
+                android:textColor="@color/black"
                 android:text="演员" />
 
             <ImageView
@@ -113,6 +116,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/imgViewIndex"
                 android:layout_alignLeft="@+id/txtViewJob"
+                android:textColor="@color/black"
                 android:text="指数：100" />
 
         </RelativeLayout>

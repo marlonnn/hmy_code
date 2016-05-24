@@ -24,8 +24,12 @@ import android.widget.TextView;
 
 import com.BC.entertainment.adapter.HotAdapter;
 import com.BC.entertainmentgravitation.DetailsActivity;
+import com.BC.entertainmentgravitation.HomeActivity_back;
+import com.BC.entertainmentgravitation.PullActivity_back;
+import com.BC.entertainmentgravitation.PushActivity_back;
 import com.BC.entertainmentgravitation.R;
 import com.BC.entertainmentgravitation.entity.FHNEntity;
+import com.BC.entertainmentgravitation.entity.StarLiveVideoInfo;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.Gson;
@@ -40,9 +44,11 @@ import com.summer.factory.ThreadPoolFactory;
 import com.summer.fragment.BaseFragment;
 import com.summer.handler.InfoHandler;
 import com.summer.json.Entity;
+import com.summer.logger.XLog;
 import com.summer.task.HttpBaseTask;
 import com.summer.treadpool.ThreadPoolConst;
 import com.summer.utils.JsonUtil;
+import com.summer.utils.StringUtil;
 import com.summer.utils.ToastUtil;
 import com.summer.utils.UrlUtil;
 import com.summer.view.CircularImage;
@@ -232,9 +238,11 @@ public class HotFragment extends BaseFragment{
 									FHNEntity entity = (FHNEntity)v.getTag(R.id.tag_portrait);
 									if (entity != null)
 									{
-										Intent i = new Intent(getActivity(), DetailsActivity.class);
-										i.putExtra("userID", entity.getStar_ID());
-										startActivity(i);
+//										Intent i = new Intent(getActivity(), DetailsActivity.class);
+//										i.putExtra("userID", entity.getStar_ID());
+//										startActivity(i);
+										watchLiveVideoRequest("18818227491");
+										
 									}
 								} catch (Exception e) {
 									e.printStackTrace();
@@ -247,7 +255,7 @@ public class HotFragment extends BaseFragment{
 						Glide.with(getActivity()).load(item.getHead_portrait())
 						.centerCrop()
 						.diskCacheStrategy(DiskCacheStrategy.ALL)
-						.placeholder(R.drawable.avatar_def).into(cPortrait);
+						.placeholder(R.drawable.home_image).into(cPortrait);
 						cPortrait.setOnClickListener(new OnClickListener() {
 							
 							@Override
@@ -261,6 +269,15 @@ public class HotFragment extends BaseFragment{
 				}
 			}
 		};
+	}
+	
+	private void watchLiveVideoRequest(String starName)
+	{
+    	HashMap<String, String> entity = new HashMap<String, String>();
+    	entity.put("username", starName);
+		List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
+		ShowProgressDialog("正在进入直播间，请稍等...");
+		addToThreadPool(Config.query_video, "send watch video request", params);
 	}
 	
 	/**
@@ -314,6 +331,22 @@ public class HotFragment extends BaseFragment{
 	public void RequestSuccessful(String jsonString, int taskType) {
 		switch(taskType)
 		{
+		case Config.query_video:
+			Entity<StarLiveVideoInfo> watchVideoEntity = gson.fromJson(jsonString,
+					new TypeToken<Entity<StarLiveVideoInfo>>() {
+					}.getType());
+			StarLiveVideoInfo watchVideo = watchVideoEntity.getData();
+			if (watchVideo != null)
+			{
+				Intent intent = new Intent(getActivity(), PullActivity_back.class);
+				Bundle b = new Bundle();
+				b.putSerializable("liveInfo", watchVideo);
+				intent.putExtras(b);
+				startActivity(intent); 
+			}
+
+			break;
+			
 		case Config.stat_list:
 			Entity<List<FHNEntity>> baseEntity = gson.fromJson(jsonString,
 					new TypeToken<Entity<List<FHNEntity>>>() {

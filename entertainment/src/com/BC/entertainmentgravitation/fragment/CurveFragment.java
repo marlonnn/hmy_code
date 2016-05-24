@@ -24,6 +24,7 @@ import com.BC.entertainment.cache.InfoCache;
 import com.BC.entertainment.view.CoordinateSystemView;
 import com.BC.entertainmentgravitation.PersonalActivity;
 import com.BC.entertainmentgravitation.R;
+import com.BC.entertainmentgravitation.dialog.ApplauseGiveConcern;
 import com.BC.entertainmentgravitation.entity.EditPersonal;
 import com.BC.entertainmentgravitation.entity.KLink;
 import com.BC.entertainmentgravitation.entity.Point;
@@ -77,6 +78,9 @@ public class CurveFragment extends BaseFragment implements OnClickListener{
 	private boolean isSlipping = false;
 	private int pageIndex = 1;
 	private int selectIndex = 0;
+	
+	private int type = 1;
+	private ApplauseGiveConcern applauseGiveConcern;
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -87,14 +91,14 @@ public class CurveFragment extends BaseFragment implements OnClickListener{
 	public void onCreate(@Nullable Bundle savedInstanceState) {
 		gson = new Gson();
 		lineChart = new LineChart();
-		sendPersonalInfoRequest();
-//		sendKLineGraphRequest();
-		sendStarRankRequest();
+
 		super.onCreate(savedInstanceState);
 	}
 	
 	@Override
 	public void onStart() {
+		sendPersonalInfoRequest();
+		sendStarRankRequest();
 		super.onStart();
 	}
 
@@ -352,14 +356,24 @@ public class CurveFragment extends BaseFragment implements OnClickListener{
 			startActivity(intent);
 			break;
 		case R.id.focus:
-			ToastUtil.show(getActivity(), "此功能正在完善中，敬请期待...");
+			if (applauseGiveConcern != null)
+			{
+				applauseGiveConcern.sendFocusRequest();
+			}
 			break;
 		case R.id.invest:
-			ToastUtil.show(getActivity(), "此功能正在完善中，敬请期待...");
+			if (applauseGiveConcern != null)
+			{
+				applauseGiveConcern.showApplaudDialog(1);
+			}
 			break;
 		case R.id.divest:
-			ToastUtil.show(getActivity(), "此功能正在完善中，敬请期待...");
+			if (applauseGiveConcern != null)
+			{
+				applauseGiveConcern.showApplaudDialog(2);
+			}
 			break;
+			
 		}
 		
 	}
@@ -368,6 +382,30 @@ public class CurveFragment extends BaseFragment implements OnClickListener{
 	public void RequestSuccessful(String jsonString, int taskType) {
 		switch(taskType)
 		{
+		case Config.give_applause_booed:
+			ToastUtil.show(getActivity(), "提交成功");
+			sendStarInfoRequest(InfoCache.getInstance().getStartInfo().getStar_ID());
+			switch (applauseGiveConcern.getType()) {
+			case 1:
+				applauseGiveConcern.showAnimationDialog(R.drawable.circle4,
+						R.raw.applaud);
+				break;
+			case 2:
+				applauseGiveConcern.showAnimationDialog(R.drawable.circle5,
+						R.raw.give_back);
+				break;
+			default:
+				applauseGiveConcern.showAnimationDialog(R.drawable.circle4,
+						R.raw.applaud);
+				break;
+			}
+			break;
+		case Config.and_attention:
+			ToastUtil.show(getActivity(), "提交成功");
+			applauseGiveConcern.showAnimationDialog(R.drawable.circle6,
+					R.raw.concern);
+			sendStarInfoRequest(InfoCache.getInstance().getStartInfo().getStar_ID());
+			break;
 		case Config.personal_information:
 			Entity<EditPersonal> baseEntity = gson.fromJson(jsonString,
 					new TypeToken<Entity<EditPersonal>>() {
@@ -389,7 +427,7 @@ public class CurveFragment extends BaseFragment implements OnClickListener{
 				
 				Glide.with(this).load(InfoCache.getInstance().getStartInfo().getHead_portrait())
 				.centerCrop().diskCacheStrategy(DiskCacheStrategy.ALL)
-				.placeholder(R.drawable.avatar_def).into(imgViewPortrait);
+				.placeholder(R.drawable.home_image).into(imgViewPortrait);
 				
 				txtViewName.setText(InfoCache.getInstance().getStartInfo().getStage_name());
 				txtViewLocation.setText(InfoCache.getInstance().getStartInfo().getRegion());
@@ -397,7 +435,14 @@ public class CurveFragment extends BaseFragment implements OnClickListener{
 				
 				Glide.with(this).load(InfoCache.getInstance().getStartInfo().getHead_portrait())
 				.centerCrop().diskCacheStrategy(DiskCacheStrategy.ALL)
-				.placeholder(R.drawable.avatar_def).into(cImagePortrait);
+				.placeholder(R.drawable.home_image).into(cImagePortrait);
+				
+				applauseGiveConcern = new ApplauseGiveConcern(getActivity(),
+						InfoCache.getInstance().getStartInfo().getStar_ID(), this,
+						InfoCache.getInstance().getStartInfo()
+								.getThe_current_hooted_thumb_up_prices(),
+						InfoCache.getInstance().getStartInfo().getStage_name());
+				type = 1;
 				
 				sendKLineGraphRequest();
 			}

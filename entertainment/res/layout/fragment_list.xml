@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/activity_charge_bg"
+    android:orientation="vertical" >
+    <RadioGroup
+        android:id="@+id/rGroup"
+        android:layout_width="match_parent"
+        android:layout_height="40dip"
+        android:background="#4c0528"
+        android:gravity="center_vertical"
+        android:orientation="horizontal" >
+
+        <RadioButton
+            android:id="@+id/tbtnFocus"
+            style="@style/routine_select_btn_style"
+            android:layout_width="60dip"
+            android:layout_height="40dip"
+            android:layout_weight="1"
+            android:checked="true"
+            android:text="关注"
+            android:textSize="10dip" />
+
+        <RadioButton
+            android:id="@+id/rbtnHot"
+            style="@style/routine_select_btn_style"
+            android:layout_width="60dip"
+            android:layout_height="40dip"
+            android:layout_weight="1"
+            android:text="热门"
+            android:textSize="10dip" />
+
+        <RadioButton
+            android:id="@+id/rbtnNew"
+            style="@style/routine_select_btn_style"
+            android:layout_width="60dip"
+            android:layout_height="40dip"
+            android:layout_weight="1"
+            android:text="最新"
+            android:textSize="10dip" />
+    </RadioGroup>
+    <com.BC.entertainment.view.CustomViewPager
+        android:id="@+id/customoViewPager"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</LinearLayout>

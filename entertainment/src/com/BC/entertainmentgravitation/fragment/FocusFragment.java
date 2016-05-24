@@ -223,7 +223,7 @@ public class FocusFragment extends BaseFragment{
 						Glide.with(getActivity()).load(item.getHead_portrait())
 						.centerCrop()
 						.diskCacheStrategy(DiskCacheStrategy.ALL)
-						.placeholder(R.drawable.avatar_def).into(cPortrait);
+						.placeholder(R.drawable.home_image).into(cPortrait);
 						cPortrait.setOnClickListener(new OnClickListener() {
 							
 							@Override

@@ -328,7 +328,12 @@
             android:name=".PushActivity_back"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait" >
-        </activity>   
+        </activity>
+        <activity
+            android:name=".PullActivity_back"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" >
+        </activity>  
         <meta-data
             android:name="UMENG_APPKEY"
             android:value="57399e6d67e58e56fd0031e2" >
