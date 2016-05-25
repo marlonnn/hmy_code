@@ -69,6 +69,19 @@ public class InfoCache {
 		return null;
 	}
 	
+	public StarInformation GetStarInfoById(String clientId)
+	{
+		CreateStarInfoList();
+		for (int i=0; i<starInfoList.size(); i++)
+		{
+			if(starInfoList.get(i).getUser_name().contains(clientId))
+			{
+				return starInfoList.get(i);
+			}
+		}
+		return null;
+	}
+	
 	/**
 	 * 个人信息
 	 */

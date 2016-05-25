@@ -9,7 +9,7 @@
         android:layout_height="130dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="70dp"
         android:background="@drawable/activity_login_logo_top" />
     
     <LinearLayout
@@ -42,6 +42,7 @@
                 android:background="#00000000"
                 android:layout_centerVertical="true"
                 android:textSize="12dip"
+                android:textColor="@color/white"
                 android:hint="@string/editText_phone_hit"/>
             <ImageView
                 android:id="@+id/imgViewUser"
@@ -49,6 +50,7 @@
                 android:layout_height="15dp"
                 android:layout_centerVertical="true"
                 android:layout_toRightOf="@+id/eTextName"
+                android:textColor="@color/white"
                 android:background="@drawable/activity_login_user"
                 android:gravity="center" />
         </RelativeLayout>
@@ -76,6 +78,7 @@
                 android:background="#00000000"
                 android:layout_centerVertical="true"
                 android:textSize="12dip"
+                android:textColor="@color/white"
                 android:hint="@string/editText_phone_hit"/>
             <ImageView
                 android:id="@+id/imgViewKey"
@@ -97,7 +100,7 @@
         android:layout_marginTop="1dp"
         android:layout_centerHorizontal="true" >
         <Button
-            android:id="@+id/button_login"
+            android:id="@+id/btnLogin"
             android:layout_width="144dp"
             android:layout_height="28dp"
             android:background="@drawable/activity_login_button"
@@ -133,7 +136,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/lLayoutLogin"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="25dp"
         android:orientation="horizontal" >
         <Button
             android:id="@+id/btnWx"
@@ -144,13 +147,13 @@
             android:id="@+id/btnQq"
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:layout_marginLeft="15dp"
+            android:layout_marginLeft="25dp"
             android:background="@drawable/activity_login_qq"/>
         <Button
             android:id="@+id/btnWb"
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:layout_marginLeft="15dp"
+            android:layout_marginLeft="25dp"
             android:background="@drawable/activity_login_wb"/>
     </LinearLayout>
 
@@ -160,7 +163,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/lLayoutAllLoginButton"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:gravity="center"
         android:text="第三方登录"
         android:textColor="@color/white" />

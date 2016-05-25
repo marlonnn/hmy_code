@@ -6,6 +6,8 @@ package com.BC.entertainmentgravitation.entity;
  *
  */
 public class FHNEntity {
+	
+	private String Username;
 
 	private String Head_portrait;
 	
@@ -24,6 +26,14 @@ public class FHNEntity {
 	private String portrait;//写真照片
 	
 	private int The_applause;
+
+	public String getUsername() {
+		return Username;
+	}
+
+	public void setUsername(String username) {
+		this.Username = username;
+	}
 
 	public String getHead_portrait() {
 		return Head_portrait;

@@ -66,6 +66,7 @@ public class FoundFragment extends BaseFragment implements OnClickListener{
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState) {
 		gson = new Gson();
+		sendActivityRequest();
 		super.onCreate(savedInstanceState);
 	}
 	
@@ -114,7 +115,7 @@ public class FoundFragment extends BaseFragment implements OnClickListener{
 //		adapter = new HotAdapter(getActivity(), hotList);
 		adapter = new CommonAdapter<Activitys>(getActivity(), R.layout.fragment_found_item, activityList) {
 			
-			public void setTag(ViewHolder viewHolder, final Activity item)
+			public void setTag(ViewHolder viewHolder, final Activitys item)
 			{
 				viewHolder.getView(R.id.imgViewFound).setTag(R.id.tag_found, item);
 			}
@@ -258,6 +259,13 @@ public class FoundFragment extends BaseFragment implements OnClickListener{
 	@Override
 	public void onClick(View v) {
 		
+	}
+	
+	@Override
+	public void onInfoReceived(int errcode, HashMap<String, Object> items) {
+		// TODO Auto-generated method stub
+		super.onInfoReceived(errcode, items);
+		pGridViewFound.onRefreshComplete();
 	}
 
 	@Override

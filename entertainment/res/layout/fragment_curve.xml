@@ -121,7 +121,9 @@
 	    <HorizontalScrollView
 	        android:id="@+id/hScrollView"
 	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content" >
+	        android:layout_height="wrap_content"
+	        android:scrollbarSize="4dp"
+	        android:scrollbarThumbHorizontal="@drawable/scrollbar_thumb" >
 		    <LinearLayout
 		        android:id="@+id/linearLayout1"
 		        android:layout_width="match_parent"

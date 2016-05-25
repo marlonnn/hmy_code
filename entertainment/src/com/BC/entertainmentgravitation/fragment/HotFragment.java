@@ -22,6 +22,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.BC.entertainment.cache.InfoCache;
 import com.BC.entertainmentgravitation.DetailsActivity;
 import com.BC.entertainmentgravitation.PullActivity_back;
 import com.BC.entertainmentgravitation.R;
@@ -230,13 +231,23 @@ public class HotFragment extends BaseFragment{
 							public void onClick(View v) {
 								try {
 									FHNEntity entity = (FHNEntity)v.getTag(R.id.tag_portrait);
-									if (entity != null)
+									if (entity != null && entity.getVstatus() != null && entity.getVstatus().contains("0"))
 									{
-//										Intent i = new Intent(getActivity(), DetailsActivity.class);
-//										i.putExtra("userID", entity.getStar_ID());
-//										startActivity(i);
-										watchLiveVideoRequest("18818227491");
+										try {
+											if (entity.getUsername() != null)
+											{
+												watchLiveVideoRequest(entity.getUsername());
+											}
+
+										} catch (Exception e) {
+											e.printStackTrace();
+											ToastUtil.show(getActivity(), "服务器异常，请稍后再试");
+										}
 										
+									}
+									else
+									{
+										ToastUtil.show(getActivity(), "主播不在直播间，请稍后再试");
 									}
 								} catch (Exception e) {
 									e.printStackTrace();

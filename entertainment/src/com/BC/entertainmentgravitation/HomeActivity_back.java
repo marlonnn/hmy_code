@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.http.NameValuePair;
 
 import android.content.Intent;
+import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -74,6 +75,7 @@ public class HomeActivity_back extends BaseActivity implements OnClickListener{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main_home_back);
+		getWindow().setFormat(PixelFormat.TRANSLUCENT);
 		gson = new Gson();
 		findViewById();
 	}
@@ -121,7 +123,8 @@ public class HomeActivity_back extends BaseActivity implements OnClickListener{
 			imgViewVideo.setBackgroundResource(R.drawable.activity_main_home_video);
 			txtViewVideo.setTextColor(getResources().getColor(R.color.white));
 			
-			imgViewLive.setBackgroundResource(R.drawable.activity_main_home_live_1);
+			imgViewLive.setBackgroundResource(R.drawable.activity_main_home_live);
+//			imgViewLive.setBackgroundResource(R.drawable.activity_main_home_live_1);
 			txtViewLive.setTextColor(getResources().getColor(R.color.hmy_red));
 			
 			imgViewFound.setBackgroundResource(R.drawable.activity_main_home_found);
