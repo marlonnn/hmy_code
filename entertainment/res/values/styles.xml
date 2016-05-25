@@ -116,4 +116,7 @@
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowIsFloating">true</item>
     </style>
+	<style name="CheckboxRemberPassword" parent="@android:style/Widget.CompoundButton.CheckBox">  
+	    <item name="android:button">@drawable/checkbox_rember_password_style</item>  
+	</style>  
 </resources>

@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/activity_charge_bg" >
+    
+    <RelativeLayout
+        android:id="@+id/rLayoutName"
+        android:layout_width="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_height="28dp"
+        android:layout_gravity="center"
+        android:background="#80000000"
+        android:layout_centerVertical="true">
+        <TextView
+            android:id="@+id/txtViewName"
+            android:layout_width="60dp"
+            android:layout_height="28dp"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:text="姓    名:" />
+        <EditText 
+            android:id="@+id/eTextName"
+            android:layout_toRightOf="@id/txtViewName"
+            android:layout_width="150dp"
+            android:layout_height="28dp"
+            android:background="#00000000"
+            android:layout_centerVertical="true"
+            android:textSize="12dip"
+            android:hint="请输入您的姓名"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/rLayoutPhone"
+        android:layout_width="wrap_content"
+        android:layout_marginTop="1dp"
+        android:layout_height="28dp"
+        android:layout_gravity="center"
+        android:background="#80000000"
+        android:layout_centerVertical="true">
+        <TextView
+            android:id="@+id/txtViewPhone"
+            android:layout_width="60dp"
+            android:layout_height="28dp"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:text="手    机:" />
+        <EditText 
+            android:id="@+id/eTextPhone"
+            android:layout_toRightOf="@id/txtViewPhone"
+            android:layout_width="150dp"
+            android:layout_height="28dp"
+            android:background="#00000000"
+            android:layout_centerVertical="true"
+            android:textSize="12dip"
+            android:hint="请输入您的手机号码"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/rLayoutYanzhengma"
+        android:layout_width="wrap_content"
+        android:layout_height="28dp"
+        android:layout_marginTop="1dp"
+        android:layout_gravity="center"
+        android:background="#80000000"
+        android:layout_centerVertical="true">
+        <TextView
+            android:id="@+id/txtViewYanzhengma"
+            android:layout_width="60dp"
+            android:layout_height="28dp"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:text="用户名:" />
+        <EditText 
+            android:id="@+id/eTextYanzhengma"
+            android:layout_toRightOf="@id/txtViewYanzhengma"
+            android:layout_width="100dp"
+            android:layout_height="28dp"
+            android:background="#00000000"
+            android:layout_centerVertical="true"
+            android:textSize="12dip"
+            android:hint="@string/editText_phone_hit"/>
+        <ImageView
+            android:id="@+id/imgViewYanzhengma"
+            android:layout_width="55dp"
+            android:layout_height="28dp"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/eTextYanzhengma"
+            android:background="@drawable/activity_login_hqyzm"
+            android:gravity="center" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/rLayoutPassword"
+        android:layout_width="wrap_content"
+        android:layout_marginTop="1dp"
+        android:layout_height="28dp"
+        android:layout_gravity="center"
+        android:background="#80000000"
+        android:layout_centerVertical="true">
+        <TextView
+            android:id="@+id/txtViewPassword"
+            android:layout_width="60dp"
+            android:layout_height="28dp"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:text="密    码:" />
+        <EditText 
+            android:id="@+id/eTextPassword"
+            android:layout_toRightOf="@id/txtViewPassword"
+            android:layout_width="150dp"
+            android:layout_height="28dp"
+            android:background="#00000000"
+            android:layout_centerVertical="true"
+            android:textSize="12dip"
+            android:hint="请输入密码"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/rLayoutPasswordAgain"
+        android:layout_width="wrap_content"
+        android:layout_marginTop="1dp"
+        android:layout_height="28dp"
+        android:layout_gravity="center"
+        android:background="#80000000"
+        android:layout_centerVertical="true">
+        <TextView
+            android:id="@+id/txtViewPasswordAgain"
+            android:layout_width="60dp"
+            android:layout_height="28dp"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:text="再输密码:" />
+        <EditText 
+            android:id="@+id/eTextPasswordAgain"
+            android:layout_toRightOf="@id/txtViewPasswordAgain"
+            android:layout_width="150dp"
+            android:layout_height="28dp"
+            android:background="#00000000"
+            android:layout_centerVertical="true"
+            android:textSize="12dip"
+            android:hint="请再次输入密码"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/rLayoutShareCode"
+        android:layout_width="wrap_content"
+        android:layout_marginTop="1dp"
+        android:layout_height="28dp"
+        android:layout_gravity="center"
+        android:background="#80000000"
+        android:layout_centerVertical="true">
+        <TextView
+            android:id="@+id/txtViewShareCode"
+            android:layout_width="60dp"
+            android:layout_height="28dp"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:text="分享码:" />
+        <EditText 
+            android:id="@+id/eTextShareCode"
+            android:layout_toRightOf="@id/txtViewShareCode"
+            android:layout_width="150dp"
+            android:layout_height="28dp"
+            android:background="#00000000"
+            android:layout_centerVertical="true"
+            android:textSize="12dip"
+            android:hint="请输入分享码"/>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/llayoutRegister"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal" >
+        <Button
+            android:id="@+id/btnRegister"
+            android:layout_width="100dp"
+            android:layout_height="28dp"
+            android:background="@drawable/activity_login_button"
+            android:text="注册"
+            android:layout_marginRight="10dp"
+            android:textColor="@color/white" />
+        <Button
+            android:id="@+id/btnCancel"
+            android:layout_width="100dp"
+            android:layout_height="28dp"
+            android:background="@drawable/activity_login_button"
+            android:text="取消"
+            android:layout_marginLeft="10dp"
+            android:textColor="@color/white" />
+    </LinearLayout>
+
+    <LinearLayout 
+        android:id="@+id/lLayoutRead"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:gravity="center"
+        android:orientation="horizontal" >
+
+        <CheckBox
+            android:id="@+id/cBoxRead"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_gravity="bottom"
+            android:gravity="center"
+            style="@style/CheckboxRemberPassword" />
+        <TextView
+            android:id="@+id/txtViewRead"
+            android:layout_width="60dp"
+            android:layout_height="28dp"
+            android:gravity="bottom"
+            android:textColor="@color/white"
+            android:text="已阅读协议" />            
+    </LinearLayout>
+
+</LinearLayout>
