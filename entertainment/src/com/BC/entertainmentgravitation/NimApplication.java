@@ -15,12 +15,10 @@ import com.netease.nim.uikit.cache.TeamDataCache;
 import com.netease.nim.uikit.contact.ContactProvider;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.SDKOptions;
-import com.netease.nimlib.sdk.StatusBarNotificationConfig;
 import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.uinfo.UserInfoProvider;
-import com.netease.nimlib.sdk.uinfo.UserInfoProvider.UserInfo;
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
 
 import android.app.Application;

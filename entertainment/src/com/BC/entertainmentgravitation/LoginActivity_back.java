@@ -15,6 +15,7 @@ import com.summer.activity.BaseActivity;
 import com.summer.factory.ThreadPoolFactory;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.analytics.MobclickAgent.EScenarioType;
+import com.umeng.socialize.PlatformConfig;
 
 public class LoginActivity_back extends BaseActivity implements iRegister, iLogin{
 	
@@ -36,7 +37,15 @@ public class LoginActivity_back extends BaseActivity implements iRegister, iLogi
         MobclickAgent.setScenarioType(mContext, EScenarioType.E_UM_NORMAL);
 
         initView();
+        registerUmengShareConfig();
     }
+	
+	private void registerUmengShareConfig()
+	{
+		PlatformConfig.setWeixin("wx2044b77eca1acb02", "e83145dab5329164721f8d55605db1f6");
+		PlatformConfig.setSinaWeibo("3576860396", "4464fa1361df7bdaca37c1aae94afe4d");
+		PlatformConfig.setQQZone("1105130883", "z6isd0lwB5VVZEUU"); 
+	}
 	
 	private void initView()
 	{

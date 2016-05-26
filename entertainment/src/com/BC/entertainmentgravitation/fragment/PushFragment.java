@@ -97,6 +97,10 @@ import com.summer.utils.ToastUtil;
 import com.summer.utils.UrlUtil;
 import com.summer.view.CircularImage;
 import com.summer.view.Pandamate;
+import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.UMShareListener;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.media.UMImage;
 
 public class PushFragment extends BaseFragment implements OnClickListener, ModuleProxy{
 
@@ -1044,24 +1048,69 @@ public class PushFragment extends BaseFragment implements OnClickListener, Modul
 		return m;
 	}
 	
+//	private void showShare() {
+//		String name = Config.User.getNickName();
+//		ShareSDK.initSDK(container.activity, "10ee118b8af16");
+//
+//		OnekeyShare oks = new OnekeyShare();
+//		// 关闭sso授权
+//		oks.disableSSOWhenAuthorize();
+//		// 分享时Notification的图标和文字
+//		oks.setTitle("演员在直播！导演你快来......");
+//		oks.setText("看演员，去海绵娱直播APP!" + "(" + name
+//				+ "正在直播中)");
+//		oks.setSite(getString(R.string.app_name));
+//		// 分享链接地址
+//		oks.setUrl("http://a.app.qq.com/o/simple.jsp?pkgname=com.BC.entertainmentgravitation");
+//		// logo地址
+//		oks.setImageUrl("http://app.haimianyu.cn/DOWNLOAD/app_logo.png");
+//		oks.show(container.activity);
+//	}
+	
 	private void showShare() {
 		String name = Config.User.getNickName();
-		ShareSDK.initSDK(container.activity, "10ee118b8af16");
-
-		OnekeyShare oks = new OnekeyShare();
-		// 关闭sso授权
-		oks.disableSSOWhenAuthorize();
-		// 分享时Notification的图标和文字
-		oks.setTitle("演员在直播！导演你快来......");
-		oks.setText("看演员，去海绵娱直播APP!" + "(" + name
-				+ "正在直播中)");
-		oks.setSite(getString(R.string.app_name));
-		// 分享链接地址
-		oks.setUrl("http://a.app.qq.com/o/simple.jsp?pkgname=com.BC.entertainmentgravitation");
-		// logo地址
-		oks.setImageUrl("http://app.haimianyu.cn/DOWNLOAD/app_logo.png");
-		oks.show(container.activity);
+//		ShareSDK.initSDK(container.activity, "10ee118b8af16");
+//
+//		OnekeyShare oks = new OnekeyShare();
+//		// 关闭sso授权
+//		oks.disableSSOWhenAuthorize();
+//		// 分享时Notification的图标和文字
+//		oks.setTitle("演员在直播！导演你快来......");
+//		oks.setText("看演员，去海绵娱直播APP!" + "(" + name
+//				+ "正在直播中)");
+//		oks.setSite(getString(R.string.app_name));
+//		// 分享链接地址
+//		oks.setUrl("http://a.app.qq.com/o/simple.jsp?pkgname=com.BC.entertainmentgravitation");
+//		// logo地址
+//		oks.setImageUrl("http://app.haimianyu.cn/DOWNLOAD/app_logo.png");
+//		oks.show(container.activity);
+		UMImage image = new UMImage(getActivity(), "http://app.haimianyu.cn/DOWNLOAD/app_logo.png");
+        new ShareAction(getActivity()).setDisplayList(SHARE_MEDIA.SINA,SHARE_MEDIA.QQ,SHARE_MEDIA.QZONE,SHARE_MEDIA.WEIXIN,SHARE_MEDIA.WEIXIN_CIRCLE)
+        .withTitle("看演员，去海绵娱直播APP!" + "(" + name
+				+ "正在直播中)")
+        .withText("来自友盟分享面板")
+        .withMedia(image)
+        .setCallback(umShareListener)
+        .open();
 	}
+	
+    private UMShareListener umShareListener = new UMShareListener() {
+        @Override
+        public void onResult(SHARE_MEDIA platform) {
+            Log.d("plat","platform"+platform);
+            Toast.makeText(getActivity(), platform + " 分享成功啦", Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onError(SHARE_MEDIA platform, Throwable t) {
+            Toast.makeText(getActivity(),platform + " 分享失败啦", Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onCancel(SHARE_MEDIA platform) {
+            Toast.makeText(getActivity(),platform + " 分享取消了", Toast.LENGTH_SHORT).show();
+        }
+    };
 	
 	@Override
 	public boolean sendMessage(IMMessage msg) {
