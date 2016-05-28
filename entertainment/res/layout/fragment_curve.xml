@@ -33,7 +33,6 @@
             android:layout_marginLeft="2dp"
             android:layout_toRightOf="@+id/cImageportrait"
             android:textSize="15dp"
-            android:text="范冰冰"
             android:textColor="@color/white" />
 
         <TextView
@@ -43,7 +42,6 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="5dp"
             android:layout_toRightOf="@+id/txtViewName"
-            android:text="影视演员"
             android:textSize="13dp"
             android:textColor="@color/white" />
     </RelativeLayout>
@@ -73,7 +71,6 @@
 	    android:layout_alignLeft="@+id/imgViewLocation"
 	    android:layout_alignTop="@+id/imgViewLocation"
 	    android:layout_marginLeft="26dp"
-	    android:text="北京"
 	    android:textColor="@color/hmy_red" />
     <RelativeLayout
         android:id="@+id/rLayoutHongBao"
@@ -98,7 +95,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="15dp"
-            android:text="昨日涨跌15点"
+            android:text="昨日涨跌0点"
             android:textColor="@color/white"
             android:textSize="18dp" />
 
@@ -108,7 +105,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/imgViewHongBao"
-            android:text="000000"
+            android:text="0"
             android:textColor="@color/white"
             android:textSize="18dp" />
     </RelativeLayout>
@@ -153,7 +150,7 @@
 	            android:layout_marginLeft="10dp"
 	            android:background="@drawable/home4"
 	            android:gravity="center"
-	            android:text="当前指数：\n点击查看大图"
+	            android:text="当前指数：0 点"
 	            android:textColor="@color/white"
 	            android:textSize="15dp" />
 	

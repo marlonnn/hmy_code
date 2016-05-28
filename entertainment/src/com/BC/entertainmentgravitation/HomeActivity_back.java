@@ -18,7 +18,6 @@ import android.widget.TextView;
 
 import com.BC.entertainment.cache.InfoCache;
 import com.BC.entertainment.view.CustomViewPager;
-import com.BC.entertainmentgravitation.dialog.ApplauseGiveConcern;
 import com.BC.entertainmentgravitation.entity.StarInformation;
 import com.BC.entertainmentgravitation.entity.StarLiveVideoInfo;
 import com.BC.entertainmentgravitation.fragment.CurveFragment;

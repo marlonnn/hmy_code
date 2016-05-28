@@ -22,11 +22,12 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.BC.entertainment.cache.InfoCache;
 import com.BC.entertainmentgravitation.DetailsActivity;
+import com.BC.entertainmentgravitation.PersonalHomeActivity;
 import com.BC.entertainmentgravitation.PullActivity_back;
 import com.BC.entertainmentgravitation.R;
 import com.BC.entertainmentgravitation.entity.FHNEntity;
+import com.BC.entertainmentgravitation.entity.Member;
 import com.BC.entertainmentgravitation.entity.StarLiveVideoInfo;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -183,6 +184,24 @@ public class HotFragment extends BaseFragment{
 
 	};
 	
+	private boolean isNullOrEmpty(String o)
+	{
+		if (o != null)
+		{
+			if (o.length() == 0)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return true;
+		}
+	}
 	
 	private void initAdapter()
 	{
@@ -207,12 +226,9 @@ public class HotFragment extends BaseFragment{
 					ImageView imgPortrait = (ImageView)viewHolder.getView(R.id.imgViewPortrait);
 					if (item != null)
 					{
-						Name.setText(item.getStar_names());
-						Location.setText(item.getRegion());
-						if (item.getPeoples() != null && !item.getPeoples().isEmpty())
-						{
-							People.setText(item.getPeoples());
-						}
+						Name.setText(isNullOrEmpty(item.getStar_names()) ? "未知" : item.getStar_names());
+						Location.setText(isNullOrEmpty(item.getRegion()) ? "未知" : item.getRegion());
+						People.setText(isNullOrEmpty(item.getPeoples()) ? "0" : item.getPeoples());
 						if (item.getVstatus() != null && !item.getVstatus().isEmpty() && item.getVstatus().contains("0"))
 						{
 							Status.setVisibility(View.VISIBLE);
@@ -231,30 +247,33 @@ public class HotFragment extends BaseFragment{
 							public void onClick(View v) {
 								try {
 									FHNEntity entity = (FHNEntity)v.getTag(R.id.tag_portrait);
-									if (entity != null && entity.getVstatus() != null && entity.getVstatus().contains("0"))
+									if (entity != null)
 									{
-										try {
-											if (entity.getUsername() != null)
+										if (entity.getVstatus() != null)
+										{
+											if (entity.getVstatus().contains("0"))
 											{
-												watchLiveVideoRequest(entity.getUsername());
-											}
+												try {
+													if (entity.getUsername() != null)
+													{
+														watchLiveVideoRequest(entity.getUsername());
+													}
 
-										} catch (Exception e) {
-											e.printStackTrace();
-											ToastUtil.show(getActivity(), "服务器异常，请稍后再试");
+												} catch (Exception e) {
+													e.printStackTrace();
+													ToastUtil.show(getActivity(), "服务器异常，请稍后再试");
+												}
+											}
+											else
+											{
+												ToastUtil.show(getActivity(), "主播不在直播间，请稍后再试");
+												sendBaseInfoRequest(entity);
+											}
 										}
-										
-									}
-									else
-									{
-										ToastUtil.show(getActivity(), "主播不在直播间，请稍后再试");
 									}
 								} catch (Exception e) {
 									e.printStackTrace();
 								}
-//								Intent i = new Intent(getActivity(), DetailsActivity.class);
-//								i.putExtra("userID", item.getStar_ID());
-//								startActivity(i);
 							}
 						});
 						Glide.with(getActivity()).load(item.getHead_portrait())
@@ -283,6 +302,18 @@ public class HotFragment extends BaseFragment{
 		List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
 		ShowProgressDialog("正在进入直播间，请稍等...");
 		addToThreadPool(Config.query_video, "send watch video request", params);
+	}
+	
+	private void sendBaseInfoRequest(FHNEntity fhnEntity)
+	{
+		if (fhnEntity != null && fhnEntity.getUsername() != null)
+		{
+			HashMap<String, String> entity = new HashMap<String, String>();
+			entity.put("username", fhnEntity.getUsername());
+			ShowProgressDialog("获取热门用户基本信息...");		
+			List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
+			addToThreadPool(Config.member_in, "send search request", params);
+		}
 	}
 	
 	/**
@@ -336,6 +367,21 @@ public class HotFragment extends BaseFragment{
 	public void RequestSuccessful(String jsonString, int taskType) {
 		switch(taskType)
 		{
+		case Config.member_in:
+			Entity<Member> entity = gson.fromJson(jsonString,
+					new TypeToken<Entity<Member>>() {
+					}.getType());
+			if (entity != null && entity.getData() != null)
+			{
+				Intent intent = new Intent();
+				intent.setClass(getActivity(), PersonalHomeActivity.class);
+				Bundle bundle = new Bundle();
+				bundle.putSerializable("member", entity.getData());
+				intent.putExtras(bundle);
+				startActivity(intent);
+			}
+			break;
+		
 		case Config.query_video:
 			Entity<StarLiveVideoInfo> watchVideoEntity = gson.fromJson(jsonString,
 					new TypeToken<Entity<StarLiveVideoInfo>>() {
@@ -349,7 +395,6 @@ public class HotFragment extends BaseFragment{
 				intent.putExtras(b);
 				startActivity(intent); 
 			}
-
 			break;
 			
 		case Config.stat_list:

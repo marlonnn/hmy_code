@@ -76,7 +76,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/imgViewHongBao"
-            android:text="000000"
+            android:text="0"
             android:textColor="@color/white"
             android:textSize="18dp" />
     </RelativeLayout>
@@ -84,7 +84,9 @@
         android:id="@+id/hScrollView"
         android:layout_below="@id/rLayoutHongBao"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:scrollbarSize="4dp"
+        android:scrollbarThumbHorizontal="@drawable/scrollbar_thumb" >
 	    <LinearLayout
 	        android:id="@+id/linearLayout1"
 	        android:layout_width="match_parent"
@@ -114,7 +116,7 @@
             android:layout_marginLeft="10dp"
             android:background="@drawable/home4"
             android:gravity="center"
-            android:text="当前指数：\n点击查看大图"
+            android:text="当前指数：0点"
             android:textColor="@color/white"
             android:textSize="15dp" />
 

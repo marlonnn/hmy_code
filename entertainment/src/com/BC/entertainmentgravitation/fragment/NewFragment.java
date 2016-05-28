@@ -20,9 +20,12 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.BC.entertainmentgravitation.DetailsActivity;
+import com.BC.entertainmentgravitation.PersonalHomeActivity;
+import com.BC.entertainmentgravitation.PullActivity_back;
 import com.BC.entertainmentgravitation.R;
 import com.BC.entertainmentgravitation.entity.FHNEntity;
+import com.BC.entertainmentgravitation.entity.Member;
+import com.BC.entertainmentgravitation.entity.StarLiveVideoInfo;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.Gson;
@@ -31,7 +34,6 @@ import com.netease.nim.uikit.common.ui.ptr.PullToRefreshBase;
 import com.netease.nim.uikit.common.ui.ptr.PullToRefreshGridView;
 import com.netease.nim.uikit.common.ui.ptr.PullToRefreshBase.OnRefreshListener2;
 import com.summer.adapter.CommonAdapter;
-import com.summer.adapter.CommonAdapter.ViewHolder;
 import com.summer.config.Config;
 import com.summer.factory.ThreadPoolFactory;
 import com.summer.fragment.BaseFragment;
@@ -42,7 +44,6 @@ import com.summer.treadpool.ThreadPoolConst;
 import com.summer.utils.JsonUtil;
 import com.summer.utils.ToastUtil;
 import com.summer.utils.UrlUtil;
-import com.summer.view.CircularImage;
 
 /**
  * 明星列表 最新
@@ -127,6 +128,11 @@ public class NewFragment extends BaseFragment{
 	{
 		adapter = new CommonAdapter<FHNEntity>(getActivity(), R.layout.fragment_new_item, newList) {
 
+			public void setTag(ViewHolder viewHolder, final FHNEntity item)
+			{
+				viewHolder.getView(R.id.imgViewPortrait).setTag(R.id.tag_new, item);
+			}
+			
 			@Override
 			public void convert(
 					ViewHolder viewHolder,
@@ -139,8 +145,10 @@ public class NewFragment extends BaseFragment{
 					TextView index = (TextView)viewHolder.getView(R.id.txtViewIndex);
 					if (item != null)
 					{
-						Name.setText(item.getStar_names());
-						Location.setText(item.getRegion());
+						Name.setText(isNullOrEmpty(item.getStar_names()) ? "未知" : item.getStar_names());
+						job.setText(isNullOrEmpty(item.getCareer()) ? "未知" : item.getCareer());
+						index.setText(isNullOrEmpty(item.getBid()) ? "未知" : item.getBid());
+						Location.setText(isNullOrEmpty(item.getRegion()) ? "未知" : item.getRegion());
 						
 						Glide.with(getActivity()).load(item.getHead_portrait())
 						.centerCrop()
@@ -150,9 +158,35 @@ public class NewFragment extends BaseFragment{
 							
 							@Override
 							public void onClick(View v) {
-								Intent i = new Intent(getActivity(), DetailsActivity.class);
-								i.putExtra("userID", item.getStar_ID());
-								startActivity(i);
+								try {
+									FHNEntity entity = (FHNEntity)v.getTag(R.id.tag_new);
+									if (entity != null)
+									{
+										if (entity.getVstatus() != null)
+										{
+											if (entity.getVstatus().contains("0"))
+											{
+												try {
+													if (entity.getUsername() != null)
+													{
+														watchLiveVideoRequest(entity.getUsername());
+													}
+
+												} catch (Exception e) {
+													e.printStackTrace();
+													ToastUtil.show(getActivity(), "服务器异常，请稍后再试");
+												}
+											}
+											else
+											{
+												ToastUtil.show(getActivity(), "主播不在直播间，请稍后再试");
+												sendBaseInfoRequest(entity);
+											}
+										}
+									}
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
 							}
 						});
 					}
@@ -162,7 +196,26 @@ public class NewFragment extends BaseFragment{
 			}
 		};
 	}
-
+	
+	private boolean isNullOrEmpty(String o)
+	{
+		if (o != null)
+		{
+			if (o.length() == 0)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return true;
+		}
+	}
+	
 	OnRefreshListener2<GridView> refreshListener = new OnRefreshListener2<GridView>() {
 
 		@Override
@@ -224,6 +277,27 @@ public class NewFragment extends BaseFragment{
 		addToThreadPool(Config.stat_list, "send search request", params);
 	}
 	
+	private void watchLiveVideoRequest(String starName)
+	{
+    	HashMap<String, String> entity = new HashMap<String, String>();
+    	entity.put("username", starName);
+		List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
+		ShowProgressDialog("正在进入直播间，请稍等...");
+		addToThreadPool(Config.query_video, "send watch video request", params);
+	}
+	
+	private void sendBaseInfoRequest(FHNEntity fhnEntity)
+	{
+		if (fhnEntity != null && fhnEntity.getUsername() != null)
+		{
+			HashMap<String, String> entity = new HashMap<String, String>();
+			entity.put("username", fhnEntity.getUsername());
+			ShowProgressDialog("获取热门用户基本信息...");		
+			List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
+			addToThreadPool(Config.member_in, "send search request", params);
+		}
+	}
+	
     private void addToThreadPool(int taskType, String Tag, List<NameValuePair> params)
     {
     	HttpBaseTask httpTask = new HttpBaseTask(ThreadPoolConst.THREAD_TYPE_FILE_HTTP, Tag, params, UrlUtil.GetUrl(taskType));
@@ -255,6 +329,35 @@ public class NewFragment extends BaseFragment{
 	public void RequestSuccessful(String jsonString, int taskType) {
 		switch(taskType)
 		{
+		case Config.member_in:
+			Entity<Member> entity = gson.fromJson(jsonString,
+					new TypeToken<Entity<Member>>() {
+					}.getType());
+			if (entity != null && entity.getData() != null)
+			{
+				Intent intent = new Intent();
+				intent.setClass(getActivity(), PersonalHomeActivity.class);
+				Bundle bundle = new Bundle();
+				bundle.putSerializable("member", entity.getData());
+				intent.putExtras(bundle);
+				startActivity(intent);
+			}
+			break;
+		
+		case Config.query_video:
+			Entity<StarLiveVideoInfo> watchVideoEntity = gson.fromJson(jsonString,
+					new TypeToken<Entity<StarLiveVideoInfo>>() {
+					}.getType());
+			StarLiveVideoInfo watchVideo = watchVideoEntity.getData();
+			if (watchVideo != null)
+			{
+				Intent intent = new Intent(getActivity(), PullActivity_back.class);
+				Bundle b = new Bundle();
+				b.putSerializable("liveInfo", watchVideo);
+				intent.putExtras(b);
+				startActivity(intent); 
+			}
+			break;
 		case Config.stat_list:
 			Entity<List<FHNEntity>> baseEntity = gson.fromJson(jsonString,
 					new TypeToken<Entity<List<FHNEntity>>>() {

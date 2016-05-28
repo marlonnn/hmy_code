@@ -176,5 +176,7 @@
             海绵娱科技\n
 	</string>
 	<item type="id" name="tag_portrait"></item>
+	<item type="id" name="tag_focus"></item>
+	<item type="id" name="tag_new"></item>
 	<item type="id" name="tag_found"></item>
 </resources>

@@ -12,6 +12,7 @@ import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.BC.entertainmentgravitation.dialog.ApplauseGiveConcern;
 import com.BC.entertainmentgravitation.entity.Member;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -59,6 +60,8 @@ public class PersonalHomeActivity extends BaseActivity implements OnClickListene
 	private Member member;
 	
 	private Gson gson;
+	
+	private ApplauseGiveConcern applauseGiveConcern;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -108,21 +111,51 @@ public class PersonalHomeActivity extends BaseActivity implements OnClickListene
 			.centerCrop().diskCacheStrategy(DiskCacheStrategy.ALL)
 			.placeholder(R.drawable.avatar_def).into(cImagePortrait);
 			
-			name.setText(member.getNick() == null ? "未知": member.getNick());
-			focus.setText(member.getFollow() == null ? "未知": member.getFollow());
-			fans.setText(member.getFans() == null ? "未知": member.getFans());
-			career.setText(member.getProfessional() == null ? "未知": member.getProfessional());
-			language.setText(member.getLanguage() == null ? "未知": member.getLanguage());
-			age.setText(member.getAge() == null ? "未知": member.getAge());
-			nationality.setText(member.getNationality() == null ? "未知": member.getNationality());
-			constellation.setText(member.getConstellation() == null ? "未知": member.getConstellation());
+			name.setText(isNullOrEmpty(member.getNick()) ? ":未知": member.getNick());
+			focus.setText(isNullOrEmpty(member.getFollow()) ? "未知": member.getFollow());
+			fans.setText(isNullOrEmpty(member.getFans()) ? ":未知": member.getFans());
+			career.setText(isNullOrEmpty(member.getProfessional()) ? "未知": member.getProfessional());
+			language.setText(isNullOrEmpty(member.getLanguage()) ? "普通话": member.getLanguage());
+			age.setText(isNullOrEmpty(member.getAge()) ? "未知": member.getAge());
+			nationality.setText(isNullOrEmpty(member.getNationality()) ? "中国": member.getNationality());
+			constellation.setText(isNullOrEmpty(member.getConstellation()) ? "未知": member.getConstellation());
 //			body.setText(member.get == null ? "": member.getName());
-			regin.setText(member.getRegion() == null ? "未知": member.getRegion());
+			regin.setText(isNullOrEmpty(member.getRegion()) ? "未知": member.getRegion());
 //			wx.setText(member.g == null ? "": member.getName());
 //			qq.setText(member.getName() == null ? "": member.getName());
-			email.setText(member.getEmail() == null ? "未知": member.getEmail());
+			email.setText(isNullOrEmpty(member.getEmail()) ? "未知": member.getEmail());
+			
+			/**
+			 * 初始化投资和撤资弹出对话框
+			 */
+			try {
+				applauseGiveConcern = new ApplauseGiveConcern( PersonalHomeActivity.this,
+						member.getId(), this, Integer.parseInt(member.getBid()),
+								member.getNick());
+			} catch (NumberFormatException e) {
+				e.printStackTrace();
+			}
 		}
 
+	}
+	
+	private boolean isNullOrEmpty(String o)
+	{
+		if (o != null)
+		{
+			if (o.length() == 0)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return true;
+		}
 	}
 	
     private void sendMemberRequest(String username)
@@ -160,7 +193,11 @@ public class PersonalHomeActivity extends BaseActivity implements OnClickListene
 		switch (v.getId()) {
 		
 		case R.id.lLayoutFocus:
-			ToastUtil.show(this, "此功能正在抓紧开发中，敬请期待...");
+//			ToastUtil.show(this, "此功能正在抓紧开发中，敬请期待...");
+			if (applauseGiveConcern != null)
+			{
+				applauseGiveConcern.sendFocusRequest();
+			}
 			break;
 			
 		case R.id.lLayoutLine:
@@ -183,11 +220,33 @@ public class PersonalHomeActivity extends BaseActivity implements OnClickListene
 			break;
 		}
 	}
-
+	
 	@Override
 	public void RequestSuccessful(String jsonString, int taskType) {
 		switch(taskType)
 		{
+		case Config.and_attention:
+			ToastUtil.show(PersonalHomeActivity.this, "提交成功");
+			applauseGiveConcern.showAnimationDialog(R.drawable.circle6,
+					R.raw.concern);
+			break;
+		case Config.give_applause_booed:
+			ToastUtil.show(PersonalHomeActivity.this, "提交成功");
+			switch (applauseGiveConcern.getType()) {
+			case 1:
+				applauseGiveConcern.showAnimationDialog(R.drawable.circle4,
+						R.raw.applaud);
+				break;
+			case 2:
+				applauseGiveConcern.showAnimationDialog(R.drawable.circle5,
+						R.raw.give_back);
+				break;
+			default:
+				applauseGiveConcern.showAnimationDialog(R.drawable.circle4,
+						R.raw.applaud);
+				break;
+			}
+			break;
  		case Config.member_in:
  			try {
  				Entity<Member> memberEntity = gson.fromJson(jsonString,

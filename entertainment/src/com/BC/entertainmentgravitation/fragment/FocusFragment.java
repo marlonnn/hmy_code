@@ -23,9 +23,12 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.BC.entertainmentgravitation.DetailsActivity;
+import com.BC.entertainmentgravitation.PersonalHomeActivity;
+import com.BC.entertainmentgravitation.PullActivity_back;
 import com.BC.entertainmentgravitation.R;
 import com.BC.entertainmentgravitation.entity.FHNEntity;
+import com.BC.entertainmentgravitation.entity.Member;
+import com.BC.entertainmentgravitation.entity.StarLiveVideoInfo;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.Gson;
@@ -173,13 +176,36 @@ public class FocusFragment extends BaseFragment{
 			// 调用数据
 			sendFocusStarListRequest();
 		}
-
 	};
+	
+	private boolean isNullOrEmpty(String o)
+	{
+		if (o != null)
+		{
+			if (o.length() == 0)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return true;
+		}
+	}
 	
 	private void initAdapter()
 	{
 		adapter = new CommonAdapter<FHNEntity>(getActivity(), R.layout.fragment_focus_item, hotList) {
 
+			public void setTag(ViewHolder viewHolder, final FHNEntity item)
+			{
+				viewHolder.getView(R.id.imgViewPortrait).setTag(R.id.tag_focus, item);
+			}
+			
 			@Override
 			public void convert(
 					ViewHolder viewHolder,
@@ -193,12 +219,9 @@ public class FocusFragment extends BaseFragment{
 					ImageView imgPortrait = (ImageView)viewHolder.getView(R.id.imgViewPortrait);
 					if (item != null)
 					{
-						Name.setText(item.getStar_names());
-						Location.setText(item.getRegion());
-						if (item.getPeoples() == null || item.getPeoples().isEmpty())
-						{
-							People.setText(item.getPeoples());
-						}
+						Name.setText(isNullOrEmpty(item.getStar_names()) ? "未知" : item.getStar_names());
+						Location.setText(isNullOrEmpty(item.getRegion()) ? "未知" : item.getRegion());
+						People.setText(isNullOrEmpty(item.getPeoples()) ? "0" : item.getPeoples());
 						if (item.getVstatus() != null && !item.getVstatus().isEmpty() && item.getVstatus().contains("0"))
 						{
 							Status.setVisibility(View.VISIBLE);
@@ -215,9 +238,35 @@ public class FocusFragment extends BaseFragment{
 							
 							@Override
 							public void onClick(View v) {
-								Intent i = new Intent(getActivity(), DetailsActivity.class);
-								i.putExtra("userID", item.getStar_ID());
-								startActivity(i);
+								try {
+									FHNEntity entity = (FHNEntity)v.getTag(R.id.tag_focus);
+									if (entity != null)
+									{
+										if (entity.getVstatus() != null)
+										{
+											if (entity.getVstatus().contains("0"))
+											{
+												try {
+													if (entity.getUsername() != null)
+													{
+														watchLiveVideoRequest(entity.getUsername());
+													}
+
+												} catch (Exception e) {
+													e.printStackTrace();
+													ToastUtil.show(getActivity(), "服务器异常，请稍后再试");
+												}
+											}
+											else
+											{
+												ToastUtil.show(getActivity(), "主播不在直播间，请稍后再试");
+												sendBaseInfoRequest(entity);
+											}
+										}
+									}
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
 							}
 						});
 						Glide.with(getActivity()).load(item.getHead_portrait())
@@ -257,6 +306,27 @@ public class FocusFragment extends BaseFragment{
 		ShowProgressDialog("获取热门用户基本信息...");		
 		List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
 		addToThreadPool(Config.stat_list, "send search request", params);
+	}
+	
+	private void sendBaseInfoRequest(FHNEntity fhnEntity)
+	{
+		if (fhnEntity != null && fhnEntity.getUsername() != null)
+		{
+			HashMap<String, String> entity = new HashMap<String, String>();
+			entity.put("username", fhnEntity.getUsername());
+			ShowProgressDialog("获取热门用户基本信息...");		
+			List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
+			addToThreadPool(Config.member_in, "send search request", params);
+		}
+	}
+	
+	private void watchLiveVideoRequest(String starName)
+	{
+    	HashMap<String, String> entity = new HashMap<String, String>();
+    	entity.put("username", starName);
+		List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
+		ShowProgressDialog("正在进入直播间，请稍等...");
+		addToThreadPool(Config.query_video, "send watch video request", params);
 	}
 	
     private void addToThreadPool(int taskType, String Tag, List<NameValuePair> params)
@@ -325,6 +395,36 @@ public class FocusFragment extends BaseFragment{
 	public void RequestSuccessful(String jsonString, int taskType) {
 		switch(taskType)
 		{
+		case Config.member_in:
+			Entity<Member> entity = gson.fromJson(jsonString,
+					new TypeToken<Entity<Member>>() {
+					}.getType());
+			if (entity != null && entity.getData() != null)
+			{
+				Intent intent = new Intent();
+				intent.setClass(getActivity(), PersonalHomeActivity.class);
+				Bundle bundle = new Bundle();
+				bundle.putSerializable("member", entity.getData());
+				intent.putExtras(bundle);
+				startActivity(intent);
+			}
+			break;
+			
+		case Config.query_video:
+			Entity<StarLiveVideoInfo> watchVideoEntity = gson.fromJson(jsonString,
+					new TypeToken<Entity<StarLiveVideoInfo>>() {
+					}.getType());
+			StarLiveVideoInfo watchVideo = watchVideoEntity.getData();
+			if (watchVideo != null)
+			{
+				Intent intent = new Intent(getActivity(), PullActivity_back.class);
+				Bundle b = new Bundle();
+				b.putSerializable("liveInfo", watchVideo);
+				intent.putExtras(b);
+				startActivity(intent); 
+			}
+			break;
+			
 		case Config.stat_list:
 			Entity<List<FHNEntity>> baseEntity = gson.fromJson(jsonString,
 					new TypeToken<Entity<List<FHNEntity>>>() {

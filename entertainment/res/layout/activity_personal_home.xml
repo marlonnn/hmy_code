@@ -60,8 +60,7 @@
             android:layout_centerHorizontal="true"
             android:textSize="15dp"
             android:textColor="@color/white"
-            android:layout_marginTop="15dp"
-            android:text="范冰冰" />
+            android:layout_marginTop="15dp" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -82,7 +81,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:textColor="@color/white"
-                android:text="29" />
+                android:text="0" />
             <TextView
                 android:id="@+id/txtViewFansContent"
                 android:layout_width="wrap_content"
@@ -96,7 +95,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
                 android:layout_marginLeft="5dp"
-                android:text="55" />
+                android:text="0" />
         </LinearLayout>
 
     </RelativeLayout>
@@ -181,6 +180,8 @@
 	    android:layout_above="@id/lLayoutHomeBottom"
 	    android:layout_width="match_parent"
 	    android:layout_height="match_parent"
+	    android:scrollbarSize="4dp"
+	    android:scrollbarThumbVertical="@drawable/scrollbar_thumb"
 	    android:orientation="vertical" >
 	
 	    <LinearLayout
@@ -213,7 +214,7 @@
 			        android:layout_marginRight="15dp"
 			        android:textColor="@color/white"
 			        android:textSize="18dp"
-			        android:text="演员" />
+			        android:text="未知" />
 			
 			</RelativeLayout>
 			<RelativeLayout
@@ -267,7 +268,7 @@
 			        android:layout_marginRight="15dp"
 			        android:textColor="@color/white"
 			        android:textSize="18dp"
-			        android:text="20" />
+			        android:text="0" />
 			</RelativeLayout>
 			<RelativeLayout
 			    android:layout_width="match_parent"

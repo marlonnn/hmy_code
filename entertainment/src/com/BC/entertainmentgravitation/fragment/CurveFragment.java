@@ -22,11 +22,12 @@ import android.widget.TextView;
 
 import com.BC.entertainment.cache.InfoCache;
 import com.BC.entertainment.view.CoordinateSystemView;
-import com.BC.entertainmentgravitation.PersonalActivity;
+import com.BC.entertainmentgravitation.PersonalHomeActivity;
 import com.BC.entertainmentgravitation.R;
 import com.BC.entertainmentgravitation.dialog.ApplauseGiveConcern;
 import com.BC.entertainmentgravitation.entity.EditPersonal;
 import com.BC.entertainmentgravitation.entity.KLink;
+import com.BC.entertainmentgravitation.entity.Member;
 import com.BC.entertainmentgravitation.entity.Point;
 import com.BC.entertainmentgravitation.entity.Ranking;
 import com.BC.entertainmentgravitation.entity.StarInformation;
@@ -91,7 +92,6 @@ public class CurveFragment extends BaseFragment implements OnClickListener{
 	public void onCreate(@Nullable Bundle savedInstanceState) {
 		gson = new Gson();
 		lineChart = new LineChart();
-
 		super.onCreate(savedInstanceState);
 	}
 	
@@ -173,7 +173,12 @@ public class CurveFragment extends BaseFragment implements OnClickListener{
 				// 拿起
 				case MotionEvent.ACTION_UP:
 					if(isSlipping){
-
+						Intent intent = new Intent();
+						intent.setClass(getActivity(), PersonalHomeActivity.class);
+						Bundle bundle = new Bundle();
+						bundle.putSerializable("member", CreateMember());
+						intent.putExtras(bundle);
+						startActivity(intent);
 					}
 					break;
 				default:
@@ -346,13 +351,33 @@ public class CurveFragment extends BaseFragment implements OnClickListener{
     	httpTask.setInfoHandler(handler);
     	ThreadPoolFactory.getThreadPoolManager().addTask(httpTask);
     }
+    
+	private Member CreateMember()
+	{
+		Member m = new Member();
+		m.setId(InfoCache.getInstance().getStartInfo().getStar_ID());
+		m.setNick(InfoCache.getInstance().getStartInfo().getStage_name());
+		m.setName(InfoCache.getInstance().getStartInfo().getUser_name());
+		m.setPortrait(InfoCache.getInstance().getStartInfo().getHead_portrait());
+		m.setGender(InfoCache.getInstance().getStartInfo().getGender());
+		m.setRegion(InfoCache.getInstance().getStartInfo().getRegion());
+		m.setConstellation(InfoCache.getInstance().getStartInfo().getThe_constellation());
+		m.setNationality(InfoCache.getInstance().getStartInfo().getNationality());
+		m.setLanguage(InfoCache.getInstance().getStartInfo().getLanguage());
+		return m;
+	}
+	
 	@Override
 	public void onClick(View v) {
 		Intent intent;
 		switch(v.getId())
 		{
 		case R.id.cImageportrait:
-			intent = new Intent(getActivity(), PersonalActivity.class);
+			intent = new Intent();
+			intent.setClass(getActivity(), PersonalHomeActivity.class);
+			Bundle bundle = new Bundle();
+			bundle.putSerializable("member", CreateMember());
+			intent.putExtras(bundle);
 			startActivity(intent);
 			break;
 		case R.id.focus:
@@ -373,9 +398,26 @@ public class CurveFragment extends BaseFragment implements OnClickListener{
 				applauseGiveConcern.showApplaudDialog(2);
 			}
 			break;
-			
 		}
-		
+	}
+	
+	private boolean isNullOrEmpty(String o)
+	{
+		if (o != null)
+		{
+			if (o.length() == 0)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return true;
+		}
 	}
 	
 	@Override
@@ -456,8 +498,8 @@ public class CurveFragment extends BaseFragment implements OnClickListener{
 				kLink = baseEntity3.getData();
 				int diff = Integer.parseInt(kLink.getDifference());
 				txtViewChange.setText("昨日涨跌"+diff+"点");
-				txtViewHongBao.setText(kLink.getBonus() == null ? "" : kLink.getBonus());
-				txtViewIndex.setText("当前指数：" + kLink.getBid() + "\n点击查看大图");
+				txtViewHongBao.setText(isNullOrEmpty(kLink.getBonus()) ? "0" : kLink.getBonus());
+				txtViewIndex.setText("当前指数：" + kLink.getBid());
 				setPriceCurve(kLink);
 			} catch (JsonSyntaxException e) {
 				e.printStackTrace();
@@ -472,9 +514,9 @@ public class CurveFragment extends BaseFragment implements OnClickListener{
 						}.getType());
 				ranking.addAll(baseEntity4.getData());
 				if (ranking != null && baseEntity4.getData().size() > 0) {
-					if (selectIndex != 0) {
-						selectIndex++;
-					}
+//					if (selectIndex != 0) {
+//						selectIndex++;
+//					}
 					sendStarInfoRequest(ranking.get(selectIndex).getStar_ID());
 				} else {
 					ToastUtil.show(getActivity(), this.getString(R.string.mainactivity_have_no_data));

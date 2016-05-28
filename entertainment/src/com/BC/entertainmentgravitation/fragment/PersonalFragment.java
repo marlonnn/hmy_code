@@ -27,6 +27,7 @@ import com.BC.entertainmentgravitation.AlbumActivity;
 import com.BC.entertainmentgravitation.BaseInfoActivity;
 import com.BC.entertainmentgravitation.BrokerActivity;
 import com.BC.entertainmentgravitation.CareerActivity;
+import com.BC.entertainmentgravitation.ChargeActivity;
 import com.BC.entertainmentgravitation.FeedbackActivity;
 import com.BC.entertainmentgravitation.IncomeActivity;
 import com.BC.entertainmentgravitation.R;
@@ -199,6 +200,13 @@ public class PersonalFragment extends BaseFragment implements OnClickListener, O
 			 */
 			case R.drawable.activity_personal_income:
 				intent = new Intent(getActivity(), IncomeActivity.class);
+				startActivity(intent);
+				break;
+			/**
+			 * 我的娛币
+			 */
+			case R.drawable.activity_personal_yubi:
+				intent = new Intent(getActivity(), ChargeActivity.class);
 				startActivity(intent);
 				break;
 			/**

@@ -106,6 +106,16 @@ public class Member implements Serializable{
 	 * 星座
 	 */
 	private String constellation;
+	
+	private String bid;
+	
+	public String getBid() {
+		return bid;
+	}
+
+	public void setBid(String bid) {
+		this.bid = bid;
+	}
 
 	public String getId() {
 		return id;

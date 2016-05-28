@@ -43,11 +43,14 @@ public class PersonalCache {
 		Personal p5 = new Personal(R.drawable.activity_personal_income, "我的收益");
 		personals.add(p5);
 		
-		Personal p6 = new Personal(R.drawable.activity_personal_feedback, "意见反馈");
+		Personal p6 = new Personal(R.drawable.activity_personal_yubi, "我的娛币");
 		personals.add(p6);
 		
-		Personal p7 = new Personal(R.drawable.activity_personal_about, "关于我们");
+		Personal p7 = new Personal(R.drawable.activity_personal_feedback, "意见反馈");
 		personals.add(p7);
+		
+		Personal p8 = new Personal(R.drawable.activity_personal_about, "关于我们");
+		personals.add(p8);
     	return personals;
     }
     

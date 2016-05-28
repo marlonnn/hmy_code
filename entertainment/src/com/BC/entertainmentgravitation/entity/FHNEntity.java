@@ -15,7 +15,8 @@ public class FHNEntity {
 
 	private String Star_names;
 	
-	private int The_current_hooted_thumb_up_prices;
+//	private int The_current_hooted_thumb_up_prices;
+	private String bid;//当前指数 
 	
 	private String vstatus;
 	
@@ -26,6 +27,24 @@ public class FHNEntity {
 	private String portrait;//写真照片
 	
 	private int The_applause;
+	
+	private String career;
+	
+	public String getBid() {
+		return bid;
+	}
+
+	public void setBid(String bid) {
+		this.bid = bid;
+	}
+
+	public String getCareer() {
+		return career;
+	}
+
+	public void setCareer(String career) {
+		this.career = career;
+	}
 
 	public String getUsername() {
 		return Username;
@@ -59,14 +78,14 @@ public class FHNEntity {
 		Star_names = star_names;
 	}
 
-	public int getThe_current_hooted_thumb_up_prices() {
+/*	public int getThe_current_hooted_thumb_up_prices() {
 		return The_current_hooted_thumb_up_prices;
 	}
 
 	public void setThe_current_hooted_thumb_up_prices(
 			int the_current_hooted_thumb_up_prices) {
 		The_current_hooted_thumb_up_prices = the_current_hooted_thumb_up_prices;
-	}
+	}*/
 
 	public String getVstatus() {
 		return vstatus;

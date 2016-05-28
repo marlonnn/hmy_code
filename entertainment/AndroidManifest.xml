@@ -357,7 +357,6 @@
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        
         <!-- weibo callback-->
         <activity
             android:name=".WBShareActivity"

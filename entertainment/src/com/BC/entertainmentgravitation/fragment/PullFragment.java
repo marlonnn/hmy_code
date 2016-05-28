@@ -1210,29 +1210,29 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
 	private void showShare() {
 		String name = InfoCache.getInstance().getStartInfo().getStage_name();
 
-//		ShareSDK.initSDK(container.activity, "10ee118b8af16");
-//
-//		OnekeyShare oks = new OnekeyShare();
-//		// 关闭sso授权
-//		oks.disableSSOWhenAuthorize();
-//		// 分享时Notification的图标和文字
-//		oks.setTitle("演员在直播！导演你快来......");
-//		oks.setText("看演员，去海绵娱直播APP!" + "(" + name
-//				+ "正在直播中)");
-//		oks.setSite(getString(R.string.app_name));
-//		// 分享链接地址
-//		oks.setUrl("http://a.app.qq.com/o/simple.jsp?pkgname=com.BC.entertainmentgravitation");
-//		// logo地址
-//		oks.setImageUrl("http://app.haimianyu.cn/DOWNLOAD/app_logo.png");
-//		oks.show(container.activity);
-		UMImage image = new UMImage(getActivity(), "http://app.haimianyu.cn/DOWNLOAD/app_logo.png");
-        new ShareAction(getActivity()).setDisplayList(SHARE_MEDIA.SINA,SHARE_MEDIA.QQ,SHARE_MEDIA.QZONE,SHARE_MEDIA.WEIXIN,SHARE_MEDIA.WEIXIN_CIRCLE)
-        .withTitle("看演员，去海绵娱直播APP!" + "(" + name
-				+ "正在直播中)")
-        .withText("来自友盟分享面板")
-        .withMedia(image)
-        .setCallback(umShareListener)
-        .open();
+		ShareSDK.initSDK(container.activity, "10ee118b8af16");
+
+		OnekeyShare oks = new OnekeyShare();
+		// 关闭sso授权
+		oks.disableSSOWhenAuthorize();
+		// 分享时Notification的图标和文字
+		oks.setTitle("演员在直播！导演你快来......");
+		oks.setText("看演员，去海绵娱直播APP!" + "(" + name
+				+ "正在直播中)");
+		oks.setSite(getString(R.string.app_name));
+		// 分享链接地址
+		oks.setUrl("http://a.app.qq.com/o/simple.jsp?pkgname=com.BC.entertainmentgravitation");
+		// logo地址
+		oks.setImageUrl("http://app.haimianyu.cn/DOWNLOAD/app_logo.png");
+		oks.show(container.activity);
+//		UMImage image = new UMImage(getActivity(), "http://app.haimianyu.cn/DOWNLOAD/app_logo.png");
+//        new ShareAction(getActivity()).setDisplayList(SHARE_MEDIA.SINA,SHARE_MEDIA.QQ,SHARE_MEDIA.QZONE,SHARE_MEDIA.WEIXIN,SHARE_MEDIA.WEIXIN_CIRCLE)
+//        .withTitle("看演员，去海绵娱直播APP!" + "(" + name
+//				+ "正在直播中)")
+//        .withText("来自友盟分享面板")
+//        .withMedia(image)
+//        .setCallback(umShareListener)
+//        .open();
 	}
 	
     private UMShareListener umShareListener = new UMShareListener() {

@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_gravity="center"
     android:layout_width="165dp"
-    android:layout_height="300dp"
+    android:layout_height="280dp"
     android:layout_marginLeft="10dp"
     android:layout_marginTop="10dp"
     android:layout_marginRight="10dp"
@@ -13,7 +13,7 @@
         android:id="@+id/rLayoutTop"
         android:layout_weight="1"
         android:layout_width="match_parent"
-        android:layout_height="205dp">
+        android:layout_height="185dp">
         <ImageView
 	        android:id="@+id/imgViewPortrait"
 	        android:layout_centerHorizontal="true"

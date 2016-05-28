@@ -122,7 +122,7 @@
                 style="@style/CheckboxRemberPassword" />
             <TextView
                 android:id="@+id/txtViewRemberPassword"
-                android:layout_width="60dp"
+                android:layout_width="wrap_content"
                 android:layout_height="28dp"
                 android:gravity="bottom"
                 android:textColor="@color/white"
