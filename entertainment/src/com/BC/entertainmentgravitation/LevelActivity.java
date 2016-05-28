@@ -96,7 +96,7 @@ public class LevelActivity extends BaseActivity implements OnItemClickListener {
 				R.layout.item_list_ranking_2, new ArrayList<Contribution>()) {
 
 			@Override
-			public void convert(ViewHolder helper, final Contribution item) {
+			public void convert(ViewHolder helper, final Contribution item, int position) {
 				// helper.setText(R.id.The_picture, item.getThe_picture() + "");
 				helper.setText(R.id.Star_names, item.getName());
 				helper.setText(R.id.contribution, item.getContribution() + "");

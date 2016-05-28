@@ -216,7 +216,7 @@ public class HotFragment extends BaseFragment{
 			@Override
 			public void convert(
 					ViewHolder viewHolder,
-					final FHNEntity item) {
+					final FHNEntity item, int position) {
 				try {
 					CircularImage cPortrait = (CircularImage) viewHolder.getView(R.id.cImagePortrait);
 					TextView Name = (TextView)viewHolder.getView(R.id.txtViewName);

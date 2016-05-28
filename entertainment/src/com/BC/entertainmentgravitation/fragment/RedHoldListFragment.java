@@ -71,7 +71,7 @@ public class RedHoldListFragment extends BaseFragment{
 				R.layout.item_list_red_hold, new ArrayList<RedList>()) {
 
 			@Override
-			public void convert(ViewHolder helper, final RedList item) {
+			public void convert(ViewHolder helper, final RedList item, int position) {
 				helper.setText(R.id.The_publishers_name,
 						item.getThe_publishers_name());
 

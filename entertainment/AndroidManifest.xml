@@ -344,7 +344,11 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait" >
         </activity>
-        
+        <activity
+            android:name=".ContributionActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" >
+        </activity>        
         <!-- umeng related -->
         <activity
             android:name="com.umeng.socialize.editorpage.ShareActivity"

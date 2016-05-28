@@ -123,7 +123,7 @@ public class FoundFragment extends BaseFragment implements OnClickListener{
 			@Override
 			public void convert(
 					ViewHolder viewHolder,
-					final Activitys item) {
+					final Activitys item, int position) {
 				try {
 					ImageView imgViewActvity = (ImageView)viewHolder.getView(R.id.imgViewFound);
 					if (item != null)

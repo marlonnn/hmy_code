@@ -85,7 +85,7 @@ public class StarLevelActivity extends BaseActivity implements OnClickListener ,
 				new ArrayList<Ranking>()) {
 
 			@Override
-			public void convert(ViewHolder helper, final Ranking item) {
+			public void convert(ViewHolder helper, final Ranking item, int position) {
 				// helper.setText(R.id.The_picture, item.getThe_picture() + "");
 				helper.setText(R.id.Star_names, item.getStar_names());
 

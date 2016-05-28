@@ -110,7 +110,7 @@ public class CurveActivity extends BaseActivity implements OnClickListener{
 				R.layout.activity_curve_item, new ArrayList<RedAList>()) {
 
 			@Override
-			public void convert(ViewHolder helper, final RedAList item) {
+			public void convert(ViewHolder helper, final RedAList item, int position) {
 
 				TextView textView = (TextView) helper.getView(R.id.type);
 

@@ -143,7 +143,7 @@ public class AlbumActivity extends BaseActivity implements OnClickListener, OnIt
 				R.layout.activity_album_item_list_album, more_pictures) {
 
 			@Override
-			public void convert(ViewHolder helper, final Photo_images item) {
+			public void convert(ViewHolder helper, final Photo_images item, int position) {
 
 				ImageView imageView = helper.getView(R.id.Picture_address);
 				if (item.getPicture_address() == null) {
@@ -181,7 +181,7 @@ public class AlbumActivity extends BaseActivity implements OnClickListener, OnIt
 				R.layout.activity_album_item_list_album, more_picturesImages) {
 
 			@Override
-			public void convert(ViewHolder helper, final Photo_images item) {
+			public void convert(ViewHolder helper, final Photo_images item, int position) {
 
 				ImageView imageView = helper.getView(R.id.Picture_address);
 				if (item.getPicture_address() == null) {
@@ -218,7 +218,7 @@ public class AlbumActivity extends BaseActivity implements OnClickListener, OnIt
 				R.layout.activity_album_item_list_album, more_picturesPhotographs) {
 
 			@Override
-			public void convert(ViewHolder helper, final Photo_images item) {
+			public void convert(ViewHolder helper, final Photo_images item, int position) {
 
 				ImageView imageView = helper.getView(R.id.Picture_address);
 				if (item.getPicture_address() == null) {

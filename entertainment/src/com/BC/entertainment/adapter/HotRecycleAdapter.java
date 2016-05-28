@@ -2,7 +2,6 @@ package com.BC.entertainment.adapter;
 
 import java.util.LinkedList;
 
-import com.BC.entertainment.adapter.RecyclerViewAdapter.OnItemClickListener;
 import com.BC.entertainmentgravitation.R;
 import com.BC.entertainmentgravitation.entity.Member;
 import com.bumptech.glide.Glide;

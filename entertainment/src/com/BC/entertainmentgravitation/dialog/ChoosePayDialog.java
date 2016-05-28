@@ -47,7 +47,7 @@ public class ChoosePayDialog {
 			@Override
 			public void convert(
 					ViewHolder helper,
-					PayWays item) {
+					PayWays item, int position) {
 				helper.setText(R.id.text_pay, item.getName() + "");
 				helper.setImageResource(R.id.image_pay, item.getImageResource());
 			}};

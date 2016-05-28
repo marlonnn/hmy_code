@@ -97,7 +97,7 @@ public class MessageCommentFragment extends BaseFragment implements
 
 			@Override
 			public void convert(ViewHolder helper,
-					final Comment_on_the_list item) {
+					final Comment_on_the_list item, int position) {
 				// helper.setText(R.id.The_picture, item.getThe_picture() + "");
 
 				helper.setText(R.id.nickname, item.getNickname() + "：");

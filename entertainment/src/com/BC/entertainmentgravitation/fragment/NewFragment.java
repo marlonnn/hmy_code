@@ -136,7 +136,7 @@ public class NewFragment extends BaseFragment{
 			@Override
 			public void convert(
 					ViewHolder viewHolder,
-					final FHNEntity item) {
+					final FHNEntity item, int position) {
 				try {
 					ImageView imgPortrait = (ImageView)viewHolder.getView(R.id.imgViewPortrait);
 					TextView Name = (TextView)viewHolder.getView(R.id.txtViewName);

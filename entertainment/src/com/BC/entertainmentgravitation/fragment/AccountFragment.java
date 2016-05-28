@@ -73,7 +73,7 @@ public class AccountFragment extends BaseFragment{
 				R.layout.fragment_account_item, new ArrayList<RedAList>()) {
 
 			@Override
-			public void convert(ViewHolder helper, final RedAList item) {
+			public void convert(ViewHolder helper, final RedAList item, int position) {
 				helper.setText(R.id.The_publishers_name,
 						item.getThe_publishers_name() + "");
 				helper.setText(R.id.Grants_of_number,

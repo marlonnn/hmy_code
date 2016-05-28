@@ -64,7 +64,7 @@ public class RedALiatFragment extends BaseFragment {
 				R.layout.item_list_red_a_list, new ArrayList<RedAList>()) {
 
 			@Override
-			public void convert(ViewHolder helper, final RedAList item) {
+			public void convert(ViewHolder helper, final RedAList item, int positions) {
 				helper.setText(R.id.The_publishers_name,
 						item.getThe_publishers_name() + "");
 				helper.setText(R.id.Grants_of_number,

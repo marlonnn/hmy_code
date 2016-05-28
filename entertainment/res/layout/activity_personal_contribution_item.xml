@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@drawable/activity_charge_item_bg"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:clickable="true"
+    android:gravity="left"
+    android:layout_height="50dp">
+
+    <TextView
+        android:id="@+id/txtViewSerial"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_gravity="center"
+        android:textColor="@color/white"
+        android:textSize="18dp"
+        android:text="NO." />
+    
+    <TextView
+        android:id="@+id/txtViewRange"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textColor="@color/white"
+        android:textSize="18dp"
+        android:text="1" />
+	<com.summer.view.CircularImage
+		android:id="@+id/cImagePortrait"
+		android:layout_gravity="center"
+		android:layout_marginLeft="5dp"
+		android:layout_width="45dip"
+		android:layout_height="45dip" />
+
+	<LinearLayout
+	    android:id="@+id/lLayoutName"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:layout_gravity="center"
+	    android:layout_marginLeft="5dp"
+	    android:orientation="vertical" >
+
+		<TextView
+		    android:id="@+id/txtViewName"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:textColor="@color/white"
+		    android:layout_weight="1"
+		    android:text="name" />
+
+		<TextView
+		    android:id="@+id/txtViewContribute"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_weight="1"
+		    android:textColor="@color/white"
+		    android:text="贡献0娱票" />
+
+	</LinearLayout>
+
+</LinearLayout>

@@ -127,7 +127,7 @@ public class MessageListFragment extends BaseFragment implements
 				R.layout.item_list_message, new ArrayList<MessageItem>()) {
 
 			@Override
-			public void convert(ViewHolder helper, final MessageItem item) {
+			public void convert(ViewHolder helper, final MessageItem item, int position) {
 				// helper.setText(R.id.The_picture, item.getThe_picture() + "");
 				helper.setText(R.id.describe, item.getDescribe());
 				helper.setText(R.id.star_nmae, item.getStar_nmae());

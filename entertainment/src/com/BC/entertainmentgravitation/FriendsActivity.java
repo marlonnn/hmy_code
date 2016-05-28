@@ -211,7 +211,7 @@ public class FriendsActivity extends BaseActivity implements
 				new ArrayList<Friend>()) {
 
 			@Override
-			public void convert(ViewHolder helper, final Friend item) {
+			public void convert(ViewHolder helper, final Friend item, int position) {
 
 				helper.setText(R.id.The_name_of_the, item.getThe_name_of_the());
 				helper.setText(R.id.level, "Lv." + item.getLevel());

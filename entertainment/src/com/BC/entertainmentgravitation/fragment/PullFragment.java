@@ -420,7 +420,7 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
 					@Override
 					public void convert(
 							ViewHolder holder,
-							IMMessage item) {
+							IMMessage item, int position) {
 //						holder.setTextColor(R.id.txtName, Color.parseColor("#EEB422"));
 						if (item.getMsgType() == MsgTypeEnum.notification)
 						{

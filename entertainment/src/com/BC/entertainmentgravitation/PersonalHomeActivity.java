@@ -190,6 +190,7 @@ public class PersonalHomeActivity extends BaseActivity implements OnClickListene
 	
 	@Override
 	public void onClick(View v) {
+		Intent intent;
 		switch (v.getId()) {
 		
 		case R.id.lLayoutFocus:
@@ -201,7 +202,7 @@ public class PersonalHomeActivity extends BaseActivity implements OnClickListene
 			break;
 			
 		case R.id.lLayoutLine:
-			Intent intent = new Intent(this, CurveActivity.class);
+			intent = new Intent(this, CurveActivity.class);
 			Bundle bundle = new Bundle();
 			bundle.putSerializable("member", member);
 			intent.putExtras(bundle);
@@ -209,7 +210,11 @@ public class PersonalHomeActivity extends BaseActivity implements OnClickListene
 			break;
 			
 		case R.id.lLayoutYupiao:
-			ToastUtil.show(this, "此功能正在抓紧开发中，敬请期待...");
+			intent = new Intent(this, ContributionActivity.class);
+			Bundle b = new Bundle();
+			b.putSerializable("member", member);
+			intent.putExtras(b);
+			startActivity(intent);
 			break;
 			
 		/**
