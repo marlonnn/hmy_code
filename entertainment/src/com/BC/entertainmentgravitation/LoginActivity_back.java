@@ -5,12 +5,14 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.util.Log;
 
 import com.BC.entertainment.view.CustomViewPager;
 import com.BC.entertainmentgravitation.fragment.LoginFragment;
 import com.BC.entertainmentgravitation.fragment.LoginFragment.iLogin;
 import com.BC.entertainmentgravitation.fragment.RegisteFragment;
 import com.BC.entertainmentgravitation.fragment.RegisteFragment.iRegister;
+import com.igexin.sdk.PushManager;
 import com.summer.activity.BaseActivity;
 import com.summer.factory.ThreadPoolFactory;
 import com.umeng.analytics.MobclickAgent;
@@ -18,6 +20,11 @@ import com.umeng.analytics.MobclickAgent.EScenarioType;
 import com.umeng.socialize.PlatformConfig;
 
 public class LoginActivity_back extends BaseActivity implements iRegister, iLogin{
+	
+    /**
+     * 第三方应用Master Secret，修改为正确的值
+     */
+    private static final String MASTERSECRET = "xuPUHNX97j5c2RlO4VoBTA";
 	
     private Context mContext;
 	private CustomViewPager viewPager;
@@ -38,6 +45,10 @@ public class LoginActivity_back extends BaseActivity implements iRegister, iLogi
 
         initView();
         registerUmengShareConfig();
+        
+        // SDK初始化，第三方程序启动时，都要进行SDK初始化工作
+        Log.d("GetuiSdkDemo", "initializing sdk...");
+        PushManager.getInstance().initialize(this.getApplicationContext());
     }
 	
 	private void registerUmengShareConfig()
