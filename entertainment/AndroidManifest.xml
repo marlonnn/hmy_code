@@ -348,6 +348,11 @@
             android:name=".ContributionActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait" >
+        </activity> 
+        <activity
+            android:name=".EnvelopeActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" >
         </activity>        
         <!-- umeng related -->
         <activity

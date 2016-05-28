@@ -16,7 +16,6 @@ import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
-import com.BC.entertainment.adapter.ContributeAdapter;
 import com.BC.entertainmentgravitation.entity.Contribute;
 import com.BC.entertainmentgravitation.entity.Member;
 import com.bumptech.glide.Glide;

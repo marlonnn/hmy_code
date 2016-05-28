@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/lLayoutExplain"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@+id/lLayoutLine"
+        android:gravity="center"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:background="@drawable/activity_charge_item_bg"
+        android:layout_marginTop="5dp" >
+        <TextView
+            android:id="@+id/txtViewDesContent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:textColor="@color/white"
+            android:text="说明" />
+        <TextView
+            android:id="@+id/txtViewTypeContent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:textColor="@color/white"
+            android:text="类型" />
+        <TextView
+            android:id="@+id/txtViewHoldContent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:textColor="@color/white"
+            android:text="发布者" />
+        <TextView
+            android:id="@+id/txtViewNumberContent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:textColor="@color/white"
+            android:text="数量" />
+        <TextView
+            android:id="@+id/txtViewTimeContent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:textColor="@color/white"
+            android:text="时间" />
+    </LinearLayout>
+
+
+    <com.netease.nim.uikit.common.ui.ptr.PullToRefreshListView
+        xmlns:ptr="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/pullToRefreshListView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:dividerHeight="0px"
+        android:layoutAnimation="@anim/layout_anim_ctrl"
+        android:scrollbarSize="4dp"
+	    android:scrollbarThumbVertical="@drawable/scrollbar_thumb"
+        android:listSelector="#00000000"
+        ptr:dividerHeight="1px"
+        ptr:ptrAnimationStyle="flip"
+        ptr:ptrMode="both"
+        ptr:scrollbars="false" >
+    </com.netease.nim.uikit.common.ui.ptr.PullToRefreshListView>
+
+</LinearLayout>

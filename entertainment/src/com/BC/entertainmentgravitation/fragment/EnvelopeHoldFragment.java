@@ -6,13 +6,16 @@ import java.util.List;
 
 import org.apache.http.NameValuePair;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.ListView;
 
 import com.BC.entertainmentgravitation.DetailsActivity;
@@ -21,8 +24,8 @@ import com.BC.entertainmentgravitation.entity.RedList;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.netease.nim.uikit.common.ui.ptr.PullToRefreshBase;
-import com.netease.nim.uikit.common.ui.ptr.PullToRefreshBase.OnRefreshListener2;
 import com.netease.nim.uikit.common.ui.ptr.PullToRefreshListView;
+import com.netease.nim.uikit.common.ui.ptr.PullToRefreshBase.OnRefreshListener2;
 import com.summer.adapter.CommonAdapter;
 import com.summer.config.Config;
 import com.summer.factory.ThreadPoolFactory;
@@ -35,50 +38,49 @@ import com.summer.utils.JsonUtil;
 import com.summer.utils.ToastUtil;
 import com.summer.utils.UrlUtil;
 
-public class RedHoldListFragment extends BaseFragment{
-
-	View contentView;
-	PullToRefreshListView pullToRefreshListView1;
-
-	List<RedList> messageItems;
+/**
+ * 持有红包
+ * @author zhongwen
+ *
+ */
+public class EnvelopeHoldFragment extends BaseFragment {
+	
+	private Gson gson;
+	private View rootView;
+	private PullToRefreshListView pullToRefreshListView;
 	private CommonAdapter<RedList> adapter;
+	private List<RedList> messageItems;
 	private int pageIndex = 1;
-
+	
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		contentView = inflater.inflate(R.layout.fragment_red_hold_list, null);
-		return contentView;
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
 	}
 
 	@Override
-	public void onViewCreated(View view, Bundle savedInstanceState) {
-		init();
+	public void onCreate(@Nullable Bundle savedInstanceState) {
+		gson = new Gson();
 		sendReqMessage(1);
-		super.onViewCreated(view, savedInstanceState);
+		super.onCreate(savedInstanceState);
 	}
-
-	private void init() {
-		// TODO Auto-generated method stub
-		pullToRefreshListView1 = (PullToRefreshListView) contentView
+	
+	private void initView()
+	{
+		pullToRefreshListView = (PullToRefreshListView) rootView
 				.findViewById(R.id.pullToRefreshListView1);
-		pullToRefreshListView1.setOnRefreshListener(refreshListener);
-		// ArrayList<MessageItem> items = new ArrayList<MessageItem>();
-		// items.add(new MessageItem());
-		// items.add(new MessageItem());
-		// items.add(new MessageItem());
+		pullToRefreshListView.setOnRefreshListener(refreshListener);
 		adapter = new CommonAdapter<RedList>(getActivity(),
-				R.layout.item_list_red_hold, new ArrayList<RedList>()) {
+				R.layout.fragment_envelope_hold_item, new ArrayList<RedList>()) {
 
 			@Override
 			public void convert(ViewHolder helper, final RedList item, int position) {
-				helper.setText(R.id.The_publishers_name,
+				helper.setText(R.id.txtViewHoldName,
 						item.getThe_publishers_name());
 
-				helper.setText(R.id.The_user_holds_a_number_of,
+				helper.setText(R.id.txtViewNumber,
 						item.getThe_user_holds_a_number_of() + "");
-				helper.setText(R.id.The_current_value,
-						item.getThe_current_value() + "");
+//				helper.setText(R.id.txtViewValue,
+//						item.getThe_current_value() + "");
 				int price = item.getThe_current_value()-1;
 				int count = item.getThe_user_holds_a_number_of();
 				int allPrice = 0;
@@ -86,9 +88,9 @@ public class RedHoldListFragment extends BaseFragment{
 					allPrice += price;
 					price --;
 				}
-				helper.setText(R.id.The_current_value, 
+				helper.setText(R.id.txtViewValue, 
 						allPrice  + "");
-				helper.getView(R.id.The_publishers_name).setOnClickListener(
+				helper.getView(R.id.txtViewHoldName).setOnClickListener(
 						new OnClickListener() {
 
 							@Override
@@ -103,8 +105,50 @@ public class RedHoldListFragment extends BaseFragment{
 						});
 			}
 		};
-		pullToRefreshListView1.setAdapter(adapter);
+		pullToRefreshListView.setAdapter(adapter);
 	}
+	
+	OnRefreshListener2<ListView> refreshListener = new OnRefreshListener2<ListView>() {
+
+		@Override
+		public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
+			// 下拉刷新
+			String time = DateUtils.formatDateTime(getActivity(),
+					System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME
+							| DateUtils.FORMAT_SHOW_DATE
+							| DateUtils.FORMAT_ABBREV_ALL);
+			pullToRefreshListView.getLoadingLayoutProxy().setRefreshingLabel(
+					"正在刷新");
+			pullToRefreshListView.getLoadingLayoutProxy().setPullLabel("下拉刷新");
+			pullToRefreshListView.getLoadingLayoutProxy().setReleaseLabel(
+					"释放开始刷新");
+			refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(
+					"最后更新时间:" + time);
+			pageIndex = 1;
+			// 调用数据
+
+			sendReqMessage(pageIndex);
+
+		}
+
+		@Override
+		public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
+			// 上拉翻页
+			String time = DateUtils.formatDateTime(getActivity(),
+					System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME
+							| DateUtils.FORMAT_SHOW_DATE
+							| DateUtils.FORMAT_ABBREV_ALL);
+			pullToRefreshListView.getLoadingLayoutProxy().setRefreshingLabel(
+					"正在加载");
+			pullToRefreshListView.getLoadingLayoutProxy().setPullLabel("上拉翻页");
+			pullToRefreshListView.getLoadingLayoutProxy().setReleaseLabel(
+					"释放开始加载");
+			refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(
+					"最后加载时间:" + time);
+			// 调用数据
+			sendReqMessage(pageIndex);
+		}
+	};
 
 	private void sendReqMessage(int pageIndex) {
 		if (Config.User == null) {
@@ -132,18 +176,57 @@ public class RedHoldListFragment extends BaseFragment{
 	@Override
 	public void onInfoReceived(int errcode, HashMap<String, Object> items) {
 		super.onInfoReceived(errcode, items);
-		pullToRefreshListView1.onRefreshComplete();
+		pullToRefreshListView.onRefreshComplete();
+	}
+	
+	@Override
+	public void onStart() {
+		super.onStart();
 	}
 
 	@Override
+	public void onResume() {
+		super.onResume();
+	}
+	
+	@Override
+	public void onPause() {
+		super.onPause();
+	}
+
+	@Override
+	public void onStop() {
+		super.onStop();
+	}
+	
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+	}
+	
+	@SuppressLint("InflateParams") @Override
+	@Nullable
+	public View onCreateView(LayoutInflater inflater,
+			@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+		rootView = inflater.inflate(R.layout.fragment_envelope_hold, null);
+		return rootView;
+	}
+	
+	@Override
+	public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+		super.onViewCreated(view, savedInstanceState);
+		initView();
+	}
+	
+
+	@Override
 	public void RequestSuccessful(String jsonString, int taskType) {
-		Gson gson = new Gson();
 		switch (taskType) {
 		case Config.hold_list:
-			Entity<List<RedList>> baseEntity5 = gson.fromJson(jsonString,
+			Entity<List<RedList>> baseEntity = gson.fromJson(jsonString,
 					new TypeToken<Entity<List<RedList>>>() {
 					}.getType());
-			messageItems = baseEntity5.getData();
+			messageItems = baseEntity.getData();
 			if (messageItems != null) {
 				if (pageIndex == 1) {// 第一页时，先清空数据集
 					adapter.clearAll();
@@ -155,50 +238,6 @@ public class RedHoldListFragment extends BaseFragment{
 			}
 			break;
 		}
-
 	}
-
-	OnRefreshListener2<ListView> refreshListener = new OnRefreshListener2<ListView>() {
-
-		@Override
-		public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
-			// 下拉刷新
-			String time = DateUtils.formatDateTime(getActivity(),
-					System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME
-							| DateUtils.FORMAT_SHOW_DATE
-							| DateUtils.FORMAT_ABBREV_ALL);
-			pullToRefreshListView1.getLoadingLayoutProxy().setRefreshingLabel(
-					"正在刷新");
-			pullToRefreshListView1.getLoadingLayoutProxy().setPullLabel("下拉刷新");
-			pullToRefreshListView1.getLoadingLayoutProxy().setReleaseLabel(
-					"释放开始刷新");
-			refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(
-					"最后更新时间:" + time);
-			pageIndex = 1;
-			// 调用数据
-
-			// sendReq(pageIndex);
-			sendReqMessage(pageIndex);
-
-		}
-
-		@Override
-		public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
-			// 上拉翻页
-			String time = DateUtils.formatDateTime(getActivity(),
-					System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME
-							| DateUtils.FORMAT_SHOW_DATE
-							| DateUtils.FORMAT_ABBREV_ALL);
-			pullToRefreshListView1.getLoadingLayoutProxy().setRefreshingLabel(
-					"正在加载");
-			pullToRefreshListView1.getLoadingLayoutProxy().setPullLabel("上拉翻页");
-			pullToRefreshListView1.getLoadingLayoutProxy().setReleaseLabel(
-					"释放开始加载");
-			refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(
-					"最后加载时间:" + time);
-			// 调用数据
-			sendReqMessage(pageIndex);
-		}
-	};
 
 }

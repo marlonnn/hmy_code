@@ -69,7 +69,7 @@
         android:scrollbars="vertical"
         android:scrollbarThumbVertical="@drawable/scrollbar_thumb"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="350dp" >
     </android.support.v7.widget.RecyclerView>
 
     <RelativeLayout

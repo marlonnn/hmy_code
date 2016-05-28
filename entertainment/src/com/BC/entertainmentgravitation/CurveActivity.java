@@ -215,7 +215,7 @@ public class CurveActivity extends BaseActivity implements OnClickListener{
 		entity.put("The_page_number", "" + pageIndex);
 		
 		List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
-		addToThreadPool(Config.account, "send account request", params);
+		addToThreadPool(Config.a_list, "send account request", params);
 	}
 	
     private void addToThreadPool(int taskType, String tag, List<NameValuePair> params)
@@ -285,7 +285,7 @@ public class CurveActivity extends BaseActivity implements OnClickListener{
 			initPriceCurve(kLink);
 			XLog.i(kLink.toString());
 			break;
-		case Config.account:
+		case Config.a_list:
 			Entity<List<RedAList>> baseEntity = gson.fromJson(jsonString,
 					new TypeToken<Entity<List<RedAList>>>() {
 					}.getType());

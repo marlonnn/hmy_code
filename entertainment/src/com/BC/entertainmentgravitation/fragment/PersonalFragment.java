@@ -28,6 +28,7 @@ import com.BC.entertainmentgravitation.BaseInfoActivity;
 import com.BC.entertainmentgravitation.BrokerActivity;
 import com.BC.entertainmentgravitation.CareerActivity;
 import com.BC.entertainmentgravitation.ChargeActivity;
+import com.BC.entertainmentgravitation.EnvelopeActivity;
 import com.BC.entertainmentgravitation.FeedbackActivity;
 import com.BC.entertainmentgravitation.IncomeActivity;
 import com.BC.entertainmentgravitation.R;
@@ -138,6 +139,7 @@ public class PersonalFragment extends BaseFragment implements OnClickListener, O
         adapter.notifyDataSetChanged();
         adapter.setmOnItemClickListener(this);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        infoList.setVerticalScrollBarEnabled(true);
         infoList.setLayoutManager(linearLayoutManager);
         
         infoList.setItemAnimator(new DefaultItemAnimator());//more的动画效果
@@ -207,6 +209,13 @@ public class PersonalFragment extends BaseFragment implements OnClickListener, O
 			 */
 			case R.drawable.activity_personal_yubi:
 				intent = new Intent(getActivity(), ChargeActivity.class);
+				startActivity(intent);
+				break;
+			/**
+			 * 我的红包
+			 */
+			case R.drawable.activity_personal_envelope:
+				intent = new Intent(getActivity(), EnvelopeActivity.class);
 				startActivity(intent);
 				break;
 			/**
