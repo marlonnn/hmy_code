@@ -2,6 +2,7 @@ package com.BC.entertainmentgravitation.fragment;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.http.NameValuePair;
 
@@ -24,8 +25,10 @@ import android.widget.Toast;
 import com.BC.entertainment.config.Preferences;
 import com.BC.entertainmentgravitation.HomeActivity_back;
 import com.BC.entertainmentgravitation.R;
-import com.BC.entertainmentgravitation.fragment.RegisteFragment.iRegister;
+import com.BC.entertainmentgravitation.entity.Member;
+import com.BC.entertainmentgravitation.entity.WxUser;
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.netease.nim.uikit.cache.DataCacheManager;
 import com.netease.nimlib.sdk.AbortableFuture;
@@ -46,6 +49,10 @@ import com.summer.utils.JsonUtil;
 import com.summer.utils.ToastUtil;
 import com.summer.utils.UrlUtil;
 import com.summer.utils.ValidateUtil;
+import com.umeng.socialize.UMAuthListener;
+import com.umeng.socialize.UMShareAPI;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.utils.Log;
 
 public class LoginFragment extends BaseFragment implements OnClickListener{
 
@@ -59,6 +66,7 @@ public class LoginFragment extends BaseFragment implements OnClickListener{
 	
 	private AbortableFuture<LoginInfo> loginRequest;
 	private iLogin iLoginInterface;
+	private UMShareAPI mShareAPI = null;
 	
 	public interface iLogin
 	{
@@ -74,12 +82,16 @@ public class LoginFragment extends BaseFragment implements OnClickListener{
 			e.printStackTrace();
 			XLog.e("get switch camera exception");
 		}
+		
 		super.onAttach(activity);
 	}
 
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState) {
 		gson = new Gson();
+        /** init auth api**/
+        mShareAPI = UMShareAPI.get(getActivity());
+        onDeleteAuth();
 		super.onCreate(savedInstanceState);
 	}
 	
@@ -169,19 +181,23 @@ public class LoginFragment extends BaseFragment implements OnClickListener{
 		 * 第三方登录 微信
 		 */
 		case R.id.btnWx:
-			ToastUtil.show(getActivity(), "此功能正在完善中，尽情期待...");
+			onClickAuth(v);
+//			onClickInfo(v);
+//			ToastUtil.show(getActivity(), "此功能正在完善中，尽情期待...");
 			break;
 		/**
 		 * 第三方登录 QQ
 		 */
 		case R.id.btnQq:
-			ToastUtil.show(getActivity(), "此功能正在完善中，尽情期待...");
+			onClickAuth(v);
+//			ToastUtil.show(getActivity(), "此功能正在完善中，尽情期待...");
 			break;
 		/**
 		 * 第三方登录 微博
 		 */
 		case R.id.btnWb:
-			ToastUtil.show(getActivity(), "此功能正在完善中，尽情期待...");
+			onClickAuth(v);
+//			ToastUtil.show(getActivity(), "此功能正在完善中，尽情期待...");
 			break;
 		/**
 		 * 没有账号，请注册
@@ -221,6 +237,128 @@ public class LoginFragment extends BaseFragment implements OnClickListener{
 		}
 	}
 	
+    private void onClickAuth(View view) {
+        SHARE_MEDIA platform = null;
+        if (view.getId() == R.id.btnWb){
+            platform = SHARE_MEDIA.SINA;
+        }else if (view.getId() == R.id.btnQq){
+            platform = SHARE_MEDIA.QQ;
+        }else if (view.getId() == R.id.btnWx){
+            platform = SHARE_MEDIA.WEIXIN;
+        }
+        /**begin invoke umeng api**/
+
+        mShareAPI.doOauthVerify(getActivity(), platform, umAuthListener);
+    }
+    
+    private void onClickInfo(View view) {
+        SHARE_MEDIA platform = null;
+        if (view.getId() == R.id.btnWb){
+            platform = SHARE_MEDIA.SINA;
+        }else if (view.getId() == R.id.btnQq){
+            platform = SHARE_MEDIA.QQ;
+        }else if (view.getId() == R.id.btnWx){
+            platform = SHARE_MEDIA.WEIXIN;
+        }
+        /**begin invoke umeng api**/
+
+        mShareAPI.getPlatformInfo(getActivity(), platform, umAuthListener);
+
+    }
+    
+    private void onDeleteAuth()
+    {
+    	SHARE_MEDIA platform = SHARE_MEDIA.WEIXIN;
+        mShareAPI.deleteOauth(getActivity(), platform, umdelAuthListener);
+    }
+    
+    /** delauth callback interface**/
+    private UMAuthListener umdelAuthListener = new UMAuthListener() {
+        @Override
+        public void onComplete(SHARE_MEDIA platform, int action, Map<String, String> data) {
+            Toast.makeText(getActivity().getApplicationContext(), "delete Authorize succeed", Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onError(SHARE_MEDIA platform, int action, Throwable t) {
+            Toast.makeText( getActivity().getApplicationContext(), "delete Authorize fail", Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onCancel(SHARE_MEDIA platform, int action) {
+            Toast.makeText( getActivity().getApplicationContext(), "delete Authorize cancel", Toast.LENGTH_SHORT).show();
+        }
+    };
+    
+    /** auth callback interface**/
+    private UMAuthListener umAuthListener = new UMAuthListener() {
+        @Override
+        public void onComplete(SHARE_MEDIA platform, int action, Map<String, String> data) {
+        	SHARE_MEDIA p = platform;
+            Toast.makeText(getActivity(), "Authorize succeed", Toast.LENGTH_SHORT).show();
+            mShareAPI.getPlatformInfo(getActivity(), platform, umInfoListener);
+            if (data!=null){
+                XLog.i("getting data");
+                String d = data.toString();
+                Toast.makeText(getActivity(), data.toString(), Toast.LENGTH_SHORT).show();
+ 				try {
+					Entity<WxUser> memberEntity = gson.fromJson(data.toString(),
+							new TypeToken<Entity<WxUser>>() {
+							}.getType());
+					XLog.i(d);
+					XLog.i(memberEntity);
+				} catch (JsonSyntaxException e) {
+					e.printStackTrace();
+				}
+            }
+        }
+
+        @Override
+        public void onError(SHARE_MEDIA platform, int action, Throwable t) {
+            Toast.makeText( getActivity(), "Authorize fail", Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onCancel(SHARE_MEDIA platform, int action) {
+            Toast.makeText( getActivity(), "Authorize cancel", Toast.LENGTH_SHORT).show();
+        }
+    };
+    
+    private UMAuthListener umInfoListener = new UMAuthListener(){
+
+		@Override
+		public void onComplete(SHARE_MEDIA platform, int action, Map<String, String> data) {
+        	SHARE_MEDIA p = platform;
+            Toast.makeText(getActivity(), "get info succeed", Toast.LENGTH_SHORT).show();
+            if (data!=null){
+                XLog.i("getting data");
+                String d = data.toString();
+                XLog.i("user info: " + d);
+                Toast.makeText(getActivity(), data.toString(), Toast.LENGTH_SHORT).show();
+ 				try {
+//					Entity<WxUser> memberEntity = gson.fromJson(data.toString(),
+//							new TypeToken<Entity<WxUser>>() {
+//							}.getType());
+					XLog.i(d);
+//					XLog.i(memberEntity);
+				} catch (JsonSyntaxException e) {
+					e.printStackTrace();
+				}
+            }
+		}
+
+        @Override
+        public void onError(SHARE_MEDIA platform, int action, Throwable t) {
+            Toast.makeText( getActivity(), "Authorize fail", Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onCancel(SHARE_MEDIA platform, int action) {
+            Toast.makeText( getActivity(), "Authorize cancel", Toast.LENGTH_SHORT).show();
+        }
+    	
+    };
+	
     /**
      * Login to server
      */
@@ -254,7 +392,7 @@ public class LoginFragment extends BaseFragment implements OnClickListener{
     @SuppressWarnings("unchecked")
 	private void logingNimServer(User user)
     {
-    	final String account = user.getUserName();
+    	final String account = user.getClientID();
     	final String token = user.getToken();
     	if (account != null && token != null)
     	{
@@ -333,5 +471,13 @@ public class LoginFragment extends BaseFragment implements OnClickListener{
     		break;
 		}
 	}
+	
+    @Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        XLog.d("on activity re 2");
+        mShareAPI.onActivityResult(requestCode, resultCode, data);
+        XLog.d("on activity re 3");
+    }
 
 }
