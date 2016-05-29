@@ -5,14 +5,13 @@
     android:focusable="true"
     android:focusableInTouchMode="true"
     android:clickable="true"
-    android:gravity="left"
     android:layout_height="50dp">
 
     <TextView
         android:id="@+id/txtViewSerial"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
+        android:layout_marginLeft="5dp"
         android:layout_gravity="center"
         android:textColor="@color/white"
         android:textSize="18dp"
@@ -24,8 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:textColor="@color/white"
-        android:textSize="18dp"
-        android:text="1" />
+        android:textSize="18dp"/>
 	<com.summer.view.CircularImage
 		android:id="@+id/cImagePortrait"
 		android:layout_gravity="center"
@@ -46,16 +44,18 @@
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
 		    android:textColor="@color/white"
-		    android:layout_weight="1"
-		    android:text="name" />
+		    android:textSize="15dp"
+		    android:gravity="center"
+		    android:layout_weight="1"/>
 
 		<TextView
 		    android:id="@+id/txtViewContribute"
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
 		    android:layout_weight="1"
-		    android:textColor="@color/white"
-		    android:text="贡献0娱票" />
+		    android:gravity="center"
+		    android:textSize="15dp"
+		    android:textColor="@color/white"/>
 
 	</LinearLayout>
 

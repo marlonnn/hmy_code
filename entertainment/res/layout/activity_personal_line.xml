@@ -158,36 +158,21 @@
 
         <TextView
             android:id="@+id/txtViewCostTypeContent"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_weight="1"
+            android:gravity="left"
+            android:paddingLeft="5dp"
+            android:layout_weight="3"
             android:textColor="@color/white"
-            android:text="消费类型" />
+            android:text="给明星鼓掌排行" />
         <TextView
-            android:id="@+id/txtViewExplainContent"
-            android:layout_width="wrap_content"
+            android:id="@+id/txtViewContributeContent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:layout_weight="1"
             android:textColor="@color/white"
-            android:text="发布者" />
-        <TextView
-            android:id="@+id/txtViewNumberContent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_weight="1"
-            android:textColor="@color/white"
-            android:text="数量" />
-        <TextView
-            android:id="@+id/txtViewTimeTypeContent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_weight="1"
-            android:textColor="@color/white"
-            android:text="时间" />
+            android:text="个人贡献" />
     </LinearLayout>
     <com.netease.nim.uikit.common.ui.ptr.PullToRefreshListView
         xmlns:ptr="http://schemas.android.com/apk/res-auto"
@@ -201,6 +186,8 @@
         ptr:dividerHeight="1px"
         ptr:ptrAnimationStyle="flip"
         ptr:ptrMode="both"
+        android:scrollbarSize="4dp"
+	    android:scrollbarThumbVertical="@drawable/scrollbar_thumb"
         ptr:scrollbars="false" >
     </com.netease.nim.uikit.common.ui.ptr.PullToRefreshListView>
 </RelativeLayout>

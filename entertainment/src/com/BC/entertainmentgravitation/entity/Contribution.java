@@ -20,15 +20,15 @@ public class Contribution {
 	/**
 	 * 个人贡献
 	 **/
-	int contribution;
+	String contribution;
 	/**
 	 * 最高掌声
 	 **/
-	int highest;
+	String highest;
 	/**
 	 * 获得掌声
 	 **/
-	int acquire;
+	String acquire;
 
 	public String getUserID() {
 		return userID;
@@ -62,27 +62,27 @@ public class Contribution {
 		this.name = name;
 	}
 
-	public int getContribution() {
+	public String getContribution() {
 		return contribution;
 	}
 
-	public void setContribution(int contribution) {
+	public void setContribution(String contribution) {
 		this.contribution = contribution;
 	}
 
-	public int getHighest() {
+	public String getHighest() {
 		return highest;
 	}
 
-	public void setHighest(int highest) {
+	public void setHighest(String highest) {
 		this.highest = highest;
 	}
 
-	public int getAcquire() {
+	public String getAcquire() {
 		return acquire;
 	}
 
-	public void setAcquire(int acquire) {
+	public void setAcquire(String acquire) {
 		this.acquire = acquire;
 	}
 

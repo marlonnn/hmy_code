@@ -80,7 +80,6 @@ public class CurveFragment extends BaseFragment implements OnClickListener{
 	private int pageIndex = 1;
 	private int selectIndex = 0;
 	
-	private int type = 1;
 	private ApplauseGiveConcern applauseGiveConcern;
 
 	@Override
@@ -364,6 +363,8 @@ public class CurveFragment extends BaseFragment implements OnClickListener{
 		m.setConstellation(InfoCache.getInstance().getStartInfo().getThe_constellation());
 		m.setNationality(InfoCache.getInstance().getStartInfo().getNationality());
 		m.setLanguage(InfoCache.getInstance().getStartInfo().getLanguage());
+		m.setDollar(InfoCache.getInstance().getStartInfo().getEntertainment_dollar());
+		m.setBid(String.valueOf(InfoCache.getInstance().getStartInfo().getThe_current_hooted_thumb_up_prices()));
 		return m;
 	}
 	
@@ -484,7 +485,6 @@ public class CurveFragment extends BaseFragment implements OnClickListener{
 						InfoCache.getInstance().getStartInfo()
 								.getThe_current_hooted_thumb_up_prices(),
 						InfoCache.getInstance().getStartInfo().getStage_name());
-				type = 1;
 				
 				sendKLineGraphRequest();
 			}

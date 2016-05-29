@@ -7,19 +7,22 @@ import java.util.List;
 import org.apache.http.NameValuePair;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.text.format.DateUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.BC.entertainment.view.CoordinateSystemView;
+import com.BC.entertainmentgravitation.dialog.ApplauseGiveConcern;
+import com.BC.entertainmentgravitation.entity.Contribution;
 import com.BC.entertainmentgravitation.entity.KLink;
 import com.BC.entertainmentgravitation.entity.Member;
 import com.BC.entertainmentgravitation.entity.Point;
-import com.BC.entertainmentgravitation.entity.RedAList;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.netease.nim.uikit.common.ui.ptr.PullToRefreshBase;
@@ -37,6 +40,7 @@ import com.summer.treadpool.ThreadPoolConst;
 import com.summer.utils.JsonUtil;
 import com.summer.utils.ToastUtil;
 import com.summer.utils.UrlUtil;
+import com.summer.view.CircularImage;
 import com.summer.view.LineChart;
 import com.umeng.analytics.MobclickAgent;
 
@@ -50,14 +54,16 @@ public class CurveActivity extends BaseActivity implements OnClickListener{
 	private Gson gson;
 	private TextView txtViewChange;
 	private TextView txtViewHongBao;
-	private TextView currentIndex;
 	
 	private CoordinateSystemView coordinateSystemView;
 	private LineChart lineChart;
 	private Member member;
 	private PullToRefreshListView pullToRefreshListView;
-	private CommonAdapter<RedAList> adapter;
+	private CommonAdapter<Contribution> adapter;
 	private int pageIndex = 1;
+	private List<Contribution> ranking = new ArrayList<>();
+	private ApplauseGiveConcern applauseGiveConcern;
+	private TextView txtViewIndex;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +79,10 @@ public class CurveActivity extends BaseActivity implements OnClickListener{
 			member = (Member) intent.getSerializableExtra("member");
 			sendKLineGraphRequest(member.getId());
 			sendAccountRequest(1);
+			
+			applauseGiveConcern = new ApplauseGiveConcern(this, member.getId(),
+					this, Integer.parseInt(member.getBid()),
+					member.getNick());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -96,7 +106,7 @@ public class CurveActivity extends BaseActivity implements OnClickListener{
 		findViewById(R.id.focus).setOnClickListener(this);
 		findViewById(R.id.invest).setOnClickListener(this);
 		findViewById(R.id.divest).setOnClickListener(this);
-		currentIndex = (TextView) findViewById(R.id.txtViewIndex);
+		txtViewIndex = (TextView) findViewById(R.id.txtViewIndex);
 		txtViewChange = (TextView) findViewById(R.id.txtViewChange);
 		txtViewHongBao = (TextView) findViewById(R.id.txtViewHongBao);
 		coordinateSystemView = (CoordinateSystemView) findViewById(R.id.coordinateSystemView);
@@ -106,37 +116,90 @@ public class CurveActivity extends BaseActivity implements OnClickListener{
 	{
 		pullToRefreshListView = (PullToRefreshListView) findViewById(R.id.pullToRefreshListView);
 		pullToRefreshListView.setOnRefreshListener(refreshListener);
-		adapter = new CommonAdapter<RedAList>(this.getBaseContext(),
-				R.layout.activity_curve_item, new ArrayList<RedAList>()) {
+		adapter = new CommonAdapter<Contribution>(this.getBaseContext(),
+				R.layout.activity_curve_item, new ArrayList<Contribution>()) {
 
 			@Override
-			public void convert(ViewHolder helper, final RedAList item, int position) {
+			public void convert(ViewHolder helper, final Contribution item, int position) {
 
-				TextView textView = (TextView) helper.getView(R.id.type);
-
-				switch (item.getType()) {
+				TextView txtViewRank = (TextView) helper.getView(R.id.txtViewRank);
+				ImageView imgViewRank = (ImageView) helper.getView(R.id.imgViewRank);
+				CircularImage cImagePortrait = (CircularImage) helper.getView(R.id.cImagePortrait);
+				TextView txtViewName = (TextView) helper.getView(R.id.txtViewName);
+				TextView txtViewContribute = (TextView) helper.getView(R.id.txtViewContribute);
+				int rank = position + 1;
+				switch(rank)
+				{
 				case 1:
-					textView.setText(getString(R.string.fragment_account_item_publish_income));
-					textView.setTextColor(Color.parseColor("#dd0000"));
+					imgViewRank.setImageResource(R.drawable.icon_1);
+					txtViewRank.setVisibility(View.GONE);
+					imgViewRank.setVisibility(View.VISIBLE);
+					Glide.with(CurveActivity.this).load(item.getHand())
+					.centerCrop().diskCacheStrategy(DiskCacheStrategy.ALL)
+					.placeholder(R.drawable.avatar_def)
+					.into(cImagePortrait);
+					txtViewName.setText(isNullOrEmpty(item.getName()) ? "" : item.getName());
+					txtViewContribute.setText(isNullOrEmpty(item.getContribution()) ? "0" : item.getContribution());
 					break;
 				case 2:
-					textView.setText(getString(R.string.fragment_account_item_publish_payout));
-					textView.setTextColor(Color.parseColor("#2fab21"));
+					imgViewRank.setImageResource(R.drawable.icon_2);
+					txtViewRank.setVisibility(View.GONE);
+					imgViewRank.setVisibility(View.VISIBLE);
+					Glide.with(CurveActivity.this).load(item.getHand())
+					.centerCrop().diskCacheStrategy(DiskCacheStrategy.ALL)
+					.placeholder(R.drawable.avatar_def)
+					.into(cImagePortrait);					
+					txtViewName.setText(isNullOrEmpty(item.getName()) ? "" : item.getName());
+					txtViewContribute.setText(isNullOrEmpty(item.getContribution()) ? "0" : item.getContribution());
+					
 					break;
 				case 3:
-					textView.setText(getString(R.string.fragment_account_item_publish_payout));
-					textView.setTextColor(Color.parseColor("#2fab21"));
+					imgViewRank.setImageResource(R.drawable.icon_3);
+					txtViewRank.setVisibility(View.GONE);
+					imgViewRank.setVisibility(View.VISIBLE);
+					Glide.with(CurveActivity.this).load(item.getHand())
+					.centerCrop().diskCacheStrategy(DiskCacheStrategy.ALL)
+					.placeholder(R.drawable.avatar_def)
+					.into(cImagePortrait);
+					txtViewName.setText(isNullOrEmpty(item.getName()) ? "" : item.getName());
+					txtViewContribute.setText(isNullOrEmpty(item.getContribution()) ? "0" : item.getContribution());
 					break;
+				default:
+					Glide.with(CurveActivity.this).load(item.getHand())
+					.centerCrop().diskCacheStrategy(DiskCacheStrategy.ALL)
+					.placeholder(R.drawable.avatar_def)
+					.into(cImagePortrait);
+					txtViewRank.setVisibility(View.VISIBLE);
+					imgViewRank.setVisibility(View.GONE);
 
+					txtViewRank.setText("NO." + rank);
+					txtViewName.setText(isNullOrEmpty(item.getName()) ? "" : item.getName());
+					txtViewContribute.setText(isNullOrEmpty(item.getContribution()) ? "0" : item.getContribution());
+					break;
 				}
-				helper.setText(R.id.The_publishers_name,
-						item.getThe_publishers_name() + "");
-				helper.setText(R.id.Grants_of_number,
-						item.getGrants_of_number() + "");
-				helper.setText(R.id.time, item.getTime() + "");
+
 			}
 		};
 		pullToRefreshListView.setAdapter(adapter);
+	}
+	
+	private boolean isNullOrEmpty(String o)
+	{
+		if (o != null)
+		{
+			if (o.length() == 0)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return true;
+		}
 	}
 	
 	OnRefreshListener2<ListView> refreshListener = new OnRefreshListener2<ListView>(){
@@ -189,12 +252,17 @@ public class CurveActivity extends BaseActivity implements OnClickListener{
 	 * 获取价格曲线
 	 */
 	public void sendKLineGraphRequest(String clientId) {
-		HashMap<String, String> entity = new HashMap<String, String>();
-		entity.put("star_id", clientId);
-		entity.put("type", "1");
-    	List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
-    	ShowProgressDialog("获取折线图...");
-    	addToThreadPool(Config.k_line_graph, "send kLine request", params);
+		try {
+			HashMap<String, String> entity = new HashMap<String, String>();
+			entity.put("star_id", clientId);
+			entity.put("user_id", Config.User.getClientID());
+			entity.put("type", "1");
+			List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
+			ShowProgressDialog("获取折线图...");
+			addToThreadPool(Config.k_line_graph, "send kLine request", params);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/**
@@ -211,11 +279,12 @@ public class CurveActivity extends BaseActivity implements OnClickListener{
     	
 		HashMap<String, String> entity = new HashMap<String, String>();
 
-		entity.put("clientID", "" + member.getId());
-		entity.put("The_page_number", "" + pageIndex);
-		
+		entity.put("star_id", member.getId());
+		entity.put("pageIndex", "" + pageIndex);
+
+		ShowProgressDialog("获取信息...");
 		List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
-		addToThreadPool(Config.a_list, "send account request", params);
+		addToThreadPool(Config.contribution, "send save user request", params);
 	}
 	
     private void addToThreadPool(int taskType, String tag, List<NameValuePair> params)
@@ -233,15 +302,22 @@ public class CurveActivity extends BaseActivity implements OnClickListener{
 		switch(v.getId())
 		{
 		case R.id.focus:
-			ToastUtil.show(this, "此功能正在抓紧开发中，敬请期待...");
+			if (applauseGiveConcern != null)
+			{
+				applauseGiveConcern.sendFocusRequest();
+			}
 			break;
-			
 		case R.id.invest:
-			ToastUtil.show(this, "此功能正在抓紧开发中，敬请期待...");
+			if (applauseGiveConcern != null)
+			{
+				applauseGiveConcern.showApplaudDialog(1);
+			}
 			break;
-			
 		case R.id.divest:
-			ToastUtil.show(this, "此功能正在抓紧开发中，敬请期待...");
+			if (applauseGiveConcern != null)
+			{
+				applauseGiveConcern.showApplaudDialog(2);
+			}
 			break;
 		/**
 		 * 返回键
@@ -273,29 +349,53 @@ public class CurveActivity extends BaseActivity implements OnClickListener{
 	public void RequestSuccessful(String jsonString, int taskType) {
 		switch(taskType)
 		{
+		case Config.give_applause_booed:
+			ToastUtil.show(this, "提交成功");
+			switch (applauseGiveConcern.getType()) {
+			case 1:
+				applauseGiveConcern.showAnimationDialog(R.drawable.circle4,
+						R.raw.applaud);
+				break;
+			case 2:
+				applauseGiveConcern.showAnimationDialog(R.drawable.circle5,
+						R.raw.give_back);
+				break;
+			default:
+				applauseGiveConcern.showAnimationDialog(R.drawable.circle4,
+						R.raw.applaud);
+				break;
+			}
+			break;
+		case Config.and_attention:
+			ToastUtil.show(this, "提交成功");
+			applauseGiveConcern.showAnimationDialog(R.drawable.circle6,
+					R.raw.concern);
+			break;
 		case Config.k_line_graph:
 			XLog.i("get k line success");
 			Entity<KLink> baseEntity3 = gson.fromJson(jsonString,
 					new TypeToken<Entity<KLink>>() {
 					}.getType());
 			KLink kLink = baseEntity3.getData();
-			int diff = Integer.parseInt(kLink.getDifference());
-			txtViewChange.setText("昨日涨跌"+diff+"点");
-			txtViewHongBao.setText(kLink.getBonus() == null ? "" : kLink.getBonus());
+			txtViewChange.setText(isNullOrEmpty(kLink.getDifference()) ? "昨日涨跌0点" : "昨日涨跌"+ kLink.getDifference()+ "点");
+			txtViewIndex.setText(isNullOrEmpty(kLink.getBid())? "当前指数：0点" : "当前指数：" + kLink.getBid()+  "点");
+			txtViewHongBao.setText(isNullOrEmpty(kLink.getBonus())? "0" : kLink.getBonus());
 			initPriceCurve(kLink);
 			XLog.i(kLink.toString());
 			break;
-		case Config.a_list:
-			Entity<List<RedAList>> baseEntity = gson.fromJson(jsonString,
-					new TypeToken<Entity<List<RedAList>>>() {
+		case Config.contribution:
+			Entity<List<Contribution>> baseEntity = gson.fromJson(
+					jsonString,
+					new TypeToken<Entity<List<Contribution>>>() {
 					}.getType());
-			List<RedAList> messageItems = baseEntity.getData();
-			if (messageItems != null) {
+			ranking = baseEntity.getData();
+			if (ranking != null)
+			{
 				if (pageIndex == 1) {// 第一页时，先清空数据集
 					adapter.clearAll();
 				}
 				pageIndex++;
-				adapter.add(messageItems);
+				adapter.add(ranking);
 			} else {
 				ToastUtil.show(this, getResourceString(R.string.fragment_account_fail_data));
 			}

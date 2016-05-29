@@ -74,7 +74,6 @@ public class ContributionActivity extends BaseActivity implements OnClickListene
 	
 	private void initAdapter()
 	{
-//		adapter = new ContributeAdapter(this, contributes);
 		adapter = new CommonAdapter<Contribute>(ContributionActivity.this, R.layout.activity_personal_contribution_item, contributes) {
 			
 			@Override
@@ -91,10 +90,32 @@ public class ContributionActivity extends BaseActivity implements OnClickListene
 						txtViewRange.setText(String.valueOf(position + 1));
 						Name.setText(isNullOrEmpty(item.getNick_name()) ? "未知" : item.getNick_name());
 						contribute.setText(isNullOrEmpty(item.getSumcount()) ? "贡献0娱票" : "贡献" + item.getSumcount() + "娱票");
-						Glide.with(ContributionActivity.this).load(item.getHead())
-						.centerCrop()
-						.diskCacheStrategy(DiskCacheStrategy.ALL)
-						.placeholder(R.drawable.home_image).into(cPortrait);
+		    			try {
+		    				if (item.getHead() != null)
+		    				{
+		    					String s[] = item.getHead().split("/");
+		    					
+		    					if (s[2] != null && !s[2].contains("app.haimianyu.cn"))
+		    					{
+		    						Glide.with(ContributionActivity.this).load(
+		    								"http://app.haimianyu.cn/" + item.getHead())
+		    						.centerCrop()
+		    						.diskCacheStrategy(DiskCacheStrategy.ALL)
+		    						.placeholder(R.drawable.home_image).into(cPortrait);
+		    					}
+		    					else
+		    					{
+		    						Glide.with(ContributionActivity.this).load(item.getHead())
+		    						.centerCrop()
+		    						.diskCacheStrategy(DiskCacheStrategy.ALL)
+		    						.placeholder(R.drawable.home_image).into(cPortrait);
+		    					}
+		    				}
+
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
