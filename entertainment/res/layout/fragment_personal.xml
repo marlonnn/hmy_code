@@ -67,9 +67,33 @@
         android:scrollbars="vertical"
         android:scrollbarThumbVertical="@drawable/scrollbar_thumb"
         android:layout_width="match_parent"
-        android:layout_height="350dp" >
+        android:layout_height="300dp" >
     </android.support.v7.widget.RecyclerView>
+    <RelativeLayout
+        android:id="@+id/rLayoutExit"
+        android:clickable="true"
+        android:layout_width="match_parent"
+        android:layout_height="55dp">
+	    <ImageView
+	        android:id="@+id/imgViewExit"
+	        android:layout_marginLeft="5dp"
+	        android:layout_marginRight="5dp"
+	        android:layout_marginTop="5dp"
+	        android:background="@color/hmy_red"
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent" />
 
+	    <TextView
+	        android:id="@+id/txtView"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_centerHorizontal="true"
+	        android:layout_centerVertical="true"
+	        android:textSize="20dp"
+	        android:textColor="@color/white"
+	        android:text="退出登录" />
+
+    </RelativeLayout>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="50dp">

@@ -208,6 +208,8 @@ public class PushFragment extends BaseFragment implements OnClickListener, Modul
 	{
 		void onSwitchCamera();
 		void finishPushMedia();
+		void showFragment();
+		void hideFragment();
 	}
 	
 	@Override
@@ -980,7 +982,12 @@ public class PushFragment extends BaseFragment implements OnClickListener, Modul
 		case R.id.imageView_share:
 
 //			ToastUtil.show(getActivity(), "此功能正在完善中...");
-			showShare();
+			if (iPushMedia != null)
+			{
+//				iPushMedia.hideFragment();
+				showShare();
+			}
+
 			break;
 		/**
 		 * 切换摄像头
@@ -1049,44 +1056,29 @@ public class PushFragment extends BaseFragment implements OnClickListener, Modul
 		return m;
 	}
 	
-	private void showShare() {
-//		String name = Config.User.getNickName();
-//		ShareSDK.initSDK(container.activity, "10ee118b8af16");
-//
-//		OnekeyShare oks = new OnekeyShare();
-//		// 关闭sso授权
-//		oks.disableSSOWhenAuthorize();
-//		// 分享时Notification的图标和文字
-//		oks.setTitle("演员在直播！导演你快来......");
-//		oks.setText("看演员，去海绵娱直播APP!" + "(" + name
-//				+ "正在直播中)");
-//		oks.setSite(getString(R.string.app_name));
-//		// 分享链接地址
-//		oks.setUrl("http://a.app.qq.com/o/simple.jsp?pkgname=com.BC.entertainmentgravitation");
-//		// logo地址
-//		oks.setImageUrl("http://app.haimianyu.cn/DOWNLOAD/app_logo.png");
-//		oks.show(container.activity);
+	public void showShare() {
+		String name = Config.User.getNickName();
+		ShareSDK.initSDK(container.activity, "10ee118b8af16");
+
+		OnekeyShare oks = new OnekeyShare();
+		// 关闭sso授权
+		oks.disableSSOWhenAuthorize();
+		// 分享时Notification的图标和文字
+		oks.setTitle("演员在直播！导演你快来......");
+		oks.setText("看演员，去海绵娱直播APP!" + "(" + name
+				+ "正在直播中)");
+		oks.setSite(getString(R.string.app_name));
+		// 分享链接地址
+		oks.setUrl("http://a.app.qq.com/o/simple.jsp?pkgname=com.BC.entertainmentgravitation");
+		// logo地址
+		oks.setImageUrl("http://app.haimianyu.cn/DOWNLOAD/app_logo.png");
+		oks.show(container.activity);
 //		UMImage image = new UMImage(context, "http://www.umeng.com/images/pic/social/integrated_3.png");
 //        new ShareAction(getActivity()).setDisplayList(SHARE_MEDIA.SINA,SHARE_MEDIA.QQ,SHARE_MEDIA.QZONE,SHARE_MEDIA.WEIXIN,SHARE_MEDIA.WEIXIN_CIRCLE)
 //        .withText("来自友盟分享面板")
 //        .withMedia(image)
 //        .setCallback(umShareListener)
 //        .open();
-        new ShareAction(getActivity()).setDisplayList(SHARE_MEDIA.SINA,SHARE_MEDIA.QQ,SHARE_MEDIA.QZONE,SHARE_MEDIA.WEIXIN,SHARE_MEDIA.WEIXIN_CIRCLE)
-        .addButton("app_name","app_name","app_logo","app_logo")
-        .setShareboardclickCallback(new ShareBoardlistener() {
-            @Override
-            public void onclick(SnsPlatform snsPlatform, SHARE_MEDIA share_media) {
-                if (snsPlatform.mShowWord.equals("umeng_sharebutton_custom")){
-                    Toast.makeText(getActivity(),"自定义按钮",Toast.LENGTH_LONG).show();
-                }else {
-                    new ShareAction(getActivity()).withText("来自友盟自定义分享面板")
-                            .setPlatform(share_media)
-                            .setCallback(umShareListener)
-                            .share();
-                }
-            }
-        }).open();
 	}
 	
     private UMShareListener umShareListener = new UMShareListener() {

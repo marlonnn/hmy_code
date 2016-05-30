@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@drawable/activity_charge_bg"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/rLayoutTop"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp" >
+
+        <ImageView
+            android:id="@+id/imageViewBack"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:src="@drawable/activity_charge_back" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true" >
+
+            <ImageView
+                android:id="@+id/imageViewIcon"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:src="@drawable/activity_money_icoon" />
+
+            <TextView
+                android:id="@+id/textViewCharge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textSize="22dp"
+                android:textColor="@color/white"
+                android:text="娱币记录" />
+        </LinearLayout>
+
+    </RelativeLayout>
+    <LinearLayout
+        android:id="@+id/lLayoutExplain"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@+id/lLayoutLine"
+        android:gravity="center"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:background="@drawable/activity_charge_item_bg"
+        android:layout_marginTop="5dp" >
+        <TextView
+            android:id="@+id/txtViewDesContent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:textColor="@color/white"
+            android:text="说明" />
+        <TextView
+            android:id="@+id/txtViewNumberContent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:textColor="@color/white"
+            android:text="数量" />
+        <TextView
+            android:id="@+id/txtViewTypeContent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:textColor="@color/white"
+            android:text="类型" />
+        <TextView
+            android:id="@+id/txtViewHoldContent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:textColor="@color/white"
+            android:text="余额" />
+
+        <TextView
+            android:id="@+id/txtViewTimeContent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:textColor="@color/white"
+            android:text="时间" />
+    </LinearLayout>
+    <com.netease.nim.uikit.common.ui.ptr.PullToRefreshListView
+        xmlns:ptr="http://schemas.android.com/apk/res-auto"
+        android:layout_below="@id/lLayoutExplain"
+        android:id="@+id/pullToRefreshListView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:dividerHeight="0px"
+        android:layoutAnimation="@anim/layout_anim_ctrl"
+        android:listSelector="#00000000"
+        ptr:dividerHeight="1px"
+        ptr:ptrAnimationStyle="flip"
+        ptr:ptrMode="both"
+        android:scrollbarSize="4dp"
+	    android:scrollbarThumbVertical="@drawable/scrollbar_thumb"
+        ptr:scrollbars="false" >
+    </com.netease.nim.uikit.common.ui.ptr.PullToRefreshListView>
+
+</LinearLayout>

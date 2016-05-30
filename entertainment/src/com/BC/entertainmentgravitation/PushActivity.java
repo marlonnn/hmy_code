@@ -440,4 +440,14 @@ public class PushActivity extends BaseActivity implements lsMessageHandler, IPus
 	public void isExit(boolean exit, long totalPeople) {
 		
 	}
+
+	@Override
+	public void showFragment() {
+		
+	}
+
+	@Override
+	public void hideFragment() {
+		
+	}
 }

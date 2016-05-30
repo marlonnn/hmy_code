@@ -31,6 +31,7 @@ import com.BC.entertainmentgravitation.ChargeActivity;
 import com.BC.entertainmentgravitation.EnvelopeActivity;
 import com.BC.entertainmentgravitation.FeedbackActivity;
 import com.BC.entertainmentgravitation.IncomeActivity;
+import com.BC.entertainmentgravitation.LoginActivity_back;
 import com.BC.entertainmentgravitation.R;
 import com.BC.entertainmentgravitation.entity.EditPersonal;
 import com.BC.entertainmentgravitation.entity.Personal;
@@ -121,6 +122,7 @@ public class PersonalFragment extends BaseFragment implements OnClickListener, O
 		
 		portrait = (CircularImage) rootView.findViewById(R.id.cirImagePortrait);
 		txtName = (TextView) rootView.findViewById(R.id.txtName);
+		rootView.findViewById(R.id.rLayoutExit).setOnClickListener(this);
 		
 		if (info != null && info.getNickname() != null)
 		{
@@ -230,6 +232,13 @@ public class PersonalFragment extends BaseFragment implements OnClickListener, O
 			 */
 			case R.drawable.activity_personal_about:
 				intent = new Intent(getActivity(), AboutActivity.class);
+				startActivity(intent);
+				break;
+			/**
+			 * 退出登录
+			 */
+			case R.id.rLayoutExit:
+				intent = new Intent(getActivity(), LoginActivity_back.class);
 				startActivity(intent);
 				break;
 			}

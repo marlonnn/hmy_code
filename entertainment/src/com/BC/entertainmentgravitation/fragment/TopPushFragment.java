@@ -24,7 +24,7 @@ public class TopPushFragment extends DialogFragment {
 	
 	private ExitFragmentListener exitListener;
 
-	private PushFragment pushFragment;
+	public PushFragment pushFragment;
 	
 	private SurfaceEmptyFragment emptyFragment;
 	

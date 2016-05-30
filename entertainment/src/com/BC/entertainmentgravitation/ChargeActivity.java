@@ -204,7 +204,7 @@ public class ChargeActivity extends BaseActivity implements OnClickListener, OnI
 		
 		findViewById(R.id.imageViewWx).setOnClickListener(this);
 		findViewById(R.id.imageViewAli).setOnClickListener(this);
-		
+		findViewById(R.id.txtViewDetail).setOnClickListener(this);
 		yubiRecycleList = (RecyclerView)findViewById(R.id.listViewCharge);
 		
 		mYubi = YubiCache.getInstance().GetYubiLists();
@@ -625,6 +625,11 @@ public class ChargeActivity extends BaseActivity implements OnClickListener, OnI
 			{
 				ToastUtil.show(ChargeActivity.this, "请先点击您需要充值的数量");
 			}
+			break;
+			
+		case R.id.txtViewDetail:
+			Intent intent = new Intent(this, TransactionDetailActivity.class);
+			startActivity(intent);
 			break;
 		/**
 		 * 返回键

@@ -5,7 +5,11 @@ import android.content.Intent;
 import android.media.AudioFormat;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -61,6 +65,8 @@ public class PushActivity_back extends BaseActivity implements lsMessageHandler,
 	private Handler handler;
 	private AbortableFuture<EnterChatRoomResultData> enterRequest;//聊天室
 	
+	private FragmentTransaction transaction;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -79,6 +85,15 @@ public class PushActivity_back extends BaseActivity implements lsMessageHandler,
 //        handler = new Handler();
 //        handler.postDelayed(runnable, 10);
 
+        mVideoView.setOnTouchListener(new OnTouchListener() {
+			
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				topFragment.pushFragment.showShare();
+				show();
+				return false;
+			}
+		});
 	}
 	
     @SuppressWarnings("unchecked")
@@ -149,9 +164,66 @@ public class PushActivity_back extends BaseActivity implements lsMessageHandler,
          * 初始化聊天室、输入框、送礼物等
          */
         topFragment = new TopPushFragment(PushActivity_back.this, ChatCache.getInstance().getChatRoom());
-        topFragment.show(getSupportFragmentManager(), "push video");
-		
+//        topFragment.show(getSupportFragmentManager(), "push video");
+        add();
 	}
+	
+	
+	public void showHideFragment(){
+	
+	    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+//	    ft.setCustomAnimations(android.R.animator.fade_in,
+//	                    android.R.animator.fade_out);
+	
+	    if (topFragment.isHidden()) {
+	        ft.show(topFragment);
+	        XLog.d("===============Show==========");
+	    } else {
+	        ft.hide(topFragment);
+	        XLog.d("===============Hide============");                        
+	    }
+	
+	    ft.commit();
+	}
+	
+	private void remove()
+	{
+		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.remove(topFragment);
+        transaction.commit();
+	}
+	
+	private void add()
+	{
+		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.add(topFragment, "topFragment");
+        transaction.commit();
+	}
+	
+	private void show()
+	{
+		showHideFragment();
+//		if (topFragment.isHidden())
+//		{
+//			FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+//	        transaction.show(topFragment);
+//	        transaction.commit();
+//		}
+
+	}
+	
+	private void hide()
+	{
+		showHideFragment();
+//		if (!topFragment.isHidden())
+//		{
+//			FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+//	        transaction.hide(topFragment);
+//	        transaction.commit();
+//		}
+
+	}
+	
     
     private void onLoginDone() {
         enterRequest = null;
@@ -546,5 +618,15 @@ public class PushActivity_back extends BaseActivity implements lsMessageHandler,
 	@Override
 	public void isExit(boolean exit, long totalPeople) {
 		
+	}
+
+	@Override
+	public void hideFragment() {
+		hide();
+	}
+
+	@Override
+	public void showFragment() {
+		show();
 	}
 }

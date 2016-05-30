@@ -55,7 +55,8 @@ public class LoginActivity_back extends BaseActivity implements iRegister, iLogi
 	{
 		PlatformConfig.setWeixin("wx2044b77eca1acb02", "e83145dab5329164721f8d55605db1f6");
 		PlatformConfig.setSinaWeibo("3576860396", "4464fa1361df7bdaca37c1aae94afe4d");
-		PlatformConfig.setQQZone("1105130883", "z6isd0lwB5VVZEUU"); 
+//		PlatformConfig.setQQZone("1105130883", "z6isd0lwB5VVZEUU"); 
+		PlatformConfig.setQQZone("1105160799", "1yIBpwJV6LLg0W3V"); 
 	}
 	
 	private void initView()
