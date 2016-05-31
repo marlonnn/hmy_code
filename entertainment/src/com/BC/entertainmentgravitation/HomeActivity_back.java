@@ -6,6 +6,10 @@ import java.util.List;
 
 import org.apache.http.NameValuePair;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
@@ -20,6 +24,7 @@ import android.widget.TextView;
 import com.BC.entertainment.cache.InfoCache;
 import com.BC.entertainment.view.CustomViewPager;
 import com.BC.entertainmentgravitation.entity.FHNEntity;
+import com.BC.entertainmentgravitation.entity.GeTui;
 import com.BC.entertainmentgravitation.entity.StarInformation;
 import com.BC.entertainmentgravitation.entity.StarLiveVideoInfo;
 import com.BC.entertainmentgravitation.fragment.CurveFragment;
@@ -73,7 +78,14 @@ public class HomeActivity_back extends BaseActivity implements OnClickListener{
 	private TextView txtViewFound;
 	private TextView txtViewMyself;
 	
+	private static Context context;
+	
 	private Gson gson;
+	
+	private static NotificationManager messageNotificatioManager;
+	
+	private static Notification notification;
+	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -81,8 +93,26 @@ public class HomeActivity_back extends BaseActivity implements OnClickListener{
 		setContentView(R.layout.activity_main_home_back);
 		getWindow().setFormat(PixelFormat.TRANSLUCENT);
 		gson = new Gson();
+		context = this;
 		sendFocusStarListRequest();
 		findViewById();
+		initNotification();
+	}
+	
+	private void initNotification()
+	{
+		int icon = R.drawable.app_logo; //通知图标  
+		notification = new Notification();
+		notification.icon = icon;
+		messageNotificatioManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+	}
+	
+	public static void showNotification(GeTui getTui)
+	{
+		Intent notificationIntent = new Intent(context, HomeActivity_back.class); 
+		PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);  
+		notification.setLatestEventInfo(context, getTui.getMessagetitle(), getTui.getMessagecontent(), contentIntent); 
+		messageNotificatioManager.notify(1, notification);
 	}
 
 	private void touchButton(int id)
