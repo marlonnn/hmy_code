@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.util.Log;
 
+import com.BC.entertainment.config.AuthConstants;
 import com.BC.entertainment.view.CustomViewPager;
 import com.BC.entertainmentgravitation.fragment.LoginFragment;
 import com.BC.entertainmentgravitation.fragment.LoginFragment.iLogin;
@@ -15,6 +16,7 @@ import com.BC.entertainmentgravitation.fragment.RegisteFragment.iRegister;
 import com.igexin.sdk.PushManager;
 import com.summer.activity.BaseActivity;
 import com.summer.factory.ThreadPoolFactory;
+import com.tencent.tauth.Tencent;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.analytics.MobclickAgent.EScenarioType;
 import com.umeng.socialize.PlatformConfig;
@@ -32,6 +34,8 @@ public class LoginActivity_back extends BaseActivity implements iRegister, iLogi
 	private LoginFragment loginFragment;
 	private RegisteFragment registeFragment;
 
+	private Tencent mTencent;
+
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,7 +49,6 @@ public class LoginActivity_back extends BaseActivity implements iRegister, iLogi
 
         initView();
         registerUmengShareConfig();
-        
         // SDK初始化，第三方程序启动时，都要进行SDK初始化工作
         Log.d("GetuiSdkDemo", "initializing sdk...");
         PushManager.getInstance().initialize(this.getApplicationContext());
@@ -54,9 +57,9 @@ public class LoginActivity_back extends BaseActivity implements iRegister, iLogi
 	private void registerUmengShareConfig()
 	{
 		PlatformConfig.setWeixin("wx2044b77eca1acb02", "e83145dab5329164721f8d55605db1f6");
-		PlatformConfig.setSinaWeibo("3576860396", "4464fa1361df7bdaca37c1aae94afe4d");
+//		PlatformConfig.setSinaWeibo("3576860396", "4464fa1361df7bdaca37c1aae94afe4d");
 //		PlatformConfig.setQQZone("1105130883", "z6isd0lwB5VVZEUU"); 
-		PlatformConfig.setQQZone("1105160799", "1yIBpwJV6LLg0W3V"); 
+//		PlatformConfig.setQQZone("1105160799", "1yIBpwJV6LLg0W3V"); 
 	}
 	
 	private void initView()
