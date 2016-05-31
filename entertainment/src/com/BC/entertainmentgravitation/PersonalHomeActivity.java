@@ -218,6 +218,11 @@ public class PersonalHomeActivity extends BaseActivity implements OnClickListene
 			startActivity(intent);
 			break;
 		case R.id.imageViewAlbum:
+			intent = new Intent(this, PersonalAlbumActivity.class);
+			Bundle bd = new Bundle();
+			bd.putSerializable("clientId", member.getId());
+			intent.putExtras(bd);
+			startActivity(intent);
 			break;
 		/**
 		 * 返回键

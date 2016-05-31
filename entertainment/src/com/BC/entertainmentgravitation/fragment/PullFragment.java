@@ -56,6 +56,7 @@ import com.BC.entertainment.chatroom.module.Container;
 import com.BC.entertainment.chatroom.module.DanmakuPanel;
 import com.BC.entertainment.chatroom.module.InputPannel;
 import com.BC.entertainment.chatroom.module.ModuleProxy;
+import com.BC.entertainmentgravitation.ContributionActivity;
 import com.BC.entertainmentgravitation.FinishActivity;
 import com.BC.entertainmentgravitation.PersonalHomeActivity;
 import com.BC.entertainmentgravitation.R;
@@ -104,8 +105,6 @@ import com.summer.utils.ToastUtil;
 import com.summer.utils.UrlUtil;
 import com.summer.view.CircularImage;
 import com.summer.view.Pandamate;
-import com.umeng.socialize.UMShareListener;
-import com.umeng.socialize.bean.SHARE_MEDIA;
 
 public class PullFragment extends BaseFragment implements OnClickListener, ModuleProxy{
 
@@ -1176,7 +1175,11 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
 		 * 查看直播间娱票详情	
 		 */
 		case R.id.imgViewMoneyDetail:
-			ToastUtil.show(container.activity, "此功能正在努力开发中，敬请期待...");
+			Intent intent = new Intent(getActivity(), ContributionActivity.class);
+			Bundle b = new Bundle();
+			b.putSerializable("member", CreateMember());
+			intent.putExtras(b);
+			startActivity(intent);
 			break;
 		/**
 		 * 点击主播头像
@@ -1199,6 +1202,7 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
 		m.setConstellation(InfoCache.getInstance().getPersonalInfo().getThe_constellation());
 		m.setNationality(InfoCache.getInstance().getPersonalInfo().getNationality());
 		m.setId(InfoCache.getInstance().getPersonalInfo().getClientID());
+		m.setPiao(InfoCache.getInstance().getPersonalInfo().getPiao());
 //		m.setMood(InfoCache.getInstance().getPersonalInfo().get)
 		return m;
 	}
@@ -1221,33 +1225,7 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
 		// logo地址
 		oks.setImageUrl("http://app.haimianyu.cn/DOWNLOAD/app_logo.png");
 		oks.show(container.activity);
-//		UMImage image = new UMImage(getActivity(), "http://app.haimianyu.cn/DOWNLOAD/app_logo.png");
-//        new ShareAction(getActivity()).setDisplayList(SHARE_MEDIA.SINA,SHARE_MEDIA.QQ,SHARE_MEDIA.QZONE,SHARE_MEDIA.WEIXIN,SHARE_MEDIA.WEIXIN_CIRCLE)
-//        .withTitle("看演员，去海绵娱直播APP!" + "(" + name
-//				+ "正在直播中)")
-//        .withText("来自友盟分享面板")
-//        .withMedia(image)
-//        .setCallback(umShareListener)
-//        .open();
 	}
-	
-    private UMShareListener umShareListener = new UMShareListener() {
-        @Override
-        public void onResult(SHARE_MEDIA platform) {
-            Log.d("plat","platform"+platform);
-            Toast.makeText(getActivity(), platform + " 分享成功啦", Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
-        public void onError(SHARE_MEDIA platform, Throwable t) {
-            Toast.makeText(getActivity(),platform + " 分享失败啦", Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
-        public void onCancel(SHARE_MEDIA platform) {
-            Toast.makeText(getActivity(),platform + " 分享取消了", Toast.LENGTH_SHORT).show();
-        }
-    };
 
 	@Override
 	public boolean sendMessage(IMMessage msg) {

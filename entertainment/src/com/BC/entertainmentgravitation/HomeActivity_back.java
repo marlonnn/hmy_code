@@ -1,5 +1,6 @@
 package com.BC.entertainmentgravitation;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -18,6 +19,7 @@ import android.widget.TextView;
 
 import com.BC.entertainment.cache.InfoCache;
 import com.BC.entertainment.view.CustomViewPager;
+import com.BC.entertainmentgravitation.entity.FHNEntity;
 import com.BC.entertainmentgravitation.entity.StarInformation;
 import com.BC.entertainmentgravitation.entity.StarLiveVideoInfo;
 import com.BC.entertainmentgravitation.fragment.CurveFragment;
@@ -27,6 +29,9 @@ import com.BC.entertainmentgravitation.fragment.PersonalFragment;
 import com.BC.entertainmentgravitation.fragment.SurfaceEmptyFragment;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.igexin.sdk.PushConsts;
+import com.igexin.sdk.PushManager;
+import com.igexin.sdk.Tag;
 import com.summer.activity.BaseActivity;
 import com.summer.config.Config;
 import com.summer.factory.ThreadPoolFactory;
@@ -76,6 +81,7 @@ public class HomeActivity_back extends BaseActivity implements OnClickListener{
 		setContentView(R.layout.activity_main_home_back);
 		getWindow().setFormat(PixelFormat.TRANSLUCENT);
 		gson = new Gson();
+		sendFocusStarListRequest();
 		findViewById();
 	}
 
@@ -294,7 +300,12 @@ public class HomeActivity_back extends BaseActivity implements OnClickListener{
 			}
 			else
 			{
-				intent = new Intent(this, ApplyActivity.class);
+//				intent = new Intent(this, ApplyActivity.class);
+//				startActivity(intent);
+				
+				intent = new Intent(v.getContext(),
+						BrowserAcitvity.class);
+				intent.putExtra("url", Config.AthuAddress + Config.User.getClientID());
 				startActivity(intent);
 			}
 			break;
@@ -343,6 +354,20 @@ public class HomeActivity_back extends BaseActivity implements OnClickListener{
     	addToThreadPool(Config.star_information, "get start info", params);
     }
     
+	/**
+	 * 获取信息
+	 */
+	private void sendFocusStarListRequest() {
+		HashMap<String, String> entity = new HashMap<String, String>();
+
+		entity.put("clientID", Config.User.getClientID());
+		entity.put("type", "1");
+		
+		ShowProgressDialog("获取热门用户基本信息...");		
+		List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
+		addToThreadPool(Config.stat_list, "send search request", params);
+	}
+    
 	@Override
 	public void RequestSuccessful(String jsonString, int taskType) {
 		switch(taskType)
@@ -368,6 +393,77 @@ public class HomeActivity_back extends BaseActivity implements OnClickListener{
 				InfoCache.getInstance().setStartInfo(startInfo.getData());
 				InfoCache.getInstance().AddToStarInfoList(startInfo.getData());
 			}
+			break;
+		case Config.stat_list:
+			Entity<List<FHNEntity>> baseEntity = gson.fromJson(jsonString,
+					new TypeToken<Entity<List<FHNEntity>>>() {
+					}.getType());
+			List<FHNEntity> hotList = baseEntity.getData();
+			if (hotList != null && hotList.size() > 0) {
+				List<String> list = new ArrayList<>();
+				
+				if (Config.User != null)
+				{
+					if (Config.User.getPermission().contains("2") && Config.User.getCheckType().contains("0"))
+					{
+						list.add("Group1");
+					}
+					else
+					{
+						list.add("Group" + Config.User.getPermission());
+					}
+				}
+				for (int i=0; i<hotList.size(); i++)
+				{
+					if (i == 99)
+					{
+						break;
+					}
+					list.add("starer" + hotList.get(i).getStar_ID());
+				}
+				Tag[] tags = new Tag[list.size()];
+				for (int i=0; i<list.size(); i++)
+				{
+					Tag t = new Tag();
+					t.setName(list.get(i));
+					tags[i] = t;
+				}
+				int result = PushManager.getInstance().setTag(this, tags);
+				String text = "设置标签失败,未知异常";
+
+				switch (result) {
+				    case PushConsts.SETTAG_SUCCESS:
+				        text = "设置标签成功";
+				        break;
+
+				    case PushConsts.SETTAG_ERROR_COUNT:
+				        text = "设置标签失败, tag数量过大, 最大不能超过200个";
+				        break;
+
+				    case PushConsts.SETTAG_ERROR_FREQUENCY:
+				        text = "设置标签失败, 频率过快, 两次间隔应大于1s";
+				        break;
+
+				    case PushConsts.SETTAG_ERROR_REPEAT:
+				        text = "设置标签失败, 标签重复";
+				        break;
+
+				    case PushConsts.SETTAG_ERROR_UNBIND:
+				        text = "设置标签失败, 服务未初始化成功";
+				        break;
+
+				    case PushConsts.SETTAG_ERROR_EXCEPTION:
+				        text = "设置标签失败, 未知异常";
+				        break;
+
+				    case PushConsts.SETTAG_ERROR_NULL:
+				        text = "设置标签失败, tag 为空";
+				        break;
+
+				    default:
+				        break;
+				}
+			} 
 			break;
 		}
 	}

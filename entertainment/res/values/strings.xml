@@ -98,7 +98,10 @@
     <string name="dialog_warning_title">输入赠送好友金额</string>
     <string name="dialog_warning_ok">确    定</string>
     <string name="dialog_warning_cancel">取    消</string>
-    
+    <string name="auth_cancel">授权操作已取消</string>
+    <string name="auth_error">授权操作遇到错误，请阅读Logcat输出; \n 如微信登录，需要微信客户端</string>
+    <string name="auth_complete">授权成功，正在跳转登录操作…</string>
+        
    <!--  主界面相关 -->
     <string name="mainactivity_login_invalidate">登录已失效</string>
     <string name="mainactivity_get_user_info">获取用户基本信息...</string>

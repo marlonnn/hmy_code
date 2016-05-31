@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.media.AudioFormat;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.MotionEvent;
 import android.view.View;
@@ -18,7 +17,6 @@ import com.BC.entertainment.cache.ChatCache;
 import com.BC.entertainment.cache.InfoCache;
 import com.BC.entertainment.config.PushConfig;
 import com.BC.entertainment.view.LiveSurfaceView;
-import com.BC.entertainmentgravitation.entity.ChatRoom;
 import com.BC.entertainmentgravitation.entity.Member;
 import com.BC.entertainmentgravitation.entity.StarLiveVideoInfo;
 import com.BC.entertainmentgravitation.fragment.ExitFragmentListener;
@@ -62,10 +60,7 @@ public class PushActivity_back extends BaseActivity implements lsMessageHandler,
 
     private TopPushFragment topFragment;
 	private RelativeLayout rlayoutLoading;
-	private Handler handler;
 	private AbortableFuture<EnterChatRoomResultData> enterRequest;//聊天室
-	
-	private FragmentTransaction transaction;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -90,7 +85,6 @@ public class PushActivity_back extends BaseActivity implements lsMessageHandler,
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 				topFragment.pushFragment.showShare();
-				show();
 				return false;
 			}
 		});
@@ -164,8 +158,7 @@ public class PushActivity_back extends BaseActivity implements lsMessageHandler,
          * 初始化聊天室、输入框、送礼物等
          */
         topFragment = new TopPushFragment(PushActivity_back.this, ChatCache.getInstance().getChatRoom());
-//        topFragment.show(getSupportFragmentManager(), "push video");
-        add();
+        topFragment.show(getSupportFragmentManager(), "push video");
 	}
 	
 	
@@ -186,45 +179,6 @@ public class PushActivity_back extends BaseActivity implements lsMessageHandler,
 	    ft.commit();
 	}
 	
-	private void remove()
-	{
-		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.remove(topFragment);
-        transaction.commit();
-	}
-	
-	private void add()
-	{
-		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.add(topFragment, "topFragment");
-        transaction.commit();
-	}
-	
-	private void show()
-	{
-		showHideFragment();
-//		if (topFragment.isHidden())
-//		{
-//			FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-//	        transaction.show(topFragment);
-//	        transaction.commit();
-//		}
-
-	}
-	
-	private void hide()
-	{
-		showHideFragment();
-//		if (!topFragment.isHidden())
-//		{
-//			FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-//	        transaction.hide(topFragment);
-//	        transaction.commit();
-//		}
-
-	}
-	
-    
     private void onLoginDone() {
         enterRequest = null;
         DialogMaker.dismissProgressDialog();
@@ -620,13 +574,4 @@ public class PushActivity_back extends BaseActivity implements lsMessageHandler,
 		
 	}
 
-	@Override
-	public void hideFragment() {
-		hide();
-	}
-
-	@Override
-	public void showFragment() {
-		show();
-	}
 }

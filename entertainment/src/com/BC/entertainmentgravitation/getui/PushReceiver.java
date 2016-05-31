@@ -1,15 +1,30 @@
 package com.BC.entertainmentgravitation.getui;
 
+import org.json.JSONObject;
+
+import com.BC.entertainmentgravitation.entity.GeTui;
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
 import com.igexin.sdk.PushConsts;
 import com.igexin.sdk.PushManager;
+import com.summer.entity.User;
+import com.summer.json.Entity;
 import com.summer.logger.XLog;
+import com.summer.utils.JsonUtil;
 
+import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 
 public class PushReceiver extends BroadcastReceiver{
+	
+	private Gson gson = new Gson();
+	
+//	private NotificationManager messageNotificatioManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
@@ -33,13 +48,16 @@ public class PushReceiver extends BroadcastReceiver{
                  String data = new String(payload);
 
                  XLog.i("receiver payload : " + data);
-
-//                 payloadData.append(data);
-//                 payloadData.append("\n");
-//
-//                 if (GetuiSdkDemoActivity.tLogView != null) {
-//                     GetuiSdkDemoActivity.tLogView.append(data + "\n");
-//                 }
+                 
+         		try {
+         			JSONObject jsonObject=new JSONObject(data);
+         			GeTui g = new GeTui();
+         			g.setMessagecontent(jsonObject.getString("messagecontent"));
+         			g.setMessagetitle(jsonObject.getString("messagetitle"));
+         			g.setMessagetype(jsonObject.getString("messagetype"));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
              }
              break;
          case PushConsts.GET_CLIENTID:

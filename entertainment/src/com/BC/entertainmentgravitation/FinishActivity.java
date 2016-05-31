@@ -1,5 +1,7 @@
 package com.BC.entertainmentgravitation;
 
+import java.util.HashMap;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -7,19 +9,22 @@ import android.view.View.OnClickListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import cn.sharesdk.framework.Platform;
+import cn.sharesdk.framework.PlatformActionListener;
+import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.sina.weibo.SinaWeibo;
+import cn.sharesdk.sina.weibo.SinaWeibo.ShareParams;
+import cn.sharesdk.tencent.qzone.QZone;
+import cn.sharesdk.wechat.friends.Wechat;
+
 import com.BC.entertainment.cache.InfoCache;
 import com.BC.entertainmentgravitation.dialog.ApplauseGiveConcern;
 import com.summer.activity.BaseActivity;
 import com.summer.logger.XLog;
 import com.summer.utils.ToastUtil;
 import com.umeng.analytics.MobclickAgent;
-import com.umeng.socialize.ShareAction;
-import com.umeng.socialize.UMShareListener;
-import com.umeng.socialize.bean.SHARE_MEDIA;
-import com.umeng.socialize.media.UMImage;
-import com.umeng.socialize.utils.Log;
 
-public class FinishActivity extends BaseActivity implements OnClickListener{
+public class FinishActivity extends BaseActivity implements OnClickListener, PlatformActionListener{
 
 	private TextView txtTotalPeople;
 	
@@ -80,49 +85,61 @@ public class FinishActivity extends BaseActivity implements OnClickListener{
 	@Override
 	public void onClick(View v) {
 		Intent intent;
-		UMImage image = new UMImage(FinishActivity.this, "http://app.haimianyu.cn/DOWNLOAD/app_logo.png");
+		ShareParams sp = new ShareParams();
+//		UMImage image = new UMImage(FinishActivity.this, "http://app.haimianyu.cn/DOWNLOAD/app_logo.png");
 		switch(v.getId())
 		{
 		case R.id.imageViewWeibo:
-            new ShareAction(this).setPlatform(SHARE_MEDIA.SINA).setCallback(umShareListener)
-            .withMedia(image)
-            .withTitle("演员正在直播！导演你快来......")
-            .withText("看演员，去海绵娱直播APP!")
-            .withTargetUrl("http://a.app.qq.com/o/simple.jsp?pkgname=com.BC.entertainmentgravitation")
-           .share();
+			sp.setTitle("演员正在直播！导演你快来......");
+			sp.setText("看演员，去海绵娱直播APP!");
+			sp.setImagePath("http://app.haimianyu.cn/DOWNLOAD/app_logo.png");
+
+			Platform weibo = ShareSDK.getPlatform(SinaWeibo.NAME);
+			weibo.setPlatformActionListener(this); // 设置分享事件回调
+			// 执行图文分享
+			weibo.share(sp);
             break;
 		case R.id.imageViewWeixin:
-            new ShareAction(this).setPlatform(SHARE_MEDIA.WEIXIN).setCallback(umShareListener)
-            .withMedia(image)
-            .withTitle("演员正在直播！导演你快来......")
-            .withText("看演员，去海绵娱直播APP!")
-            .withTargetUrl("http://a.app.qq.com/o/simple.jsp?pkgname=com.BC.entertainmentgravitation")
-           .share();
+			sp.setTitle("演员正在直播！导演你快来......");
+			sp.setText("看演员，去海绵娱直播APP!");
+			sp.setImageUrl("http://app.haimianyu.cn/DOWNLOAD/app_logo.png");
+			sp.setSite("发布分享的网站名称");
+			sp.setSiteUrl("发布分享网站的地址");
+
+			Platform wx = ShareSDK.getPlatform (Wechat.NAME);
+			wx.setPlatformActionListener (this); // 设置分享事件回调
+			// 执行图文分享
+			wx.share(sp);
             break;
 		case R.id.imageViewQq:
-            new ShareAction(this).setPlatform(SHARE_MEDIA.QQ).setCallback(umShareListener)
-            .withMedia(image)
-            .withTitle("演员正在直播！导演你快来......")
-            .withText("看演员，去海绵娱直播APP!")
-            .withTargetUrl("http://a.app.qq.com/o/simple.jsp?pkgname=com.BC.entertainmentgravitation")
-           .share();
+			sp.setTitle("演员正在直播！导演你快来......");
+			sp.setText("看演员，去海绵娱直播APP!");
+			sp.setImageUrl("http://app.haimianyu.cn/DOWNLOAD/app_logo.png");
+			sp.setSite("发布分享的网站名称");
+			sp.setSiteUrl("发布分享网站的地址");
+
+			Platform qzone = ShareSDK.getPlatform (QZone.NAME);
+			qzone.setPlatformActionListener (this); // 设置分享事件回调
             break;
 		case R.id.imageViewZone:
-            new ShareAction(this).setPlatform(SHARE_MEDIA.QZONE).setCallback(umShareListener)
-            .withMedia(image)
-            .withTitle("演员正在直播！导演你快来......")
-            .withText("看演员，去海绵娱直播APP!")
-            .withTargetUrl("http://a.app.qq.com/o/simple.jsp?pkgname=com.BC.entertainmentgravitation")
-           .share();
+			sp.setTitle("演员正在直播！导演你快来......");
+			sp.setText("看演员，去海绵娱直播APP!");
+			sp.setImageUrl("http://app.haimianyu.cn/DOWNLOAD/app_logo.png");
+			sp.setSite("发布分享的网站名称");
+			sp.setSiteUrl("发布分享网站的地址");
+
+			Platform zone = ShareSDK.getPlatform (QZone.NAME);
+			zone.setPlatformActionListener (this); // 设置分享事件回调
             break;
 		case R.id.imageViewPengyou:
-//			ToastUtil.show(this, "此功能正在完善中，敬请期待...");
-            new ShareAction(this).setPlatform(SHARE_MEDIA.WEIXIN_CIRCLE).setCallback(umShareListener)
-            .withMedia(image)
-            .withTitle("演员正在直播！导演你快来......")
-            .withText("看演员，去海绵娱直播APP!")
-            .withTargetUrl("http://a.app.qq.com/o/simple.jsp?pkgname=com.BC.entertainmentgravitation")
-           .share();
+			sp.setTitle("演员正在直播！导演你快来......");
+			sp.setText("看演员，去海绵娱直播APP!");
+			sp.setImageUrl("http://app.haimianyu.cn/DOWNLOAD/app_logo.png");
+			sp.setSite("发布分享的网站名称");
+			sp.setSiteUrl("发布分享网站的地址");
+
+			Platform p = ShareSDK.getPlatform (Wechat.NAME);
+			p.setPlatformActionListener (this); // 设置分享事件回调
 			break;
 		case R.id.imageViewFocus:
 			if (applauseGiveConcern != null)
@@ -138,28 +155,26 @@ public class FinishActivity extends BaseActivity implements OnClickListener{
 			break;
 		}
 	}
-	
-    private UMShareListener umShareListener = new UMShareListener() {
-        @Override
-        public void onResult(SHARE_MEDIA platform) {
-            Log.d("plat","platform"+platform);
-            Toast.makeText(FinishActivity.this, platform + " 分享成功啦", Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
-        public void onError(SHARE_MEDIA platform, Throwable t) {
-            Toast.makeText(FinishActivity.this,platform + " 分享失败啦", Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
-        public void onCancel(SHARE_MEDIA platform) {
-            Toast.makeText(FinishActivity.this,platform + " 分享取消了", Toast.LENGTH_SHORT).show();
-        }
-    };
 
 	@Override
 	public void RequestSuccessful(String jsonString, int taskType) {
 		
+	}
+
+	@Override
+	public void onCancel(Platform arg0, int arg1) {
+		ToastUtil.show(this, "分享取消");
+	}
+
+	@Override
+	public void onComplete(Platform arg0, int arg1, HashMap<String, Object> arg2) {
+		ToastUtil.show(this, "分享成功");
+		
+	}
+
+	@Override
+	public void onError(Platform arg0, int arg1, Throwable arg2) {
+		ToastUtil.show(this, "分享异常");
 	}
 
 }

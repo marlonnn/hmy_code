@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.BC.entertainment.adapter.PersonalRecycleAdapter;
@@ -38,6 +39,7 @@ import com.BC.entertainmentgravitation.entity.Personal;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.Gson;
+import com.summer.config.Config;
 import com.summer.fragment.BaseFragment;
 import com.summer.view.CircularImage;
 
@@ -122,7 +124,16 @@ public class PersonalFragment extends BaseFragment implements OnClickListener, O
 		
 		portrait = (CircularImage) rootView.findViewById(R.id.cirImagePortrait);
 		txtName = (TextView) rootView.findViewById(R.id.txtName);
-		rootView.findViewById(R.id.rLayoutExit).setOnClickListener(this);
+		RelativeLayout r = (RelativeLayout) rootView.findViewById(R.id.rLayoutExit);
+		r.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Config.manualExit = true;
+				Intent intent = new Intent(getActivity(), LoginActivity_back.class);
+				startActivity(intent);
+			}
+		});
 		
 		if (info != null && info.getNickname() != null)
 		{
@@ -234,13 +245,13 @@ public class PersonalFragment extends BaseFragment implements OnClickListener, O
 				intent = new Intent(getActivity(), AboutActivity.class);
 				startActivity(intent);
 				break;
-			/**
-			 * 退出登录
-			 */
-			case R.id.rLayoutExit:
-				intent = new Intent(getActivity(), LoginActivity_back.class);
-				startActivity(intent);
-				break;
+//			/**
+//			 * 退出登录
+//			 */
+//			case R.id.rLayoutExit:
+//				intent = new Intent(getActivity(), LoginActivity_back.class);
+//				startActivity(intent);
+//				break;
 			}
 		}
 	}

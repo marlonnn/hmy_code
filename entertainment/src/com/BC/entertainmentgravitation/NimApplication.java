@@ -20,6 +20,7 @@ import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.uinfo.UserInfoProvider;
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
+import com.summer.logger.XLog;
 
 import android.app.Application;
 import android.graphics.Bitmap;
@@ -36,7 +37,7 @@ public class NimApplication extends Application {
 		
 		Cache.setContext(this);
 		NIMClient.init(this, getLoginInfo(), getOptions());
-		
+//		XLog.allowI = XLog.allowD = XLog.allowE = XLog.allowV = XLog.allowW = false;
 		if (inMainProcess())
 		{
             // 初始化UIKit模块
