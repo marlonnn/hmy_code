@@ -65,9 +65,11 @@ public class PersonalFragment extends BaseFragment implements OnClickListener, O
 	 * 从后台获取的个人信息
 	 */
 	private EditPersonal info;
+	private Activity ativity;
 	
 	@Override
 	public void onAttach(Activity activity) {
+		this.ativity = activity;
 		super.onAttach(activity);
 	}
 
@@ -132,6 +134,10 @@ public class PersonalFragment extends BaseFragment implements OnClickListener, O
 				Config.manualExit = true;
 				Intent intent = new Intent(getActivity(), LoginActivity_back.class);
 				startActivity(intent);
+				if (ativity != null)
+				{
+					ativity.finish();
+				}
 			}
 		});
 		

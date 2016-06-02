@@ -109,8 +109,7 @@ public class EnvelopeRecordFragment extends BaseFragment{
 
 			@Override
 			public void convert(ViewHolder helper, final RedAList item, int positions) {
-				helper.setText(R.id.txtViewHold,
-						item.getThe_publishers_name() + "");
+
 				helper.setText(R.id.txtViewNumber,
 						item.getGrants_of_number() + "");
 
@@ -132,7 +131,6 @@ public class EnvelopeRecordFragment extends BaseFragment{
 
 				}
 
-				helper.setText(R.id.txtViewDes, item.getThe_donor() + "");
 				helper.setText(R.id.txtViewTime, item.getTime() + "");
 			}
 		};

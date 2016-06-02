@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 
@@ -15,7 +17,7 @@ import com.BC.entertainmentgravitation.fragment.EnvelopeRecordFragment;
 import com.summer.activity.BaseActivity;
 import com.umeng.analytics.MobclickAgent;
 
-public class EnvelopeActivity extends BaseActivity {
+public class EnvelopeActivity extends BaseActivity implements OnClickListener {
 
 	private RadioGroup group;
 	private ViewPager pager;
@@ -71,6 +73,7 @@ public class EnvelopeActivity extends BaseActivity {
 			public void onPageScrollStateChanged(int arg0) {
 			}
 		});
+		findViewById(R.id.imageViewBack).setOnClickListener(this);
 	}
 	
 	private void initView() {
@@ -99,6 +102,19 @@ public class EnvelopeActivity extends BaseActivity {
 	
 	@Override
 	public void RequestSuccessful(String jsonString, int taskType) {
+		
+	}
+
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		/**
+		 * 返回键
+		 */
+		case R.id.imageViewBack:
+			finish();
+			break;
+		}
 		
 	}
 

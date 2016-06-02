@@ -38,6 +38,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:textSize="22dp"
+                android:textColor="@color/white"
                 android:text="我的红包" />
         </LinearLayout>
     </RelativeLayout>
