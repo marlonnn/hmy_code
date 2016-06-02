@@ -23,7 +23,6 @@ import android.widget.AdapterView.OnItemClickListener;
 
 import com.BC.entertainmentgravitation.AuthoritativeInformation;
 import com.BC.entertainmentgravitation.BrowserAcitvity;
-import com.BC.entertainmentgravitation.DetailsActivity;
 import com.BC.entertainmentgravitation.R;
 import com.BC.entertainmentgravitation.entity.Activitys;
 import com.BC.entertainmentgravitation.entity.FHNEntity;
@@ -170,7 +169,7 @@ public class FoundFragment extends BaseFragment implements OnClickListener{
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				try {
+/*				try {
 					FHNEntity entity = (FHNEntity)view.getTag();
 					if (entity != null)
 					{
@@ -180,7 +179,7 @@ public class FoundFragment extends BaseFragment implements OnClickListener{
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
-				}
+				}*/
 			}
 		});
 		pGridViewFound.setAdapter(adapter);

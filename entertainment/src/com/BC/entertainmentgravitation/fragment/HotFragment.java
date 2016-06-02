@@ -22,7 +22,6 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.BC.entertainmentgravitation.DetailsActivity;
 import com.BC.entertainmentgravitation.PersonalHomeActivity;
 import com.BC.entertainmentgravitation.PullActivity_back;
 import com.BC.entertainmentgravitation.R;
@@ -131,9 +130,9 @@ public class HotFragment extends BaseFragment{
 					FHNEntity entity = (FHNEntity)view.getTag();
 					if (entity != null)
 					{
-						Intent i = new Intent(getActivity(), DetailsActivity.class);
+/*						Intent i = new Intent(getActivity(), DetailsActivity.class);
 						i.putExtra("userID", entity.getStar_ID());
-						startActivity(i);
+						startActivity(i);*/
 					}
 				} catch (Exception e) {
 					e.printStackTrace();

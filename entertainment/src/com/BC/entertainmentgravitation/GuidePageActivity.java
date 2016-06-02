@@ -151,7 +151,7 @@ ViewPager.OnPageChangeListener {
             if (positionOffsetPixels == 0 && currentPageScrollStatus == 1)
             {
                 Intent intent = new Intent();
-                intent.setClass(this, LoginActivity.class);
+                intent.setClass(this, LoginActivity_back.class);
                 startActivity(intent);
                 this.finish();
             }

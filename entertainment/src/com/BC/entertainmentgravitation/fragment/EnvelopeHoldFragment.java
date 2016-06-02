@@ -18,7 +18,6 @@ import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.ListView;
 
-import com.BC.entertainmentgravitation.DetailsActivity;
 import com.BC.entertainmentgravitation.R;
 import com.BC.entertainmentgravitation.entity.RedList;
 import com.google.gson.Gson;
@@ -90,19 +89,6 @@ public class EnvelopeHoldFragment extends BaseFragment {
 				}
 				helper.setText(R.id.txtViewValue, 
 						allPrice  + "");
-				helper.getView(R.id.txtViewHoldName).setOnClickListener(
-						new OnClickListener() {
-
-							@Override
-							public void onClick(View v) {
-								// TODO Auto-generated method stub
-								Intent intent = new Intent(v.getContext(),
-										DetailsActivity.class);
-								intent.putExtra("userID",
-										item.getThe_publisher_ID());
-								startActivity(intent);
-							}
-						});
 			}
 		};
 		pullToRefreshListView.setAdapter(adapter);
