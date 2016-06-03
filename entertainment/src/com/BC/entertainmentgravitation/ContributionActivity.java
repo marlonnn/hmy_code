@@ -40,6 +40,11 @@ import com.summer.utils.UrlUtil;
 import com.summer.view.CircularImage;
 import com.umeng.analytics.MobclickAgent;
 
+/**
+ * 娱票排行榜
+ * @author wen zhong
+ *
+ */
 public class ContributionActivity extends BaseActivity implements OnClickListener {
 
 	private Gson gson;
@@ -243,7 +248,14 @@ public class ContributionActivity extends BaseActivity implements OnClickListene
 	
 	@Override
 	public void onClick(View v) {
-		
+		switch (v.getId()) {
+		/**
+		 * 返回键
+		 */
+		case R.id.imageViewBack:
+			finish();
+			break;
+		}
 	}
 
 	private void addContribute() {
