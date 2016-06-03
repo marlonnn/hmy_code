@@ -19,7 +19,7 @@ import com.summer.factory.ThreadPoolFactory;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.analytics.MobclickAgent.EScenarioType;
 
-public class LoginActivity_back extends BaseActivity implements iRegister, iLogin{
+public class LoginActivity extends BaseActivity implements iRegister, iLogin{
 	
     /**
      * 第三方应用Master Secret，修改为正确的值

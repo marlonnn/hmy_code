@@ -42,7 +42,7 @@ import com.summer.utils.StringUtil;
 import com.summer.utils.ToastUtil;
 import com.umeng.analytics.MobclickAgent;
 
-public class PushActivity_back extends BaseActivity implements lsMessageHandler, IPushMedia, ExitFragmentListener{
+public class PushActivity extends BaseActivity implements lsMessageHandler, IPushMedia, ExitFragmentListener{
 	
 	private Context mContext;
 //	private ChatRoom chatRoom;
@@ -101,8 +101,8 @@ public class PushActivity_back extends BaseActivity implements lsMessageHandler,
 			public void onException(Throwable exception) {
 				 onLoginDone();
 				 XLog.e("enter chat room exception, e=" + exception.getMessage());
-	             Toast.makeText(PushActivity_back.this, 
-	            		 StringUtil.getXmlResource(PushActivity_back.this, R.string.push_video_nim_login_exception) + exception.getMessage(),
+	             Toast.makeText(PushActivity.this, 
+	            		 StringUtil.getXmlResource(PushActivity.this, R.string.push_video_nim_login_exception) + exception.getMessage(),
 	            		 Toast.LENGTH_SHORT).show();
 	             finish();
 			}
@@ -110,12 +110,12 @@ public class PushActivity_back extends BaseActivity implements lsMessageHandler,
 			@Override
 			public void onFailed(int code) {
                 if (code == ResponseCode.RES_CHATROOM_BLACKLIST) {
-                    Toast.makeText(PushActivity_back.this, 
-                    		StringUtil.getXmlResource(PushActivity_back.this, R.string.push_video_nim_black_list), 
+                    Toast.makeText(PushActivity.this, 
+                    		StringUtil.getXmlResource(PushActivity.this, R.string.push_video_nim_black_list), 
                     		Toast.LENGTH_SHORT).show();
                 } else {
                 	XLog.e("enter chat room failed, code=" + code);
-                    Toast.makeText(PushActivity_back.this, "enter chat room failed, code=" + code, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PushActivity.this, "enter chat room failed, code=" + code, Toast.LENGTH_SHORT).show();
                 }
                 finish();
 			}
@@ -157,7 +157,7 @@ public class PushActivity_back extends BaseActivity implements lsMessageHandler,
         /**
          * 初始化聊天室、输入框、送礼物等
          */
-        topFragment = new TopPushFragment(PushActivity_back.this, ChatCache.getInstance().getChatRoom());
+        topFragment = new TopPushFragment(PushActivity.this, ChatCache.getInstance().getChatRoom());
         topFragment.show(getSupportFragmentManager(), "push video");
 	}
 	

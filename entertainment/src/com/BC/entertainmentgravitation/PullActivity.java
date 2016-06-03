@@ -34,10 +34,10 @@ import com.summer.utils.StringUtil;
 import com.summer.utils.ToastUtil;
 import com.umeng.analytics.MobclickAgent;
 
-public class PullActivity_back extends BaseActivity implements OnClickListener, IPullMedia, ExitFragmentListener{
+public class PullActivity extends BaseActivity implements OnClickListener, IPullMedia, ExitFragmentListener{
 
 	private NEVideoView mVideoView;
-	NEMediaPlayer mMediaPlayer = new NEMediaPlayer();
+	private NEMediaPlayer mMediaPlayer = new NEMediaPlayer();
 
 	private TopPullFragment topFragment;
 	
@@ -71,7 +71,7 @@ public class PullActivity_back extends BaseActivity implements OnClickListener, 
         /**
          * 初始化聊天室、输入框、送礼物等
          */
-        topFragment = new TopPullFragment(PullActivity_back.this, ChatCache.getInstance().getChatRoom());
+        topFragment = new TopPullFragment(PullActivity.this, ChatCache.getInstance().getChatRoom());
         topFragment.show(getSupportFragmentManager(), "push video");
 	}
 	
@@ -86,8 +86,8 @@ public class PullActivity_back extends BaseActivity implements OnClickListener, 
 			public void onException(Throwable exception) {
 				 onLoginDone();
 				 XLog.e("enter chat room exception, e=" + exception.getMessage());
-	             Toast.makeText(PullActivity_back.this, 
-	            		 StringUtil.getXmlResource(PullActivity_back.this, R.string.push_video_nim_login_exception) + exception.getMessage(),
+	             Toast.makeText(PullActivity.this, 
+	            		 StringUtil.getXmlResource(PullActivity.this, R.string.push_video_nim_login_exception) + exception.getMessage(),
 	            		 Toast.LENGTH_SHORT).show();
 	             finish();
 			}
@@ -95,12 +95,12 @@ public class PullActivity_back extends BaseActivity implements OnClickListener, 
 			@Override
 			public void onFailed(int code) {
                 if (code == ResponseCode.RES_CHATROOM_BLACKLIST) {
-                    Toast.makeText(PullActivity_back.this, 
-                    		StringUtil.getXmlResource(PullActivity_back.this, R.string.push_video_nim_black_list), 
+                    Toast.makeText(PullActivity.this, 
+                    		StringUtil.getXmlResource(PullActivity.this, R.string.push_video_nim_black_list), 
                     		Toast.LENGTH_SHORT).show();
                 } else {
                 	XLog.e("enter chat room failed, code=" + code);
-                    Toast.makeText(PullActivity_back.this, "enter chat room failed, code=" + code, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PullActivity.this, "enter chat room failed, code=" + code, Toast.LENGTH_SHORT).show();
                 }
                 finish();
 			}

@@ -32,7 +32,7 @@ import com.BC.entertainmentgravitation.ChargeActivity;
 import com.BC.entertainmentgravitation.EnvelopeActivity;
 import com.BC.entertainmentgravitation.FeedbackActivity;
 import com.BC.entertainmentgravitation.IncomeActivity;
-import com.BC.entertainmentgravitation.LoginActivity_back;
+import com.BC.entertainmentgravitation.LoginActivity;
 import com.BC.entertainmentgravitation.R;
 import com.BC.entertainmentgravitation.entity.EditPersonal;
 import com.BC.entertainmentgravitation.entity.Personal;
@@ -132,7 +132,7 @@ public class PersonalFragment extends BaseFragment implements OnClickListener, O
 			@Override
 			public void onClick(View v) {
 				Config.manualExit = true;
-				Intent intent = new Intent(getActivity(), LoginActivity_back.class);
+				Intent intent = new Intent(getActivity(), LoginActivity.class);
 				startActivity(intent);
 				if (ativity != null)
 				{
@@ -255,7 +255,7 @@ public class PersonalFragment extends BaseFragment implements OnClickListener, O
 //			 * 退出登录
 //			 */
 //			case R.id.rLayoutExit:
-//				intent = new Intent(getActivity(), LoginActivity_back.class);
+//				intent = new Intent(getActivity(), LoginActivity.class);
 //				startActivity(intent);
 //				break;
 			}

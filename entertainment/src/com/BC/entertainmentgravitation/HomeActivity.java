@@ -55,7 +55,7 @@ import com.umeng.analytics.MobclickAgent;
  * @author wen zhong
  *
  */
-public class HomeActivity_back extends BaseActivity implements OnClickListener{
+public class HomeActivity extends BaseActivity implements OnClickListener{
 	
 	private CustomViewPager viewPager;
 	private CurveFragment curveFragment;
@@ -109,7 +109,7 @@ public class HomeActivity_back extends BaseActivity implements OnClickListener{
 	
 	public static void showNotification(GeTui getTui)
 	{
-		Intent notificationIntent = new Intent(context, HomeActivity_back.class); 
+		Intent notificationIntent = new Intent(context, HomeActivity.class); 
 		PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);  
 		notification.setLatestEventInfo(context, getTui.getMessagetitle(), getTui.getMessagecontent(), contentIntent); 
 		messageNotificatioManager.notify(1, notification);
@@ -407,7 +407,7 @@ public class HomeActivity_back extends BaseActivity implements OnClickListener{
 					new TypeToken<Entity<StarLiveVideoInfo>>() {
 					}.getType());
 			StarLiveVideoInfo startLiveVideoInfo = starLiveInfoEntity.getData();
-			Intent intent = new Intent(HomeActivity_back.this, PushActivity_back.class);
+			Intent intent = new Intent(HomeActivity.this, PushActivity.class);
 			Bundle b = new Bundle();
 			b.putSerializable("liveInfo", startLiveVideoInfo);
 			intent.putExtras(b);

@@ -2,7 +2,7 @@ package com.BC.entertainmentgravitation.getui;
 
 import org.json.JSONObject;
 
-import com.BC.entertainmentgravitation.HomeActivity_back;
+import com.BC.entertainmentgravitation.HomeActivity;
 import com.BC.entertainmentgravitation.entity.GeTui;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -56,7 +56,7 @@ public class PushReceiver extends BroadcastReceiver{
          			g.setMessagecontent(jsonObject.getString("messagecontent"));
          			g.setMessagetitle(jsonObject.getString("messagetitle"));
          			g.setMessagetype(jsonObject.getString("messagetype"));
-         			HomeActivity_back.showNotification(g);
+         			HomeActivity.showNotification(g);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

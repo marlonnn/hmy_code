@@ -31,7 +31,7 @@ import cn.sharesdk.tencent.qq.QQ;
 import cn.sharesdk.wechat.friends.Wechat;
 
 import com.BC.entertainment.config.Preferences;
-import com.BC.entertainmentgravitation.HomeActivity_back;
+import com.BC.entertainmentgravitation.HomeActivity;
 import com.BC.entertainmentgravitation.R;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -405,7 +405,7 @@ public class LoginFragment extends BaseFragment implements OnClickListener, Call
 					saveLoginInfo(account, token);
 	                DataCacheManager.buildDataCacheAsync();
 	        		saveNimAccount(Config.User);
-	    			Intent intent = new Intent(getActivity(), HomeActivity_back.class);
+	    			Intent intent = new Intent(getActivity(), HomeActivity.class);
 	    			startActivity(intent);
 	        		ToastUtil.show(getActivity(), getActivity().getString(R.string.loginSuccess));
 				}

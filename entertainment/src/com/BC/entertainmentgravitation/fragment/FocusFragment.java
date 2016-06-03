@@ -24,7 +24,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.BC.entertainmentgravitation.PersonalHomeActivity;
-import com.BC.entertainmentgravitation.PullActivity_back;
+import com.BC.entertainmentgravitation.PullActivity;
 import com.BC.entertainmentgravitation.R;
 import com.BC.entertainmentgravitation.entity.FHNEntity;
 import com.BC.entertainmentgravitation.entity.Member;
@@ -417,7 +417,7 @@ public class FocusFragment extends BaseFragment{
 			StarLiveVideoInfo watchVideo = watchVideoEntity.getData();
 			if (watchVideo != null)
 			{
-				Intent intent = new Intent(getActivity(), PullActivity_back.class);
+				Intent intent = new Intent(getActivity(), PullActivity.class);
 				Bundle b = new Bundle();
 				b.putSerializable("liveInfo", watchVideo);
 				intent.putExtras(b);
