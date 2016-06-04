@@ -1,6 +1,5 @@
 package com.BC.entertainmentgravitation;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -46,14 +45,13 @@ public class PersonalAlbumActivity extends BaseActivity implements OnClickListen
 
 	private Album album;
 
-	PullToRefreshGridView pullToRefreshGridView1;
+	private PullToRefreshGridView pullToRefreshGridView1;
 
 	boolean canEdit = false;
-	String fileName = "";
 
-	ArrayList<Photo_images> more_pictures = new ArrayList<Photo_images>();//生活照
-	ArrayList<Photo_images> more_picturesImages = new ArrayList<Photo_images>();//写真
-	ArrayList<Photo_images> more_picturesPhotographs = new ArrayList<Photo_images>();//剧照
+	private ArrayList<Photo_images> more_pictures = new ArrayList<Photo_images>();//生活照
+	private ArrayList<Photo_images> more_picturesImages = new ArrayList<Photo_images>();//写真
+	private ArrayList<Photo_images> more_picturesPhotographs = new ArrayList<Photo_images>();//剧照
 
 	private CommonAdapter<Photo_images> adapter1;
 	private CommonAdapter<Photo_images> adapter2;
@@ -61,7 +59,6 @@ public class PersonalAlbumActivity extends BaseActivity implements OnClickListen
 	private RadioGroup radio;
 	private int pageIndex = 1;
 	
-	private SimpleDateFormat format;
 	private String clientId;
 	
 	public Album getAlbum() {
@@ -80,7 +77,6 @@ public class PersonalAlbumActivity extends BaseActivity implements OnClickListen
 			Intent intent = this.getIntent();
 			clientId = (String)intent.getSerializableExtra("clientId");
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		initView();
@@ -101,7 +97,6 @@ public class PersonalAlbumActivity extends BaseActivity implements OnClickListen
 	
 	private void initView()
 	{
-		format = new SimpleDateFormat("yyyyMMddHHmmsssss");
 		findViewById(R.id.imageViewBack).setOnClickListener(this);
 		pullToRefreshGridView1 = (PullToRefreshGridView)findViewById(R.id.pullToRefreshGridView1);
 		pullToRefreshGridView1.getRefreshableView().setNumColumns(3);
@@ -133,7 +128,6 @@ public class PersonalAlbumActivity extends BaseActivity implements OnClickListen
 	}
 	
 	private void initAdapter() {
-		// TODO Auto-generated method stub
 		adapter1 = new CommonAdapter<Photo_images>(this,
 				R.layout.activity_personal_album_item, more_pictures) {
 
@@ -316,7 +310,6 @@ public class PersonalAlbumActivity extends BaseActivity implements OnClickListen
 			sendAlbumRequest();
 			break;
 		case Config.photo_album_management:
-			// if (MainActivity.user.getPermission().equals("2")) {
 			Entity<Album> baseEntity5 = gson.fromJson(jsonString,
 					new TypeToken<Entity<Album>>() {
 					}.getType());

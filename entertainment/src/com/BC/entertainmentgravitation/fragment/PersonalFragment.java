@@ -1,12 +1,10 @@
 package com.BC.entertainmentgravitation.fragment;
 
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -38,20 +36,20 @@ import com.BC.entertainmentgravitation.entity.EditPersonal;
 import com.BC.entertainmentgravitation.entity.Personal;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.google.gson.Gson;
 import com.summer.config.Config;
 import com.summer.fragment.BaseFragment;
 import com.summer.view.CircularImage;
 
+/**
+ * 首页 个人中心
+ * @author zhongwen
+ *
+ */
 public class PersonalFragment extends BaseFragment implements OnClickListener, OnItemClickListener{
 	
-	private Gson gson;
 	private View rootView;
-	private SimpleDateFormat format;
 	
 	private CircularImage portrait;
-	
-	private Bitmap portraitBmp;
 	
 	private List<Personal> personals;
 	
@@ -75,7 +73,6 @@ public class PersonalFragment extends BaseFragment implements OnClickListener, O
 
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState) {
-		gson = new Gson();
 		super.onCreate(savedInstanceState);
 	}
 	
@@ -115,7 +112,6 @@ public class PersonalFragment extends BaseFragment implements OnClickListener, O
 	@Override
 	public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-		format = new SimpleDateFormat("yyyyMMddHHmmsssss");
 		initView();
 	}
 	
@@ -175,7 +171,6 @@ public class PersonalFragment extends BaseFragment implements OnClickListener, O
 		 * 修改头像
 		 */
 		case R.id.cirImagePortrait:
-//			showAlertDialog(R.layout.dialog_alert3, R.id.button3, R.id.button1, R.id.button2);
 			break;
 		}
 	}
@@ -251,13 +246,6 @@ public class PersonalFragment extends BaseFragment implements OnClickListener, O
 				intent = new Intent(getActivity(), AboutActivity.class);
 				startActivity(intent);
 				break;
-//			/**
-//			 * 退出登录
-//			 */
-//			case R.id.rLayoutExit:
-//				intent = new Intent(getActivity(), LoginActivity.class);
-//				startActivity(intent);
-//				break;
 			}
 		}
 	}
