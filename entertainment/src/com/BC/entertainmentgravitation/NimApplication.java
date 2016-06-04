@@ -37,7 +37,7 @@ public class NimApplication extends Application {
 		
 		Cache.setContext(this);
 		NIMClient.init(this, getLoginInfo(), getOptions());
-//		XLog.allowI = XLog.allowD = XLog.allowE = XLog.allowV = XLog.allowW = false;
+		XLog.allowI = XLog.allowD = XLog.allowE = XLog.allowV = XLog.allowW = false;
 		if (inMainProcess())
 		{
             // 初始化UIKit模块

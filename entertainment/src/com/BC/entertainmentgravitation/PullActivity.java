@@ -23,8 +23,6 @@ import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.ResponseCode;
 import com.netease.nimlib.sdk.chatroom.ChatRoomService;
-import com.netease.nimlib.sdk.chatroom.model.ChatRoomInfo;
-import com.netease.nimlib.sdk.chatroom.model.ChatRoomMember;
 import com.netease.nimlib.sdk.chatroom.model.EnterChatRoomData;
 import com.netease.nimlib.sdk.chatroom.model.EnterChatRoomResultData;
 import com.summer.activity.BaseActivity;
@@ -107,15 +105,15 @@ public class PullActivity extends BaseActivity implements OnClickListener, IPull
 
 			@Override
 			public void onSuccess(EnterChatRoomResultData result) {
-				ChatRoomInfo roomInfo = result.getRoomInfo();
-                ChatRoomMember member = result.getMember();
-                member.setRoomId(roomInfo.getRoomId());
-                ChatCache.getInstance().ClearMember();
-                ChatCache.getInstance().AddMember(createMasterMember());
-                ChatCache.getInstance().getChatRoom().setChatRoomInfo(roomInfo);
+//				ChatRoomInfo roomInfo = result.getRoomInfo();
+//                ChatRoomMember member = result.getMember();
+//                member.setRoomId(roomInfo.getRoomId());
+//                ChatCache.getInstance().ClearMember();
+//                ChatCache.getInstance().AddMember(createMasterMember());
+//                ChatCache.getInstance().getChatRoom().setChatRoomInfo(roomInfo);
                 
                 startWatchVideo(startLiveVideoInfo);
-                XLog.i("enter chat room success" + roomInfo.getRoomId());
+//                XLog.i("enter chat room success" + roomInfo.getRoomId());
 			}});
     }
     

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.AudioFormat;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.FragmentTransaction;
 import android.view.MotionEvent;
 import android.view.View;
@@ -122,21 +121,7 @@ public class PushActivity extends BaseActivity implements lsMessageHandler, IPus
 
 			@Override
 			public void onSuccess(EnterChatRoomResultData result) {
-				ChatRoomInfo roomInfo = result.getRoomInfo();
-                ChatRoomMember member = result.getMember();
-                member.setRoomId(roomInfo.getRoomId());
-                ChatCache.getInstance().ClearMember();
-                ChatCache.getInstance().AddMember(createMasterMember());
-                ChatCache.getInstance().getChatRoom().setChatRoomInfo(roomInfo);
-                if (isPush)
-                {
-                    startLiveVideo(startLiveVideoInfo);	
-                }
-                else
-                {
-//                	startWatchVideo(startLiveVideoInfo);
-                }
-                XLog.i("enter chat room success" + roomInfo.getRoomId());
+                startLiveVideo(startLiveVideoInfo);	
 			}});
     }
     
@@ -196,32 +181,6 @@ public class PushActivity extends BaseActivity implements lsMessageHandler, IPus
         m.setPiao(InfoCache.getInstance().getPersonalInfo().getPiao());
     	return m;
     }
-	
-	private Runnable runnable = new Runnable(){
-
-		@Override
-		public void run() {
-	        /**
-	         * 初始化推流
-	         */
-	        initializeLive();
-		}
-		
-	};
-	
-	private void delayLiveVideo()
-	{
-		this.runOnUiThread(new Runnable() {
-			
-			@Override
-			public void run() {
-		        /**
-		         * 初始化推流
-		         */
-		        initializeLive();
-			}
-		});
-	}
 	
 	@Override
 	protected void onPause() {
