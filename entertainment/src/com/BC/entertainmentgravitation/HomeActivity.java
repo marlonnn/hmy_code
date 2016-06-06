@@ -21,6 +21,7 @@ import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.BC.entertainment.adapter.HomeViewPagerAdapter;
 import com.BC.entertainment.cache.InfoCache;
 import com.BC.entertainment.view.CustomViewPager;
 import com.BC.entertainmentgravitation.entity.FHNEntity;
@@ -81,6 +82,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener{
 	private static Context context;
 	
 	private Gson gson;
+	private HomeViewPagerAdapter homePagerAdapter;
 	
 	private static NotificationManager messageNotificatioManager;
 	
@@ -203,11 +205,9 @@ public class HomeActivity extends BaseActivity implements OnClickListener{
 		}
 	}
 	
-	@SuppressWarnings("deprecation")
 	private void findViewById()
 	{
 		curveFragment = new CurveFragment();
-//		hotFragment = new HotFragment();
 		listFragment = new ListFragment();
 		personalFragment = new PersonalFragment();
 		foundFragment = new FoundFragment();
@@ -249,52 +249,8 @@ public class HomeActivity extends BaseActivity implements OnClickListener{
 		FragmentManager fragmentManager = this.getSupportFragmentManager();
 		viewPager = (CustomViewPager) findViewById(R.id.vPagerContent);
 		viewPager.setPagingEnabled(false);
-        viewPager.setAdapter(new FragmentPagerAdapter(fragmentManager) {
-            @Override
-            public Fragment getItem(int position) {
-            	Fragment fragment = null;
-            	switch(position)
-            	{
-				/**
-				 * 曲线
-				 */
-            	case 0:
-            		fragment = curveFragment;
-            		break;
-				/**
-				 * 直播列表
-				 */
-            	case 1:
-//            		fragment = hotFragment;
-            		fragment = listFragment;
-            		break;
-				/**
-				 * 直播
-				 */
-            	case 2:
-            		fragment = emptyFragment;
-            		break;
-				/**
-				 * 发现
-				 */
-            	case 3:
-            		fragment = foundFragment;
-            		break;
-				/**
-				 * 我的
-				 */
-            	case 4:
-            		fragment = personalFragment;
-            		break;            		
-            	}
-                return fragment;
-            }
-
-            @Override
-            public int getCount() {
-                return 5;
-            }
-        });
+		homePagerAdapter = new HomeViewPagerAdapter(fragmentManager);
+		viewPager.setAdapter(homePagerAdapter);
         viewPager.setCurrentItem(0);
 	}
 	
