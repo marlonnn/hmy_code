@@ -13,9 +13,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
@@ -28,11 +26,6 @@ import com.BC.entertainmentgravitation.entity.FHNEntity;
 import com.BC.entertainmentgravitation.entity.GeTui;
 import com.BC.entertainmentgravitation.entity.StarInformation;
 import com.BC.entertainmentgravitation.entity.StarLiveVideoInfo;
-import com.BC.entertainmentgravitation.fragment.CurveFragment;
-import com.BC.entertainmentgravitation.fragment.FoundFragment;
-import com.BC.entertainmentgravitation.fragment.ListFragment;
-import com.BC.entertainmentgravitation.fragment.PersonalFragment;
-import com.BC.entertainmentgravitation.fragment.SurfaceEmptyFragment;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.igexin.sdk.PushConsts;
@@ -59,14 +52,6 @@ import com.umeng.analytics.MobclickAgent;
 public class HomeActivity extends BaseActivity implements OnClickListener{
 	
 	private CustomViewPager viewPager;
-	private CurveFragment curveFragment;
-	private PersonalFragment personalFragment;
-	
-	private SurfaceEmptyFragment emptyFragment;
-	private FoundFragment foundFragment;
-	
-//	private HotFragment hotFragment;
-	private ListFragment listFragment;
 	private ImageView imgViewLine;
 	private ImageView imgViewVideo;
 	private ImageView imgViewLive;
@@ -207,12 +192,6 @@ public class HomeActivity extends BaseActivity implements OnClickListener{
 	
 	private void findViewById()
 	{
-		curveFragment = new CurveFragment();
-		listFragment = new ListFragment();
-		personalFragment = new PersonalFragment();
-		foundFragment = new FoundFragment();
-		emptyFragment = new SurfaceEmptyFragment();
-		
 		imgViewLine = (ImageView) findViewById(R.id.imgViewLine);
 		imgViewVideo = (ImageView) findViewById(R.id.imgViewVideo);
 		imgViewLive = (ImageView) findViewById(R.id.imgViewLive);

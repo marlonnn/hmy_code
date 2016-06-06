@@ -499,7 +499,7 @@ public class CurveFragment extends BaseFragment implements OnClickListener{
 				int diff = Integer.parseInt(kLink.getDifference());
 				txtViewChange.setText("昨日涨跌"+diff+"点");
 				txtViewHongBao.setText(isNullOrEmpty(kLink.getBonus()) ? "0" : kLink.getBonus());
-				txtViewIndex.setText("当前指数：" + kLink.getBid());
+				txtViewIndex.setText("明星储备指数：" + kLink.getBid());
 				setPriceCurve(kLink);
 			} catch (JsonSyntaxException e) {
 				e.printStackTrace();
