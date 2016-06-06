@@ -1,34 +1,40 @@
 package com.BC.entertainmentgravitation.dialog;
 
+import com.BC.entertainmentgravitation.R;
+
 import android.annotation.SuppressLint;
-import android.app.ActionBar.LayoutParams;
 import android.app.Dialog;
+import android.app.ActionBar.LayoutParams;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import com.BC.entertainmentgravitation.R;
 
-public class PromptDialog extends Dialog{
+/**
+ * 娛币购买对话框
+ * 
+ * @author zhongwen
+ *
+ */
+public class PurchaseDialog extends Dialog {
 
-	public PromptDialog(Context context, boolean cancelable,
+	public PurchaseDialog(Context context, boolean cancelable,
 			OnCancelListener cancelListener) {
 		super(context, cancelable, cancelListener);
 	}
 
-	public PromptDialog(Context context, int theme) {
+	public PurchaseDialog(Context context, int theme) {
 		super(context, theme);
 	}
 
-	public PromptDialog(Context context) {
+	public PurchaseDialog(Context context) {
 		super(context);
 	}
-
-	public static class Builder implements iWheel {
+	
+	public static class Builder{
 		private Context context;
 		private String title;
 		private String message;
@@ -36,10 +42,10 @@ public class PromptDialog extends Dialog{
 		private String negativeButtonText;
 		private View contentView;
 		private View layout;
-		private EditText editText;
+		
 		private DialogInterface.OnClickListener positiveButtonClickListener;
 		private DialogInterface.OnClickListener negativeButtonClickListener;
-
+		
 		public Builder(Context context) {
 			this.context = context;
 		}
@@ -70,7 +76,7 @@ public class PromptDialog extends Dialog{
 			this.title = (String) context.getText(title);
 			return this;
 		}
-
+		
 		/**
 		 * Set the Dialog title from String
 		 * 
@@ -87,7 +93,7 @@ public class PromptDialog extends Dialog{
 			this.contentView = v;
 			return this;
 		}
-
+		
 		/**
 		 * Set the positive button resource and it's listener
 		 * 
@@ -123,20 +129,21 @@ public class PromptDialog extends Dialog{
 			this.negativeButtonClickListener = listener;
 			return this;
 		}
-
+		
 		public View findViewById(int id) {
 			if (layout == null) {
 				return null;
 			}
 			return layout.findViewById(id);
 		}
-
-		@SuppressLint("InflateParams") public PromptDialog create() {
+		
+		@SuppressLint("InflateParams") 
+		public PurchaseDialog create() {
 			LayoutInflater inflater = (LayoutInflater) context
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			final PromptDialog dialog = new PromptDialog(context,
+			final PurchaseDialog dialog = new PurchaseDialog(context,
 					R.style.Dialog);
-			layout = inflater.inflate(R.layout.dialog_warning, null);
+			layout = inflater.inflate(R.layout.dialog_purchase, null);
 			dialog.addContentView(layout, new LayoutParams(
 					LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 			((TextView) layout.findViewById(R.id.title)).setText(title);
@@ -157,6 +164,7 @@ public class PromptDialog extends Dialog{
 				layout.findViewById(R.id.positiveButton).setVisibility(
 						View.GONE);
 			}
+			
 			// set the cancel button
 			if (negativeButtonText != null) {
 				((Button) layout.findViewById(R.id.negativeButton))
@@ -175,6 +183,7 @@ public class PromptDialog extends Dialog{
 				layout.findViewById(R.id.negativeButton).setVisibility(
 						View.GONE);
 			}
+			
 			// set the content message
 			if (message != null) {
 				((TextView) layout.findViewById(R.id.message)).setHint(message);
@@ -189,16 +198,6 @@ public class PromptDialog extends Dialog{
 			}
 			dialog.setContentView(layout);
 			return dialog;
-		}
-
-		@Override
-		public void selectValue(int selectID, String selectItem,
-				boolean oneString) {
-			// TODO Auto-generated method stub
-			if (editText != null && !selectItem.equals("")) {
-				int s = Integer.valueOf(selectItem);
-				editText.setText(s + "");
-			}
 		}
 	}
 }

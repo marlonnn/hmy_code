@@ -5,9 +5,12 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.apache.http.NameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -22,9 +25,12 @@ import android.widget.TextView;
 
 import com.BC.entertainment.cache.InfoCache;
 import com.BC.entertainment.view.CoordinateSystemView;
+import com.BC.entertainmentgravitation.ChargeActivity;
 import com.BC.entertainmentgravitation.PersonalHomeActivity;
 import com.BC.entertainmentgravitation.R;
+import com.BC.entertainmentgravitation.dialog.ApplaudDialog;
 import com.BC.entertainmentgravitation.dialog.ApplauseGiveConcern;
+import com.BC.entertainmentgravitation.dialog.PurchaseDialog;
 import com.BC.entertainmentgravitation.entity.EditPersonal;
 import com.BC.entertainmentgravitation.entity.KLink;
 import com.BC.entertainmentgravitation.entity.Member;
@@ -41,6 +47,7 @@ import com.summer.factory.ThreadPoolFactory;
 import com.summer.fragment.BaseFragment;
 import com.summer.handler.InfoHandler;
 import com.summer.json.Entity;
+import com.summer.logger.XLog;
 import com.summer.task.HttpBaseTask;
 import com.summer.treadpool.ThreadPoolConst;
 import com.summer.utils.JsonUtil;
@@ -421,6 +428,83 @@ public class CurveFragment extends BaseFragment implements OnClickListener{
 		}
 	}
 	
+	@Override
+	public void onInfoReceived(int errorCode, HashMap<String, Object> items) {
+		RemoveProgressDialog();
+        if (errorCode == 0)
+        {
+            String jsonString = (String) items.get("content");
+            if (jsonString != null)
+            {
+                JSONObject object;
+                try {
+                    object = new JSONObject(jsonString);
+                    String msg = object.optString("msg");
+                    int code = object.optInt("status", -1);
+                    int taskType = (Integer) items.get("taskType");
+                    XLog.i("code: " + errorCode);
+                    XLog.i("taskType: " + taskType);
+                    if (code == 0)
+                    {
+                        RequestSuccessful(jsonString, taskType);
+                    }
+                    else
+                    {
+                    	if (taskType != Config.give_applause_booed)
+                    	{
+                            RequestFailed(code, msg, taskType);
+                    	}
+                    	else
+                    	{
+                    		showPurchaseDialog();
+                    	}
+
+                    }
+                } catch (JSONException e) {
+                    XLog.e(e);
+                    e.printStackTrace();
+                    RequestFailed(-1, "Json Parse Error", -1);
+                }
+            }
+        }
+	}
+	
+//	@Override
+//	public void RequestFailed(int errcode, String message, int taskType) {
+//		switch(taskType)
+//		{
+//		case Config.give_applause_booed:
+//			showPurchaseDialog();
+//			break;
+//		}
+//		super.RequestFailed(errcode, message, taskType);
+//	}
+	
+	private void showPurchaseDialog()
+	{
+		PurchaseDialog.Builder builder = new PurchaseDialog.Builder(getActivity());
+		builder.setTitle("购买娛币");
+		builder.setMessage("娛币不足，是否购买娛币？");
+		builder.setPositiveButton("确定", new DialogInterface.OnClickListener(){
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				Intent intent = new Intent(getActivity(), ChargeActivity.class);
+				startActivity(intent);				
+			}
+			
+		});
+		builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+			}
+		});
+		PurchaseDialog purchaseDialog = builder.create();
+		purchaseDialog.show();
+	}
+
 	@Override
 	public void RequestSuccessful(String jsonString, int taskType) {
 		switch(taskType)
