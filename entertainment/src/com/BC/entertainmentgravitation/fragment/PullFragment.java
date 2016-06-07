@@ -621,6 +621,7 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
 		if (inputPanel == null)
 		{
 			inputPanel = new InputPannel(container, rootView, GiftCache.getInstance().getListGifts(), bubbling);
+			inputPanel.setAmountMoney(InfoCache.getInstance().getPersonalInfo().getEntertainment_dollar());
 		}
 		layoutInput = (LinearLayout) rootView.findViewById(R.id.layout_input);
 		functionView = (RelativeLayout) rootView.findViewById(R.id.layout_bottom);

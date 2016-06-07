@@ -355,7 +355,7 @@ public class CurveActivity extends BaseActivity implements OnClickListener{
                     }
                     else
                     {
-                    	if (taskType == Config.give_applause_booed && errorCode == 205)
+                    	if (taskType == Config.give_applause_booed && code == 205)
                     	{
                     		showPurchaseDialog();
                     	}

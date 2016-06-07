@@ -78,7 +78,6 @@
 	            android:layout_width="0dip"
 	            android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:visibility="invisible" 
                 android:orientation="horizontal">
 
                 <TextView
@@ -95,7 +94,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="888" />
+                    android:text="0" />
 
                 <ImageView
                     android:id="@+id/imageView_default_money"
@@ -103,7 +102,12 @@
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:src="@drawable/fragment_money_def" />
-
+                <ImageView
+                    android:id="@+id/imgViewRight"
+                    android:layout_gravity="center"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/fragment_right" />
             </LinearLayout>
 	        <TextView
 	            android:id="@+id/buttonSendGift"

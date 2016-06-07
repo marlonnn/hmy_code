@@ -4,6 +4,7 @@ package com.BC.entertainment.chatroom.module;
 import java.util.List;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Handler;
 import android.support.v4.view.ViewPager;
 import android.text.Editable;
@@ -12,12 +13,16 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
+
 import com.BC.entertainment.adapter.GiftPagerAdapter;
 import com.BC.entertainment.chatroom.gift.BaseGift;
+import com.BC.entertainmentgravitation.ChargeActivity;
 import com.BC.entertainmentgravitation.R;
 import com.netease.nim.uikit.common.util.string.StringUtil;
 import com.netease.nimlib.sdk.chatroom.ChatRoomMessageBuilder;
@@ -42,6 +47,8 @@ public class InputPannel {
 	private ViewGroup indicator;//滚动点
 	
 	private Bubbling bubble;
+	private TextView amountMoney;
+	private ImageView imgViewRight;
 	
     public InputPannel(Container container, View view, List<BaseGift> gifts, Bubbling bubble) {
         this.container = container;
@@ -149,6 +156,24 @@ public class InputPannel {
         
         viewPager = (ViewPager) view.findViewById(R.id.gift_viewPager);
         indicator = (ViewGroup) view.findViewById(R.id.gift_page_indicator);
+        amountMoney = (TextView) view.findViewById(R.id.textView_total_money);
+        imgViewRight = (ImageView) view.findViewById(R.id.imgViewRight);
+        imgViewRight.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(container.activity, ChargeActivity.class);
+				container.activity.startActivity(intent);
+			}
+		});
+    }
+    
+    public void setAmountMoney(String money)
+    {
+    	if (money != null)
+    	{
+    		amountMoney.setText(money);
+    	}
     }
     
     private void initInputBarListener()
