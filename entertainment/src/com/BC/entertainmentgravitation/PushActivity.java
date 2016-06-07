@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.AudioFormat;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
@@ -13,10 +12,8 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.BC.entertainment.cache.ChatCache;
-import com.BC.entertainment.cache.InfoCache;
 import com.BC.entertainment.config.PushConfig;
 import com.BC.entertainment.view.LiveSurfaceView;
-import com.BC.entertainmentgravitation.entity.Member;
 import com.BC.entertainmentgravitation.entity.StarLiveVideoInfo;
 import com.BC.entertainmentgravitation.fragment.ExitFragmentListener;
 import com.BC.entertainmentgravitation.fragment.PushFragment.IPushMedia;
@@ -30,12 +27,9 @@ import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.ResponseCode;
 import com.netease.nimlib.sdk.chatroom.ChatRoomService;
-import com.netease.nimlib.sdk.chatroom.model.ChatRoomInfo;
-import com.netease.nimlib.sdk.chatroom.model.ChatRoomMember;
 import com.netease.nimlib.sdk.chatroom.model.EnterChatRoomData;
 import com.netease.nimlib.sdk.chatroom.model.EnterChatRoomResultData;
 import com.summer.activity.BaseActivity;
-import com.summer.config.Config;
 import com.summer.logger.XLog;
 import com.summer.utils.StringUtil;
 import com.summer.utils.ToastUtil;
@@ -44,7 +38,6 @@ import com.umeng.analytics.MobclickAgent;
 public class PushActivity extends BaseActivity implements lsMessageHandler, IPushMedia, ExitFragmentListener{
 	
 	private Context mContext;
-//	private ChatRoom chatRoom;
 	private LiveSurfaceView mVideoView;
 	private lsMediaCapture mLSMediaCapture;
 	private boolean m_liveStreamingInit = false;
@@ -55,8 +48,6 @@ public class PushActivity extends BaseActivity implements lsMessageHandler, IPus
 	private LSLiveStreamingParaCtx mLSLiveStreamingParaCtx = null;
     private long mLastVideoProcessErrorAlertTime = 0;
     
-//    private PushFragment pushFragment;
-
     private TopPushFragment topFragment;
 	private RelativeLayout rlayoutLoading;
 	private AbortableFuture<EnterChatRoomResultData> enterRequest;//聊天室
@@ -65,19 +56,14 @@ public class PushActivity extends BaseActivity implements lsMessageHandler, IPus
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_push);
-//		scrollView = (ScrollView)findViewById(R.id.scrollView);
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);   //应用运行时，保持屏幕高亮，不锁屏
 		getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-//		chatRoom = ChatCache.getInstance().getChatRoom();
         mVideoView = (LiveSurfaceView) findViewById(R.id.videoview);
         rlayoutLoading = (RelativeLayout) findViewById(R.id.rLayoutPushLoading);
         Intent intent = this.getIntent();
         StarLiveVideoInfo startLiveVideoInfo = (StarLiveVideoInfo)intent.getSerializableExtra("liveInfo");
         enterChatRoom(startLiveVideoInfo, true);
-//        delayLiveVideo();
-//        handler = new Handler();
-//        handler.postDelayed(runnable, 10);
 
         mVideoView.setOnTouchListener(new OnTouchListener() {
 			
@@ -146,40 +132,9 @@ public class PushActivity extends BaseActivity implements lsMessageHandler, IPus
         topFragment.show(getSupportFragmentManager(), "push video");
 	}
 	
-	
-	public void showHideFragment(){
-	
-	    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-//	    ft.setCustomAnimations(android.R.animator.fade_in,
-//	                    android.R.animator.fade_out);
-	
-	    if (topFragment.isHidden()) {
-	        ft.show(topFragment);
-	        XLog.d("===============Show==========");
-	    } else {
-	        ft.hide(topFragment);
-	        XLog.d("===============Hide============");                        
-	    }
-	
-	    ft.commit();
-	}
-	
     private void onLoginDone() {
         enterRequest = null;
         DialogMaker.dismissProgressDialog();
-    }
-    
-    private Member createMasterMember()
-    {
-    	Member m = new Member();
-    	m.setId(Config.User.getClientID());
-    	m.setName(Config.User.getUserName());
-        m.setPortrait(InfoCache.getInstance().getPersonalInfo().getHead_portrait());
-        m.setAge(InfoCache.getInstance().getPersonalInfo().getAge());
-        m.setNick(InfoCache.getInstance().getPersonalInfo().getNickname());
-        m.setDollar(InfoCache.getInstance().getPersonalInfo().getEntertainment_dollar());
-        m.setPiao(InfoCache.getInstance().getPersonalInfo().getPiao());
-    	return m;
     }
 	
 	@Override

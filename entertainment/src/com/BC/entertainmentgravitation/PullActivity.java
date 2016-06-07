@@ -9,8 +9,6 @@ import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.BC.entertainment.cache.ChatCache;
-import com.BC.entertainment.cache.InfoCache;
-import com.BC.entertainmentgravitation.entity.Member;
 import com.BC.entertainmentgravitation.entity.StarLiveVideoInfo;
 import com.BC.entertainmentgravitation.fragment.ExitFragmentListener;
 import com.BC.entertainmentgravitation.fragment.NEVideoView;
@@ -26,7 +24,6 @@ import com.netease.nimlib.sdk.chatroom.ChatRoomService;
 import com.netease.nimlib.sdk.chatroom.model.EnterChatRoomData;
 import com.netease.nimlib.sdk.chatroom.model.EnterChatRoomResultData;
 import com.summer.activity.BaseActivity;
-import com.summer.config.Config;
 import com.summer.logger.XLog;
 import com.summer.utils.StringUtil;
 import com.summer.utils.ToastUtil;
@@ -105,15 +102,7 @@ public class PullActivity extends BaseActivity implements OnClickListener, IPull
 
 			@Override
 			public void onSuccess(EnterChatRoomResultData result) {
-//				ChatRoomInfo roomInfo = result.getRoomInfo();
-//                ChatRoomMember member = result.getMember();
-//                member.setRoomId(roomInfo.getRoomId());
-//                ChatCache.getInstance().ClearMember();
-//                ChatCache.getInstance().AddMember(createMasterMember());
-//                ChatCache.getInstance().getChatRoom().setChatRoomInfo(roomInfo);
-                
                 startWatchVideo(startLiveVideoInfo);
-//                XLog.i("enter chat room success" + roomInfo.getRoomId());
 			}});
     }
     
@@ -133,19 +122,6 @@ public class PullActivity extends BaseActivity implements OnClickListener, IPull
 		}
     }
     
-    private Member createMasterMember()
-    {
-    	Member m = new Member();
-    	m.setId(Config.User.getClientID());
-    	m.setName(Config.User.getUserName());
-        m.setPortrait(InfoCache.getInstance().getPersonalInfo().getHead_portrait());
-        m.setAge(InfoCache.getInstance().getPersonalInfo().getAge());
-        m.setNick(InfoCache.getInstance().getPersonalInfo().getNickname());
-        m.setDollar(InfoCache.getInstance().getPersonalInfo().getEntertainment_dollar());
-        m.setPiao(InfoCache.getInstance().getPersonalInfo().getPiao());
-    	return m;
-    }
-	
     private void onLoginDone() {
         enterRequest = null;
         DialogMaker.dismissProgressDialog();
