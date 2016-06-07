@@ -134,8 +134,8 @@ public class PersonalAlbumActivity extends BaseActivity implements OnClickListen
 		});
 	}
 	
-	private void showImageDialog(final PictureAdapter adapter) {
-		final PictureFragment fragment = new PictureFragment();
+	private void showImageDialog(final PictureAdapter adapter, int position) {
+		final PictureFragment fragment = new PictureFragment(position);
 		fragment.setStyle(R.style.Dialog, DialogFragment.STYLE_NO_FRAME);
 		fragment.show(getSupportFragmentManager(), "PictureDialog");
 		fragment.setAdapter(adapter);
@@ -179,7 +179,7 @@ public class PersonalAlbumActivity extends BaseActivity implements OnClickListen
 				R.layout.activity_personal_album_item, more_pictures) {
 
 			@Override
-			public void convert(ViewHolder helper, final Photo_images item, int position) {
+			public void convert(ViewHolder helper, final Photo_images item, final int position) {
 
 				ImageView imageView = helper.getView(R.id.Picture_address);
 				if (item.getPicture_address() != null) {
@@ -192,7 +192,7 @@ public class PersonalAlbumActivity extends BaseActivity implements OnClickListen
 						@Override
 						public void onClick(View v) {
 							adapter = new PictureAdapter(more_pictures, mContext);
-							showImageDialog(adapter);
+							showImageDialog(adapter, position);
 						}
 					});
 				}
@@ -202,7 +202,7 @@ public class PersonalAlbumActivity extends BaseActivity implements OnClickListen
 				R.layout.activity_personal_album_item, more_picturesImages) {
 
 			@Override
-			public void convert(ViewHolder helper, final Photo_images item, int position) {
+			public void convert(ViewHolder helper, final Photo_images item, final int position) {
 
 				ImageView imageView = helper.getView(R.id.Picture_address);
 				if (item.getPicture_address() != null) {
@@ -215,7 +215,7 @@ public class PersonalAlbumActivity extends BaseActivity implements OnClickListen
 						@Override
 						public void onClick(View v) {
 							adapter = new PictureAdapter(more_picturesImages, mContext);
-							showImageDialog(adapter);
+							showImageDialog(adapter, position);
 						}
 					});
 				}
@@ -225,7 +225,7 @@ public class PersonalAlbumActivity extends BaseActivity implements OnClickListen
 				R.layout.activity_personal_album_item, more_picturesPhotographs) {
 
 			@Override
-			public void convert(ViewHolder helper, final Photo_images item, int position) {
+			public void convert(ViewHolder helper, final Photo_images item, final int position) {
 
 				ImageView imageView = helper.getView(R.id.Picture_address);
 				if (item.getPicture_address() != null) {
@@ -238,7 +238,7 @@ public class PersonalAlbumActivity extends BaseActivity implements OnClickListen
 						@Override
 						public void onClick(View v) {
 							adapter = new PictureAdapter(more_picturesPhotographs, mContext);
-							showImageDialog(adapter);
+							showImageDialog(adapter, position);
 						}
 					});
 				}

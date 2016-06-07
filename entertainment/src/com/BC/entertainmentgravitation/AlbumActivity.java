@@ -20,6 +20,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.text.format.DateUtils;
 import android.util.Base64;
@@ -149,19 +150,21 @@ public class AlbumActivity extends BaseActivity implements OnClickListener, OnIt
 		});
 	}
 	
-	private void showImageDialog(final PictureAdapter adapter) {
-		final PictureFragment fragment = new PictureFragment();
+	private void showImageDialog(final PictureAdapter adapter, int position) {
+		final PictureFragment fragment = new PictureFragment(position);
 		fragment.setStyle(R.style.Dialog, DialogFragment.STYLE_NO_FRAME);
 		fragment.show(getSupportFragmentManager(), "PictureDialog");
 		fragment.setAdapter(adapter);
+		fragment.setPage(position);
+		
 		fragment.setChangeListener(new OnPageChangeListener() {
 
 			@Override
 			public void onPageSelected(int arg0) {
-				if (adapter.getCount() - 1 == arg0) {
-					index++;
-					sendAlbumRequest(index);
-				}
+//				if (adapter.getCount() - 1 == arg0) {
+//					index++;
+//					sendAlbumRequest(index);
+//				}
 			}
 
 			@Override
@@ -181,7 +184,7 @@ public class AlbumActivity extends BaseActivity implements OnClickListener, OnIt
 				R.layout.activity_album_item_list_album, more_pictures) {
 
 			@Override
-			public void convert(ViewHolder helper, final Photo_images item, int position) {
+			public void convert(ViewHolder helper, final Photo_images item, final int position) {
 
 				ImageView imageView = helper.getView(R.id.Picture_address);
 				if (item.getPicture_address() == null) {
@@ -216,7 +219,7 @@ public class AlbumActivity extends BaseActivity implements OnClickListener, OnIt
 						@Override
 						public void onClick(View v) {
 							adapter = new PictureAdapter(more_pictures, mContext);
-							showImageDialog(adapter);
+							showImageDialog(adapter, position);
 						}
 					});
 				}
@@ -226,7 +229,7 @@ public class AlbumActivity extends BaseActivity implements OnClickListener, OnIt
 				R.layout.activity_album_item_list_album, more_picturesImages) {
 
 			@Override
-			public void convert(ViewHolder helper, final Photo_images item, int position) {
+			public void convert(ViewHolder helper, final Photo_images item, final int position) {
 
 				ImageView imageView = helper.getView(R.id.Picture_address);
 				if (item.getPicture_address() == null) {
@@ -261,7 +264,7 @@ public class AlbumActivity extends BaseActivity implements OnClickListener, OnIt
 						@Override
 						public void onClick(View v) {
 							adapter = new PictureAdapter(more_picturesImages, mContext);
-							showImageDialog(adapter);
+							showImageDialog(adapter, position);
 						}
 					});
 				}
@@ -271,7 +274,7 @@ public class AlbumActivity extends BaseActivity implements OnClickListener, OnIt
 				R.layout.activity_album_item_list_album, more_picturesPhotographs) {
 
 			@Override
-			public void convert(ViewHolder helper, final Photo_images item, int position) {
+			public void convert(ViewHolder helper, final Photo_images item, final int position) {
 
 				ImageView imageView = helper.getView(R.id.Picture_address);
 				if (item.getPicture_address() == null) {
@@ -305,7 +308,7 @@ public class AlbumActivity extends BaseActivity implements OnClickListener, OnIt
 						@Override
 						public void onClick(View v) {
 							adapter = new PictureAdapter(more_picturesPhotographs, mContext);
-							showImageDialog(adapter);
+							showImageDialog(adapter, position);
 						}
 					});
 				}

@@ -16,6 +16,13 @@ public class PictureFragment extends BaseDialogFragment{
 	private View contentView;// editConnect
 	private OnPageChangeListener changeListener;
 	private PictureAdapter adapter;
+	private ViewPager pager;
+	private int currentItem = 0;
+	
+	public PictureFragment(int currentItem)
+	{
+		this.currentItem = currentItem;
+	}
 
 	public OnPageChangeListener getChangeListener() {
 		return changeListener;
@@ -38,12 +45,13 @@ public class PictureFragment extends BaseDialogFragment{
 			Bundle savedInstanceState) {
 		contentView = inflater.inflate(R.layout.fragment_picture, container,
 				false);
+		initializeView();
 		return contentView;
 	}
 
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
-		initializeView();
+		
 		super.onViewCreated(view, savedInstanceState);
 	}
 
@@ -57,12 +65,21 @@ public class PictureFragment extends BaseDialogFragment{
 						dismiss();
 					}
 				});
-		ViewPager pager = (ViewPager) contentView.findViewById(R.id.picture);
+		pager = (ViewPager) contentView.findViewById(R.id.picture);
 		if (adapter != null) {
 			pager.setAdapter(adapter);
+			pager.setCurrentItem(currentItem);
 		}
 		if (changeListener != null) {
 			pager.setOnPageChangeListener(changeListener);
+		}
+	}
+	
+	public void setPage(int item)
+	{
+		if (pager != null)
+		{
+			pager.setCurrentItem(item);
 		}
 	}
 	

@@ -36,7 +36,14 @@ public class PictureAdapter extends PagerAdapter {
 
 	@Override
 	public int getCount() {
-		return images.size();
+		if (images.size() > 0)
+		{
+			return images.size() -1;
+		}
+		else
+		{
+			return 0;
+		}
 	}
 
 	@Override
