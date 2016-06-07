@@ -5,7 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.apache.http.NameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.format.DateUtils;
@@ -17,6 +20,7 @@ import android.widget.TextView;
 
 import com.BC.entertainment.view.CoordinateSystemView;
 import com.BC.entertainmentgravitation.dialog.ApplauseGiveConcern;
+import com.BC.entertainmentgravitation.dialog.PurchaseDialog;
 import com.BC.entertainmentgravitation.entity.Contribution;
 import com.BC.entertainmentgravitation.entity.KLink;
 import com.BC.entertainmentgravitation.entity.Member;
@@ -329,10 +333,76 @@ public class CurveActivity extends BaseActivity implements OnClickListener{
 	}
 	
 	@Override
-	public void onInfoReceived(int errcode, HashMap<String, Object> items) {
-		super.onInfoReceived(errcode, items);
+	public void onInfoReceived(int errorCode, HashMap<String, Object> items) {
 		pullToRefreshListView.onRefreshComplete();
+		RemoveProgressDialog();
+        if (errorCode == 0)
+        {
+            String jsonString = (String) items.get("content");
+            if (jsonString != null)
+            {
+                JSONObject object;
+                try {
+                    object = new JSONObject(jsonString);
+                    String msg = object.optString("msg");
+                    int code = object.optInt("status", -1);
+                    int taskType = (Integer) items.get("taskType");
+                    XLog.i("code: " + errorCode);
+                    XLog.i("taskType: " + taskType);
+                    if (code == 0)
+                    {
+                        RequestSuccessful(jsonString, taskType);
+                    }
+                    else
+                    {
+                    	if (taskType == Config.give_applause_booed && errorCode == 205)
+                    	{
+                    		showPurchaseDialog();
+                    	}
+                    	else
+                    	{
+                    		RequestFailed(code, msg, taskType);
+                    	}
+                    }
+                } catch (JSONException e) {
+                    XLog.e(e);
+                    e.printStackTrace();
+                    RequestFailed(-1, "Json Parse Error", -1);
+                }
+            }
+        }
 	}
+	
+	private void showPurchaseDialog()
+	{
+		PurchaseDialog.Builder builder = new PurchaseDialog.Builder(this);
+		builder.setTitle("购买娛币");
+		builder.setMessage("娛币不足，是否购买娛币？");
+		builder.setPositiveButton("确定", new DialogInterface.OnClickListener(){
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				Intent intent = new Intent(CurveActivity.this, ChargeActivity.class);
+				startActivity(intent);				
+			}
+			
+		});
+		builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+			}
+		});
+		PurchaseDialog purchaseDialog = builder.create();
+		purchaseDialog.show();
+	}
+	
+//	@Override
+//	public void onInfoReceived(int errcode, HashMap<String, Object> items) {
+//		super.onInfoReceived(errcode, items);
+//		pullToRefreshListView.onRefreshComplete();
+//	}
 
 	@Override
 	public void onNotifyText(String notify) {

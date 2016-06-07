@@ -450,15 +450,14 @@ public class CurveFragment extends BaseFragment implements OnClickListener{
                     }
                     else
                     {
-                    	if (taskType != Config.give_applause_booed)
-                    	{
-                            RequestFailed(code, msg, taskType);
-                    	}
-                    	else
+                    	if (taskType == Config.give_applause_booed && errorCode == 205)
                     	{
                     		showPurchaseDialog();
                     	}
-
+                    	else
+                    	{
+                    		RequestFailed(code, msg, taskType);
+                    	}
                     }
                 } catch (JSONException e) {
                     XLog.e(e);
