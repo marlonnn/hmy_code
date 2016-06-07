@@ -6,8 +6,10 @@ import java.util.List;
 
 import org.apache.http.NameValuePair;
 
+import android.app.DialogFragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.text.format.DateUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -18,8 +20,10 @@ import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 
+import com.BC.entertainment.adapter.PictureAdapter;
 import com.BC.entertainmentgravitation.entity.Album;
 import com.BC.entertainmentgravitation.entity.Photo_images;
+import com.BC.entertainmentgravitation.fragment.PictureFragment;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.Gson;
@@ -52,14 +56,17 @@ public class PersonalAlbumActivity extends BaseActivity implements OnClickListen
 	private ArrayList<Photo_images> more_pictures = new ArrayList<Photo_images>();//生活照
 	private ArrayList<Photo_images> more_picturesImages = new ArrayList<Photo_images>();//写真
 	private ArrayList<Photo_images> more_picturesPhotographs = new ArrayList<Photo_images>();//剧照
-
+	
 	private CommonAdapter<Photo_images> adapter1;
 	private CommonAdapter<Photo_images> adapter2;
 	private CommonAdapter<Photo_images> adapter3;
 	private RadioGroup radio;
 	private int pageIndex = 1;
+	private int index = 1;
 	
 	private String clientId;
+
+	private PictureAdapter adapter;
 	
 	public Album getAlbum() {
 		return album;
@@ -127,6 +134,46 @@ public class PersonalAlbumActivity extends BaseActivity implements OnClickListen
 		});
 	}
 	
+	private void showImageDialog(final PictureAdapter adapter) {
+		final PictureFragment fragment = new PictureFragment();
+		fragment.setStyle(R.style.Dialog, DialogFragment.STYLE_NO_FRAME);
+		fragment.show(getSupportFragmentManager(), "PictureDialog");
+		fragment.setAdapter(adapter);
+		fragment.setChangeListener(new OnPageChangeListener() {
+
+			@Override
+			public void onPageSelected(int arg0) {
+				if (adapter.getCount() - 1 == arg0) {
+					index++;
+					sendAlbumRequest(index);
+				}
+			}
+
+			@Override
+			public void onPageScrolled(int arg0, float arg1, int arg2) {
+
+			}
+
+			@Override
+			public void onPageScrollStateChanged(int arg0) {
+
+			}
+		});
+	}
+	
+	/**
+	 * 获取相册信息
+	 */
+	private void sendAlbumRequest(int pageIndex) {
+		HashMap<String, String> entity = new HashMap<String, String>();
+
+		entity.put("clientID", Config.User.getClientID());
+		entity.put("The_page_number", "" + pageIndex);
+		
+		List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
+		addToThreadPool(Config.photo_album_management, "send album info request", params);
+	}
+	
 	private void initAdapter() {
 		adapter1 = new CommonAdapter<Photo_images>(this,
 				R.layout.activity_personal_album_item, more_pictures) {
@@ -140,6 +187,14 @@ public class PersonalAlbumActivity extends BaseActivity implements OnClickListen
 					.centerCrop()
 					.diskCacheStrategy(DiskCacheStrategy.ALL)
 					.placeholder(R.drawable.home_image).into(imageView);
+					imageView.setOnClickListener(new OnClickListener() {
+
+						@Override
+						public void onClick(View v) {
+							adapter = new PictureAdapter(more_pictures, mContext);
+							showImageDialog(adapter);
+						}
+					});
 				}
 			}
 		};
@@ -155,6 +210,14 @@ public class PersonalAlbumActivity extends BaseActivity implements OnClickListen
 					.centerCrop()
 					.diskCacheStrategy(DiskCacheStrategy.ALL)
 					.placeholder(R.drawable.home_image).into(imageView);
+					imageView.setOnClickListener(new OnClickListener() {
+
+						@Override
+						public void onClick(View v) {
+							adapter = new PictureAdapter(more_picturesImages, mContext);
+							showImageDialog(adapter);
+						}
+					});
 				}
 			}
 		};
@@ -170,6 +233,14 @@ public class PersonalAlbumActivity extends BaseActivity implements OnClickListen
 					.centerCrop()
 					.diskCacheStrategy(DiskCacheStrategy.ALL)
 					.placeholder(R.drawable.home_image).into(imageView);
+					imageView.setOnClickListener(new OnClickListener() {
+
+						@Override
+						public void onClick(View v) {
+							adapter = new PictureAdapter(more_picturesPhotographs, mContext);
+							showImageDialog(adapter);
+						}
+					});
 				}
 
 			}

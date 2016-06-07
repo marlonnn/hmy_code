@@ -11,39 +11,36 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 
 import com.BC.entertainmentgravitation.R;
+import com.BC.entertainmentgravitation.entity.Photo_images;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.bitmap.ImageHeaderParser.ImageType;
-import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 
 public class PictureAdapter extends PagerAdapter {
-	List<String> images = new ArrayList<String>();
-	Context context;
+	private List<Photo_images> images = new ArrayList<Photo_images>();
+	private Context context;
 
-	public PictureAdapter(List<String> images, Context context) {
+	public PictureAdapter(List<Photo_images> images, Context context) {
 		super();
 		this.context = context;
 		this.images = images;
 	}
 
-	public List<String> getImages() {
+	public List<Photo_images> getImages() {
 		return images;
 	}
 
-	public void setImages(List<String> images) {
+	public void setImages(List<Photo_images> images) {
 		this.images = images;
 		notifyDataSetChanged();
 	}
 
 	@Override
 	public int getCount() {
-		// TODO Auto-generated method stub
 		return images.size();
 	}
 
 	@Override
 	public boolean isViewFromObject(View arg0, Object arg1) {
-		// TODO Auto-generated method stub
 		return arg0 == arg1;
 	}
 
@@ -61,7 +58,7 @@ public class PictureAdapter extends PagerAdapter {
 				LayoutParams.WRAP_CONTENT);
 		imageView.setLayoutParams(layoutParams);
 		imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);//.centerCrop()
-		Glide.with(context).load(images.get(position))
+		Glide.with(context).load(images.get(position).getPicture_address())
 				.diskCacheStrategy(DiskCacheStrategy.ALL)
 				.placeholder(R.drawable.home_image).into(imageView);
 		view.addView(imageView);

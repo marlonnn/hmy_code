@@ -11,6 +11,8 @@ import java.util.List;
 import org.apache.http.NameValuePair;
 
 import android.app.AlertDialog;
+import android.app.DialogFragment;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -18,11 +20,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.text.format.DateUtils;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -31,8 +35,10 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 
+import com.BC.entertainment.adapter.PictureAdapter;
 import com.BC.entertainmentgravitation.entity.Album;
 import com.BC.entertainmentgravitation.entity.Photo_images;
+import com.BC.entertainmentgravitation.fragment.PictureFragment;
 import com.netease.nim.uikit.common.ui.ptr.PullToRefreshBase;
 import com.netease.nim.uikit.common.ui.ptr.PullToRefreshBase.OnRefreshListener2;
 import com.netease.nim.uikit.common.ui.ptr.PullToRefreshGridView;
@@ -59,23 +65,28 @@ public class AlbumActivity extends BaseActivity implements OnClickListener, OnIt
 
 	private Album album;
 
-	PullToRefreshGridView pullToRefreshGridView1;
+	private PullToRefreshGridView pullToRefreshGridView1;
 
 	boolean canEdit = false;
-	String fileName = "";
+	private String fileName = "";
 
-	ArrayList<Photo_images> more_pictures = new ArrayList<Photo_images>();//生活照
-	ArrayList<Photo_images> more_picturesImages = new ArrayList<Photo_images>();//写真
-	ArrayList<Photo_images> more_picturesPhotographs = new ArrayList<Photo_images>();//剧照
+	private List<Photo_images> more_pictures = new ArrayList<Photo_images>();//生活照
+	private List<Photo_images> more_picturesImages = new ArrayList<Photo_images>();//写真
+	private List<Photo_images> more_picturesPhotographs = new ArrayList<Photo_images>();//剧照
 
 	private CommonAdapter<Photo_images> adapter1;
 	private CommonAdapter<Photo_images> adapter2;
 	private CommonAdapter<Photo_images> adapter3;
 	private RadioGroup radio;
 	private int pageIndex = 1;
+	private int index = 1;
 	private String setType = "1";
 	
 	private SimpleDateFormat format;
+	
+	private PictureAdapter adapter;
+	
+	private Context mContext;
 	
 	public Album getAlbum() {
 		return album;
@@ -108,6 +119,7 @@ public class AlbumActivity extends BaseActivity implements OnClickListener, OnIt
 	private void initView()
 	{
 		format = new SimpleDateFormat("yyyyMMddHHmmsssss");
+		mContext = this;
 		findViewById(R.id.imageViewBack).setOnClickListener(this);
 		pullToRefreshGridView1 = (PullToRefreshGridView)findViewById(R.id.pullToRefreshGridView1);
 		pullToRefreshGridView1.getRefreshableView().setNumColumns(3);
@@ -137,8 +149,34 @@ public class AlbumActivity extends BaseActivity implements OnClickListener, OnIt
 		});
 	}
 	
+	private void showImageDialog(final PictureAdapter adapter) {
+		final PictureFragment fragment = new PictureFragment();
+		fragment.setStyle(R.style.Dialog, DialogFragment.STYLE_NO_FRAME);
+		fragment.show(getSupportFragmentManager(), "PictureDialog");
+		fragment.setAdapter(adapter);
+		fragment.setChangeListener(new OnPageChangeListener() {
+
+			@Override
+			public void onPageSelected(int arg0) {
+				if (adapter.getCount() - 1 == arg0) {
+					index++;
+					sendAlbumRequest(index);
+				}
+			}
+
+			@Override
+			public void onPageScrolled(int arg0, float arg1, int arg2) {
+
+			}
+
+			@Override
+			public void onPageScrollStateChanged(int arg0) {
+
+			}
+		});
+	}
+	
 	private void initAdapter() {
-		// TODO Auto-generated method stub
 		adapter1 = new CommonAdapter<Photo_images>(this,
 				R.layout.activity_album_item_list_album, more_pictures) {
 
@@ -164,14 +202,21 @@ public class AlbumActivity extends BaseActivity implements OnClickListener, OnIt
 							.centerCrop()
 							.diskCacheStrategy(DiskCacheStrategy.ALL)
 							.placeholder(R.drawable.home_image).into(imageView);
+					imageView.setOnLongClickListener(new OnLongClickListener(){
+
+						@Override
+						public boolean onLongClick(View v) {
+							showAlertDialog1(R.layout.dialog_alert6,
+									R.id.button3, R.id.button1, R.id.button2, item.getPicture_ID());
+							return true;
+						}});
+					
 					imageView.setOnClickListener(new OnClickListener() {
 
 						@Override
 						public void onClick(View v) {
-							// TODO Auto-generated method stub
-							// item.getPicture_address()
-							showAlertDialog1(R.layout.dialog_alert6,
-									R.id.button3, R.id.button1, R.id.button2, item.getPicture_ID());
+							adapter = new PictureAdapter(more_pictures, mContext);
+							showImageDialog(adapter);
 						}
 					});
 				}
@@ -202,13 +247,21 @@ public class AlbumActivity extends BaseActivity implements OnClickListener, OnIt
 							.centerCrop()
 							.diskCacheStrategy(DiskCacheStrategy.ALL)
 							.placeholder(R.drawable.home_image).into(imageView);
+					imageView.setOnLongClickListener(new OnLongClickListener(){
+
+						@Override
+						public boolean onLongClick(View v) {
+							showAlertDialog1(R.layout.dialog_alert6,
+									R.id.button3, R.id.button1, R.id.button2,item.getPicture_ID());
+							return true;
+						}});
+					
 					imageView.setOnClickListener(new OnClickListener() {
 
 						@Override
 						public void onClick(View v) {
-							// TODO Auto-generated method stub
-							showAlertDialog1(R.layout.dialog_alert6,
-									R.id.button3, R.id.button1, R.id.button2,item.getPicture_ID());
+							adapter = new PictureAdapter(more_picturesImages, mContext);
+							showImageDialog(adapter);
 						}
 					});
 				}
@@ -228,7 +281,6 @@ public class AlbumActivity extends BaseActivity implements OnClickListener, OnIt
 
 						@Override
 						public void onClick(View v) {
-							// TODO Auto-generated method stub
 							showAlertDialog(R.layout.dialog_alert3,
 									R.id.button3, R.id.button1, R.id.button2);
 						}
@@ -239,13 +291,21 @@ public class AlbumActivity extends BaseActivity implements OnClickListener, OnIt
 							.centerCrop()
 							.diskCacheStrategy(DiskCacheStrategy.ALL)
 							.placeholder(R.drawable.home_image).into(imageView);
+					imageView.setOnLongClickListener(new OnLongClickListener(){
+
+						@Override
+						public boolean onLongClick(View v) {
+							showAlertDialog1(R.layout.dialog_alert6,
+									R.id.button3, R.id.button1, R.id.button2, item.getPicture_ID());
+							return true;
+						}});
+					
 					imageView.setOnClickListener(new OnClickListener() {
 
 						@Override
 						public void onClick(View v) {
-							// TODO Auto-generated method stub
-							showAlertDialog1(R.layout.dialog_alert6,
-									R.id.button3, R.id.button1, R.id.button2, item.getPicture_ID());
+							adapter = new PictureAdapter(more_picturesPhotographs, mContext);
+							showImageDialog(adapter);
 						}
 					});
 				}
@@ -308,9 +368,22 @@ public class AlbumActivity extends BaseActivity implements OnClickListener, OnIt
 
 		entity.put("clientID", Config.User.getClientID());
 		
-		ShowProgressDialog("获取用户相册...");		
+		ShowProgressDialog("获取用户相册...");
 		List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
 		addToThreadPool(Config.photo_album_management, "send album request", params);
+	}
+	
+	/**
+	 * 获取相册信息
+	 */
+	private void sendAlbumRequest(int pageIndex) {
+		HashMap<String, String> entity = new HashMap<String, String>();
+
+		entity.put("clientID", Config.User.getClientID());
+		entity.put("The_page_number", "" + pageIndex);
+		
+		List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
+		addToThreadPool(Config.photo_album_management, "send album info request", params);
 	}
 	
 	/**

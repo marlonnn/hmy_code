@@ -3,7 +3,6 @@ package com.BC.entertainmentgravitation.fragment;
 import com.BC.entertainmentgravitation.R;
 import com.BC.entertainment.adapter.PictureAdapter;
 import com.summer.fragment.BaseDialogFragment;
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
@@ -14,7 +13,6 @@ import android.view.View.OnClickListener;
 
 public class PictureFragment extends BaseDialogFragment{
 
-	private Activity activity;
 	private View contentView;// editConnect
 	private OnPageChangeListener changeListener;
 	private PictureAdapter adapter;
@@ -38,7 +36,6 @@ public class PictureFragment extends BaseDialogFragment{
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		activity = getActivity();
 		contentView = inflater.inflate(R.layout.fragment_picture, container,
 				false);
 		return contentView;
