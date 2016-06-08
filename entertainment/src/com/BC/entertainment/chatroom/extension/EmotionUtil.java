@@ -18,7 +18,6 @@ public class EmotionUtil {
     	if (message != null)
     	{
     		try {
-				CustomAttachment customAttachment = (CustomAttachment)message.getAttachment();
 				
 				if (message.getMsgType() == MsgTypeEnum.text)
 				{
@@ -26,6 +25,7 @@ public class EmotionUtil {
 				}
 				else if (message.getMsgType() == MsgTypeEnum.custom)
 				{
+					CustomAttachment customAttachment = (CustomAttachment)message.getAttachment();
 					switch(customAttachment.getType())
 					{
 					/**

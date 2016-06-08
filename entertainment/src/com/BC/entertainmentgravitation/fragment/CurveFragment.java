@@ -28,7 +28,6 @@ import com.BC.entertainment.view.CoordinateSystemView;
 import com.BC.entertainmentgravitation.ChargeActivity;
 import com.BC.entertainmentgravitation.PersonalHomeActivity;
 import com.BC.entertainmentgravitation.R;
-import com.BC.entertainmentgravitation.dialog.ApplaudDialog;
 import com.BC.entertainmentgravitation.dialog.ApplauseGiveConcern;
 import com.BC.entertainmentgravitation.dialog.PurchaseDialog;
 import com.BC.entertainmentgravitation.entity.EditPersonal;

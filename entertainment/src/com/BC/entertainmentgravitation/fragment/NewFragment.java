@@ -20,6 +20,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.BC.entertainment.cache.InfoCache;
 import com.BC.entertainmentgravitation.PersonalHomeActivity;
 import com.BC.entertainmentgravitation.PullActivity;
 import com.BC.entertainmentgravitation.R;
@@ -169,6 +170,7 @@ public class NewFragment extends BaseFragment{
 												try {
 													if (entity.getUsername() != null)
 													{
+														InfoCache.getInstance().setLiveStar(entity);
 														watchLiveVideoRequest(entity.getUsername());
 													}
 

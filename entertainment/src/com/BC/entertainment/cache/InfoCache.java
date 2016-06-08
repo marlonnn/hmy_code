@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.BC.entertainmentgravitation.entity.EditPersonal;
+import com.BC.entertainmentgravitation.entity.FHNEntity;
 import com.BC.entertainmentgravitation.entity.StarInformation;
 
 /**
@@ -20,6 +21,33 @@ public class InfoCache {
 	
 	private List<StarInformation> starInfoList;
 	
+	/**
+	 * 个人信息
+	 */
+	private EditPersonal personalInfo;
+	
+	/**
+	 * 当前正在直播的用户
+	 */
+	private StarInformation liveStar;
+
+    public static InfoCache getInstance() {
+        return InstanceHolder.instance;
+    }
+    
+    static class InstanceHolder {
+        final static InfoCache instance = new InfoCache();
+    }
+
+	public StarInformation CreateStartInfoInstance()
+    {
+    	if (startInfo == null)
+    	{
+    		startInfo = new StarInformation();
+    	}
+    	return startInfo;
+    }
+	
 	public List<StarInformation> CreateStarInfoList()
 	{
 		if (starInfoList == null)
@@ -29,6 +57,23 @@ public class InfoCache {
 		return starInfoList;
 	}
 	
+	public List<StarInformation> getStarInfoList() {
+		return starInfoList;
+	}
+
+
+	public void setStarInfoList(List<StarInformation> starInfoList) {
+		this.starInfoList = starInfoList;
+	}
+
+	public EditPersonal CreateEditPersonalInstance()
+	{
+	    if (personalInfo == null)
+		{
+			personalInfo = new EditPersonal();
+		}
+		return personalInfo;
+	}
 	
 	public void AddToStarInfoList(StarInformation starInfo)
 	{
@@ -40,7 +85,6 @@ public class InfoCache {
 				starInfoList.add(starInfo);
 			}
 		}
-
 	}
 	
 	public StarInformation GetStarInfo(StarInformation starInfo)
@@ -82,19 +126,6 @@ public class InfoCache {
 		return null;
 	}
 	
-	/**
-	 * 个人信息
-	 */
-	private EditPersonal personalInfo;
-
-    public static InfoCache getInstance() {
-        return InstanceHolder.instance;
-    }
-    
-    static class InstanceHolder {
-        final static InfoCache instance = new InfoCache();
-    }
-    
     public StarInformation getStartInfo() {
 		return startInfo;
 	}
@@ -110,28 +141,35 @@ public class InfoCache {
 	public void setPersonalInfo(EditPersonal personalInfo) {
 		this.personalInfo = personalInfo;
 	}
-
-	public StarInformation CreateStartInfoInstance()
-    {
-    	if (startInfo == null)
-    	{
-    		startInfo = new StarInformation();
-    	}
-    	return startInfo;
-    }
 	
-	public EditPersonal CreateEditPersonalInstance()
+	public StarInformation getLiveStar() {
+		return liveStar;
+	}
+
+	public void setLiveStar(StarInformation liveStar) {
+		this.liveStar = liveStar;
+	}
+	
+	public void setLiveStar(FHNEntity entity)
 	{
-	    if (personalInfo == null)
+		if (liveStar == null)
 		{
-			personalInfo = new EditPersonal();
+			liveStar = new StarInformation();
 		}
-		return personalInfo;
+		if (entity != null)
+		{
+			liveStar.setStar_ID(entity.getStar_ID());
+			liveStar.setUser_name(entity.getUsername());
+			liveStar.setProfessional(entity.getCareer());
+			liveStar.setHead_portrait(entity.getHead_portrait());
+			liveStar.setStage_name(entity.getStar_names());
+		}
 	}
 	
 	public void ClearAllData()
 	{
 		startInfo = null;
 		personalInfo = null;
+		liveStar = null;
 	}
 }

@@ -490,7 +490,7 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
     	headPortrait = (CircularImage) rootView.findViewById(R.id.portrait);
     	headPortrait.setOnClickListener(this);
 		Glide.with(this)
-		.load(InfoCache.getInstance().getStartInfo().getHead_portrait())
+		.load(InfoCache.getInstance().getLiveStar().getHead_portrait())
 		.centerCrop().diskCacheStrategy(DiskCacheStrategy.ALL)
 		.placeholder(R.drawable.avatar_def).into(headPortrait);
 		XLog.i("custom portrait: " + InfoCache.getInstance().getPersonalInfo().getHead_portrait());
@@ -653,10 +653,10 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
 		 * 初始化投资和撤资弹出对话框
 		 */
 		applauseGiveConcern = new ApplauseGiveConcern( container.activity,
-				InfoCache.getInstance().getStartInfo().getStar_ID(), this,
-				InfoCache.getInstance().getStartInfo()
+				InfoCache.getInstance().getLiveStar().getStar_ID(), this,
+				InfoCache.getInstance().getLiveStar()
 						.getThe_current_hooted_thumb_up_prices(),
-				InfoCache.getInstance().getStartInfo().getStage_name());
+				InfoCache.getInstance().getLiveStar().getStage_name());
 		
 		rootView.setOnTouchListener(new OnTouchListener() {
 			
@@ -1009,11 +1009,11 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
          else if(attachment.getType() == NotificationType.ChatRoomMemberExit)
          {
          	Member member = ChatCache.getInstance().getMember(account);
-         	if (member != null && member.getName().contains(InfoCache.getInstance().getStartInfo().getUser_name()))
+         	if (member != null && member.getName().contains(InfoCache.getInstance().getLiveStar().getUser_name()))
          	{
          		XLog.i("exit chat room");
          		XLog.i("exit chat room, member.getName(): " + member.getName());
-         		XLog.i("exit chat room, ---getUser_name(): " + InfoCache.getInstance().getStartInfo().getUser_name());
+         		XLog.i("exit chat room, ---getUser_name(): " + InfoCache.getInstance().getLiveStar().getUser_name());
     			Intent intent = new Intent(container.activity, FinishActivity.class);
     			intent.putExtra("totalPeople", ChatCache.getInstance().getOnlinePeopleitems().size());
     			startActivity(intent);
@@ -1046,7 +1046,7 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
  	{
      	try {
  			HashMap<String, String> entity = new HashMap<String, String>();
- 			entity.put("username", InfoCache.getInstance().getStartInfo().getUser_name());
+ 			entity.put("username", InfoCache.getInstance().getLiveStar().getUser_name());
  			List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
  			httpTask = new HttpTask(ThreadPoolConst.THREAD_TYPE_FILE_HTTP, "get yu piao info", params, UrlUtil.GetUrl(Config.query_piao));
  			httpTask.setTaskType(Config.query_piao);
@@ -1210,7 +1210,7 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
 	}
 	
 	private void showShare() {
-		String name = InfoCache.getInstance().getStartInfo().getStage_name();
+		String name = InfoCache.getInstance().getLiveStar().getStage_name();
 
 		ShareSDK.initSDK(container.activity, "10ee118b8af16");
 
@@ -1343,7 +1343,7 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
 		    	entity.put("username", Config.User.getUserName());
 		    	entity.put("user_dollar", String.valueOf(baseEmotion.getValue()));
 		    	entity.put("type", String.valueOf(type));
-		    	entity.put("starid", InfoCache.getInstance().getStartInfo().getUser_name());
+		    	entity.put("starid", InfoCache.getInstance().getLiveStar().getUser_name());
 				List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
 				addToThreadPool(Config.send_gift, "send gift request", params);
 				XLog.i("send gift reques");
@@ -1374,7 +1374,7 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
 		    	entity.put("username", Config.User.getUserName());
 		    	entity.put("user_dollar", String.valueOf(tipValue));
 		    	entity.put("type", "-1");
-		    	entity.put("starid", InfoCache.getInstance().getStartInfo().getUser_name());
+		    	entity.put("starid", InfoCache.getInstance().getLiveStar().getUser_name());
 				List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
 				addToThreadPool(Config.send_gift, "send gift request", params);
 				XLog.i("send gift reques");
