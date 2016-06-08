@@ -10,4 +10,11 @@
     <dimen name="avatar_size_in_session">40dip</dimen>
     <dimen name="avatar_size_in_contact">30dip</dimen>
     <dimen name="avatar_size_in_profile">60dip</dimen>
+    <!-- message -->
+    <dimen name="message_bottom_function_viewpager_height">220dp</dimen>
+    <dimen name="input_panel_image_margin_bottom">3dip</dimen>
+    <dimen name="input_panel_image_margin_top">20dip</dimen>
+    
+    <dimen name="bottom_component_margin_horizontal">6dip</dimen>
+    <dimen name="bottom_component_margin_vertical">8dip</dimen>
 </resources>

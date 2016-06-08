@@ -13,15 +13,14 @@ import android.widget.Toast;
 
 import com.BC.entertainment.cache.ChatCache;
 import com.BC.entertainment.config.PushConfig;
+import com.BC.entertainment.inter.IMedia;
 import com.BC.entertainment.view.LiveSurfaceView;
 import com.BC.entertainmentgravitation.entity.StarLiveVideoInfo;
 import com.BC.entertainmentgravitation.fragment.ExitFragmentListener;
-import com.BC.entertainmentgravitation.fragment.PushFragment.IPushMedia;
 import com.BC.entertainmentgravitation.fragment.TopPushFragment;
 import com.netease.LSMediaCapture.lsMediaCapture;
 import com.netease.LSMediaCapture.lsMediaCapture.LSLiveStreamingParaCtx;
 import com.netease.LSMediaCapture.lsMessageHandler;
-import com.netease.nim.uikit.common.ui.dialog.DialogMaker;
 import com.netease.nimlib.sdk.AbortableFuture;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.RequestCallback;
@@ -35,7 +34,7 @@ import com.summer.utils.StringUtil;
 import com.summer.utils.ToastUtil;
 import com.umeng.analytics.MobclickAgent;
 
-public class PushActivity extends BaseActivity implements lsMessageHandler, IPushMedia, ExitFragmentListener{
+public class PushActivity extends BaseActivity implements lsMessageHandler, IMedia, ExitFragmentListener{
 	
 	private Context mContext;
 	private LiveSurfaceView mVideoView;
@@ -134,7 +133,6 @@ public class PushActivity extends BaseActivity implements lsMessageHandler, IPus
 	
     private void onLoginDone() {
         enterRequest = null;
-        DialogMaker.dismissProgressDialog();
     }
 	
 	@Override
@@ -485,6 +483,11 @@ public class PushActivity extends BaseActivity implements lsMessageHandler, IPus
 
 	@Override
 	public void isExit(boolean exit, long totalPeople) {
+		
+	}
+
+	@Override
+	public void finishPullMedia() {
 		
 	}
 

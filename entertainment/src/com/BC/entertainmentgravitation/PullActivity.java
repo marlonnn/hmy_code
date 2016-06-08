@@ -9,13 +9,12 @@ import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.BC.entertainment.cache.ChatCache;
+import com.BC.entertainment.inter.IMedia;
 import com.BC.entertainmentgravitation.entity.StarLiveVideoInfo;
 import com.BC.entertainmentgravitation.fragment.ExitFragmentListener;
 import com.BC.entertainmentgravitation.fragment.NEVideoView;
-import com.BC.entertainmentgravitation.fragment.PullFragment.IPullMedia;
 import com.BC.entertainmentgravitation.fragment.TopPullFragment;
 import com.netease.neliveplayer.NEMediaPlayer;
-import com.netease.nim.uikit.common.ui.dialog.DialogMaker;
 import com.netease.nimlib.sdk.AbortableFuture;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.RequestCallback;
@@ -29,7 +28,7 @@ import com.summer.utils.StringUtil;
 import com.summer.utils.ToastUtil;
 import com.umeng.analytics.MobclickAgent;
 
-public class PullActivity extends BaseActivity implements OnClickListener, IPullMedia, ExitFragmentListener{
+public class PullActivity extends BaseActivity implements OnClickListener, IMedia, ExitFragmentListener{
 
 	private NEVideoView mVideoView;
 	private NEMediaPlayer mMediaPlayer = new NEMediaPlayer();
@@ -124,7 +123,6 @@ public class PullActivity extends BaseActivity implements OnClickListener, IPull
     
     private void onLoginDone() {
         enterRequest = null;
-        DialogMaker.dismissProgressDialog();
     }
 	@Override
 	protected void onPause() {
@@ -208,6 +206,16 @@ public class PullActivity extends BaseActivity implements OnClickListener, IPull
 
 	@Override
 	public void isExit(boolean exit, long totalPeople) {
+		
+	}
+
+	@Override
+	public void finishPushMedia() {
+		
+	}
+
+	@Override
+	public void onSwitchCamera() {
 		
 	}
 	

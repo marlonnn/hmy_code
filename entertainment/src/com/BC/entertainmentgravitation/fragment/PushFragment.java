@@ -55,6 +55,7 @@ import com.BC.entertainment.chatroom.module.Container;
 import com.BC.entertainment.chatroom.module.DanmakuPanel;
 import com.BC.entertainment.chatroom.module.InputPannel;
 import com.BC.entertainment.chatroom.module.ModuleProxy;
+import com.BC.entertainment.inter.IMedia;
 import com.BC.entertainmentgravitation.ContributionActivity;
 import com.BC.entertainmentgravitation.PersonalHomeActivity;
 import com.BC.entertainmentgravitation.R;
@@ -62,12 +63,12 @@ import com.BC.entertainmentgravitation.dialog.ApplauseGiveConcern;
 import com.BC.entertainmentgravitation.dialog.InfoDialog;
 import com.BC.entertainmentgravitation.entity.ChatRoom;
 import com.BC.entertainmentgravitation.entity.Member;
+import com.BC.entertainmentgravitation.util.ListViewUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.netease.nim.uikit.common.ui.listview.ListViewUtil;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.RequestCallback;
@@ -142,7 +143,7 @@ public class PushFragment extends BaseFragment implements OnClickListener, Modul
     private HttpTask httpTask;//更新娱票线程
     private ApplauseGiveConcern applauseGiveConcern;//投资或者撤资
     
-	private IPushMedia iPushMedia;
+	private IMedia iMedia;
 	private InfoDialog dialog;
     
 	InfoHandler handler = new InfoHandler(new InfoReceiver() {
@@ -193,24 +194,13 @@ public class PushFragment extends BaseFragment implements OnClickListener, Modul
 		container = new Container(activity, chatRoom, SessionTypeEnum.ChatRoom, this);
 		context = activity;
 	}
-
-	/**
-	 * 直播推流时切换摄像头接口
-	 * @author zhongwen
-	 *
-	 */
-	public interface IPushMedia
-	{
-		void onSwitchCamera();
-		void finishPushMedia();
-	}
 	
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
 		
 		try {
-			iPushMedia = (IPushMedia)activity;
+			iMedia = (IMedia)activity;
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -975,21 +965,16 @@ public class PushFragment extends BaseFragment implements OnClickListener, Modul
 		 */
 		case R.id.imageView_share:
 
-//			ToastUtil.show(getActivity(), "此功能正在完善中...");
-			if (iPushMedia != null)
-			{
-//				iPushMedia.hideFragment();
-				showShare();
-			}
+			showShare();
 
 			break;
 		/**
 		 * 切换摄像头
 		 */
 		case R.id.imageView_camera:
-			if(iPushMedia != null)
+			if(iMedia != null)
 			{
-				iPushMedia.onSwitchCamera();
+				iMedia.onSwitchCamera();
 			}
 			break;
 		/**
@@ -1007,9 +992,9 @@ public class PushFragment extends BaseFragment implements OnClickListener, Modul
 		 */
 		case R.id.imageView_close:
 			registerObservers(false);
-			if(iPushMedia != null)
+			if(iMedia != null)
 			{
-				iPushMedia.finishPushMedia();
+				iMedia.finishPushMedia();
 			}
 
 			if (danmakuPanel != null)

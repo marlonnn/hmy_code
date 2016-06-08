@@ -22,9 +22,9 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.netease.nim.uikit.common.ui.ptr.PullToRefreshBase;
-import com.netease.nim.uikit.common.ui.ptr.PullToRefreshBase.OnRefreshListener2;
-import com.netease.nim.uikit.common.ui.ptr.PullToRefreshListView;
+import com.summer.ptr.PullToRefreshBase;
+import com.summer.ptr.PullToRefreshBase.OnRefreshListener2;
+import com.summer.ptr.PullToRefreshListView;
 //import com.handmark.pulltorefresh.library.PullToRefreshBase;
 //import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 //import com.handmark.pulltorefresh.library.PullToRefreshListView;

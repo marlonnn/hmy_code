@@ -174,7 +174,7 @@
             android:textColor="@color/white"
             android:text="个人贡献" />
     </LinearLayout>
-    <com.netease.nim.uikit.common.ui.ptr.PullToRefreshListView
+    <com.summer.ptr.PullToRefreshListView
         xmlns:ptr="http://schemas.android.com/apk/res-auto"
         android:layout_below="@id/lLayoutExplain"
         android:id="@+id/pullToRefreshListView"
@@ -189,5 +189,5 @@
         android:scrollbarSize="4dp"
 	    android:scrollbarThumbVertical="@drawable/scrollbar_thumb"
         ptr:scrollbars="false" >
-    </com.netease.nim.uikit.common.ui.ptr.PullToRefreshListView>
+    </com.summer.ptr.PullToRefreshListView>
 </RelativeLayout>

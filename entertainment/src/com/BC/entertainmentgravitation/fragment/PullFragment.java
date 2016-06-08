@@ -24,41 +24,29 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.onekeyshare.OnekeyShare;
 
 import com.BC.entertainment.adapter.RecyclerViewAdapter;
 import com.BC.entertainment.adapter.RecyclerViewAdapter.OnItemClickListener;
 import com.BC.entertainment.cache.ChatCache;
-import com.BC.entertainment.cache.GiftCache;
 import com.BC.entertainment.cache.InfoCache;
-import com.BC.entertainment.chatroom.extension.BaseEmotion;
-import com.BC.entertainment.chatroom.extension.BubbleAttachment;
-import com.BC.entertainment.chatroom.extension.CustomAttachment;
-import com.BC.entertainment.chatroom.extension.CustomAttachmentType;
-import com.BC.entertainment.chatroom.extension.EmotionAttachment;
-import com.BC.entertainment.chatroom.extension.EmotionUtil;
-import com.BC.entertainment.chatroom.extension.FontAttachment;
 import com.BC.entertainment.chatroom.gift.Gift;
-import com.BC.entertainment.chatroom.gift.GiftHelper;
-import com.BC.entertainment.chatroom.module.BubbingPanel;
-import com.BC.entertainment.chatroom.module.Bubbling;
 import com.BC.entertainment.chatroom.module.Container;
-import com.BC.entertainment.chatroom.module.DanmakuPanel;
-import com.BC.entertainment.chatroom.module.InputPannel;
+import com.BC.entertainment.chatroom.module.PullModulePanel;
 import com.BC.entertainment.chatroom.module.ModuleProxy;
+import com.BC.entertainment.inter.IMedia;
+import com.BC.entertainment.inter.SimpleCallback;
 import com.BC.entertainmentgravitation.ContributionActivity;
-import com.BC.entertainmentgravitation.FinishActivity;
 import com.BC.entertainmentgravitation.PersonalHomeActivity;
 import com.BC.entertainmentgravitation.R;
 import com.BC.entertainmentgravitation.dialog.ApplauseGiveConcern;
@@ -66,13 +54,12 @@ import com.BC.entertainmentgravitation.dialog.InfoDialog;
 import com.BC.entertainmentgravitation.entity.ChatRoom;
 import com.BC.entertainmentgravitation.entity.Member;
 import com.BC.entertainmentgravitation.entity.YubiAssets;
+import com.BC.entertainmentgravitation.util.ListViewUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.netease.nim.uikit.cache.SimpleCallback;
-import com.netease.nim.uikit.common.ui.listview.ListViewUtil;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.RequestCallback;
@@ -90,7 +77,6 @@ import com.netease.nimlib.sdk.msg.constant.NotificationType;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.summer.adapter.CommonAdapter;
-import com.summer.adapter.CommonAdapter.ViewHolder;
 import com.summer.config.Config;
 import com.summer.factory.ThreadPoolFactory;
 import com.summer.fragment.BaseFragment;
@@ -98,14 +84,11 @@ import com.summer.handler.InfoHandler;
 import com.summer.handler.InfoHandler.InfoReceiver;
 import com.summer.json.Entity;
 import com.summer.logger.XLog;
-import com.summer.task.HttpBaseTask;
 import com.summer.task.HttpTask;
 import com.summer.treadpool.ThreadPoolConst;
 import com.summer.utils.JsonUtil;
-import com.summer.utils.ToastUtil;
 import com.summer.utils.UrlUtil;
 import com.summer.view.CircularImage;
-import com.summer.view.Pandamate;
 
 public class PullFragment extends BaseFragment implements OnClickListener, ModuleProxy{
 
@@ -116,7 +99,6 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
 	private ImageView btnShare;//分享
 	private ImageView btnFocus;//关注
 	private ImageView btnClose;//关闭
-	private ImageView btnSwitch;//切换摄像头
 	private ImageView btnGift;//送礼物
 	private ImageView btnInvest;//投资
 	private ImageView btnDivest;//撤资
@@ -124,33 +106,27 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
 	private TextView totalPiao;//yupiao
 	private RelativeLayout functionView;//底部功能键根布局
     private static final int MESSAGE_CAPACITY = 500;
-	private int tipValue = 10;//一条消息10个娱币
     // container
     private Container container;
-    private ImageView imageViewAnimation;
+    public ImageView imageViewAnimation;
     // message list view
     private ListView messageListView;
     private LinkedList<IMMessage> items;//聊天室消息列表
     private CommonAdapter<IMMessage> adapter;
 	private CircularImage headPortrait;
 	private RecyclerView recycleView;
-	private RecyclerViewAdapter recycleAdapter;
-	private TextView onlinePeople;//总的在线人数
+	public RecyclerViewAdapter recycleAdapter;
+	public TextView onlinePeople;//总的在线人数
 	private Gson gson;
 	
-	private Bubbling bubbling;//气泡
-	private boolean isFirst = true;
     //module
-//	private ChatRoomPanel chatRoomPanel;
-    private InputPannel inputPanel;
-    private DanmakuPanel danmakuPanel;
-    private BubbingPanel bubblePanel;
+    private PullModulePanel modulePanel;
     
     private HttpTask httpTask;//更新娱票线程
     private ApplauseGiveConcern applauseGiveConcern;//投资或者撤资
     
     
-    private IPullMedia iPullMedia;
+    public IMedia iMedia;
     
     private static final int LIMIT = 100;
     private long updateTime = 0; // 非游客的updateTime
@@ -159,16 +135,6 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
     private boolean isNormalEmpty = false; // 固定成员是否拉取完
     
     private InfoDialog dialog;
-    
-	/**
-	 * 直播拉流时切换摄像头接口
-	 * @author zhongwen
-	 *
-	 */
-	public interface IPullMedia
-	{
-		void finishPullMedia();
-	}
     
 	InfoHandler handler = new InfoHandler(new InfoReceiver() {
 		
@@ -231,7 +197,7 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
 		try {
-			iPullMedia = (IPullMedia)activity;
+			iMedia = (IMedia)activity;
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -242,9 +208,9 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
 	@Override
 	public void onDestroy() {
 		registerObservers(false);
-		if (danmakuPanel != null)
+		if (modulePanel.danmakuPanel != null)
 		{
-			danmakuPanel.onDestroy();
+			modulePanel.danmakuPanel.onDestroy();
 		}
 		stopUpdateYuPiao();
 		ChatCache.getInstance().ClearMember();
@@ -254,9 +220,9 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
 	public void Destroy()
 	{
 		registerObservers(false);
-		if (danmakuPanel != null)
+		if (modulePanel.danmakuPanel != null)
 		{
-			danmakuPanel.onDestroy();
+			modulePanel.danmakuPanel.onDestroy();
 		}
 		stopUpdateYuPiao();
 		ChatCache.getInstance().ClearMember();
@@ -264,17 +230,17 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
 	
 	@Override
 	public void onPause() {
-		if (danmakuPanel != null)
+		if (modulePanel.danmakuPanel != null)
 		{
-			danmakuPanel.onPause();
+			modulePanel.danmakuPanel.onPause();
 		}
 		super.onPause();
 	}
 	
 	public void onResume() {
-		if (danmakuPanel != null)
+		if (modulePanel.danmakuPanel != null)
 		{
-			danmakuPanel.onResume();
+			modulePanel.danmakuPanel.onResume();
 		}
 		super.onResume();
 	}
@@ -292,47 +258,21 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
 		super.onViewCreated(view, savedInstanceState);
         initChatView();
         
-        initBubbleView();
         /**
          * 初始化聊天室和输入框控件
          */
         initializeView();
-	}
-	
-	private void initBubbleView()
-	{
-		if (bubblePanel == null)
-		{
-			bubblePanel = new BubbingPanel(container);
-		}
-		bubbling = (Bubbling) rootView.findViewById(R.id.pullBubbling);
-		bubbling.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				bubbling.start();
-				bubblePanel.sendBubbling(!isFirst, bubbling.getmIndex());
-//				if (isFirst)
-//				{
-//					isFirst = false;
-//				}
-			}
-		});
+        
+        modulePanel = new PullModulePanel(this, container, rootView, handler);
 	}
 	
 	private void initChatView()
 	{
 		initListView();
 		initPortrait();
-//		fetchOnlinePeople();
 		fetchData();
 		initOnlinePortrait();
 	}
-	
-    private void fetchOnlinePeople()
-    {
-    	fetchRoomMembers(container.chatRoom.getChatroomid(), MemberQueryType.ONLINE_NORMAL, 0, 100, null);
-    }
     
     private void fetchData() {
         if (!isNormalEmpty) {
@@ -445,7 +385,7 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
 						}
 		                else if(item.getMsgType() == MsgTypeEnum.custom)
 		                {
-							handlerCustomMessage(holder, item);
+		                	modulePanel.HandlerCustomMessage(holder, item);
 		                }
 						else if (item.getMsgType() == MsgTypeEnum.text)
 						{
@@ -520,7 +460,6 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
             @Override
             public void onItemClick(View view, int position) {
             	showInfoDialog(ChatCache.getInstance().getOnlinePeopleitems().get(position));
-//            	ToastUtil.show(container.activity, "此功能正在努力开发中，敬请期待...");
             }
             @Override
             public void onItemLongClick(View view, int position) {
@@ -612,36 +551,22 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
     
 	private void initializeView()
 	{
-		if (danmakuPanel == null)
-		{
-			danmakuPanel = new DanmakuPanel(container, rootView);
-		}
-		
 		showMessageListView(true);
-		
-		if (inputPanel == null)
-		{
-			inputPanel = new InputPannel(container, rootView, GiftCache.getInstance().getListGifts(), bubbling);
-			inputPanel.setAmountMoney(InfoCache.getInstance().getPersonalInfo().getEntertainment_dollar());
-		}
 		layoutInput = (LinearLayout) rootView.findViewById(R.id.layout_input);
 		functionView = (RelativeLayout) rootView.findViewById(R.id.layout_bottom);
 		btnChat = (ImageView) rootView.findViewById(R.id.imageView_chart);
 		totalPiao = (TextView) rootView.findViewById(R.id.textView_total_value);
 		btnShare = (ImageView) rootView.findViewById(R.id.imageView_share);
 		btnClose = (ImageView) rootView.findViewById(R.id.imageView_close);
-		btnSwitch = (ImageView) rootView.findViewById(R.id.imageView_camera);
 		btnGift = (ImageView) rootView.findViewById(R.id.imageView_gift);
 		btnFocus = (ImageView) rootView.findViewById(R.id.imageView_focus);
 		btnInvest = (ImageView) rootView.findViewById(R.id.imageView_invest);
 		btnDivest = (ImageView) rootView.findViewById(R.id.imageView_divest);
 		btnYuPaoDetail = (ImageView) rootView.findViewById(R.id.imgViewMoneyDetail);
 		btnYuPaoDetail.setOnClickListener(this);
-		btnSwitch.setVisibility(View.GONE);
 		btnChat.setOnClickListener(this);
 		btnShare.setOnClickListener(this);
 		btnFocus.setOnClickListener(this);
-		btnSwitch.setOnClickListener(this);
 		btnClose.setOnClickListener(this);
 		btnGift.setOnClickListener(this);
 		btnInvest.setOnClickListener(this);
@@ -664,9 +589,9 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
 			public boolean onTouch(View v, MotionEvent event) {
 				showMessageListView(true);
 				showFunctionView(true);
-				inputPanel.hideInputMethod();
-				inputPanel.hideInputBar();
-				inputPanel.hideGiftLayout();
+				modulePanel.inputPanel.hideInputMethod();
+				modulePanel.inputPanel.hideInputBar();
+				modulePanel.inputPanel.hideGiftLayout();
 				return false;
 			}
 		});
@@ -790,26 +715,18 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
          boolean needRefresh = false;
          for (IMMessage message : messages) {
          	
-//         	 try {
-//         		 XLog.i("sessioon type: " + message.getSessionType());
-//         		 XLog.i("message type: " + message.getMsgType());
-//         		 Log.i("ChatRoomPanel","message type: " + message.getContent());
-// 			} catch (Exception e) {
-// 				e.printStackTrace();
-// 			}
-         	
              if (isMyMessage(message)) {
 
-                 danmakuPanel.showDanmaku(message);
+            	 modulePanel.danmakuPanel.showDanmaku(message);
                  if (message.getMsgType() == MsgTypeEnum.notification)
                  {
-                 	handleNotification(message);
+                	 modulePanel.HandleNotification(message);
                  	//保存消息到聊天室消息列表中
                     saveMessage(message, false);
                  }
                  else if(message.getMsgType() == MsgTypeEnum.custom)
                  {
- 					handlerCustomMessage(message);
+ 					modulePanel.HandlerCustomMessage(message);
  	             	//保存消息到聊天室消息列表中
                  }
                  else if(message.getMsgType() == MsgTypeEnum.text)
@@ -824,7 +741,6 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
          if (needRefresh) {
              refreshMessageList();
          }
-
          // incoming messages tip
          IMMessage lastMsg = messages.get(messages.size() - 1);
          if (isMyMessage(lastMsg) && needScrollToBottom) {
@@ -838,129 +754,6 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
                  && message.getSessionId().equals(container.chatRoom.getChatroomid());
      }
      
-     private void handlerCustomMessage(IMMessage message)
-     {
-     	if( message != null)
-     	{
-         	CustomAttachment customAttachment = (CustomAttachment)message.getAttachment();
-         	switch(customAttachment.getType())
-         	{
-         	case CustomAttachmentType.emotion:
-         		EmotionAttachment emotionAttachment = (EmotionAttachment)customAttachment;
-         		if (emotionAttachment != null)
-         		{
-         			showAnimate(emotionAttachment.getEmotion());
- 	             	//保存消息到聊天室消息列表中
- 	                saveMessage(message, false);
-         		}
-         		break;
-         	case CustomAttachmentType.font:
-         		FontAttachment fontAttachment = (FontAttachment)customAttachment;
-         		if (fontAttachment != null)
-         		{
-         			showAnimate(fontAttachment.getEmotion());
- 	             	//保存消息到聊天室消息列表中
- 	                saveMessage(message, false);
-         		}
-         		break;
-        	case CustomAttachmentType.bubble:
-        		BubbleAttachment bubbleAttachment = (BubbleAttachment)customAttachment;
-        		if (bubbleAttachment != null)
-        		{
-        			bubbling.startAnimation();
-        			if (bubbleAttachment.getBubble().isFirstSend())
-        			{
-        				if (message.getFromAccount() != null && !message.getFromAccount().contains(Config.User.getUserName()))
-        				{
-         	             	//保存消息到聊天室消息列表中
-        					//接收到的是别人的消息，同时是第一次点亮，则添加到列表中显示
-         	                saveMessage(message, false);
-        				}
-        			}
-        		}
-        		break;
-         	}
-     	}
-     }
-     
-     /**
-      * 显示表情动漫效果
-      * @param baseEmotion
-      */
-     public void showAnimate(BaseEmotion baseEmotion)
-     {
-     	Pandamate.animate(GiftHelper.getDrawable(baseEmotion.getCategory()), imageViewAnimation, new Runnable() {
- 			
- 			@Override
- 			public void run() {
- 				imageViewAnimation.setVisibility(View.VISIBLE);
- 			}
- 		}, new Runnable() {
- 			
- 			@Override
- 			public void run() {
- 				imageViewAnimation.setVisibility(View.GONE);
- 			}
- 		});
-     }
-     
-     /**
-      * 处理自定义字体或者礼物消息
-      * @param holder
-      * @param message
-      */
-     private void handlerCustomMessage(@SuppressWarnings("rawtypes") ViewHolder holder, IMMessage message)
-     {
-     	if (message != null)
-     	{
-//         	holder.setTextColor(R.id.txtName, Color.parseColor("#EEB422"));
-//         	holder.setText(R.id.txtName, "系统消息：");
-         	CustomAttachment customAttachment = (CustomAttachment)message.getAttachment();
-         	Member member = ChatCache.getInstance().getMember(message.getFromAccount());
-         	switch(customAttachment.getType())
-         	{
-         	case CustomAttachmentType.emotion:
-         		EmotionAttachment emotionAttachment = (EmotionAttachment)customAttachment;
-         		if (emotionAttachment != null)
-         		{
-        			holder.setImageResource(R.id.imageViewMessage, R.drawable.fragment_message_icon);
-                	holder.setTextColor(R.id.txtName, Color.parseColor("#EEB422"));
-                	holder.setText(R.id.txtName, "系统消息：");
-         			String emotionName = emotionAttachment.getEmotion().getName();
-         			holder.setText(R.id.txtContent, (member == null ? "" : member.getNick()) + " 送来了 " + emotionAttachment.getEmotion().getName());
-         			XLog.i("font gift name: " + emotionName);
-         			holder.setTextColor(R.id.txtContent, Color.parseColor("#8B658B"));
-         		}
-         		
-         		break;
-         	case CustomAttachmentType.font:
-         		FontAttachment fontAttachment = (FontAttachment)customAttachment;
-         		if (fontAttachment != null)
-         		{
-        			holder.setImageResource(R.id.imageViewMessage, R.drawable.fragment_message_icon);
-                	holder.setTextColor(R.id.txtName, Color.parseColor("#EEB422"));
-                	holder.setText(R.id.txtName, "系统消息：");
-         			String fontName = fontAttachment.getEmotion().getName();
-         			holder.setText(R.id.txtContent, (member == null ? "" : member.getNick()) + " 送来了 " + fontAttachment.getEmotion().getName());
-         			XLog.i("font gift name: " + fontName);
-         			holder.setTextColor(R.id.txtContent, Color.parseColor("#8B658B"));
-         		}
-         		break;
-        	case CustomAttachmentType.bubble:
-        		BubbleAttachment bubbleAttachment = (BubbleAttachment)customAttachment;
-        		if (bubbleAttachment != null && bubbleAttachment.getBubble() != null && bubbleAttachment.getBubble().isFirstSend())
-        		{
-        			holder.setImageResource(R.id.imageViewMessage, R.drawable.fragment_message_icon);
-                	holder.setTextColor(R.id.txtName, Color.parseColor("#EEB422"));
-                	holder.setText(R.id.txtName, "系统消息：");
-        			holder.setText(R.id.txtContent, (member == null ? "" : member.getNick()) + " 我点亮了");
-        		}
-
-        		break;
-         	}
-     	}
-
-     }
      
      /**
       *  刷新消息列表
@@ -994,51 +787,6 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
          }
      }
      
-     private void handleNotification(IMMessage message) {
-         if (message.getAttachment() == null) {
-             return;
-         }
-
-         String account = message.getFromAccount();
-         ChatRoomNotificationAttachment attachment = (ChatRoomNotificationAttachment) message.getAttachment();
-         danmakuPanel.showDanmaku(attachment);
-         if (attachment.getType() == NotificationType.ChatRoomMemberIn)
-         {
-         	sendMemberRequest(account);
-         }
-         else if(attachment.getType() == NotificationType.ChatRoomMemberExit)
-         {
-         	Member member = ChatCache.getInstance().getMember(account);
-         	if (member != null && member.getName().contains(InfoCache.getInstance().getLiveStar().getUser_name()))
-         	{
-         		XLog.i("exit chat room");
-         		XLog.i("exit chat room, member.getName(): " + member.getName());
-         		XLog.i("exit chat room, ---getUser_name(): " + InfoCache.getInstance().getLiveStar().getUser_name());
-    			Intent intent = new Intent(container.activity, FinishActivity.class);
-    			intent.putExtra("totalPeople", ChatCache.getInstance().getOnlinePeopleitems().size());
-    			startActivity(intent);
-    			if (iPullMedia != null)
-    			{
-    				Destroy();
-        			iPullMedia.finishPullMedia();
-    			}
-         	}
-        	removeMembers(member);
-         }
-     }
-     
-     /**
-      * 游客进入聊天室，发送获取头像信息请求
-      * @param username
-      */
-     private void sendMemberRequest(String username)
-     {
-     	HashMap<String, String> entity = new HashMap<String, String>();
- 		entity.put("username", username);
-     	List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
-     	addToThreadPool(Config.member_in, "get start info", params);
-     }
-     
  	/**
  	 * 开始获取娱票线程
  	 */
@@ -1066,15 +814,6 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
 	{
 		httpTask.CancelTask();
 	}
- 	
-    private void addToThreadPool(int taskType, String tag, List<NameValuePair> params)
-    {
-    	XLog.i("add to thread pool: " + tag);
-    	HttpBaseTask httpTask = new HttpBaseTask(ThreadPoolConst.THREAD_TYPE_FILE_HTTP, tag, params, UrlUtil.GetUrl(taskType));
-    	httpTask.setTaskType(taskType);
-    	httpTask.setInfoHandler(handler);
-    	ThreadPoolFactory.getThreadPoolManager().addTask(httpTask);
-    }
      
      /**
       * 聊天室人离开时减少总人数
@@ -1104,8 +843,8 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
 			showFunctionView(false);
 			showMessageListView(true);
 			layoutInput.setVisibility(View.VISIBLE);
-			inputPanel.showInputBar();
-			inputPanel.hideGiftLayout();
+			modulePanel.inputPanel.showInputBar();
+			modulePanel.inputPanel.hideGiftLayout();
 			break;
 		/**
 		 * 投资
@@ -1141,17 +880,7 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
 		 */
 		case R.id.imageView_share:
 
-//			ToastUtil.show(getActivity(), "此功能正在完善中...");
 			showShare();
-			break;
-		/**
-		 * 切换摄像头
-		 */
-		case R.id.imageView_camera:
-//			if( switchCamera != null)
-//			{
-//				switchCamera.onSwitchCamera();
-//			}
 			break;
 		/**
 		 * 送礼物
@@ -1160,17 +889,17 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
 			showFunctionView(false);
 			showMessageListView(false);
 			layoutInput.setVisibility(View.VISIBLE);
-			inputPanel.hideInputBar();
-			inputPanel.showGiftLayout();
+			modulePanel.inputPanel.hideInputBar();
+			modulePanel.inputPanel.showGiftLayout();
 			break;
 		/**
 		 * 关闭
 		 */
 		case R.id.imageView_close:
-			if (iPullMedia != null)
+			if (iMedia != null)
 			{
 				Destroy();
-    			iPullMedia.finishPullMedia();
+				iMedia.finishPullMedia();
 			}
 			break;
 		/**
@@ -1187,7 +916,6 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
 		 * 点击主播头像
 		 */
 		case R.id.portrait:
-//			ToastUtil.show(container.activity, "此功能正在努力开发中，敬请期待...");
 			showInfoDialog(CreateMember());
 			break;
 		}
@@ -1231,7 +959,7 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
 
 	@Override
 	public boolean sendMessage(IMMessage msg) {
-		if (EmotionUtil.CanSendCustomMessage(msg))
+		if (modulePanel.CanSendCustomMessage(msg))
 		{
 	        ChatRoomMessage message = (ChatRoomMessage) msg;
 
@@ -1267,7 +995,7 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
 
 	}
 	
-	   /**
+	 /**
      *  发送消息后，更新本地消息列表
      * @param message
      */
@@ -1275,119 +1003,17 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
         // add to listView and refresh
         saveMessage(message, false);
         refreshMessageList();
-        danmakuPanel.showDanmaku(message);
+        modulePanel.danmakuPanel.showDanmaku(message);
         if (message.getMsgType() == MsgTypeEnum.custom)
         {
-            handlerSendCustomMessage(message);
+        	modulePanel.SendCustomMessageRequest(message);
         }
         else if (message.getMsgType() == MsgTypeEnum.text)
         {
-        	sendChatRoomMessage(message);
+        	modulePanel.SendMessageRequest(null, -1, handler);
         }
         
         ListViewUtil.scrollToBottom(messageListView);
-    }
-    
-    /**
-     * 处理发送的礼物消息
-     * @param message
-     */
-    private void handlerSendCustomMessage(IMMessage message)
-    {
-    	if( message != null)
-    	{
-        	CustomAttachment customAttachment = (CustomAttachment)message.getAttachment();
-        	switch(customAttachment.getType())
-        	{
-        	case CustomAttachmentType.emotion:
-        		EmotionAttachment emotionAttachment = (EmotionAttachment)customAttachment;
-        		if (emotionAttachment != null && sendChatRoomGift(emotionAttachment.getEmotion(), customAttachment.getType()))
-        		{
-        			showAnimate(emotionAttachment.getEmotion());
-        		}
-        		break;
-        	case CustomAttachmentType.font:
-        		FontAttachment fontAttachment = (FontAttachment)customAttachment;
-        		if (fontAttachment != null && sendChatRoomGift(fontAttachment.getEmotion(), customAttachment.getType()))
-        		{
-        			showAnimate(fontAttachment.getEmotion());
-        		}
-        		break;
-        	case CustomAttachmentType.bubble:
-        		BubbleAttachment bubbleAttachment = (BubbleAttachment)customAttachment;
-        		if (bubbleAttachment != null)
-        		{
-        			bubbling.startAnimation(bubbleAttachment.getBubble().getCategory());
-        			if (bubbleAttachment.getBubble().isFirstSend())
-        			{
-        				//添加到消息列表中，显示 用户名：我点亮了
-//        				Member member = ChatCache.getInstance().getMember(message.getFromAccount());
-        				saveMessage(message, false);
-        			}
-        		}
-        		break;
-        	}
-    	}
-    }
-    
-    private boolean sendChatRoomGift(BaseEmotion baseEmotion, int type)
-    {
-    	//非主播可以送礼物给主播
-    	try {
-			//送礼物之前先检查余额是否充足
-			XLog.i("value: " + baseEmotion.getValue());
-			XLog.i("my dollar: " + InfoCache.getInstance().getPersonalInfo().getEntertainment_dollar());
-			if (baseEmotion.getValue() < Integer.parseInt(InfoCache.getInstance().getPersonalInfo().getEntertainment_dollar()))
-			{
-		    	HashMap<String, String> entity = new HashMap<String, String>();
-		    	entity.put("username", Config.User.getUserName());
-		    	entity.put("user_dollar", String.valueOf(baseEmotion.getValue()));
-		    	entity.put("type", String.valueOf(type));
-		    	entity.put("starid", InfoCache.getInstance().getLiveStar().getUser_name());
-				List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
-				addToThreadPool(Config.send_gift, "send gift request", params);
-				XLog.i("send gift reques");
-				XLog.i("---type-----" + String.valueOf(type));
-				return true;
-			}
-			else
-			{
-				//余额不足，需要充值
-				ToastUtil.show(container.activity, "余额不足，赶紧充值吧");
-				return false;
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			XLog.e("NumberFormatException");
-			return false;
-		}
-    }
-    private void sendChatRoomMessage(IMMessage message)
-    {
-    	//非主播可以送礼物给主播
-    	try {
-			//送礼物之前先检查余额是否充足
-			XLog.i("my dollar: " + InfoCache.getInstance().getPersonalInfo().getEntertainment_dollar());
-			if (tipValue < Integer.parseInt(InfoCache.getInstance().getPersonalInfo().getEntertainment_dollar()))
-			{
-		    	HashMap<String, String> entity = new HashMap<String, String>();
-		    	entity.put("username", Config.User.getUserName());
-		    	entity.put("user_dollar", String.valueOf(tipValue));
-		    	entity.put("type", "-1");
-		    	entity.put("starid", InfoCache.getInstance().getLiveStar().getUser_name());
-				List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
-				addToThreadPool(Config.send_gift, "send gift request", params);
-				XLog.i("send gift reques");
-			}
-			else
-			{
-				//余额不足，需要充值
-				ToastUtil.show(container.activity, "余额不足，赶紧充值吧");
-			}
-		} catch (Exception e) {
-			XLog.e("NumberFormatException");
-			e.printStackTrace();
-		}
     }
 
 	@Override
@@ -1436,10 +1062,6 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
 								Toast.LENGTH_SHORT).show();
 					}
 				});
-//		if (isFirst)
-//		{
-//			onMsgSend(msg);
-//		}
 	}
 
 }

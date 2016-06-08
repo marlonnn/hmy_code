@@ -8,23 +8,21 @@ import org.apache.http.NameValuePair;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.View.OnClickListener;
 import android.widget.ListView;
 
 import com.BC.entertainmentgravitation.R;
 import com.BC.entertainmentgravitation.entity.RedList;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.netease.nim.uikit.common.ui.ptr.PullToRefreshBase;
-import com.netease.nim.uikit.common.ui.ptr.PullToRefreshListView;
-import com.netease.nim.uikit.common.ui.ptr.PullToRefreshBase.OnRefreshListener2;
+import com.summer.ptr.PullToRefreshBase;
+import com.summer.ptr.PullToRefreshListView;
+import com.summer.ptr.PullToRefreshBase.OnRefreshListener2;
 import com.summer.adapter.CommonAdapter;
 import com.summer.config.Config;
 import com.summer.factory.ThreadPoolFactory;

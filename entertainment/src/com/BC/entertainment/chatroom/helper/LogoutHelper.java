@@ -1,7 +1,6 @@
 package com.BC.entertainment.chatroom.helper;
 
 import com.BC.entertainment.config.Cache;
-import com.netease.nim.uikit.NimUIKit;
 
 /**
  * 注销帮助类
@@ -10,9 +9,6 @@ import com.netease.nim.uikit.NimUIKit;
 public class LogoutHelper {
     public static void logout() {
         // 清理缓存&注销监听&清除状态
-        NimUIKit.clearCache();
-//        ChatRoomHelper.logout();
         Cache.clear();
-//        LoginSyncDataStatusObserver.getInstance().reset();
     }
 }

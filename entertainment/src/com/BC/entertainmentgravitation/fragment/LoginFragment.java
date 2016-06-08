@@ -35,7 +35,6 @@ import com.BC.entertainmentgravitation.HomeActivity;
 import com.BC.entertainmentgravitation.R;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.netease.nim.uikit.cache.DataCacheManager;
 import com.netease.nimlib.sdk.AbortableFuture;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.RequestCallback;
@@ -403,7 +402,6 @@ public class LoginFragment extends BaseFragment implements OnClickListener, Call
 		    		
 					XLog.i("loginInfo: " + loginInfo.getAccount());
 					saveLoginInfo(account, token);
-	                DataCacheManager.buildDataCacheAsync();
 	        		saveNimAccount(Config.User);
 	    			Intent intent = new Intent(getActivity(), HomeActivity.class);
 	    			startActivity(intent);

@@ -10,7 +10,8 @@
     <color name="gray">#ff999999</color>
     <color name="green">#2fab21</color>
     <color name="black">#ff000000</color>
-    
+    <color name="color_green_01d9ae">#01D9AE</color>
+    <color name="color_gray_d9d9d9">#d9d9d9</color>    
     <color name="view_line_color">#ECECEC</color>
     <color name="cnmoney">#FED11B</color>
     <color name="global_line_color">#a0a0a0</color>

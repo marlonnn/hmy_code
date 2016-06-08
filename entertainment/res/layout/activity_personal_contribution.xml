@@ -72,7 +72,7 @@
 			    android:textColor="@color/white"
 			    android:text="娱票" />
         </LinearLayout>
-	    <com.netease.nim.uikit.common.ui.ptr.PullToRefreshGridView
+	    <com.summer.ptr.PullToRefreshGridView
 	        xmlns:ptr="http://schemas.android.com/apk/res-auto"
 	        android:id="@+id/pGridViewContribution"
 	        android:layout_width="match_parent"
@@ -87,7 +87,7 @@
 	        ptr:ptrMode="both"
 	        android:scrollbarSize="4dp"
 	        android:scrollbarThumbVertical="@drawable/scrollbar_thumb" >
-	    </com.netease.nim.uikit.common.ui.ptr.PullToRefreshGridView>
+	    </com.summer.ptr.PullToRefreshGridView>
     </RelativeLayout>
 
 </LinearLayout>
