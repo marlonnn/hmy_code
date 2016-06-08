@@ -47,6 +47,7 @@ import com.BC.entertainment.chatroom.extension.BubbleAttachment;
 import com.BC.entertainment.chatroom.extension.CustomAttachment;
 import com.BC.entertainment.chatroom.extension.CustomAttachmentType;
 import com.BC.entertainment.chatroom.extension.EmotionAttachment;
+import com.BC.entertainment.chatroom.extension.EmotionUtil;
 import com.BC.entertainment.chatroom.extension.FontAttachment;
 import com.BC.entertainment.chatroom.gift.Gift;
 import com.BC.entertainment.chatroom.gift.GiftHelper;
@@ -1230,32 +1231,40 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
 
 	@Override
 	public boolean sendMessage(IMMessage msg) {
-        ChatRoomMessage message = (ChatRoomMessage) msg;
+		if (EmotionUtil.CanSendCustomMessage(msg))
+		{
+	        ChatRoomMessage message = (ChatRoomMessage) msg;
 
-		NIMClient.getService(ChatRoomService.class).sendMessage(message, false)
-				.setCallback(new RequestCallback<Void>() {
-					@Override
-					public void onSuccess(Void param) {
-						XLog.i("send messsage success");
-					}
-
-					@Override
-					public void onFailed(int code) {
-						if (code == ResponseCode.RES_CHATROOM_MUTED) {
-							Toast.makeText(container.activity.getBaseContext(), "用户被禁言",Toast.LENGTH_SHORT).show();
-						} else {
-							Toast.makeText(container.activity.getBaseContext(),"消息发送失败：code:" + code, Toast.LENGTH_SHORT).show();
+			NIMClient.getService(ChatRoomService.class).sendMessage(message, false)
+					.setCallback(new RequestCallback<Void>() {
+						@Override
+						public void onSuccess(Void param) {
+							XLog.i("send messsage success");
 						}
-					}
 
-					@Override
-					public void onException(Throwable exception) {
-						Toast.makeText(container.activity.getBaseContext(), "消息发送失败！",
-								Toast.LENGTH_SHORT).show();
-					}
-				});
-		onMsgSend(msg);
-		return true;
+						@Override
+						public void onFailed(int code) {
+							if (code == ResponseCode.RES_CHATROOM_MUTED) {
+								Toast.makeText(container.activity.getBaseContext(), "用户被禁言",Toast.LENGTH_SHORT).show();
+							} else {
+								Toast.makeText(container.activity.getBaseContext(),"消息发送失败：code:" + code, Toast.LENGTH_SHORT).show();
+							}
+						}
+
+						@Override
+						public void onException(Throwable exception) {
+							Toast.makeText(container.activity.getBaseContext(), "消息发送失败！",
+									Toast.LENGTH_SHORT).show();
+						}
+					});
+			onMsgSend(msg);
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+
 	}
 	
 	   /**
