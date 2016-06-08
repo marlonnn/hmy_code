@@ -87,6 +87,7 @@ import com.summer.logger.XLog;
 import com.summer.task.HttpTask;
 import com.summer.treadpool.ThreadPoolConst;
 import com.summer.utils.JsonUtil;
+import com.summer.utils.ToastUtil;
 import com.summer.utils.UrlUtil;
 import com.summer.view.CircularImage;
 
@@ -220,7 +221,7 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
 	public void Destroy()
 	{
 		registerObservers(false);
-		if (modulePanel.danmakuPanel != null)
+		if (modulePanel != null && modulePanel.danmakuPanel != null)
 		{
 			modulePanel.danmakuPanel.onDestroy();
 		}
@@ -230,7 +231,7 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
 	
 	@Override
 	public void onPause() {
-		if (modulePanel.danmakuPanel != null)
+		if (modulePanel != null &&  modulePanel.danmakuPanel != null)
 		{
 			modulePanel.danmakuPanel.onPause();
 		}
@@ -238,7 +239,7 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
 	}
 	
 	public void onResume() {
-		if (modulePanel.danmakuPanel != null)
+		if (modulePanel != null &&  modulePanel.danmakuPanel != null)
 		{
 			modulePanel.danmakuPanel.onResume();
 		}
@@ -990,6 +991,7 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
 		}
 		else
 		{
+			ToastUtil.show(getActivity(), "娛币不足，请赶紧充值吧。");
 			return false;
 		}
 
