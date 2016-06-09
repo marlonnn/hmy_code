@@ -15,9 +15,11 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -205,6 +207,7 @@ public class FocusFragment extends BaseFragment{
 			public void setTag(ViewHolder viewHolder, final FHNEntity item)
 			{
 				viewHolder.getView(R.id.imgViewPortrait).setTag(R.id.tag_focus, item);
+				viewHolder.getView(R.id.cImagePortrait).setTag(R.id.tag_cfocus, item);
 			}
 			
 			@Override
@@ -235,6 +238,62 @@ public class FocusFragment extends BaseFragment{
 						.centerCrop()
 						.diskCacheStrategy(DiskCacheStrategy.ALL)
 						.placeholder(R.drawable.home_image).into(imgPortrait);
+						cPortrait.setOnTouchListener(new OnTouchListener() {
+							
+							@Override
+							public boolean onTouch(View v, MotionEvent event) {
+								switch (event.getAction()) {
+								/**
+								 * 按下
+								 * */
+								case MotionEvent.ACTION_DOWN:
+								/**
+								 * 移动
+								 * */
+								case MotionEvent.ACTION_MOVE:
+								
+									break;
+								// 拿起
+								case MotionEvent.ACTION_UP:
+									try {
+										FHNEntity entity = (FHNEntity)v.getTag(R.id.tag_cfocus);
+										if (entity != null)
+										{
+											if (entity.getVstatus() != null)
+											{
+												if (entity.getVstatus().contains("0"))
+												{
+													try {
+														if (entity.getUsername() != null)
+														{
+															InfoCache.getInstance().setLiveStar(entity);
+															watchLiveVideoRequest(entity.getUsername());
+														}
+
+													} catch (Exception e) {
+														e.printStackTrace();
+														ToastUtil.show(getActivity(), "服务器异常，请稍后再试");
+													}
+												}
+												else
+												{
+													ToastUtil.show(getActivity(), "主播不在直播间，请稍后再试");
+													sendBaseInfoRequest(entity);
+												}
+											}
+										}
+									} catch (Exception e) {
+										e.printStackTrace();
+									}
+									break;
+								default:
+									break;
+								}
+
+								return false;
+							}
+						});
+						
 						imgPortrait.setOnClickListener(new OnClickListener() {
 							
 							@Override
