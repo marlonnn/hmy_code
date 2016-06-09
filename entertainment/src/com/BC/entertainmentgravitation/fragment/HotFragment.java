@@ -211,6 +211,7 @@ public class HotFragment extends BaseFragment{
 			public void setTag(ViewHolder viewHolder, final FHNEntity item)
 			{
 				viewHolder.getView(R.id.imgViewPortrait).setTag(R.id.tag_portrait, item);
+				viewHolder.getView(R.id.cImagePortrait).setTag(R.id.tag_portrait, item);
 			}
 
 			@Override
@@ -241,6 +242,42 @@ public class HotFragment extends BaseFragment{
 						.centerCrop()
 						.diskCacheStrategy(DiskCacheStrategy.ALL)
 						.placeholder(R.drawable.home_image).into(imgPortrait);
+						cPortrait.setOnClickListener(new OnClickListener() {
+
+							@Override
+							public void onClick(View v) {
+								try {
+									FHNEntity entity = (FHNEntity)v.getTag(R.id.tag_portrait);
+									if (entity != null)
+									{
+										if (entity.getVstatus() != null)
+										{
+											if (entity.getVstatus().contains("0"))
+											{
+												try {
+													if (entity.getUsername() != null)
+													{
+														InfoCache.getInstance().setLiveStar(entity);
+														watchLiveVideoRequest(entity.getUsername());
+													}
+
+												} catch (Exception e) {
+													e.printStackTrace();
+													ToastUtil.show(getActivity(), "服务器异常，请稍后再试");
+												}
+											}
+											else
+											{
+												ToastUtil.show(getActivity(), "主播不在直播间，请稍后再试");
+												sendBaseInfoRequest(entity);
+											}
+										}
+									}
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+							}
+						});
 						imgPortrait.setOnClickListener(new OnClickListener() {
 
 							@Override

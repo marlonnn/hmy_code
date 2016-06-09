@@ -176,7 +176,7 @@ public class CurveActivity extends BaseActivity implements OnClickListener{
 					txtViewRank.setVisibility(View.VISIBLE);
 					imgViewRank.setVisibility(View.GONE);
 
-					txtViewRank.setText("NO." + rank);
+					txtViewRank.setText(String.valueOf(rank));
 					txtViewName.setText(isNullOrEmpty(item.getName()) ? "" : item.getName());
 					txtViewContribute.setText(isNullOrEmpty(item.getContribution()) ? "0" : item.getContribution());
 					break;

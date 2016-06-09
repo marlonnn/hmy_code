@@ -48,7 +48,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginRight="10dip"
                 android:layout_toLeftOf="@+id/textView1"
-                android:src="@drawable/apply_icon2" />
+                android:src="@drawable/activity_curve_contribution" />
         </RelativeLayout>
 
         <View

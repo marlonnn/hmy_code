@@ -711,11 +711,10 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
          }
      };
      
-     public void onIncomingMessage(List<ChatRoomMessage> messages) {
+	public void onIncomingMessage(List<ChatRoomMessage> messages) {
          boolean needScrollToBottom = ListViewUtil.isLastMessageVisible(messageListView);
          boolean needRefresh = false;
-         for (IMMessage message : messages) {
-         	
+         for (ChatRoomMessage message : messages) {
              if (isMyMessage(message)) {
 
             	 modulePanel.danmakuPanel.showDanmaku(message);

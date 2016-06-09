@@ -1,5 +1,8 @@
 package com.BC.entertainmentgravitation;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -23,6 +26,7 @@ import com.netease.nimlib.sdk.chatroom.ChatRoomService;
 import com.netease.nimlib.sdk.chatroom.model.EnterChatRoomData;
 import com.netease.nimlib.sdk.chatroom.model.EnterChatRoomResultData;
 import com.summer.activity.BaseActivity;
+import com.summer.config.Config;
 import com.summer.logger.XLog;
 import com.summer.utils.StringUtil;
 import com.summer.utils.ToastUtil;
@@ -73,6 +77,13 @@ public class PullActivity extends BaseActivity implements OnClickListener, IMedi
 	private void enterChatRoom(final StarLiveVideoInfo startLiveVideoInfo, final boolean isPush)
     {
         EnterChatRoomData data = new EnterChatRoomData(startLiveVideoInfo.getChatroomid());
+        Map<String, Object> extention = new HashMap<>();
+        extention.put("nick", Config.User.getNickName());
+        extention.put("avatar", Config.User.getImage());
+        data.setNick(Config.User.getNickName());
+        data.setAvatar(Config.User.getImage());
+        data.setNotifyExtension(extention);
+//        data.setExtension(extention);
         enterRequest = NIMClient.getService(ChatRoomService.class).enterChatRoom(data);
         enterRequest.setCallback(new RequestCallback<EnterChatRoomResultData>(){
 

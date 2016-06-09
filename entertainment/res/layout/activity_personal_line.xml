@@ -156,23 +156,20 @@
         android:background="@drawable/activity_charge_item_bg"
         android:layout_marginTop="5dp" >
 
+        <ImageView 
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:gravity="center"
+            android:background="@drawable/activity_curve_contribution"/>
         <TextView
             android:id="@+id/txtViewCostTypeContent"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:gravity="left"
-            android:paddingLeft="5dp"
-            android:layout_weight="3"
-            android:textColor="@color/white"
-            android:text="给明星鼓掌排行" />
-        <TextView
-            android:id="@+id/txtViewContributeContent"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:textSize="18dp"
             android:gravity="center"
-            android:layout_weight="1"
+            android:paddingLeft="5dp"
             android:textColor="@color/white"
-            android:text="个人贡献" />
+            android:text="排行榜" />
     </LinearLayout>
     <com.summer.ptr.PullToRefreshListView
         xmlns:ptr="http://schemas.android.com/apk/res-auto"
