@@ -1,6 +1,9 @@
 package com.BC.entertainmentgravitation.fragment;
 
+import java.util.HashMap;
 import java.util.List;
+
+import org.apache.http.NameValuePair;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -31,13 +34,24 @@ import com.BC.entertainmentgravitation.EnvelopeActivity;
 import com.BC.entertainmentgravitation.FeedbackActivity;
 import com.BC.entertainmentgravitation.IncomeActivity;
 import com.BC.entertainmentgravitation.LoginActivity;
+import com.BC.entertainmentgravitation.PersonalHomeActivity;
 import com.BC.entertainmentgravitation.R;
 import com.BC.entertainmentgravitation.entity.EditPersonal;
+import com.BC.entertainmentgravitation.entity.Member;
 import com.BC.entertainmentgravitation.entity.Personal;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.summer.config.Config;
+import com.summer.factory.ThreadPoolFactory;
 import com.summer.fragment.BaseFragment;
+import com.summer.handler.InfoHandler;
+import com.summer.json.Entity;
+import com.summer.task.HttpBaseTask;
+import com.summer.treadpool.ThreadPoolConst;
+import com.summer.utils.JsonUtil;
+import com.summer.utils.UrlUtil;
 import com.summer.view.CircularImage;
 
 /**
@@ -59,6 +73,8 @@ public class PersonalFragment extends BaseFragment implements OnClickListener, O
 	
 	private TextView txtName;
 	
+	private Gson gson;
+	
 	/**
 	 * 从后台获取的个人信息
 	 */
@@ -74,6 +90,7 @@ public class PersonalFragment extends BaseFragment implements OnClickListener, O
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		gson = new Gson();
 	}
 	
 	@Override
@@ -115,12 +132,31 @@ public class PersonalFragment extends BaseFragment implements OnClickListener, O
 		initView();
 	}
 	
+	private void sendBaseInfoRequest()
+	{
+		HashMap<String, String> entity = new HashMap<String, String>();
+		entity.put("username", Config.User.getUserName());
+//		ShowProgressDialog("获取热门用户基本信息...");		
+		List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
+		addToThreadPool(Config.member_in, "send search request", params);
+	}
+	
+    private void addToThreadPool(int taskType, String Tag, List<NameValuePair> params)
+    {
+    	HttpBaseTask httpTask = new HttpBaseTask(ThreadPoolConst.THREAD_TYPE_FILE_HTTP, Tag, params, UrlUtil.GetUrl(taskType));
+    	httpTask.setTaskType(taskType);
+    	InfoHandler handler = new InfoHandler(this);
+    	httpTask.setInfoHandler(handler);
+    	ThreadPoolFactory.getThreadPoolManager().addTask(httpTask);
+    }
+    
 	private void initView()
 	{
 		personals = PersonalCache.getInstance().GetPersonalInfos();
 		info = InfoCache.getInstance().getPersonalInfo();
 		
 		portrait = (CircularImage) rootView.findViewById(R.id.cirImagePortrait);
+		portrait.setOnClickListener(this);
 		txtName = (TextView) rootView.findViewById(R.id.txtName);
 		RelativeLayout r = (RelativeLayout) rootView.findViewById(R.id.rLayoutExit);
 		r.setOnClickListener(new OnClickListener() {
@@ -171,6 +207,7 @@ public class PersonalFragment extends BaseFragment implements OnClickListener, O
 		 * 修改头像
 		 */
 		case R.id.cirImagePortrait:
+			sendBaseInfoRequest();
 			break;
 		}
 	}
@@ -252,7 +289,23 @@ public class PersonalFragment extends BaseFragment implements OnClickListener, O
 
 	@Override
 	public void RequestSuccessful(String jsonString, int taskType) {
-		
+		switch(taskType)
+		{
+		case Config.member_in:
+			Entity<Member> entity = gson.fromJson(jsonString,
+					new TypeToken<Entity<Member>>() {
+					}.getType());
+			if (entity != null && entity.getData() != null)
+			{
+				Intent intent = new Intent();
+				intent.setClass(getActivity(), PersonalHomeActivity.class);
+				Bundle bundle = new Bundle();
+				bundle.putSerializable("member", entity.getData());
+				intent.putExtras(bundle);
+				startActivity(intent);
+			}
+			break;
+		}
 	}
 
 }
