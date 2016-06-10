@@ -89,6 +89,25 @@ public class InfoDialog extends Dialog{
 			this.context = context;
 		}
 		
+		private boolean isNullOrEmpty(String o)
+		{
+			if (o != null)
+			{
+				if (o.length() == 0)
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+			}
+			else
+			{
+				return true;
+			}
+		}
+		
 		@SuppressLint("InflateParams")
 		public InfoDialog create(){
 			LayoutInflater inflater = (LayoutInflater) context
@@ -100,23 +119,29 @@ public class InfoDialog extends Dialog{
 					LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 			if (member != null)
 			{
-				((TextView) view.findViewById(R.id.txtViewName)).setText(member.getNick() == null ? "" : member.getNick());
-				((TextView) view.findViewById(R.id.txtViewId)).setText(member.getId() == null ? "" : member.getId());
-				((TextView) view.findViewById(R.id.txtViewLocation)).setText(member.getRegion() == null ? "" : member.getRegion());
-				
+				((TextView) view.findViewById(R.id.txtViewName)).setText(isNullOrEmpty(member.getNick()) ? "未知" : member.getNick());
+				((TextView) view.findViewById(R.id.txtViewId)).setText(isNullOrEmpty(member.getId()) ? "未知" : member.getId());
+				((TextView) view.findViewById(R.id.txtViewLocation)).setText(isNullOrEmpty(member.getRegion()) ? "未知" : member.getRegion());
+				ImageView imgViewFemale = (ImageView) view.findViewById(R.id.imgViewFeMale);
+				ImageView imgViewMale = (ImageView) view.findViewById(R.id.imgViewMale);
 				if (member.getGender() != null && member.getGender().contains("男"))
 				{
-					ImageView imgViewFemale = (ImageView) view.findViewById(R.id.imgViewFeMale);
+
 					imgViewFemale.setVisibility(View.GONE);
 				}
 				else if (member.getGender() != null && member.getGender().contains("女"))
 				{
-					ImageView imgViewMale = (ImageView) view.findViewById(R.id.imgViewMale);
+
 					imgViewMale.setVisibility(View.GONE);
 				}
-				((TextView) view.findViewById(R.id.txtViewFans)).setText(member.getFans() == null ? "" : member.getFans());
-				((TextView) view.findViewById(R.id.txtViewFocus)).setText(member.getFollow() == null ? "" : member.getFollow());
-				((TextView) view.findViewById(R.id.txtViewMood)).setText(member.getMood() == null ? "您还没有发表任何心情哦~" : member.getMood());
+				else 
+				{
+					imgViewFemale.setVisibility(View.GONE);
+					imgViewMale.setVisibility(View.GONE);
+				}
+				((TextView) view.findViewById(R.id.txtViewFans)).setText(isNullOrEmpty(member.getFans()) ? "未知" : member.getFans());
+				((TextView) view.findViewById(R.id.txtViewFocus)).setText(isNullOrEmpty(member.getFollow()) ? "未知" : member.getFollow());
+				((TextView) view.findViewById(R.id.txtViewMood)).setText(isNullOrEmpty(member.getMood()) ? "您还没有发表任何心情哦~" : member.getMood());
 				
 				ImageView imgViewAuthenticated = (ImageView) view.findViewById(R.id.imgViewAuthenticated);
 				if (member.getIs_validated() != null && member.getIs_validated().contains("1"))

@@ -107,7 +107,7 @@ public class PersonalAlbumActivity extends BaseActivity implements OnClickListen
 		findViewById(R.id.imageViewBack).setOnClickListener(this);
 		pullToRefreshGridView1 = (PullToRefreshGridView)findViewById(R.id.pullToRefreshGridView1);
 		pullToRefreshGridView1.getRefreshableView().setNumColumns(3);
-		pullToRefreshGridView1.getRefreshableView().setVerticalSpacing(10);
+		pullToRefreshGridView1.getRefreshableView().setVerticalSpacing(15);
 		pullToRefreshGridView1.setOnRefreshListener(refreshListener);
 		initAdapter();
 		pullToRefreshGridView1.setAdapter(adapter1);
