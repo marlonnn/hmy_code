@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
@@ -90,36 +91,43 @@ public class ContributionActivity extends BaseActivity implements OnClickListene
 					TextView Name = (TextView) viewHolder.getView(R.id.txtViewName);
 					TextView contribute = (TextView) viewHolder.getView(R.id.txtViewContribute);
 					TextView txtViewRange = (TextView) viewHolder.getView(R.id.txtViewRange);
+					ImageView imgViewRank = (ImageView) viewHolder.getView(R.id.imgViewRank);
 					if (item != null)
 					{
 						txtViewRange.setText(String.valueOf(position + 1));
 						Name.setText(isNullOrEmpty(item.getNick_name()) ? "未知" : item.getNick_name());
 						contribute.setText(isNullOrEmpty(item.getSumcount()) ? "贡献0娱票" : "贡献" + item.getSumcount() + "娱票");
-		    			try {
-		    				if (item.getHead() != null)
-		    				{
-		    					String s[] = item.getHead().split("/");
-		    					
-		    					if (s[2] != null && !s[2].contains("app.haimianyu.cn"))
-		    					{
-		    						Glide.with(ContributionActivity.this).load(
-		    								"http://app.haimianyu.cn/" + item.getHead())
-		    						.centerCrop()
-		    						.diskCacheStrategy(DiskCacheStrategy.ALL)
-		    						.placeholder(R.drawable.home_image).into(cPortrait);
-		    					}
-		    					else
-		    					{
-		    						Glide.with(ContributionActivity.this).load(item.getHead())
-		    						.centerCrop()
-		    						.diskCacheStrategy(DiskCacheStrategy.ALL)
-		    						.placeholder(R.drawable.home_image).into(cPortrait);
-		    					}
-		    				}
+						int rank = position + 1;
+						switch(rank)
+						{
+						case 1:
+							imgViewRank.setImageResource(R.drawable.icon_1);
+							txtViewRange.setVisibility(View.GONE);
+							imgViewRank.setVisibility(View.VISIBLE);
+							GlideToImage(item, cPortrait);
+							break;
+						case 2:
+							imgViewRank.setImageResource(R.drawable.icon_2);
+							txtViewRange.setVisibility(View.GONE);
+							imgViewRank.setVisibility(View.VISIBLE);
+							GlideToImage(item, cPortrait);					
+							
+							break;
+						case 3:
+							imgViewRank.setImageResource(R.drawable.icon_3);
+							txtViewRange.setVisibility(View.GONE);
+							imgViewRank.setVisibility(View.VISIBLE);
+							GlideToImage(item, cPortrait);
+							break;
+						default:
+							GlideToImage(item, cPortrait);
+							txtViewRange.setVisibility(View.VISIBLE);
+							imgViewRank.setVisibility(View.GONE);
 
-						} catch (Exception e) {
-							e.printStackTrace();
+							txtViewRange.setText(String.valueOf(rank));
+							break;
 						}
+
 
 					}
 				} catch (Exception e) {
@@ -127,6 +135,35 @@ public class ContributionActivity extends BaseActivity implements OnClickListene
 				}
 			}
 		};
+	}
+	
+	private void GlideToImage(Contribute item, CircularImage cPortrait)
+	{
+		try {
+			if (item.getHead() != null)
+			{
+				String s[] = item.getHead().split("/");
+				
+				if (s[2] != null && !s[2].contains("app.haimianyu.cn"))
+				{
+					Glide.with(ContributionActivity.this).load(
+							"http://app.haimianyu.cn/" + item.getHead())
+					.centerCrop()
+					.diskCacheStrategy(DiskCacheStrategy.ALL)
+					.placeholder(R.drawable.home_image).into(cPortrait);
+				}
+				else
+				{
+					Glide.with(ContributionActivity.this).load(item.getHead())
+					.centerCrop()
+					.diskCacheStrategy(DiskCacheStrategy.ALL)
+					.placeholder(R.drawable.home_image).into(cPortrait);
+				}
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	private void findViewById(Member member)
