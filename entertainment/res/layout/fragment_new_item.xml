@@ -14,7 +14,7 @@
         android:layout_weight="1"
         android:layout_width="match_parent"
         android:layout_height="185dp">
-        <ImageView
+        <com.summer.view.RoundAngleImageView
 	        android:id="@+id/imgViewPortrait"
 	        android:layout_centerHorizontal="true"
 	        android:layout_centerVertical="true"
