@@ -13,7 +13,13 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:background="@drawable/activity_charge_item_bg" >
-
+        <TextView
+            android:id="@+id/txtViewStar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:textColor="@color/white"/>
         <TextView
             android:id="@+id/txtViewType"
             android:layout_width="0dp"
@@ -29,6 +35,7 @@
             android:gravity="center"
             android:layout_weight="1"
             android:textColor="@color/white"/>
+
         <TextView
             android:id="@+id/txtViewTime"
             android:layout_width="0dp"

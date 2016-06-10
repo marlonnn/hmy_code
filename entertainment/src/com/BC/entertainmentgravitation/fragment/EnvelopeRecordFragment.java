@@ -109,28 +109,29 @@ public class EnvelopeRecordFragment extends BaseFragment{
 
 			@Override
 			public void convert(ViewHolder helper, final RedAList item, int positions) {
-
+				helper.setText(R.id.txtViewStar, 
+						isNullOrEmpty(item.getThe_publishers_name()) ? "未知" : item.getThe_publishers_name());
 				helper.setText(R.id.txtViewNumber,
 						item.getGrants_of_number() + "");
 
 				TextView textView = (TextView) helper.getView(R.id.txtViewType);
-
+				
 				switch (item.getType()) {
 				case 1:
-					textView.setText("收入");
+					textView.setText("入");
 					textView.setTextColor(Color.parseColor("#dd0000"));
 					break;
 				case 2:
-					textView.setText("支出");
+					textView.setText("出");
 					textView.setTextColor(Color.parseColor("#2fab21"));
 					break;
 				case 3:
-					textView.setText("支出");
+					textView.setText("出");
 					textView.setTextColor(Color.parseColor("#2fab21"));
 					break;
 
 				}
-
+				
 				helper.setText(R.id.txtViewTime, item.getTime() + "");
 			}
 		};
@@ -179,6 +180,25 @@ public class EnvelopeRecordFragment extends BaseFragment{
 			sendReqMessage(pageIndex);
 		}
 	};
+	
+	private boolean isNullOrEmpty(String o)
+	{
+		if (o != null)
+		{
+			if (o.length() == 0)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return true;
+		}
+	}
 	
 	private void sendReqMessage(int pageIndex) {
 		if (Config.User == null) {
