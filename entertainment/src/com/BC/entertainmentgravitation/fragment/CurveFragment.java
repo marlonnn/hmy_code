@@ -31,6 +31,7 @@ import com.BC.entertainmentgravitation.R;
 import com.BC.entertainmentgravitation.dialog.ApplauseGiveConcern;
 import com.BC.entertainmentgravitation.dialog.PurchaseDialog;
 import com.BC.entertainmentgravitation.entity.EditPersonal;
+import com.BC.entertainmentgravitation.entity.FHNEntity;
 import com.BC.entertainmentgravitation.entity.KLink;
 import com.BC.entertainmentgravitation.entity.Member;
 import com.BC.entertainmentgravitation.entity.Point;
@@ -41,6 +42,8 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
+import com.igexin.sdk.PushManager;
+import com.igexin.sdk.Tag;
 import com.summer.config.Config;
 import com.summer.factory.ThreadPoolFactory;
 import com.summer.fragment.BaseFragment;
@@ -87,6 +90,8 @@ public class CurveFragment extends BaseFragment implements OnClickListener{
 	private int selectIndex = 0;
 	
 	private ApplauseGiveConcern applauseGiveConcern;
+	
+	private boolean hasFollow = false;
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -334,6 +339,20 @@ public class CurveFragment extends BaseFragment implements OnClickListener{
     	ShowProgressDialog(this.getString(R.string.mainactivity_get_user_info));
     	addToThreadPool(Config.personal_information, "get user info", params);
     }
+    
+	/**
+	 * 获取信息
+	 */
+	private void sendFocusStarListRequest() {
+		HashMap<String, String> entity = new HashMap<String, String>();
+
+		entity.put("clientID", Config.User.getClientID());
+		entity.put("type", "1");
+		
+		ShowProgressDialog("获取热门用户基本信息...");		
+		List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
+		addToThreadPool(Config.stat_list, "send search request", params);
+	}
 	
 	/**
 	 * 获取价格曲线
@@ -390,7 +409,15 @@ public class CurveFragment extends BaseFragment implements OnClickListener{
 		case R.id.focus:
 			if (applauseGiveConcern != null)
 			{
-				applauseGiveConcern.sendFocusRequest();
+				if (hasFollow)
+				{
+					applauseGiveConcern.sendUnFocusRequest();
+				}
+				else
+				{
+					applauseGiveConcern.sendFocusRequest();
+				}
+				
 			}
 			break;
 		case R.id.invest:
@@ -453,6 +480,21 @@ public class CurveFragment extends BaseFragment implements OnClickListener{
                     	{
                     		showPurchaseDialog();
                     	}
+                    	else if (taskType == Config.and_attention)
+                    	{
+                			//关注成功
+                			hasFollow = true;
+                    		RequestSuccessful(jsonString, taskType);
+                    	}
+                    	else if (taskType == Config.unfollow_attention)
+                    	{
+                    		if (code == 0)
+                    		{
+                    			//取消关注成功
+                    			hasFollow = false;
+                    			RequestSuccessful(jsonString, taskType);
+                    		}
+                    	}
                     	else
                     	{
                     		RequestFailed(code, msg, taskType);
@@ -466,17 +508,6 @@ public class CurveFragment extends BaseFragment implements OnClickListener{
             }
         }
 	}
-	
-//	@Override
-//	public void RequestFailed(int errcode, String message, int taskType) {
-//		switch(taskType)
-//		{
-//		case Config.give_applause_booed:
-//			showPurchaseDialog();
-//			break;
-//		}
-//		super.RequestFailed(errcode, message, taskType);
-//	}
 	
 	private void showPurchaseDialog()
 	{
@@ -527,10 +558,53 @@ public class CurveFragment extends BaseFragment implements OnClickListener{
 			break;
 		case Config.and_attention:
 			ToastUtil.show(getActivity(), "提交成功");
+//			if (hasFollow)
+//			{
+//				
+//			}
+//			else
+//			{
+//
+//			}
+			hasFollow = true;
 			applauseGiveConcern.showAnimationDialog(R.drawable.circle6,
 					R.raw.concern);
 			sendStarInfoRequest(InfoCache.getInstance().getStartInfo().getStar_ID());
 			break;
+		case Config.unfollow_attention:
+			//取消关注成功
+			hasFollow = false;
+			ToastUtil.show(getActivity(), "取消关注成功");
+			sendFocusStarListRequest();
+			break;
+			
+		case Config.stat_list:
+			Entity<List<FHNEntity>> entity = gson.fromJson(jsonString,
+					new TypeToken<Entity<List<FHNEntity>>>() {
+					}.getType());
+			List<FHNEntity> hotList = entity.getData();
+			if (hotList != null && hotList.size() > 0) {
+				List<String> list = new ArrayList<>();
+				
+				for (int i=0; i<hotList.size(); i++)
+				{
+					if (i == 99)
+					{
+						break;
+					}
+					list.add("starer" + hotList.get(i).getStar_ID());
+				}
+				Tag[] tags = new Tag[list.size()];
+				for (int i=0; i<list.size(); i++)
+				{
+					Tag t = new Tag();
+					t.setName(list.get(i));
+					tags[i] = t;
+				}
+				PushManager.getInstance().setTag(getActivity(), tags);
+			}
+			break;
+			
 		case Config.personal_information:
 			Entity<EditPersonal> baseEntity = gson.fromJson(jsonString,
 					new TypeToken<Entity<EditPersonal>>() {

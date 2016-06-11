@@ -22,6 +22,7 @@ import com.BC.entertainment.view.CoordinateSystemView;
 import com.BC.entertainmentgravitation.dialog.ApplauseGiveConcern;
 import com.BC.entertainmentgravitation.dialog.PurchaseDialog;
 import com.BC.entertainmentgravitation.entity.Contribution;
+import com.BC.entertainmentgravitation.entity.FHNEntity;
 import com.BC.entertainmentgravitation.entity.KLink;
 import com.BC.entertainmentgravitation.entity.Member;
 import com.BC.entertainmentgravitation.entity.Point;
@@ -29,6 +30,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.igexin.sdk.PushManager;
+import com.igexin.sdk.Tag;
 import com.summer.ptr.PullToRefreshBase;
 import com.summer.ptr.PullToRefreshListView;
 import com.summer.ptr.PullToRefreshBase.OnRefreshListener2;
@@ -68,6 +71,7 @@ public class CurveActivity extends BaseActivity implements OnClickListener{
 	private List<Contribution> ranking = new ArrayList<>();
 	private ApplauseGiveConcern applauseGiveConcern;
 	private TextView txtViewIndex;
+	private boolean hasFollow = false;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -291,6 +295,20 @@ public class CurveActivity extends BaseActivity implements OnClickListener{
 		addToThreadPool(Config.contribution, "send save user request", params);
 	}
 	
+	/**
+	 * 获取信息
+	 */
+	private void sendFocusStarListRequest() {
+		HashMap<String, String> entity = new HashMap<String, String>();
+
+		entity.put("clientID", Config.User.getClientID());
+		entity.put("type", "1");
+		
+		ShowProgressDialog("获取热门用户基本信息...");		
+		List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
+		addToThreadPool(Config.stat_list, "send search request", params);
+	}
+	
     private void addToThreadPool(int taskType, String tag, List<NameValuePair> params)
     {
     	XLog.i("add to thread pool: " + tag);
@@ -308,7 +326,15 @@ public class CurveActivity extends BaseActivity implements OnClickListener{
 		case R.id.focus:
 			if (applauseGiveConcern != null)
 			{
-				applauseGiveConcern.sendFocusRequest();
+				if (hasFollow)
+				{
+					applauseGiveConcern.sendUnFocusRequest();
+				}
+				else
+				{
+					applauseGiveConcern.sendFocusRequest();
+				}
+
 			}
 			break;
 		case R.id.invest:
@@ -358,6 +384,21 @@ public class CurveActivity extends BaseActivity implements OnClickListener{
                     	if (taskType == Config.give_applause_booed && code == 205)
                     	{
                     		showPurchaseDialog();
+                    	}
+                    	else if (taskType == Config.and_attention)
+                    	{
+                			//关注成功
+                			hasFollow = true;
+                    		RequestSuccessful(jsonString, taskType);
+                    	}
+                    	else if (taskType == Config.unfollow_attention)
+                    	{
+                    		if (code == 0)
+                    		{
+                    			//取消关注成功
+                    			hasFollow = false;
+                    			RequestSuccessful(jsonString, taskType);
+                    		}
                     	}
                     	else
                     	{
@@ -437,9 +478,42 @@ public class CurveActivity extends BaseActivity implements OnClickListener{
 			}
 			break;
 		case Config.and_attention:
+			hasFollow = true;
 			ToastUtil.show(this, "提交成功");
 			applauseGiveConcern.showAnimationDialog(R.drawable.circle6,
 					R.raw.concern);
+			break;
+		case Config.unfollow_attention:
+			//取消关注成功
+			hasFollow = false;
+			ToastUtil.show(this, "取消关注成功");
+			sendFocusStarListRequest();
+			break;
+		case Config.stat_list:
+			Entity<List<FHNEntity>> entity = gson.fromJson(jsonString,
+					new TypeToken<Entity<List<FHNEntity>>>() {
+					}.getType());
+			List<FHNEntity> hotList = entity.getData();
+			if (hotList != null && hotList.size() > 0) {
+				List<String> list = new ArrayList<>();
+				
+				for (int i=0; i<hotList.size(); i++)
+				{
+					if (i == 99)
+					{
+						break;
+					}
+					list.add("starer" + hotList.get(i).getStar_ID());
+				}
+				Tag[] tags = new Tag[list.size()];
+				for (int i=0; i<list.size(); i++)
+				{
+					Tag t = new Tag();
+					t.setName(list.get(i));
+					tags[i] = t;
+				}
+				PushManager.getInstance().setTag(this, tags);
+			}
 			break;
 		case Config.k_line_graph:
 			XLog.i("get k line success");

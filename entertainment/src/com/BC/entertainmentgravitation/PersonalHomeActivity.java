@@ -1,9 +1,12 @@
 package com.BC.entertainmentgravitation;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import org.apache.http.NameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,12 +16,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.BC.entertainmentgravitation.dialog.ApplauseGiveConcern;
+import com.BC.entertainmentgravitation.entity.FHNEntity;
 import com.BC.entertainmentgravitation.entity.Member;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
+import com.igexin.sdk.PushManager;
+import com.igexin.sdk.Tag;
 import com.summer.activity.BaseActivity;
 import com.summer.config.Config;
 import com.summer.factory.ThreadPoolFactory;
@@ -62,6 +68,7 @@ public class PersonalHomeActivity extends BaseActivity implements OnClickListene
 	private Gson gson;
 	
 	private ApplauseGiveConcern applauseGiveConcern;
+	private boolean hasFollow = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -167,6 +174,20 @@ public class PersonalHomeActivity extends BaseActivity implements OnClickListene
     	addToThreadPool(Config.member_in, "get start info", params);
     }
     
+	/**
+	 * 获取信息
+	 */
+	private void sendFocusStarListRequest() {
+		HashMap<String, String> entity = new HashMap<String, String>();
+
+		entity.put("clientID", Config.User.getClientID());
+		entity.put("type", "1");
+		
+		ShowProgressDialog("获取热门用户基本信息...");		
+		List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
+		addToThreadPool(Config.stat_list, "send search request", params);
+	}
+    
     private void addToThreadPool(int taskType, String tag, List<NameValuePair> params)
     {
     	XLog.i("add to thread pool: " + tag);
@@ -198,7 +219,15 @@ public class PersonalHomeActivity extends BaseActivity implements OnClickListene
 //			ToastUtil.show(this, "此功能正在抓紧开发中，敬请期待...");
 			if (applauseGiveConcern != null)
 			{
-				applauseGiveConcern.sendFocusRequest();
+				if (hasFollow)
+				{
+					applauseGiveConcern.sendUnFocusRequest();
+				}
+				else
+				{
+					applauseGiveConcern.sendFocusRequest();
+				}
+				
 			}
 			break;
 			
@@ -234,13 +263,97 @@ public class PersonalHomeActivity extends BaseActivity implements OnClickListene
 	}
 	
 	@Override
+	public void onInfoReceived(int errorCode, HashMap<String, Object> items) {
+		RemoveProgressDialog();
+        if (errorCode == 0)
+        {
+            String jsonString = (String) items.get("content");
+            if (jsonString != null)
+            {
+                JSONObject object;
+                try {
+                    object = new JSONObject(jsonString);
+                    String msg = object.optString("msg");
+                    int code = object.optInt("status", -1);
+                    int taskType = (Integer) items.get("taskType");
+                    XLog.i("code: " + errorCode);
+                    XLog.i("taskType: " + taskType);
+                    if (code == 0)
+                    {
+                        RequestSuccessful(jsonString, taskType);
+                    }
+                    else
+                    {
+                    	if (taskType == Config.and_attention)
+                    	{
+                			//关注成功
+                			hasFollow = true;
+                    		RequestSuccessful(jsonString, taskType);
+                    	}
+                    	else if (taskType == Config.unfollow_attention)
+                    	{
+                    		if (code == 0)
+                    		{
+                    			//取消关注成功
+                    			hasFollow = false;
+                    			RequestSuccessful(jsonString, taskType);
+                    		}
+                    	}
+                    	else
+                    	{
+                    		RequestFailed(code, msg, taskType);
+                    	}
+                    }
+                } catch (JSONException e) {
+                    XLog.e(e);
+                    e.printStackTrace();
+                    RequestFailed(-1, "Json Parse Error", -1);
+                }
+            }
+        }
+	}
+
+	@Override
 	public void RequestSuccessful(String jsonString, int taskType) {
 		switch(taskType)
 		{
 		case Config.and_attention:
+			hasFollow = true;
 			ToastUtil.show(PersonalHomeActivity.this, "提交成功");
 			applauseGiveConcern.showAnimationDialog(R.drawable.circle6,
 					R.raw.concern);
+			break;
+		case Config.unfollow_attention:
+			//取消关注成功
+			hasFollow = false;
+			ToastUtil.show(this, "取消关注成功");
+			sendFocusStarListRequest();
+			break;
+		case Config.stat_list:
+			Entity<List<FHNEntity>> entity = gson.fromJson(jsonString,
+					new TypeToken<Entity<List<FHNEntity>>>() {
+					}.getType());
+			List<FHNEntity> hotList = entity.getData();
+			if (hotList != null && hotList.size() > 0) {
+				List<String> list = new ArrayList<>();
+				
+				for (int i=0; i<hotList.size(); i++)
+				{
+					if (i == 99)
+					{
+						break;
+					}
+					list.add("starer" + hotList.get(i).getStar_ID());
+				}
+				Tag[] tags = new Tag[list.size()];
+				for (int i=0; i<list.size(); i++)
+				{
+					Tag t = new Tag();
+					t.setName(list.get(i));
+					tags[i] = t;
+				}
+				PushManager.getInstance().setTag(this, tags);
+			}
 			break;
 		case Config.give_applause_booed:
 			ToastUtil.show(PersonalHomeActivity.this, "提交成功");

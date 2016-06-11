@@ -198,6 +198,23 @@ public class ApplauseGiveConcern {
 		List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
 		addToThreadPool(Config.and_attention, "send focus request", params);
 	}
+	
+	/**
+	 * 取消关注
+	 */
+	public void sendUnFocusRequest()
+	{
+		if (Config.User == null || Star_ID == null) {
+			ToastUtil.show(context, "抱歉，提交失败");
+			return;
+		}
+		HashMap<String, String> entity = new HashMap<String, String>();
+
+		entity.put("clientID", Config.User.getClientID());
+		entity.put("Star_ID", Star_ID);
+		List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
+		addToThreadPool(Config.unfollow_attention, "send un focus request", params);
+	}
 
 	/**
 	 * 鼓掌、喝倒彩
