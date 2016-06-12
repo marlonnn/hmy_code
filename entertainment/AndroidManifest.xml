@@ -319,7 +319,13 @@
             android:name=".PersonalAlbumActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait" >
-        </activity>             
+        </activity>
+        <!--关注的人  -->
+        <activity
+            android:name=".FocusActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" >
+        </activity>               
         <!-- umeng related -->
         <meta-data
             android:name="UMENG_APPKEY"

@@ -110,6 +110,7 @@ public class PersonalHomeActivity extends BaseActivity implements OnClickListene
 			lLayoutYupiao = (LinearLayout) findViewById(R.id.lLayoutYupiao);
 			
 			findViewById(R.id.imageViewAlbum).setOnClickListener(this);
+			findViewById(R.id.txtViewFocusContent).setOnClickListener(this);
 			lLayoutFocus.setOnClickListener(this);
 			lLayoutLine.setOnClickListener(this);
 			lLayoutYupiao.setOnClickListener(this);
@@ -251,6 +252,11 @@ public class PersonalHomeActivity extends BaseActivity implements OnClickListene
 			Bundle bd = new Bundle();
 			bd.putSerializable("clientId", member.getId());
 			intent.putExtras(bd);
+			startActivity(intent);
+			break;
+			
+		case R.id.txtViewFocusContent:
+			intent = new Intent(this, FocusActivity.class);
 			startActivity(intent);
 			break;
 		/**
