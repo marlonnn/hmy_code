@@ -121,7 +121,7 @@ public class PersonalHomeActivity extends BaseActivity implements OnClickListene
 			.placeholder(R.drawable.avatar_def).into(cImagePortrait);
 			
 			name.setText(isNullOrEmpty(member.getNick()) ? ":未知": member.getNick());
-			focus.setText(isNullOrEmpty(member.getFollow()) ? "未知": member.getFollow());
+			focus.setText(isNullOrEmpty(member.getFocus()) ? "未知": member.getFocus());
 			fans.setText(isNullOrEmpty(member.getFans()) ? ":未知": member.getFans());
 			career.setText(isNullOrEmpty(member.getProfessional()) ? "未知": member.getProfessional());
 			language.setText(isNullOrEmpty(member.getLanguage()) ? "普通话": member.getLanguage());
@@ -257,6 +257,9 @@ public class PersonalHomeActivity extends BaseActivity implements OnClickListene
 			
 		case R.id.txtViewFocusContent:
 			intent = new Intent(this, FocusActivity.class);
+			Bundle b1 = new Bundle();
+			b1.putSerializable("clientId", member.getId());
+			intent.putExtras(b1);
 			startActivity(intent);
 			break;
 		/**

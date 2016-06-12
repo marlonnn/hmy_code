@@ -38,12 +38,12 @@ public class FocusActivity extends BaseActivity implements OnClickListener, Slid
 	private SlideAdapter adapter;
 	private int pageIndex = 1;
 	private SlideListView mSlideListView;
+	private String clientId;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		gson = new Gson();
-		sendFocusStarListRequest();
 		setContentView(R.layout.activity_focus);
 		findViewById(R.id.imageViewBack).setOnClickListener(this);
 		mSlideListView = ((SlideListView) findViewById(R.id.slistview));
@@ -52,6 +52,22 @@ public class FocusActivity extends BaseActivity implements OnClickListener, Slid
 //		mSlideListView.setSlideMode(SlideMode.RIGHT);
 		
 		mSlideListView.setAdapter(adapter);
+		
+		try {
+			Intent intent = this.getIntent();
+			clientId = (String)intent.getSerializableExtra("clientId");
+			if (clientId != null && clientId.contains(Config.User.getClientID()))
+			{
+				mSlideListView.setSlideMode(SlideMode.RIGHT);
+			}
+			else
+			{
+				mSlideListView.setSlideMode(SlideMode.NONE);
+			}
+			sendFocusStarListRequest(clientId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
     @Override
@@ -69,15 +85,15 @@ public class FocusActivity extends BaseActivity implements OnClickListener, Slid
 	/**
 	 * 获取信息
 	 */
-	private void sendFocusStarListRequest() {
-		if (Config.User == null) {
+	private void sendFocusStarListRequest(String clientID) {
+		if (clientID == null ) {
 			ToastUtil.show(this, "无法获取信息");
 			return;
 		}
 		HashMap<String, String> entity = new HashMap<String, String>();
 
-		entity.put("clientID", Config.User.getClientID());
-		entity.put("The_page_number", "" + pageIndex);
+		entity.put("clientID", clientID);
+//		entity.put("The_page_number", "" + pageIndex);
 		entity.put("type", "1");
 
 		

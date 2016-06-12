@@ -109,6 +109,10 @@ public class Member implements Serializable{
 	
 	private String bid;
 	
+	/**
+	 * 我关注的人
+	 */
+	private String focus;
 	public String getBid() {
 		return bid;
 	}
@@ -291,6 +295,14 @@ public class Member implements Serializable{
 
 	public void setConstellation(String constellation) {
 		this.constellation = constellation;
+	}
+
+	public String getFocus() {
+		return focus;
+	}
+
+	public void setFocus(String focus) {
+		this.focus = focus;
 	}
 	
 }
