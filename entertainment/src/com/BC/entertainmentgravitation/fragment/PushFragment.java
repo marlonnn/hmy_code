@@ -568,7 +568,10 @@ public class PushFragment extends BaseFragment implements OnClickListener, Modul
 				
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					
+					if (applauseGiveConcern != null)
+					{
+						applauseGiveConcern.sendFocusRequest(member.getId());
+					}
 				}
 			});
         	

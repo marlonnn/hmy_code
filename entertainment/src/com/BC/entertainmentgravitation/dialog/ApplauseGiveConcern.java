@@ -200,6 +200,22 @@ public class ApplauseGiveConcern {
 	}
 	
 	/**
+	 * 加关注
+	 */
+	public void sendFocusRequest(String starId) {
+		if (Config.User == null || starId == null) {
+			ToastUtil.show(context, "抱歉，提交失败");
+			return;
+		}
+		HashMap<String, String> entity = new HashMap<String, String>();
+
+		entity.put("clientID", Config.User.getClientID());
+		entity.put("Star_ID", starId);
+		List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
+		addToThreadPool(Config.and_attention, "send focus request", params);
+	}
+	
+	/**
 	 * 取消关注
 	 */
 	public void sendUnFocusRequest()

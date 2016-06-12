@@ -91,12 +91,13 @@ public class SlideAdapter extends SlideBaseAdapter {
 			holder.btnCancelFocus.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					mData.remove(position);
-					notifyDataSetChanged();
+
 					if (slideCallback != null)
 					{
 						slideCallback.unFocus(mData.get(position).getStar_ID());
 					}
+					mData.remove(position);
+					notifyDataSetChanged();
 				}
 			});
 		}

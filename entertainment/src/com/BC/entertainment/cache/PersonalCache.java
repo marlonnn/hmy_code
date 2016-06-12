@@ -49,11 +49,14 @@ public class PersonalCache {
 		Personal p7 = new Personal(R.drawable.activity_personal_envelope, "我的红包");
 		personals.add(p7);
 		
-		Personal p8 = new Personal(R.drawable.activity_personal_feedback, "意见反馈");
+		Personal p8 = new Personal(R.drawable.activity_home_bottom_focus, "我的关注");
 		personals.add(p8);
 		
-		Personal p9 = new Personal(R.drawable.activity_personal_about, "关于我们");
+		Personal p9 = new Personal(R.drawable.activity_personal_feedback, "意见反馈");
 		personals.add(p9);
+		
+		Personal p10 = new Personal(R.drawable.activity_personal_about, "关于我们");
+		personals.add(p10);
     	return personals;
     }
     

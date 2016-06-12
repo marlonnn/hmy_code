@@ -36,7 +36,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="140dp"
-        android:paddingTop="10dp"
+        android:paddingTop="5dp"
         android:paddingBottom="10dp" 
         android:background="@drawable/activity_personal_portrait_bg" >
 
@@ -55,9 +55,43 @@
             android:layout_below="@+id/cirImagePortrait"
             android:layout_centerHorizontal="true"
             android:textSize="15dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="5dp"
             android:text="" />
+<!--         <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/txtName"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp" >
 
+            <TextView
+                android:id="@+id/txtViewFocusContent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:text="关注" />
+            <TextView
+                android:id="@+id/txtViewTopFocus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:textColor="@color/white"
+                android:text="0" />
+            <TextView
+                android:id="@+id/txtViewFansContent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:layout_marginLeft="10dp"
+                android:text="粉丝" />
+            <TextView
+                android:id="@+id/txtViewTopFans"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:layout_marginLeft="5dp"
+                android:text="0" />
+        </LinearLayout> -->
     </RelativeLayout>
 
     <android.support.v7.widget.RecyclerView     

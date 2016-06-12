@@ -80,6 +80,10 @@ public class PersonalFragment extends BaseFragment implements OnClickListener, O
 	 */
 	private EditPersonal info;
 	private Activity ativity;
+
+//	private TextView txtViewTopFocus;
+//
+//	private TextView txtViewTopFans;
 	
 	@Override
 	public void onAttach(Activity activity) {
@@ -158,6 +162,8 @@ public class PersonalFragment extends BaseFragment implements OnClickListener, O
 		portrait = (CircularImage) rootView.findViewById(R.id.cirImagePortrait);
 		portrait.setOnClickListener(this);
 		txtName = (TextView) rootView.findViewById(R.id.txtName);
+//		txtViewTopFocus = (TextView) rootView.findViewById(R.id.txtViewTopFocus);
+//		txtViewTopFans = (TextView) rootView.findViewById(R.id.txtViewTopFans);
 		RelativeLayout r = (RelativeLayout) rootView.findViewById(R.id.rLayoutExit);
 		r.setOnClickListener(new OnClickListener() {
 			
@@ -177,6 +183,7 @@ public class PersonalFragment extends BaseFragment implements OnClickListener, O
 		{
 			txtName.setText(info.getNickname());
 		}
+//		txtViewTopFocus.setText(isNullOrEmpty(info.get) ? "" : )
 		Glide.with(this)
 		.load(InfoCache.getInstance().getPersonalInfo().getHead_portrait())
 		.centerCrop().diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -197,6 +204,25 @@ public class PersonalFragment extends BaseFragment implements OnClickListener, O
         
         infoList.setAdapter(adapter);
 		
+	}
+	
+	private boolean isNullOrEmpty(String o)
+	{
+		if (o != null)
+		{
+			if (o.length() == 0)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return true;
+		}
 	}
 
 	@Override
@@ -268,6 +294,12 @@ public class PersonalFragment extends BaseFragment implements OnClickListener, O
 			case R.drawable.activity_personal_envelope:
 				intent = new Intent(getActivity(), EnvelopeActivity.class);
 				startActivity(intent);
+				break;
+			/**
+			 * 我的关注
+			 */
+			case R.drawable.activity_home_bottom_focus:
+				sendBaseInfoRequest();
 				break;
 			/**
 			 * 意见反馈

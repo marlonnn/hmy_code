@@ -523,7 +523,10 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
 				
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					
+					if (applauseGiveConcern != null)
+					{
+						applauseGiveConcern.sendFocusRequest(member.getId());
+					}
 				}
 			});
         	
@@ -680,6 +683,12 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
 				e.printStackTrace();
 				XLog.e("exception: " + e.getMessage());
 			}
+			break;
+			
+		case Config.and_attention:
+			ToastUtil.show(getActivity(), "提交成功");
+			applauseGiveConcern.showAnimationDialog(R.drawable.circle6,
+					R.raw.concern);
 			break;
 		}
 		
