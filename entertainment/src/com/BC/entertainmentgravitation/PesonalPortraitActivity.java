@@ -1,11 +1,13 @@
 package com.BC.entertainmentgravitation;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
 
 import com.BC.entertainment.cache.InfoCache;
+import com.BC.entertainmentgravitation.entity.Member;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.summer.activity.BaseActivity;
@@ -21,13 +23,21 @@ public class PesonalPortraitActivity extends BaseActivity implements OnClickList
 		setContentView(R.layout.activity_personal_portrait);
 		imageView = (ImageView)findViewById(R.id.imageView);
 		findViewById(R.id.imageViewBack).setOnClickListener(this);
-		setPortrait();
+		try {
+			Intent intent = this.getIntent(); 
+			String portrait = (String) intent.getSerializableExtra("portrait");
+			setPortrait(portrait);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 	
-	private void setPortrait()
+	private void setPortrait(String portrait)
 	{
 		Glide.with(this)
-		.load(InfoCache.getInstance().getPersonalInfo().getHead_portrait())
+		.load(portrait)
 		.centerCrop().diskCacheStrategy(DiskCacheStrategy.ALL)
 		.placeholder(R.drawable.avatar_def).into(imageView);
 	}

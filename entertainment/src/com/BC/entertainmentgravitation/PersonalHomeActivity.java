@@ -222,6 +222,9 @@ public class PersonalHomeActivity extends BaseActivity implements OnClickListene
 		 */
 		case R.id.cirImagePortrait:
 			intent = new Intent(this, PesonalPortraitActivity.class);
+			Bundle bundle1 = new Bundle();
+			bundle1.putSerializable("portrait", member.getPortrait());
+			intent.putExtras(bundle1);
 			startActivity(intent);
 			break;
 		/**

@@ -20,6 +20,7 @@ public class NimApplication extends Application {
 		super.onCreate();
 		
 		Cache.setContext(this);
+		
 		NIMClient.init(this, getLoginInfo(), getOptions());
 //		XLog.allowI = XLog.allowD = XLog.allowE = XLog.allowV = XLog.allowW = false;
 		if (inMainProcess())
