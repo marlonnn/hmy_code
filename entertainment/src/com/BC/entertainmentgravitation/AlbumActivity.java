@@ -12,7 +12,6 @@ import org.apache.http.NameValuePair;
 
 import android.app.AlertDialog;
 import android.app.DialogFragment;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -79,14 +78,11 @@ public class AlbumActivity extends BaseActivity implements OnClickListener, OnIt
 	private CommonAdapter<Photo_images> adapter3;
 	private RadioGroup radio;
 	private int pageIndex = 1;
-	private int index = 1;
 	private String setType = "1";
 	
 	private SimpleDateFormat format;
 	
 	private PictureAdapter adapter;
-	
-	private Context mContext;
 	
 	public Album getAlbum() {
 		return album;
@@ -119,7 +115,6 @@ public class AlbumActivity extends BaseActivity implements OnClickListener, OnIt
 	private void initView()
 	{
 		format = new SimpleDateFormat("yyyyMMddHHmmsssss");
-		mContext = this;
 		findViewById(R.id.imageViewBack).setOnClickListener(this);
 		pullToRefreshGridView1 = (PullToRefreshGridView)findViewById(R.id.pullToRefreshGridView1);
 		pullToRefreshGridView1.getRefreshableView().setNumColumns(3);
@@ -375,18 +370,18 @@ public class AlbumActivity extends BaseActivity implements OnClickListener, OnIt
 		addToThreadPool(Config.photo_album_management, "send album request", params);
 	}
 	
-	/**
-	 * 获取相册信息
-	 */
-	private void sendAlbumRequest(int pageIndex) {
-		HashMap<String, String> entity = new HashMap<String, String>();
-
-		entity.put("clientID", Config.User.getClientID());
-		entity.put("The_page_number", "" + pageIndex);
-		
-		List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
-		addToThreadPool(Config.photo_album_management, "send album info request", params);
-	}
+//	/**
+//	 * 获取相册信息
+//	 */
+//	private void sendAlbumRequest(int pageIndex) {
+//		HashMap<String, String> entity = new HashMap<String, String>();
+//
+//		entity.put("clientID", Config.User.getClientID());
+//		entity.put("The_page_number", "" + pageIndex);
+//		
+//		List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
+//		addToThreadPool(Config.photo_album_management, "send album info request", params);
+//	}
 	
 	/**
 	 * 保存相册信息

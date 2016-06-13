@@ -129,10 +129,10 @@ public class PersonalHomeActivity extends BaseActivity implements OnClickListene
 			age.setText(isNullOrEmpty(member.getAge()) ? "未知": member.getAge());
 			nationality.setText(isNullOrEmpty(member.getNationality()) ? "中国": member.getNationality());
 			constellation.setText(isNullOrEmpty(member.getConstellation()) ? "未知": member.getConstellation());
-//			body.setText(member.get == null ? "": member.getName());
+			body.setText("未知");
 			regin.setText(isNullOrEmpty(member.getRegion()) ? "未知": member.getRegion());
-//			wx.setText(member.g == null ? "": member.getName());
-//			qq.setText(member.getName() == null ? "": member.getName());
+			wx.setText("保密");
+			qq.setText("保密");
 			email.setText(isNullOrEmpty(member.getEmail()) ? "未知": member.getEmail());
 			
 			/**
