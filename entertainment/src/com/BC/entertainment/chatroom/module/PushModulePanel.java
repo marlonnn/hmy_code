@@ -25,7 +25,6 @@ import com.BC.entertainment.chatroom.extension.CustomAttachmentType;
 import com.BC.entertainment.chatroom.extension.EmotionAttachment;
 import com.BC.entertainment.chatroom.extension.FontAttachment;
 import com.BC.entertainment.chatroom.gift.GiftHelper;
-import com.BC.entertainment.inter.MediaCallback;
 import com.BC.entertainment.task.ThreadUtil;
 import com.BC.entertainmentgravitation.R;
 import com.BC.entertainmentgravitation.entity.Member;
@@ -70,8 +69,6 @@ public class PushModulePanel {
 	
     private HttpTask httpTask;//更新娱票线程
     
-    private MediaCallback mediaCallback;
-
     public PushModulePanel(PushFragment pushFragment, Container container, View rootView, InfoHandler handler)
     {
     	this.handler = handler;
@@ -454,16 +451,6 @@ public class PushModulePanel {
 		httpTask.CancelTask();
 	}
 	
-    public void SetMediaCallback(MediaCallback mediaCallback)
-    {
-    	this.mediaCallback = mediaCallback;
-    }
-    
-    public MediaCallback GetMediaCallback()
-    {
-    	return this.mediaCallback;
-    }
-    
     /***********************************************************注册相关**********************************************************************/
     public void RegisterObservers(boolean register) {
     	if(! register){

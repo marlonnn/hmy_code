@@ -110,6 +110,8 @@ public class PushFragment extends BaseFragment implements OnClickListener, Modul
     
     //基本信息弹出窗
 	private InfoDialog dialog;
+	
+	private MediaCallback mediaCallback;
     
 	InfoHandler handler = new InfoHandler(new InfoReceiver() {
 		@Override
@@ -158,8 +160,8 @@ public class PushFragment extends BaseFragment implements OnClickListener, Modul
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
 		try {
-			MediaCallback mediaCallback = (MediaCallback)activity;
-			modulePanel.SetMediaCallback(mediaCallback);
+			mediaCallback = (MediaCallback)activity;
+//			modulePanel.SetMediaCallback(mediaCallback);
 		} catch (Exception e) {
 			e.printStackTrace();
 			XLog.e("get switch camera exception");
@@ -285,6 +287,8 @@ public class PushFragment extends BaseFragment implements OnClickListener, Modul
 		btnSwitch.setOnClickListener(this);
 		btnClose.setOnClickListener(this);
 		btnGift.setOnClickListener(this);
+		btnInvest.setVisibility(View.GONE);
+		btnDivest.setVisibility(View.GONE);
 		btnInvest.setOnClickListener(this);
 		btnDivest.setOnClickListener(this);
 		
@@ -579,9 +583,9 @@ public class PushFragment extends BaseFragment implements OnClickListener, Modul
 		 * 切换摄像头
 		 */
 		case R.id.imageView_camera:
-			if(modulePanel.GetMediaCallback() != null)
+			if(mediaCallback!= null)
 			{
-				modulePanel.GetMediaCallback().onSwitchCamera();
+				mediaCallback.onSwitchCamera();
 			}
 			break;
 		/**
@@ -599,9 +603,9 @@ public class PushFragment extends BaseFragment implements OnClickListener, Modul
 		 */
 		case R.id.imageView_close:
 			modulePanel.RegisterObservers(false);
-			if(modulePanel.GetMediaCallback() != null)
+			if(mediaCallback != null)
 			{
-				modulePanel.GetMediaCallback().finishPushMedia();
+				mediaCallback.finishPushMedia();
 			}
 
 			if (modulePanel.danmakuPanel != null)

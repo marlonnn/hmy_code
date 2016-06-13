@@ -621,6 +621,23 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
 	public void RequestSuccessful(String jsonString, int taskType) {
 		switch(taskType)
 		{
+ 		case Config.give_applause_booed:
+ 			switch (applauseGiveConcern.getType()) {
+ 			case 1:
+ 				applauseGiveConcern.showAnimationDialog(R.drawable.circle4,
+ 						R.raw.applaud);
+ 				break;
+ 			case 2:
+ 				applauseGiveConcern.showAnimationDialog(R.drawable.circle5,
+ 						R.raw.give_back);
+ 				break;
+ 			default:
+ 				applauseGiveConcern.showAnimationDialog(R.drawable.circle4,
+ 						R.raw.applaud);
+ 				break;
+ 			}
+
+ 			break;
 		case Config.update_status:
 			XLog.i("taskType: " + taskType + " json string: " + jsonString);
 			break;

@@ -163,6 +163,7 @@ public class InfoCache {
 			liveStar.setProfessional(entity.getCareer());
 			liveStar.setHead_portrait(entity.getHead_portrait());
 			liveStar.setStage_name(entity.getStar_names());
+			liveStar.setThe_current_hooted_thumb_up_prices(Integer.parseInt(entity.getBid()));
 		}
 	}
 	
