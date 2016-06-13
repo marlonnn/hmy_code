@@ -91,6 +91,7 @@ public class PersonalHomeActivity extends BaseActivity implements OnClickListene
 		if (member != null)
 		{
 			cImagePortrait = (CircularImage) findViewById(R.id.cirImagePortrait);
+			cImagePortrait.setOnClickListener(this);
 			name = (TextView) findViewById(R.id.txtName);
 			focus = (TextView) findViewById(R.id.txtViewTopFocus);
 			fans = (TextView) findViewById(R.id.txtViewTopFans);
@@ -216,9 +217,17 @@ public class PersonalHomeActivity extends BaseActivity implements OnClickListene
 	public void onClick(View v) {
 		Intent intent;
 		switch (v.getId()) {
-		
+		/**
+		 * 用户头像 
+		 */
+		case R.id.cirImagePortrait:
+			intent = new Intent(this, PesonalPortraitActivity.class);
+			startActivity(intent);
+			break;
+		/**
+		 * 关注和取消关注
+		 */
 		case R.id.lLayoutFocus:
-//			ToastUtil.show(this, "此功能正在抓紧开发中，敬请期待...");
 			if (applauseGiveConcern != null)
 			{
 				if (hasFollow)
@@ -232,7 +241,9 @@ public class PersonalHomeActivity extends BaseActivity implements OnClickListene
 				
 			}
 			break;
-			
+		/**
+		 * 价值曲线	
+		 */
 		case R.id.lLayoutLine:
 			intent = new Intent(this, CurveActivity.class);
 			Bundle bundle = new Bundle();
@@ -240,7 +251,9 @@ public class PersonalHomeActivity extends BaseActivity implements OnClickListene
 			intent.putExtras(bundle);
 			startActivity(intent);
 			break;
-			
+		/**
+		 * 娱票排行榜
+		 */
 		case R.id.lLayoutYupiao:
 			intent = new Intent(this, ContributionActivity.class);
 			Bundle b = new Bundle();
@@ -248,6 +261,9 @@ public class PersonalHomeActivity extends BaseActivity implements OnClickListene
 			intent.putExtras(b);
 			startActivity(intent);
 			break;
+		/**
+		 * 用户相册
+		 */
 		case R.id.imageViewAlbum:
 			intent = new Intent(this, PersonalAlbumActivity.class);
 			Bundle bd = new Bundle();
@@ -255,7 +271,9 @@ public class PersonalHomeActivity extends BaseActivity implements OnClickListene
 			intent.putExtras(bd);
 			startActivity(intent);
 			break;
-			
+		/**
+		 * 关注列表	
+		 */
 		case R.id.txtViewFocusContent:
 			intent = new Intent(this, FocusActivity.class);
 			Bundle b1 = new Bundle();

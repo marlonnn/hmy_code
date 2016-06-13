@@ -325,7 +325,13 @@
             android:name=".FocusActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait" >
-        </activity>               
+        </activity>
+        <!--用户头像  -->
+        <activity
+            android:name=".PesonalPortraitActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" >
+        </activity>                 
         <!-- umeng related -->
         <meta-data
             android:name="UMENG_APPKEY"
