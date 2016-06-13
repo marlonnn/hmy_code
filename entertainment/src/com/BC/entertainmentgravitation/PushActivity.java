@@ -4,16 +4,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.AudioFormat;
 import android.os.Bundle;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnTouchListener;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.BC.entertainment.cache.ChatCache;
 import com.BC.entertainment.config.PushConfig;
-import com.BC.entertainment.inter.IMedia;
+import com.BC.entertainment.inter.MediaCallback;
 import com.BC.entertainment.view.LiveSurfaceView;
 import com.BC.entertainmentgravitation.entity.StarLiveVideoInfo;
 import com.BC.entertainmentgravitation.fragment.ExitFragmentListener;
@@ -34,7 +32,7 @@ import com.summer.utils.StringUtil;
 import com.summer.utils.ToastUtil;
 import com.umeng.analytics.MobclickAgent;
 
-public class PushActivity extends BaseActivity implements lsMessageHandler, IMedia, ExitFragmentListener{
+public class PushActivity extends BaseActivity implements lsMessageHandler, MediaCallback, ExitFragmentListener{
 	
 	private Context mContext;
 	private LiveSurfaceView mVideoView;
@@ -63,15 +61,6 @@ public class PushActivity extends BaseActivity implements lsMessageHandler, IMed
         Intent intent = this.getIntent();
         StarLiveVideoInfo startLiveVideoInfo = (StarLiveVideoInfo)intent.getSerializableExtra("liveInfo");
         enterChatRoom(startLiveVideoInfo, true);
-
-        mVideoView.setOnTouchListener(new OnTouchListener() {
-			
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				topFragment.pushFragment.showShare();
-				return false;
-			}
-		});
 	}
 	
     @SuppressWarnings("unchecked")

@@ -44,7 +44,7 @@ import com.BC.entertainment.chatroom.gift.Gift;
 import com.BC.entertainment.chatroom.module.Container;
 import com.BC.entertainment.chatroom.module.PullModulePanel;
 import com.BC.entertainment.chatroom.module.ModuleProxy;
-import com.BC.entertainment.inter.IMedia;
+import com.BC.entertainment.inter.MediaCallback;
 import com.BC.entertainment.inter.SimpleCallback;
 import com.BC.entertainmentgravitation.ContributionActivity;
 import com.BC.entertainmentgravitation.PersonalHomeActivity;
@@ -127,7 +127,7 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
     private ApplauseGiveConcern applauseGiveConcern;//投资或者撤资
     
     
-    public IMedia iMedia;
+    public MediaCallback mediaCallback;
     
     private static final int LIMIT = 100;
     private long updateTime = 0; // 非游客的updateTime
@@ -198,7 +198,7 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
 		try {
-			iMedia = (IMedia)activity;
+			mediaCallback = (MediaCallback)activity;
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -905,10 +905,10 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
 		 * 关闭
 		 */
 		case R.id.imageView_close:
-			if (iMedia != null)
+			if (mediaCallback != null)
 			{
 				Destroy();
-				iMedia.finishPullMedia();
+				mediaCallback.finishPullMedia();
 			}
 			break;
 		/**

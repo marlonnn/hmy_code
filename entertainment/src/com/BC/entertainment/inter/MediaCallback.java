@@ -1,6 +1,6 @@
 package com.BC.entertainment.inter;
 
-public interface IMedia {
+public interface MediaCallback {
 
 	void finishPullMedia();
 	

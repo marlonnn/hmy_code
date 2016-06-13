@@ -12,7 +12,7 @@ import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.BC.entertainment.cache.ChatCache;
-import com.BC.entertainment.inter.IMedia;
+import com.BC.entertainment.inter.MediaCallback;
 import com.BC.entertainmentgravitation.entity.StarLiveVideoInfo;
 import com.BC.entertainmentgravitation.fragment.ExitFragmentListener;
 import com.BC.entertainmentgravitation.fragment.NEVideoView;
@@ -32,7 +32,7 @@ import com.summer.utils.StringUtil;
 import com.summer.utils.ToastUtil;
 import com.umeng.analytics.MobclickAgent;
 
-public class PullActivity extends BaseActivity implements OnClickListener, IMedia, ExitFragmentListener{
+public class PullActivity extends BaseActivity implements OnClickListener, MediaCallback, ExitFragmentListener{
 
 	private NEVideoView mVideoView;
 	private NEMediaPlayer mMediaPlayer = new NEMediaPlayer();
