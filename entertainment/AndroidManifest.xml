@@ -331,7 +331,19 @@
             android:name=".PesonalPortraitActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait" >
-        </activity>                 
+        </activity>
+        <!--剧组信息  -->
+        <activity
+            android:name=".CrewActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" >
+        </activity>
+        <!--消息中心   -->
+        <activity
+            android:name=".MessageActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" >
+        </activity>                
         <!-- umeng related -->
         <meta-data
             android:name="UMENG_APPKEY"
