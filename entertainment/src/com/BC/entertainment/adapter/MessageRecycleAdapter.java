@@ -6,6 +6,7 @@ import com.BC.entertainmentgravitation.R;
 import com.BC.entertainmentgravitation.entity.GeTui;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.view.LayoutInflater;
@@ -61,12 +62,26 @@ public class MessageRecycleAdapter extends RecyclerView.Adapter<MessageViewHolde
 	@Override
 	public void onBindViewHolder(MessageViewHolder viewGroup, int i) {
 	
-		GeTui geTui = mDatas.get(i);
-		if (geTui != null)
-		{
-			viewGroup.title.setText(geTui.getMessagetitle());
-			viewGroup.content.setText(geTui.getMessagecontent());
-			viewGroup.itemView.setTag(geTui);
+		try {
+			GeTui geTui = mDatas.get(i);
+			if (geTui != null)
+			{
+				viewGroup.title.setText(geTui.getMessagetitle());
+				viewGroup.content.setText(geTui.getMessagecontent());
+				if (geTui.isHasRead())
+				{
+					viewGroup.title.setTextColor(Color.parseColor("#ff999999"));
+					viewGroup.content.setTextColor(Color.parseColor("#ff999999"));
+				}
+				else
+				{
+					viewGroup.title.setTextColor(Color.parseColor("#FFFFFF"));
+					viewGroup.content.setTextColor(Color.parseColor("#FFFFFF"));
+				}
+				viewGroup.itemView.setTag(geTui);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		
 		setUpitemEvent(viewGroup);
@@ -105,6 +120,6 @@ class MessageViewHolder extends ViewHolder {
     public MessageViewHolder(View v) {
         super(v);
         title = (TextView) v.findViewById(R.id.txtTitle);
-        title = (TextView) v.findViewById(R.id.txtContent);
+        content = (TextView) v.findViewById(R.id.txtContent);
     }
 }

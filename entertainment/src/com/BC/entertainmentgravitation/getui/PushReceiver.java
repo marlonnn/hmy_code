@@ -3,7 +3,9 @@ package com.BC.entertainmentgravitation.getui;
 import org.json.JSONObject;
 
 import com.BC.entertainmentgravitation.HomeActivity;
+import com.BC.entertainmentgravitation.R;
 import com.BC.entertainmentgravitation.entity.GeTui;
+import com.BC.entertainmentgravitation.entity.GeTuiDao;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
@@ -14,7 +16,9 @@ import com.summer.json.Entity;
 import com.summer.logger.XLog;
 import com.summer.utils.JsonUtil;
 
+import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -56,7 +60,8 @@ public class PushReceiver extends BroadcastReceiver{
          			g.setMessagecontent(jsonObject.getString("messagecontent"));
          			g.setMessagetitle(jsonObject.getString("messagetitle"));
          			g.setMessagetype(jsonObject.getString("messagetype"));
-         			HomeActivity.showNotification(g);
+         			sendNotification(context, g);
+         			new GeTuiDao(context).add(g);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -88,5 +93,32 @@ public class PushReceiver extends BroadcastReceiver{
              break;
 		 }
 	}
+	
+	  private void sendNotification(Context ctx, GeTui geTui)   
+	    {   
+	        String ns = Context.NOTIFICATION_SERVICE;   
+	        NotificationManager nm =    
+	            (NotificationManager)ctx.getSystemService(ns);   
+	           
+	        //Create Notification Object   
+	        int icon = R.drawable.app_logo; //通知图标  
+	        long when = System.currentTimeMillis();   
+	           
+	        Notification notification =    
+	            new Notification(icon, geTui.getMessagetitle(), when);   
+	        notification.defaults |= Notification.DEFAULT_SOUND; 
+	        notification.flags = Notification.FLAG_AUTO_CANCEL;
+	        //Set ContentView using setLatestEvenInfo   
+	        Intent notificationIntent = new Intent(ctx, HomeActivity.class); 
+	        PendingIntent contentIntent = PendingIntent.getActivity(ctx, 0, notificationIntent, 0);  
+	        notification.setLatestEventInfo(ctx, geTui.getMessagetitle(), geTui.getMessagecontent(), contentIntent);           
+	        //Send notification   
+	        //The first argument is a unique id for this notification.   
+	        //This id allows you to cancel the notification later   
+	        //This id also allows you to update your notification   
+	        //by creating a new notification and resending it against that id   
+	        //This id is unique with in this application   
+	        nm.notify(1, notification);   
+	    }   
 
 }

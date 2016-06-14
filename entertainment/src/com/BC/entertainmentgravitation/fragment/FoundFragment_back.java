@@ -7,6 +7,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +23,7 @@ import com.BC.entertainmentgravitation.MessageActivity;
 import com.BC.entertainmentgravitation.R;
 import com.BC.entertainmentgravitation.entity.Found;
 import com.summer.fragment.BaseFragment;
+import com.summer.utils.ToastUtil;
 
 /**
  * 发现页
@@ -87,11 +90,18 @@ public class FoundFragment_back extends BaseFragment implements OnClickListener,
 	
 	private void initView()
 	{
-		founds = FoundCache.getInstance().GetFounds();
 		foundList = (RecyclerView) rootView.findViewById(R.id.listViewFound);
+		
+		founds = FoundCache.getInstance().GetFounds();
+
 		adapter = new FoundRecycleAdapter(getActivity(), founds);
         adapter.notifyDataSetChanged();
         adapter.setmOnItemClickListener(this);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        foundList.setVerticalScrollBarEnabled(true);
+        foundList.setLayoutManager(linearLayoutManager);
+        
+        foundList.setItemAnimator(new DefaultItemAnimator());//more的动画效果
         foundList.setAdapter(adapter);
 	}
 
@@ -120,8 +130,9 @@ public class FoundFragment_back extends BaseFragment implements OnClickListener,
 			 * 剧组信息
 			 */
 			case R.drawable.activity_found_live:
-				intent = new Intent(getActivity(), CrewActivity.class);
-				startActivity(intent);
+//				intent = new Intent(getActivity(), CrewActivity.class);
+//				startActivity(intent);
+				ToastUtil.show(getActivity(), "此功能正在完善中，尽情期待...");
 				break;
 			/**
 			 * 消息中心
@@ -130,13 +141,14 @@ public class FoundFragment_back extends BaseFragment implements OnClickListener,
 				intent = new Intent(getActivity(), MessageActivity.class);
 				startActivity(intent);
 				break;
-//			/**
-//			 * 权益中心
-//			 */
-//			case R.drawable.activity_personal_career:
+			/**
+			 * 权益中心
+			 */
+			case R.drawable.activity_personal_career:
+				ToastUtil.show(getActivity(), "此功能正在完善中，尽情期待...");
 //				intent = new Intent(getActivity(), CareerActivity.class);
 //				startActivity(intent);
-//				break;
+				break;
 
 			}
 		}

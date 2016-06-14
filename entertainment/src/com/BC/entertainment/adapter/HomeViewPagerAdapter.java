@@ -2,6 +2,7 @@ package com.BC.entertainment.adapter;
 
 import com.BC.entertainmentgravitation.fragment.CurveFragment;
 import com.BC.entertainmentgravitation.fragment.FoundFragment;
+import com.BC.entertainmentgravitation.fragment.FoundFragment_back;
 import com.BC.entertainmentgravitation.fragment.ListFragment;
 import com.BC.entertainmentgravitation.fragment.PersonalFragment;
 import com.BC.entertainmentgravitation.fragment.SurfaceEmptyFragment;
@@ -18,7 +19,7 @@ public class HomeViewPagerAdapter extends FragmentPagerAdapter {
 	private CurveFragment curveFragment;
 	private ListFragment listFragment;
 	private PersonalFragment personalFragment;
-	private FoundFragment foundFragment;
+	private FoundFragment_back foundFragment;
 	private SurfaceEmptyFragment emptyFragment;
 
 	public HomeViewPagerAdapter(FragmentManager fm) {
@@ -27,7 +28,7 @@ public class HomeViewPagerAdapter extends FragmentPagerAdapter {
 		listFragment = new ListFragment();
 		emptyFragment = new SurfaceEmptyFragment();
 		personalFragment = new PersonalFragment();
-		foundFragment = new FoundFragment();
+		foundFragment = new FoundFragment_back();
 	}
 
 	@Override

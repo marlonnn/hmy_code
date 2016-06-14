@@ -12,6 +12,7 @@ import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.SDKOptions;
 import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.netease.nimlib.sdk.msg.MsgService;
+import com.summer.logger.XLog;
 
 public class NimApplication extends Application {
 
@@ -22,7 +23,7 @@ public class NimApplication extends Application {
 		Cache.setContext(this);
 		
 		NIMClient.init(this, getLoginInfo(), getOptions());
-//		XLog.allowI = XLog.allowD = XLog.allowE = XLog.allowV = XLog.allowW = false;
+		XLog.allowI = XLog.allowD = XLog.allowE = XLog.allowV = XLog.allowW = false;
 		if (inMainProcess())
 		{
             // 初始化UIKit模块
