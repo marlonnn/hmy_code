@@ -42,7 +42,7 @@ ViewPager.OnPageChangeListener {
         try {
 			if ((boolean)SharedPreferencesUtils.getParam(this, "autoLogin", false))
 			{
-				Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+				Intent intent = new Intent(getApplicationContext(), HomeActivity_back.class);
 				startActivity(intent);
 				finish();
 			}

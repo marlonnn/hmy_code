@@ -78,6 +78,7 @@ public class HomeActivity_back extends BaseActivity implements OnClickListener{
 		gson = new Gson();
 		sendFocusStarListRequest();
 		findViewById();
+		setFragmentSelection(R.id.rLayoutLine);
 	}
 	
     private void hideFragments(FragmentTransaction transaction) {  
@@ -230,14 +231,14 @@ public class HomeActivity_back extends BaseActivity implements OnClickListener{
 		super.onResume();
         MobclickAgent.onResume(this);
 	}
-
-	@Override
-	public void onClick(View v) {
+	
+	private void setFragmentSelection(int v)
+	{
         FragmentTransaction transaction = fManager.beginTransaction();  
         hideFragments(transaction);
-		touchButton(v.getId());
+		touchButton(v );
 		Intent intent;
-		switch(v.getId())
+		switch(v )
 		{
 
 		case R.id.rLayoutLine:
@@ -263,7 +264,7 @@ public class HomeActivity_back extends BaseActivity implements OnClickListener{
 			}
 			else
 			{
-				intent = new Intent(v.getContext(),
+				intent = new Intent(this,
 						BrowserAcitvity.class);
 				intent.putExtra("url", Config.AthuAddress + Config.User.getClientID());
 				startActivity(intent);
@@ -274,7 +275,7 @@ public class HomeActivity_back extends BaseActivity implements OnClickListener{
             	foundFragment = new FoundFragment_back();
                 transaction.add(R.id.content, foundFragment);  
             } else {  
-                transaction.show(curveFragment);  
+                transaction.show(foundFragment);  
             } 
 			break;
 		case R.id.rLayoutMyself:
@@ -286,6 +287,65 @@ public class HomeActivity_back extends BaseActivity implements OnClickListener{
             } 
 			break;
 		}
+		transaction.commit();  
+	}
+
+	@Override
+	public void onClick(View v) {
+		setFragmentSelection(v.getId());
+//        FragmentTransaction transaction = fManager.beginTransaction();  
+//        hideFragments(transaction);
+//		touchButton(v.getId());
+//		Intent intent;
+//		switch(v.getId())
+//		{
+//
+//		case R.id.rLayoutLine:
+//            if (curveFragment == null) {  
+//            	curveFragment = new CurveFragment();
+//                transaction.add(R.id.content, curveFragment);  
+//            } else {  
+//                transaction.show(curveFragment);  
+//            } 
+//			break;
+//		case R.id.rLayoutVideo:
+//            if (listFragment == null) {  
+//            	listFragment = new ListFragment();
+//                transaction.add(R.id.content, listFragment);  
+//            } else {  
+//                transaction.show(listFragment);  
+//            } 
+//			break;
+//		case R.id.rLayoutLive:
+//			if (Config.User.getPermission().equals("2")) 
+//			{
+//				createLiveVideoRequest();
+//			}
+//			else
+//			{
+//				intent = new Intent(v.getContext(),
+//						BrowserAcitvity.class);
+//				intent.putExtra("url", Config.AthuAddress + Config.User.getClientID());
+//				startActivity(intent);
+//			}
+//			break;
+//		case R.id.rLayoutFound:
+//            if (foundFragment == null) {  
+//            	foundFragment = new FoundFragment_back();
+//                transaction.add(R.id.content, foundFragment);  
+//            } else {  
+//                transaction.show(curveFragment);  
+//            } 
+//			break;
+//		case R.id.rLayoutMyself:
+//            if (personalFragment == null) {  
+//            	personalFragment = new PersonalFragment();
+//                transaction.add(R.id.content, personalFragment);  
+//            } else {  
+//                transaction.show(personalFragment);  
+//            } 
+//			break;
+//		}
 	}
 	
 	private void createLiveVideoRequest()

@@ -52,6 +52,9 @@ public class PersonalCache {
 		Personal p8 = new Personal(R.drawable.activity_home_bottom_focus, "我的关注");
 		personals.add(p8);
 		
+		Personal p11 = new Personal(R.drawable.activity_authenticate, "我的认证");
+		personals.add(p11);
+		
 		Personal p9 = new Personal(R.drawable.activity_personal_feedback, "意见反馈");
 		personals.add(p9);
 		

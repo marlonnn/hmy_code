@@ -1,0 +1,391 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:select="http://schemas.android.com/apk/res/com.BC.entertainmentgravitation"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/activity_charge_bg"
+    android:orientation="vertical" >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp" >
+
+        <ImageView
+            android:id="@+id/imageViewBack"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:src="@drawable/activity_charge_back" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true" >
+
+            <TextView
+                android:id="@+id/textViewCharge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textSize="22dp"
+                android:textColor="@color/white"
+                android:text="身份认证" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="25dp"
+            android:textColor="@color/white"
+            android:text="提交审核" />
+    </RelativeLayout>    
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scrollbarSize="4dp"
+	    android:scrollbarThumbVertical="@drawable/scrollbar_thumb"
+        android:layout_alignLeft="@+id/imageViewBack"
+        android:layout_alignParentTop="true" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+		    <RelativeLayout
+		        android:layout_width="match_parent"
+		        android:layout_height="match_parent" >
+		        <TextView
+		            android:id="@+id/txtContent"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:layout_centerHorizontal="true"
+		            android:layout_marginLeft="10dp"
+		            android:layout_marginRight="10dp"
+		            android:layout_marginTop="5dp"
+		            android:text="以下信息均为必填项，为保证您的利益，请如实填写。"
+		            android:textSize="12dp" />
+		
+		        <RelativeLayout
+		            android:id="@+id/rLayoutStep"
+		            android:layout_width="match_parent"
+		            android:layout_height="80dp"
+		            android:layout_below="@+id/txtContent"
+		            android:layout_centerHorizontal="true" >
+		            <View
+		                android:id="@+id/view1"
+		                android:layout_width="150dp"
+		                android:layout_height="1dp"
+		                android:layout_centerHorizontal="true"
+		                android:layout_centerVertical="true"
+		                android:background="@color/hmy_red" />
+		
+		            <ImageView
+		                android:id="@+id/imgViewOne"
+		                android:layout_width="20dp"
+		                android:layout_height="20dp"
+		                android:layout_centerVertical="true"
+		                android:layout_toLeftOf="@+id/view1"
+		                android:src="@drawable/activity_suthenticate_dian" />
+		            <ImageView
+		                android:id="@+id/imgViewTwo"
+		                android:layout_width="30dp"
+		                android:layout_height="30dp"
+		                android:layout_centerVertical="true"
+		                android:layout_toRightOf="@+id/view1"
+		                android:src="@drawable/activity_suthenticate_dian" />
+		
+		            <TextView
+		                android:id="@+id/txtViewOne"
+		                android:layout_width="20dp"
+		                android:layout_height="20dp"
+		                android:layout_alignBottom="@+id/imgViewOne"
+		                android:layout_alignLeft="@+id/imgViewOne"
+		                android:layout_alignTop="@+id/imgViewOne"
+		                android:layout_toLeftOf="@+id/view1"
+		                android:gravity="center"
+		                android:textColor="@color/white"
+		                android:text="1" />
+		
+		            <TextView
+		                android:id="@+id/txtViewTwo"
+		                android:layout_width="wrap_content"
+		                android:layout_height="wrap_content"
+		                android:layout_alignBottom="@+id/imgViewTwo"
+		                android:layout_alignLeft="@+id/imgViewTwo"
+		                android:layout_alignRight="@+id/imgViewTwo"
+		                android:layout_alignTop="@+id/imgViewTwo"
+		                android:layout_toRightOf="@+id/view1"
+		                android:gravity="center"
+		                android:text="2" />
+		
+		        </RelativeLayout>
+		
+				<RelativeLayout
+				    android:id="@+id/rLayoutType"
+				    android:layout_width="match_parent"
+				    android:layout_height="45dp"
+				    android:layout_alignParentLeft="true"
+				    android:layout_below="@+id/rLayoutStep"
+				    android:background="@drawable/activity_charge_item_bg">
+		
+				    <TextView
+				        android:id="@+id/txtIdentification"
+				        android:layout_width="wrap_content"
+				        android:layout_height="wrap_content"
+				        android:layout_centerVertical="true"
+				        android:layout_marginLeft="15dp"
+				        android:clickable="false"
+				        android:focusable="false"
+				        android:text="证件类型"
+				        android:textColor="@color/white"
+				        android:textSize="18dp" />
+		
+				    <EditText
+				        android:id="@+id/editTextName"
+				        android:layout_width="wrap_content"
+				        android:layout_height="wrap_content"
+				        android:layout_centerVertical="true"
+				        android:layout_alignBaseline="@+id/txtIdentification"
+				        android:layout_alignBottom="@+id/txtIdentification"
+				        android:layout_marginLeft="10dp"
+				        android:layout_toRightOf="@+id/txtIdentification"
+				        android:ems="10"
+				        android:inputType="textPersonName" 
+				        android:layout_weight="1"
+				        android:background="@null"
+				        android:hint="请选择证件类型"
+				        android:textColor="@color/white" >
+				        <requestFocus />
+				    </EditText>
+		
+				</RelativeLayout>
+				<RelativeLayout
+				    android:id="@+id/rLayoutNo"
+				    android:layout_width="match_parent"
+				    android:layout_height="45dp"
+				    android:layout_alignParentLeft="true"
+				    android:layout_below="@+id/rLayoutType"
+				    android:background="@drawable/activity_charge_item_bg">
+		
+				    <TextView
+				        android:id="@+id/txtMobile"
+				        android:layout_width="wrap_content"
+				        android:layout_height="wrap_content"
+				        android:layout_centerVertical="true"
+				        android:layout_marginLeft="15dp"
+				        android:clickable="false"
+				        android:focusable="false"
+				        android:text="证件号码"
+				        android:textColor="@color/white"
+				        android:textSize="18dp" />
+		
+				    <EditText
+				        android:id="@+id/editTextMobile"
+				        android:layout_width="wrap_content"
+				        android:layout_height="wrap_content"
+				        android:layout_centerVertical="true"
+				        android:layout_alignBaseline="@+id/txtMobile"
+				        android:layout_alignBottom="@+id/txtMobile"
+				        android:layout_marginLeft="10dp"
+				        android:layout_toRightOf="@+id/txtMobile"
+				        android:ems="10"
+				        android:inputType="phone"
+				        android:layout_weight="1"
+				        android:background="@null"
+				        android:hint="请填写您的手机号"
+				        android:textColor="@color/white" >
+				    </EditText>
+		
+				</RelativeLayout>
+				
+				<RelativeLayout
+				    android:id="@+id/rLayoutProfessionalName"
+				    android:layout_width="match_parent"
+				    android:layout_height="45dp"
+				    android:layout_alignParentLeft="true"
+				    android:layout_below="@+id/rLayoutNo"
+				    android:background="@drawable/activity_charge_item_bg">
+		
+				    <TextView
+				        android:id="@+id/txtProfessionalName"
+				        android:layout_width="wrap_content"
+				        android:layout_height="wrap_content"
+				        android:layout_centerVertical="true"
+				        android:layout_marginLeft="15dp"
+				        android:clickable="false"
+				        android:focusable="false"
+				        android:text="专业名称"
+				        android:textColor="@color/white"
+				        android:textSize="18dp" />
+		
+				    <EditText
+				        android:id="@+id/editTextCard"
+				        android:layout_width="wrap_content"
+				        android:layout_height="wrap_content"
+				        android:layout_centerVertical="true"
+				        android:layout_alignBaseline="@+id/txtProfessionalName"
+				        android:layout_alignBottom="@+id/txtProfessionalName"
+				        android:layout_marginLeft="10dp"
+				        android:layout_toRightOf="@+id/txtProfessionalName"
+				        android:ems="10"
+				        android:inputType="numberPassword"
+				        android:layout_weight="1"
+				        android:background="@null"
+				        android:hint="请填写您的专业名称"
+				        android:textColor="@color/white" >
+				    </EditText>
+				</RelativeLayout>
+		
+				<LinearLayout
+				    android:id="@+id/lLayoutPhoto"
+				    android:layout_width="match_parent"
+				    android:layout_height="wrap_content"
+				    android:layout_below="@+id/rLayoutProfessionalName"
+				    android:layout_centerHorizontal="true" >
+					<LinearLayout
+					    android:id="@+id/lLayoutProfessionalPhoto"
+					    android:layout_weight="1"
+					    android:layout_width="0dp"
+					    android:layout_height="match_parent"
+					    android:orientation="vertical" >
+						<ImageView
+						    android:id="@+id/imgViewProfession"
+						    android:layout_width="80dp"
+						    android:layout_height="80dp"
+						    android:layout_gravity="center"
+						    android:visibility="gone"
+						    android:src="@drawable/avatar_def" />
+						<ImageButton
+						    android:id="@+id/imgBtnProfesson"
+						    android:layout_width="wrap_content"
+						    android:layout_height="wrap_content"
+						    android:layout_marginTop="5dp"
+						    android:layout_gravity="center"
+						    android:background="@drawable/add_image" />
+		
+						<TextView
+						    android:id="@+id/txtViewProfession"
+						    android:layout_gravity="center"
+						    android:layout_marginTop="5dp"
+						    android:layout_width="wrap_content"
+						    android:layout_height="wrap_content"
+						    android:textColor="@color/white"
+						    android:text="专业证照片" />
+					</LinearLayout>
+					<LinearLayout
+					    android:id="@+id/lLayoutShenfenFront"
+					    android:layout_weight="1"
+					    android:layout_width="0dp"
+					    android:layout_height="match_parent"
+					    android:orientation="vertical" >
+						<ImageView
+						    android:id="@+id/imgViewShenfenFront"
+						    android:layout_width="80dp"
+						    android:layout_height="80dp"
+						    android:layout_gravity="center"
+						    android:visibility="gone"
+						    android:src="@drawable/avatar_def" />
+						<ImageButton
+						    android:id="@+id/imgBtnShenfenFront"
+						    android:layout_width="wrap_content"
+						    android:layout_height="wrap_content"
+						    android:layout_marginTop="5dp"
+						    android:layout_gravity="center"
+						    android:background="@drawable/add_image" />
+		
+						<TextView
+						    android:id="@+id/txtViewShenfenFront"
+						    android:layout_gravity="center"
+						    android:layout_marginTop="5dp"
+						    android:layout_width="wrap_content"
+						    android:layout_height="wrap_content"
+						    android:textColor="@color/white"
+						    android:text="身份证正面" />
+					</LinearLayout>
+					<LinearLayout
+					    android:id="@+id/lLayoutShenfenBack"
+					    android:layout_weight="1"
+					    android:layout_width="0dp"
+					    android:layout_height="match_parent"
+					    android:orientation="vertical" >
+						<ImageView
+						    android:id="@+id/imgViewShenfenBack"
+						    android:layout_width="80dp"
+						    android:layout_height="80dp"
+						    android:layout_gravity="center"
+						    android:visibility="gone"
+						    android:src="@drawable/avatar_def" />
+						<ImageButton
+						    android:id="@+id/imgBtnShenfenBack"
+						    android:layout_width="wrap_content"
+						    android:layout_height="wrap_content"
+						    android:layout_marginTop="5dp"
+						    android:layout_gravity="center"
+						    android:background="@drawable/add_image" />
+		
+						<TextView
+						    android:id="@+id/txtViewShenfenBack"
+						    android:layout_gravity="center"
+						    android:layout_marginTop="5dp"
+						    android:layout_width="wrap_content"
+						    android:layout_height="wrap_content"
+						    android:textColor="@color/white"
+						    android:text="身份证反面" />
+					</LinearLayout>	
+					<LinearLayout
+					    android:id="@+id/lLayoutShenfen"
+					    android:layout_weight="1"
+					    android:layout_width="0dp"
+					    android:layout_height="match_parent"
+					    android:orientation="vertical" >
+						<ImageView
+						    android:id="@+id/imgViewShenfen"
+						    android:layout_width="80dp"
+						    android:layout_height="80dp"
+						    android:layout_gravity="center"
+						    android:visibility="gone"
+						    android:src="@drawable/avatar_def" />
+						<ImageButton
+						    android:id="@+id/imgBtnShenfen"
+						    android:layout_width="wrap_content"
+						    android:layout_height="wrap_content"
+						    android:layout_marginTop="5dp"
+						    android:layout_gravity="center"
+						    android:background="@drawable/add_image" />
+		
+						<TextView
+						    android:id="@+id/txtViewShenfen"
+						    android:layout_gravity="center"
+						    android:layout_marginTop="5dp"
+						    android:layout_width="wrap_content"
+						    android:layout_height="wrap_content"
+						    android:textColor="@color/white"
+						    android:textSize="12dp"
+						    android:text="手持身份证正面" />
+					</LinearLayout>			
+				</LinearLayout>
+		
+				<ImageView
+				    android:id="@+id/imageView1"
+				    android:layout_width="match_parent"
+				    android:layout_height="300dp"
+				    android:layout_below="@+id/lLayoutPhoto"
+				    android:layout_centerHorizontal="true"
+				    android:layout_marginTop="5dp"
+				    android:background="@drawable/activity_authenticate_shen_fen_zheng" />
+								
+		    </RelativeLayout>            
+            
+        </LinearLayout>
+    </ScrollView>
+
+
+</LinearLayout>

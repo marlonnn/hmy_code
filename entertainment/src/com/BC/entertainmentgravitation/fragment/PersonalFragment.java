@@ -41,6 +41,7 @@ import com.BC.entertainment.cache.InfoCache;
 import com.BC.entertainment.cache.PersonalCache;
 import com.BC.entertainmentgravitation.AboutActivity;
 import com.BC.entertainmentgravitation.AlbumActivity;
+import com.BC.entertainmentgravitation.Authenticate1Activity;
 import com.BC.entertainmentgravitation.BaseInfoActivity;
 import com.BC.entertainmentgravitation.BrokerActivity;
 import com.BC.entertainmentgravitation.CareerActivity;
@@ -435,6 +436,9 @@ public class PersonalFragment extends BaseFragment implements OnClickListener, O
 		startActivityForResult(intent, PHOTO_GRAPH);
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.BC.entertainment.adapter.PersonalRecycleAdapter.OnItemClickListener#onItemClick(android.view.View, int)
+	 */
 	@Override
 	public void onItemClick(View view, int position) {
 		Personal personal = (Personal)view.getTag();
@@ -497,6 +501,13 @@ public class PersonalFragment extends BaseFragment implements OnClickListener, O
 			 */
 			case R.drawable.activity_home_bottom_focus:
 				sendBaseInfoRequest();
+				break;
+			/**
+			 * 身份认证
+			 */
+			case R.drawable.activity_authenticate:
+				intent = new Intent(getActivity(), Authenticate1Activity.class);
+				startActivity(intent);
 				break;
 			/**
 			 * 意见反馈

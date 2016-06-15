@@ -130,4 +130,11 @@ public class LoginActivity extends BaseActivity implements iRegister, iLogin{
 		
 	}
 
+	@Override
+	public void onBackPressed() {
+		super.onBackPressed();
+		this.finish();
+	}
+
+	
 }

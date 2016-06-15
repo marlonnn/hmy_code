@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:select="http://schemas.android.com/apk/res/com.BC.entertainmentgravitation"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/activity_charge_bg"
+    android:orientation="vertical" >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp" >
+
+        <ImageView
+            android:id="@+id/imageViewBack"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:src="@drawable/activity_charge_back" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true" >
+
+            <TextView
+                android:id="@+id/textViewCharge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textSize="22dp"
+                android:textColor="@color/white"
+                android:text="身份认证" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="25dp"
+            android:textColor="@color/white"
+            android:text="下一步" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+                
+<!--         <TextView
+            android:id="@+id/txtCopyRight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:textSize="15dp"
+            android:layout_marginBottom="15dp"
+            android:text="Copyright® 2016 海绵娱科技有限公司" />
+ -->
+        <TextView
+            android:id="@+id/txtContent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="5dp"
+            android:text="除银行信息外均为必填项，为保证您的利益，请如实填写。"
+            android:textSize="12dp" />
+
+        <RelativeLayout
+            android:id="@+id/rLayoutStep"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_below="@+id/txtContent"
+            android:layout_centerHorizontal="true" >
+            <View
+                android:id="@+id/view1"
+                android:layout_width="150dp"
+                android:layout_height="1dp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:background="@color/hmy_red" />
+
+            <ImageView
+                android:id="@+id/imgViewOne"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@+id/view1"
+                android:src="@drawable/activity_suthenticate_dian" />
+            <ImageView
+                android:id="@+id/imgViewTwo"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/view1"
+                android:src="@drawable/activity_suthenticate_dian" />
+
+            <TextView
+                android:id="@+id/txtViewOne"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/imgViewOne"
+                android:layout_alignLeft="@+id/imgViewOne"
+                android:layout_alignTop="@+id/imgViewOne"
+                android:layout_toLeftOf="@+id/view1"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:text="1" />
+
+            <TextView
+                android:id="@+id/txtViewTwo"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignBottom="@+id/imgViewTwo"
+                android:layout_alignLeft="@+id/imgViewTwo"
+                android:layout_alignRight="@+id/imgViewTwo"
+                android:layout_alignTop="@+id/imgViewTwo"
+                android:layout_toRightOf="@+id/view1"
+                android:gravity="center"
+                android:text="2" />
+
+        </RelativeLayout>
+
+		<RelativeLayout
+		    android:id="@+id/rLayoutName"
+		    android:layout_width="match_parent"
+		    android:layout_height="45dp"
+		    android:layout_alignParentLeft="true"
+		    android:layout_below="@+id/rLayoutStep"
+		    android:background="@drawable/activity_charge_item_bg" >
+
+		    <TextView
+		        android:id="@+id/txtName"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_centerVertical="true"
+		        android:layout_marginLeft="15dp"
+		        android:clickable="false"
+		        android:focusable="false"
+		        android:text="真实姓名"
+		        android:textColor="@color/white"
+		        android:textSize="18dp" />
+
+		    <EditText
+		        android:id="@+id/editTextName"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_centerVertical="true"
+		        android:layout_alignBaseline="@+id/txtName"
+		        android:layout_alignBottom="@+id/txtName"
+		        android:layout_marginLeft="10dp"
+		        android:layout_toRightOf="@+id/txtName"
+		        android:layout_weight="1"
+		        android:background="@null"
+		        android:singleLine="true"
+		        android:hint="请填写您的真实姓名"
+		        android:textColor="@color/white" >
+		        <requestFocus />
+		    </EditText>
+
+		</RelativeLayout>
+		<RelativeLayout
+		    android:id="@+id/rLayoutMobile"
+		    android:layout_width="match_parent"
+		    android:layout_height="45dp"
+		    android:layout_alignParentLeft="true"
+		    android:layout_below="@+id/rLayoutName"
+		    android:background="@drawable/activity_charge_item_bg" >
+
+		    <TextView
+		        android:id="@+id/txtMobile"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_centerVertical="true"
+		        android:layout_marginLeft="15dp"
+		        android:clickable="false"
+		        android:focusable="false"
+		        android:text="手机号码"
+		        android:textColor="@color/white"
+		        android:textSize="18dp" />
+
+		    <EditText
+		        android:id="@+id/editTextMobile"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_centerVertical="true"
+		        android:layout_alignBaseline="@+id/txtMobile"
+		        android:layout_alignBottom="@+id/txtMobile"
+		        android:layout_marginLeft="10dp"
+		        android:layout_toRightOf="@+id/txtMobile"
+		        android:ems="10"
+		        android:inputType="phone"
+		        android:layout_weight="1"
+		        android:background="@null"
+		        android:singleLine="true"
+		        android:hint="请填写您的手机号"
+		        android:textColor="@color/white" >
+		    </EditText>
+
+		</RelativeLayout>
+		
+		<RelativeLayout
+		    android:id="@+id/rLayoutCard"
+		    android:layout_width="match_parent"
+		    android:layout_height="45dp"
+		    android:layout_alignParentLeft="true"
+		    android:layout_below="@+id/rLayoutMobile"
+		    android:background="@drawable/activity_charge_item_bg">
+
+		    <TextView
+		        android:id="@+id/txtCard"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_centerVertical="true"
+		        android:layout_marginLeft="15dp"
+		        android:clickable="false"
+		        android:focusable="false"
+		        android:text="银行卡号"
+		        android:textColor="@color/white"
+		        android:textSize="18dp" />
+
+		    <EditText
+		        android:id="@+id/editTextCard"
+		        android:singleLine="true"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_centerVertical="true"
+		        android:layout_alignBaseline="@+id/txtCard"
+		        android:layout_alignBottom="@+id/txtCard"
+		        android:layout_marginLeft="10dp"
+		        android:layout_toRightOf="@+id/txtCard"
+		        android:ems="10"
+		        android:inputType="numberPassword"
+		        android:layout_weight="1"
+		        android:background="@null"
+		        android:hint="请填写您的银行卡号"
+		        android:textColor="@color/white" >
+		    </EditText>
+		</RelativeLayout>
+		<RelativeLayout
+		    android:id="@+id/rLayoutBank"
+		    android:layout_width="match_parent"
+		    android:layout_height="45dp"
+		    android:layout_alignParentLeft="true"
+		    android:layout_below="@+id/rLayoutCard"
+		    android:background="@drawable/activity_charge_item_bg" >
+
+		    <TextView
+		        android:id="@+id/txtBank"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_centerVertical="true"
+		        android:layout_marginLeft="15dp"
+		        android:clickable="false"
+		        android:focusable="false"
+		        android:text="开户银行"
+		        android:textColor="@color/white"
+		        android:textSize="18dp" />
+
+		    <EditText
+		        android:id="@+id/editTextBanke"
+		        android:singleLine="true"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_centerVertical="true"
+		        android:layout_alignBaseline="@+id/txtBank"
+		        android:layout_alignBottom="@+id/txtBank"
+		        android:layout_marginLeft="10dp"
+		        android:layout_toRightOf="@+id/txtBank"
+		        android:layout_weight="1"
+		        android:background="@null"
+		        android:hint="请选择开户银行"
+		        android:textColor="@color/white" >
+		    </EditText>
+		</RelativeLayout>	
+		<RelativeLayout
+		    android:id="@+id/rLayoutBankProvince"
+		    android:layout_width="match_parent"
+		    android:layout_height="45dp"
+		    android:layout_alignParentLeft="true"
+		    android:layout_below="@+id/rLayoutBank"
+		    android:background="@drawable/activity_charge_item_bg">
+
+		    <TextView
+		        android:id="@+id/txtBankProvince"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_centerVertical="true"
+		        android:layout_marginLeft="15dp"
+		        android:clickable="false"
+		        android:focusable="false"
+		        android:text="开户省份"
+		        android:textColor="@color/white"
+		        android:textSize="18dp" />
+
+		    <EditText
+		        android:id="@+id/editTextBankProvince"
+		        android:singleLine="true"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_centerVertical="true"
+		        android:layout_alignBaseline="@+id/txtBankProvince"
+		        android:layout_alignBottom="@+id/txtBankProvince"
+		        android:layout_marginLeft="10dp"
+		        android:layout_toRightOf="@+id/txtBankProvince"
+		        android:layout_weight="1"
+		        android:background="@null"
+		        android:hint="请选择开户省份"
+		        android:textColor="@color/white" >
+		    </EditText>
+		</RelativeLayout>		
+		<RelativeLayout
+		    android:id="@+id/rLayoutBankCity"
+		    android:layout_width="match_parent"
+		    android:layout_height="45dp"
+		    android:layout_alignParentLeft="true"
+		    android:layout_below="@+id/rLayoutBankProvince"
+		    android:background="@drawable/activity_charge_item_bg">
+
+		    <TextView
+		        android:id="@+id/txtBankcity"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_centerVertical="true"
+		        android:layout_marginLeft="15dp"
+		        android:clickable="false"
+		        android:focusable="false"
+		        android:text="开户城市"
+		        android:textColor="@color/white"
+		        android:textSize="18dp" />
+
+		    <EditText
+		        android:id="@+id/editTextBankCity"
+		        android:singleLine="true"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_centerVertical="true"
+		        android:layout_alignBaseline="@+id/txtBankcity"
+		        android:layout_alignBottom="@+id/txtBankcity"
+		        android:layout_marginLeft="10dp"
+		        android:layout_toRightOf="@+id/txtBankcity"
+		        android:layout_weight="1"
+		        android:background="@null"
+		        android:hint="请选择开户城市"
+		        android:textColor="@color/white" >
+		    </EditText>
+		</RelativeLayout>		
+		<RelativeLayout
+		    android:id="@+id/rLayoutBankBranch"
+		    android:layout_width="match_parent"
+		    android:layout_height="45dp"
+		    android:layout_alignParentLeft="true"
+		    android:layout_below="@+id/rLayoutBankCity"
+		    android:background="@drawable/activity_charge_item_bg">
+
+		    <TextView
+		        android:id="@+id/txtBankBranch"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_centerVertical="true"
+		        android:layout_marginLeft="15dp"
+		        android:clickable="false"
+		        android:focusable="false"
+		        android:text="支行名称"
+		        android:textColor="@color/white"
+		        android:textSize="18dp" />
+
+		    <EditText
+		        android:id="@+id/editTextBankBranch"
+		        android:singleLine="true"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_centerVertical="true"
+		        android:layout_alignBaseline="@+id/txtBankBranch"
+		        android:layout_alignBottom="@+id/txtBankBranch"
+		        android:layout_marginLeft="10dp"
+		        android:layout_toRightOf="@+id/txtBankBranch"
+		        android:layout_weight="1"
+		        android:background="@null"
+		        android:hint="请填写您的支行名称"
+		        android:textColor="@color/white" >
+		    </EditText>
+		</RelativeLayout>						
+    </RelativeLayout>
+
+</LinearLayout>

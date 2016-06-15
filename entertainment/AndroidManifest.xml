@@ -162,7 +162,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        
+         <activity
+            android:name=".HomeActivity_back"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" >
+        </activity>       
         <activity
             android:name=".LoginActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -349,7 +353,23 @@
             android:name=".MessageActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait" >
-        </activity>                
+        </activity>
+        <!-- 认证 -->
+        <activity
+            android:name=".Authenticate1Activity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" >
+        </activity>    
+        <activity
+            android:name=".Authenticate2Activity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" >
+        </activity>    
+        <activity
+            android:name=".Authenticate3Activity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" >
+        </activity>              
         <!-- umeng related -->
         <meta-data
             android:name="UMENG_APPKEY"
