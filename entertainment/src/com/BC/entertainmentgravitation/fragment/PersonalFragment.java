@@ -110,6 +110,8 @@ public class PersonalFragment extends BaseFragment implements OnClickListener, O
 	private EditPersonal info;
 	private Activity ativity;
 	private SimpleDateFormat format;
+	private TextView txtViewTopFocus;
+	private TextView txtViewTopFans;
 	
 	@Override
 	public void onAttach(Activity activity) {
@@ -271,8 +273,8 @@ public class PersonalFragment extends BaseFragment implements OnClickListener, O
 		portrait = (CircularImage) rootView.findViewById(R.id.cirImagePortrait);
 		portrait.setOnClickListener(this);
 		txtName = (TextView) rootView.findViewById(R.id.txtName);
-//		txtViewTopFocus = (TextView) rootView.findViewById(R.id.txtViewTopFocus);
-//		txtViewTopFans = (TextView) rootView.findViewById(R.id.txtViewTopFans);
+		txtViewTopFocus = (TextView) rootView.findViewById(R.id.txtViewTopFocus);
+		txtViewTopFans = (TextView) rootView.findViewById(R.id.txtViewTopFans);
 		RelativeLayout r = (RelativeLayout) rootView.findViewById(R.id.rLayoutExit);
 		r.setOnClickListener(new OnClickListener() {
 			

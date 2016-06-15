@@ -10,17 +10,20 @@ import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.BC.entertainment.adapter.HomeViewPagerAdapter;
 import com.BC.entertainment.cache.InfoCache;
-import com.BC.entertainment.view.CustomViewPager;
 import com.BC.entertainmentgravitation.entity.FHNEntity;
 import com.BC.entertainmentgravitation.entity.StarInformation;
 import com.BC.entertainmentgravitation.entity.StarLiveVideoInfo;
+import com.BC.entertainmentgravitation.fragment.CurveFragment;
+import com.BC.entertainmentgravitation.fragment.FoundFragment_back;
+import com.BC.entertainmentgravitation.fragment.ListFragment;
+import com.BC.entertainmentgravitation.fragment.PersonalFragment;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.igexin.sdk.PushConsts;
@@ -44,9 +47,8 @@ import com.umeng.analytics.MobclickAgent;
  * @author wen zhong
  *
  */
-public class HomeActivity extends BaseActivity implements OnClickListener{
+public class HomeActivity_back extends BaseActivity implements OnClickListener{
 	
-	private CustomViewPager viewPager;
 	private ImageView imgViewLine;
 	private ImageView imgViewVideo;
 	private ImageView imgViewLive;
@@ -60,17 +62,38 @@ public class HomeActivity extends BaseActivity implements OnClickListener{
 	private TextView txtViewMyself;
 	
 	private Gson gson;
-	private HomeViewPagerAdapter homePagerAdapter;
+	
+	private CurveFragment curveFragment;
+	private ListFragment listFragment;
+	private PersonalFragment personalFragment;
+	private FoundFragment_back foundFragment;
+	private FragmentManager fManager;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main_home_back);
+		setContentView(R.layout.activity_home_back);
 		getWindow().setFormat(PixelFormat.TRANSLUCENT);
+		fManager = getSupportFragmentManager();
 		gson = new Gson();
 		sendFocusStarListRequest();
 		findViewById();
 	}
+	
+    private void hideFragments(FragmentTransaction transaction) {  
+        if (curveFragment != null) {  
+            transaction.hide(curveFragment);  
+        }  
+        if (listFragment != null) {  
+            transaction.hide(listFragment);  
+        }  
+        if (foundFragment != null) {  
+            transaction.hide(foundFragment);  
+        }
+        if (personalFragment != null) {  
+            transaction.hide(personalFragment);  
+        }
+    } 
 	
 	private void touchButton(int id)
 	{
@@ -194,13 +217,6 @@ public class HomeActivity extends BaseActivity implements OnClickListener{
 		findViewById(R.id.rLayoutLive).setOnClickListener(this);
 		findViewById(R.id.rLayoutFound).setOnClickListener(this);
 		findViewById(R.id.rLayoutMyself).setOnClickListener(this);
-		
-		FragmentManager fragmentManager = this.getSupportFragmentManager();
-		viewPager = (CustomViewPager) findViewById(R.id.vPagerContent);
-		viewPager.setPagingEnabled(false);
-		homePagerAdapter = new HomeViewPagerAdapter(fragmentManager);
-		viewPager.setAdapter(homePagerAdapter);
-        viewPager.setCurrentItem(0);
 	}
 	
     @Override
@@ -217,16 +233,28 @@ public class HomeActivity extends BaseActivity implements OnClickListener{
 
 	@Override
 	public void onClick(View v) {
+        FragmentTransaction transaction = fManager.beginTransaction();  
+        hideFragments(transaction);
 		touchButton(v.getId());
 		Intent intent;
 		switch(v.getId())
 		{
 
 		case R.id.rLayoutLine:
-			viewPager.setCurrentItem(0);
+            if (curveFragment == null) {  
+            	curveFragment = new CurveFragment();
+                transaction.add(R.id.content, curveFragment);  
+            } else {  
+                transaction.show(curveFragment);  
+            } 
 			break;
 		case R.id.rLayoutVideo:
-			viewPager.setCurrentItem(1);
+            if (listFragment == null) {  
+            	listFragment = new ListFragment();
+                transaction.add(R.id.content, listFragment);  
+            } else {  
+                transaction.show(listFragment);  
+            } 
 			break;
 		case R.id.rLayoutLive:
 			if (Config.User.getPermission().equals("2")) 
@@ -235,9 +263,6 @@ public class HomeActivity extends BaseActivity implements OnClickListener{
 			}
 			else
 			{
-//				intent = new Intent(this, ApplyActivity.class);
-//				startActivity(intent);
-				
 				intent = new Intent(v.getContext(),
 						BrowserAcitvity.class);
 				intent.putExtra("url", Config.AthuAddress + Config.User.getClientID());
@@ -245,10 +270,20 @@ public class HomeActivity extends BaseActivity implements OnClickListener{
 			}
 			break;
 		case R.id.rLayoutFound:
-			viewPager.setCurrentItem(3);
+            if (foundFragment == null) {  
+            	foundFragment = new FoundFragment_back();
+                transaction.add(R.id.content, foundFragment);  
+            } else {  
+                transaction.show(curveFragment);  
+            } 
 			break;
 		case R.id.rLayoutMyself:
-			viewPager.setCurrentItem(4);
+            if (personalFragment == null) {  
+            	personalFragment = new PersonalFragment();
+                transaction.add(R.id.content, personalFragment);  
+            } else {  
+                transaction.show(personalFragment);  
+            } 
 			break;
 		}
 	}
@@ -299,7 +334,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener{
 					new TypeToken<Entity<StarLiveVideoInfo>>() {
 					}.getType());
 			StarLiveVideoInfo startLiveVideoInfo = starLiveInfoEntity.getData();
-			Intent intent = new Intent(HomeActivity.this, PushActivity.class);
+			Intent intent = new Intent(HomeActivity_back.this, PushActivity.class);
 			Bundle b = new Bundle();
 			b.putSerializable("liveInfo", startLiveVideoInfo);
 			intent.putExtras(b);

@@ -36,7 +36,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="140dp"
+        android:layout_height="150dp"
         android:paddingTop="5dp"
         android:paddingBottom="10dp" 
         android:background="@drawable/activity_personal_portrait_bg" >
@@ -58,7 +58,7 @@
             android:textSize="15dp"
             android:layout_marginTop="5dp"
             android:text="" />
-<!--         <LinearLayout
+         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/txtName"
@@ -92,7 +92,7 @@
                 android:textColor="@color/white"
                 android:layout_marginLeft="5dp"
                 android:text="0" />
-        </LinearLayout> -->
+        </LinearLayout>
     </RelativeLayout>
 
     <android.support.v7.widget.RecyclerView     
@@ -102,7 +102,7 @@
         android:scrollbars="vertical"
         android:scrollbarThumbVertical="@drawable/scrollbar_thumb"
         android:layout_width="match_parent"
-        android:layout_height="300dp" >
+        android:layout_height="290dp" >
     </android.support.v7.widget.RecyclerView>
     <RelativeLayout
         android:id="@+id/rLayoutExit"
