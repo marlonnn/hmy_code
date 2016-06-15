@@ -50,6 +50,7 @@ import com.summer.logger.XLog;
 import com.summer.task.HttpBaseTask;
 import com.summer.treadpool.ThreadPoolConst;
 import com.summer.utils.JsonUtil;
+import com.summer.utils.SharedPreferencesUtils;
 import com.summer.utils.ToastUtil;
 import com.summer.utils.UrlUtil;
 import com.summer.utils.ValidateUtil;
@@ -97,43 +98,8 @@ public class LoginFragment extends BaseFragment implements OnClickListener, Call
 		gson = new Gson();
 		handler = new Handler(this);
 		ShareSDK.initSDK(getActivity().getApplicationContext());
-        if (!Config.manualExit && Config.User != null && !isNullOrEmpty(Config.password) && !isNullOrEmpty(Config.phoneNum))
-        {
-        	logingToServer(Config.phoneNum, Config.password);
-        }
 		super.onCreate(savedInstanceState);
 	}
-	
-	private boolean isNullOrEmpty(String o)
-	{
-		if (o != null)
-		{
-			if (o.length() == 0)
-			{
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
-		else
-		{
-			return true;
-		}
-	}
-	
-    /**
-     * Login to server
-     */
-    private void logingToServer(String username, String password)
-    {
-		final String name = username;
-		final String psw = password;
-		List<NameValuePair> params = getLogingParams(name, psw, Config.POS + "");
-		ShowProgressDialog(getResources().getString(R.string.loginIsLogining));
-		addToThreadPool(Config.LOGIN_TYPE, "loginTask", params);
-    }
 	
 	@Override
 	public void onStart() {
@@ -213,7 +179,6 @@ public class LoginFragment extends BaseFragment implements OnClickListener, Call
 		case R.id.btnLogin:
 			if (isValidate())
 			{
-				Config.manualExit = false;
 				logingToServer();
 			}
 			
@@ -405,6 +370,7 @@ public class LoginFragment extends BaseFragment implements OnClickListener, Call
 	        		saveNimAccount(Config.User);
 	    			Intent intent = new Intent(getActivity(), HomeActivity.class);
 	    			startActivity(intent);
+	    			SharedPreferencesUtils.setParam(getActivity(), "autoLogin", true);
 	        		ToastUtil.show(getActivity(), getActivity().getString(R.string.loginSuccess));
 				}
 			});

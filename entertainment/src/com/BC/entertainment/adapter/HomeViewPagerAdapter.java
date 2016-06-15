@@ -1,7 +1,6 @@
 package com.BC.entertainment.adapter;
 
 import com.BC.entertainmentgravitation.fragment.CurveFragment;
-import com.BC.entertainmentgravitation.fragment.FoundFragment;
 import com.BC.entertainmentgravitation.fragment.FoundFragment_back;
 import com.BC.entertainmentgravitation.fragment.ListFragment;
 import com.BC.entertainmentgravitation.fragment.PersonalFragment;

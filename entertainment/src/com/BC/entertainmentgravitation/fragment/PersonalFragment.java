@@ -69,6 +69,7 @@ import com.summer.logger.XLog;
 import com.summer.task.HttpBaseTask;
 import com.summer.treadpool.ThreadPoolConst;
 import com.summer.utils.JsonUtil;
+import com.summer.utils.SharedPreferencesUtils;
 import com.summer.utils.StringUtil;
 import com.summer.utils.ToastUtil;
 import com.summer.utils.UrlUtil;
@@ -280,7 +281,7 @@ public class PersonalFragment extends BaseFragment implements OnClickListener, O
 			
 			@Override
 			public void onClick(View v) {
-				Config.manualExit = true;
+				SharedPreferencesUtils.setParam(getActivity(), "autoLogin", false);
 				Intent intent = new Intent(getActivity(), LoginActivity.class);
 				startActivity(intent);
 				if (ativity != null)

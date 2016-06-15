@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.BC.entertainment.adapter.ViewPagerAdapter;
-import com.umeng.analytics.MobclickAgent;
+import com.summer.utils.SharedPreferencesUtils;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -39,6 +39,16 @@ ViewPager.OnPageChangeListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        try {
+			if ((boolean)SharedPreferencesUtils.getParam(this, "autoLogin", false))
+			{
+				Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+				startActivity(intent);
+				finish();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
         setContentView(R.layout.activity_guide_page);
         initializeView();
         initializeData();

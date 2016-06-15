@@ -152,7 +152,7 @@
             </intent-filter>            
         </activity>                
         <activity
-            android:name=".LoginActivity"
+            android:name=".GuidePageActivity"
             android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/app_name" >
@@ -161,6 +161,12 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        
+        <activity
+            android:name=".LoginActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".AccountActivity"
