@@ -15,7 +15,7 @@
         android:textSize="16dp" />
         <TextView
             android:id="@+id/txtViewMessage"
-            android:layout_width="match_parent"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="10dp"
@@ -31,13 +31,13 @@
 		  	<kankan.wheel.widget.WheelView
 			    android:id="@+id/wheelViewPovince"
 			    android:layout_marginTop="10dp"
-			    android:layout_width="wrap_content"
+			    android:layout_width="200dp"
 			    android:layout_height="wrap_content">
 			</kankan.wheel.widget.WheelView>
 			<kankan.wheel.widget.WheelView
 			    android:id="@+id/wheelViewCity"
 			    android:layout_marginTop="10dp"
-			    android:layout_width="wrap_content"
+			    android:layout_width="200dp"
 			    android:layout_height="wrap_content">
 			</kankan.wheel.widget.WheelView>    
         </LinearLayout>

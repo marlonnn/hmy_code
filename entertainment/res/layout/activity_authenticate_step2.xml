@@ -300,7 +300,23 @@
 		        android:textColor="@color/white"
 		        android:textSize="18dp" />
 
-		    <EditText
+		    <TextView
+		        android:id="@+id/txtViewBankProvince"
+		        android:singleLine="true"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_centerVertical="true"
+		        android:layout_alignBaseline="@+id/txtBankProvince"
+		        android:layout_alignBottom="@+id/txtBankProvince"
+		        android:layout_marginLeft="10dp"
+		        android:layout_toRightOf="@+id/txtBankProvince"
+		        android:layout_weight="1"
+		        android:textSize="20dp"
+		        android:hint="请选择开户省份"
+		        android:textColor="@color/white" >
+		        
+		    </TextView>
+<!-- 		    <EditText
 		        android:id="@+id/editTextBankProvince"
 		        android:singleLine="true"
 		        android:layout_width="match_parent"
@@ -314,7 +330,7 @@
 		        android:background="@null"
 		        android:hint="请选择开户省份"
 		        android:textColor="@color/white" >
-		    </EditText>
+		    </EditText> -->
 		</RelativeLayout>		
 		<RelativeLayout
 		    android:id="@+id/rLayoutBankCity"
@@ -336,7 +352,21 @@
 		        android:textColor="@color/white"
 		        android:textSize="18dp" />
 
-		    <EditText
+		    <TextView 
+		        android:id="@+id/txtViewBankCity"
+		        android:singleLine="true"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_centerVertical="true"
+		        android:layout_alignBaseline="@+id/txtBankcity"
+		        android:layout_alignBottom="@+id/txtBankcity"
+		        android:layout_marginLeft="10dp"
+		        android:layout_toRightOf="@+id/txtBankcity"
+		        android:layout_weight="1"
+		        android:textSize="20dp"
+		        android:hint="请选择开户城市"
+		        android:textColor="@color/white"  />
+<!-- 		    <EditText
 		        android:id="@+id/editTextBankCity"
 		        android:singleLine="true"
 		        android:layout_width="match_parent"
@@ -350,7 +380,7 @@
 		        android:background="@null"
 		        android:hint="请选择开户城市"
 		        android:textColor="@color/white" >
-		    </EditText>
+		    </EditText> -->
 		</RelativeLayout>		
 		<RelativeLayout
 		    android:id="@+id/rLayoutBankBranch"

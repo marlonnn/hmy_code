@@ -1,14 +1,10 @@
 package com.BC.entertainmentgravitation.dialog;
 
-import java.util.List;
-
 import kankan.wheel.widget.OnWheelChangedListener;
 import kankan.wheel.widget.WheelView;
 
 import com.BC.entertainment.adapter.RegionAdapter;
 import com.BC.entertainmentgravitation.R;
-import com.BC.entertainmentgravitation.entity.RegionItem;
-import com.BC.entertainmentgravitation.util.CitydbUtil;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
@@ -47,21 +43,21 @@ public class BankDialog extends Dialog {
 		private LinearLayout lLayoutWheel;
 		private WheelView province;
 		private WheelView city;
-		private CitydbUtil citydbUtil;
-		private List<RegionItem> provinceList;
-		private List<RegionItem> cityList;
 		private View layout;
 		private String title;
 		private TextView txtViewMessage;
+		
+		private RegionAdapter adapter;
+		
 		private OnWheelChangedListener wheelChangedListener;
 		private DialogInterface.OnClickListener positiveButtonClickListener;
 		private DialogInterface.OnClickListener negativeButtonClickListener;
 		
-		public Builder(Context context) {
+		public Builder(Context context, RegionAdapter adapter) {
 			this.context = context;
-			citydbUtil = CitydbUtil.structureCitydbUtil(context);
+			this.adapter = adapter;
 		}
-
+		
 		/**
 		 * Set the Dialog title from String
 		 * 
@@ -71,22 +67,6 @@ public class BankDialog extends Dialog {
 
 		public void setTitle(String title) {
 			this.title = title;
-		}
-		
-		public List<RegionItem> getProvinceList() {
-			return provinceList;
-		}
-
-		public void setProvinceList(List<RegionItem> provinceList) {
-			this.provinceList = provinceList;
-		}
-
-		public List<RegionItem> getCityList() {
-			return cityList;
-		}
-
-		public void setCityList(List<RegionItem> cityList) {
-			this.cityList = cityList;
 		}
 		
 		public WheelView getProvince() {
@@ -162,14 +142,17 @@ public class BankDialog extends Dialog {
 			case 1:
 				lLayoutWheel.setVisibility(View.VISIBLE);
 				txtViewMessage.setVisibility(View.GONE);
-				if (provinceList != null && provinceList.size() > 0)
+				if (adapter != null)
 				{
-					province.setViewAdapter(new RegionAdapter(context, provinceList));
+					province.setViewAdapter(adapter);
+					province.setVisibleItems(5);
+					province.setDrawShadows(false);
+					if (wheelChangedListener != null)
+					{
+						province.addChangingListener(wheelChangedListener);
+					}
 				}
-				if (wheelChangedListener != null)
-				{
-					province.addChangingListener(wheelChangedListener);
-				}
+
 				break;
 			/**
 			 * 市
@@ -177,14 +160,17 @@ public class BankDialog extends Dialog {
 			case 2:
 				lLayoutWheel.setVisibility(View.VISIBLE);
 				txtViewMessage.setVisibility(View.GONE);
-				if (cityList != null && cityList.size() > 0)
+				if (adapter != null)
 				{
-					city.setViewAdapter(new RegionAdapter(context, cityList));
+					city.setViewAdapter(adapter);
+					city.setVisibleItems(5);
+					city.setDrawShadows(false);
+					if (wheelChangedListener != null)
+					{
+						city.addChangingListener(wheelChangedListener);
+					}
 				}
-				if (wheelChangedListener != null)
-				{
-					city.addChangingListener(wheelChangedListener);
-				}
+
 				break;
 			}
 			
