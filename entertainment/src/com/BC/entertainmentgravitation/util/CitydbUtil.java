@@ -3,7 +3,7 @@ package com.BC.entertainmentgravitation.util;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.BC.entertainmentgravitation.entity.MyListItem;
+import com.BC.entertainmentgravitation.entity.RegionItem;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -35,9 +35,9 @@ public class CitydbUtil {
 		db.close();
 	}
 
-	public List<MyListItem> selectCountry() {
+	public List<RegionItem> selectCountry() {
 		openDB();
-		List<MyListItem> list = new ArrayList<MyListItem>();
+		List<RegionItem> list = new ArrayList<RegionItem>();
 
 		try {
 			String sql = "select * from fs_province";
@@ -47,7 +47,7 @@ public class CitydbUtil {
 				String code = cursor.getString(cursor
 						.getColumnIndex("ProvinceID"));
 				String name = cursor.getString(1);
-				MyListItem myListItem = new MyListItem();
+				RegionItem myListItem = new RegionItem();
 				myListItem.setName(name);
 				myListItem.setPcode(code);
 				list.add(myListItem);
@@ -55,7 +55,7 @@ public class CitydbUtil {
 			}
 			String code = cursor.getString(cursor.getColumnIndex("ProvinceID"));
 			String name = cursor.getString(1);
-			MyListItem myListItem = new MyListItem();
+			RegionItem myListItem = new RegionItem();
 			myListItem.setName(name);
 			myListItem.setPcode(code);
 			list.add(myListItem);
@@ -66,9 +66,9 @@ public class CitydbUtil {
 		return list;
 	}
 
-	public List<MyListItem> selectCity(String pcode) {
+	public List<RegionItem> selectCity(String pcode) {
 		openDB();
-		List<MyListItem> list = new ArrayList<MyListItem>();
+		List<RegionItem> list = new ArrayList<RegionItem>();
 		try {
 			String sql = "select * from fs_city where ProvinceID='" + pcode
 					+ "'";
@@ -77,7 +77,7 @@ public class CitydbUtil {
 			while (!cursor.isLast()) {
 				String code = cursor.getString(cursor.getColumnIndex("CityID"));
 				String name = cursor.getString(1);
-				MyListItem myListItem = new MyListItem();
+				RegionItem myListItem = new RegionItem();
 				myListItem.setName(name);
 				myListItem.setPcode(code);
 				list.add(myListItem);
@@ -85,7 +85,7 @@ public class CitydbUtil {
 			}
 			String code = cursor.getString(cursor.getColumnIndex("CityID"));
 			String name = cursor.getString(1);
-			MyListItem myListItem = new MyListItem();
+			RegionItem myListItem = new RegionItem();
 			myListItem.setName(name);
 			myListItem.setPcode(code);
 			list.add(myListItem);
@@ -96,9 +96,9 @@ public class CitydbUtil {
 		return list;
 	}
 
-	public List<MyListItem> selectCounty(String pcode) {
+	public List<RegionItem> selectCounty(String pcode) {
 		openDB();
-		List<MyListItem> list = new ArrayList<MyListItem>();
+		List<RegionItem> list = new ArrayList<RegionItem>();
 
 		try {
 			String sql = "select * from fs_district where CityID='" + pcode
@@ -109,7 +109,7 @@ public class CitydbUtil {
 				String code = cursor.getString(cursor
 						.getColumnIndex("DistrictID"));
 				String name = cursor.getString(1);
-				MyListItem myListItem = new MyListItem();
+				RegionItem myListItem = new RegionItem();
 				myListItem.setName(name);
 				myListItem.setPcode(code);
 				list.add(myListItem);
@@ -117,7 +117,7 @@ public class CitydbUtil {
 			}
 			String code = cursor.getString(cursor.getColumnIndex("DistrictID"));
 			String name = cursor.getString(1);
-			MyListItem myListItem = new MyListItem();
+			RegionItem myListItem = new RegionItem();
 			myListItem.setName(name);
 			myListItem.setPcode(code);
 			list.add(myListItem);

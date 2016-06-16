@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/txtViewTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="16dp" />
+        <TextView
+            android:id="@+id/txtViewMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:gravity="center" >
+        </TextView>
+        
+        <LinearLayout
+            android:id="@+id/lLayoutWheel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+		  	<kankan.wheel.widget.WheelView
+			    android:id="@+id/wheelViewPovince"
+			    android:layout_marginTop="10dp"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content">
+			</kankan.wheel.widget.WheelView>
+			<kankan.wheel.widget.WheelView
+			    android:id="@+id/wheelViewCity"
+			    android:layout_marginTop="10dp"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content">
+			</kankan.wheel.widget.WheelView>    
+        </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/selectContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingBottom="5dip" >
+
+        <Button
+            android:id="@+id/positiveButton"
+            android:layout_width="match_parent"
+            android:layout_height="30dip"
+            android:layout_marginBottom="3dip"
+            android:layout_marginLeft="3dip"
+            android:layout_marginRight="3dip"
+            android:layout_marginTop="3dip"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:text="@string/dialog_warning_ok"
+            android:textColor="@color/red2"
+            android:textSize="12dip" />
+
+        <Button
+            android:id="@+id/negativeButton"
+            android:layout_width="match_parent"
+            android:layout_height="30dip"
+            android:layout_marginBottom="3dip"
+            android:layout_marginLeft="3dip"
+            android:layout_marginRight="3dip"
+            android:layout_marginTop="3dip"
+            android:layout_weight="1"
+            android:background="@color/red2"
+            android:text="@string/dialog_warning_cancel"
+            android:textColor="@color/white"
+            android:textSize="12dip" />
+    </LinearLayout>
+</LinearLayout>

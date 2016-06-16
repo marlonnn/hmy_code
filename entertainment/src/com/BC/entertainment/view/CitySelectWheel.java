@@ -12,7 +12,7 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.BC.entertainmentgravitation.R;
-import com.BC.entertainmentgravitation.entity.MyListItem;
+import com.BC.entertainmentgravitation.entity.RegionItem;
 import com.BC.entertainmentgravitation.util.CitydbUtil;
 
 public class CitySelectWheel extends BaseSelcetWheel {
@@ -20,9 +20,9 @@ public class CitySelectWheel extends BaseSelcetWheel {
 	private WheelView city;
 	private WheelView county;
 	private CitydbUtil citydbUtil;
-	private List<MyListItem> countryList;
-	private List<MyListItem> cityList;
-	private List<MyListItem> countyList;
+	private List<RegionItem> countryList;
+	private List<RegionItem> cityList;
+	private List<RegionItem> countyList;
 	private boolean countryScrolling;
 	private boolean cityScrolling;
 
@@ -167,7 +167,7 @@ public class CitySelectWheel extends BaseSelcetWheel {
 		if (countryList == null && countryList.size() <= 0) {
 			return;
 		}
-		MyListItem item = countryList.get(currentItem);
+		RegionItem item = countryList.get(currentItem);
 		cityList = citydbUtil.selectCity(item.getPcode());
 		CountryAdapter adapter = new CountryAdapter(getContext(), cityList);
 		city.setViewAdapter(adapter);
@@ -185,10 +185,10 @@ public class CitySelectWheel extends BaseSelcetWheel {
 
 	protected void updateCounty(int currentItem) {
 		if (cityList != null && cityList.size() > 0) {
-			MyListItem item = cityList.get(currentItem);
+			RegionItem item = cityList.get(currentItem);
 			countyList = citydbUtil.selectCounty(item.getPcode());
 		} else {
-			countyList = new ArrayList<MyListItem>();
+			countyList = new ArrayList<RegionItem>();
 		}
 		if (county != null) {
 			county.setViewAdapter(new CountryAdapter(getContext(), countyList));
@@ -211,10 +211,10 @@ public class CitySelectWheel extends BaseSelcetWheel {
 	 */
 	private class CountryAdapter extends AbstractWheelTextAdapter {
 
-		private List<MyListItem> list;
+		private List<RegionItem> list;
 
 		// Countries names
-		protected CountryAdapter(Context context, List<MyListItem> list) {
+		protected CountryAdapter(Context context, List<RegionItem> list) {
 			super(context);
 			this.list = list;
 

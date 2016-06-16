@@ -164,7 +164,7 @@ public class DateSelectWheel extends BaseSelcetWheel {
 	// if (countryList == null) {
 	// return;
 	// }
-	// MyListItem item = countryList.get(currentItem);
+	// RegionItem item = countryList.get(currentItem);
 	// cityList = citydbUtil.selectCity(item.getPcode());
 	// city.setViewAdapter(new CountryAdapter(getContext(), cityList));
 	// city.setCurrentItem(1);
@@ -174,10 +174,10 @@ public class DateSelectWheel extends BaseSelcetWheel {
 	// protected void updateCounty(int currentItem) {
 	// // TODO Auto-generated method stub
 	// if (cityList != null) {
-	// MyListItem item = cityList.get(currentItem);
+	// RegionItem item = cityList.get(currentItem);
 	// countyList = citydbUtil.selectCounty(item.getPcode());
 	// } else {
-	// countyList = new ArrayList<MyListItem>();
+	// countyList = new ArrayList<RegionItem>();
 	// }
 	// if (county != null) {
 	// county.setViewAdapter(new CountryAdapter(getContext(), countyList));
