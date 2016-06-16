@@ -264,8 +264,8 @@
 		        android:textColor="@color/white"
 		        android:textSize="18dp" />
 
-		    <EditText
-		        android:id="@+id/editTextBanke"
+		    <TextView
+		        android:id="@+id/txtViewBank"
 		        android:singleLine="true"
 		        android:layout_width="match_parent"
 		        android:layout_height="wrap_content"
@@ -275,10 +275,10 @@
 		        android:layout_marginLeft="10dp"
 		        android:layout_toRightOf="@+id/txtBank"
 		        android:layout_weight="1"
-		        android:background="@null"
+		        android:textSize="20dp"
 		        android:hint="请选择开户银行"
 		        android:textColor="@color/white" >
-		    </EditText>
+		    </TextView>
 		</RelativeLayout>	
 		<RelativeLayout
 		    android:id="@+id/rLayoutBankProvince"

@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.BC.entertainment.adapter.RegionAdapter;
@@ -16,6 +17,7 @@ import com.BC.entertainmentgravitation.dialog.BankDialog;
 import com.BC.entertainmentgravitation.entity.RegionItem;
 import com.BC.entertainmentgravitation.util.CitydbUtil;
 import com.summer.activity.BaseActivity;
+import com.summer.utils.ValidateUtil;
 import com.umeng.analytics.MobclickAgent;
 
 public class Authenticate2Activity extends BaseActivity implements OnClickListener, OnWheelChangedListener{
@@ -24,8 +26,14 @@ public class Authenticate2Activity extends BaseActivity implements OnClickListen
 	private List<RegionItem> cityList;
 	private CitydbUtil citydbUtil;
 	private BankDialog.Builder builder;
+	
+	private TextView txtViewbrank;
 	private TextView txtViewBankProvince;
 	private TextView txtViewBankCity;
+	
+	private EditText editName;
+	private EditText editMobile;
+	private EditText editBankBranch;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -40,8 +48,21 @@ public class Authenticate2Activity extends BaseActivity implements OnClickListen
 	
 	private void initView()
 	{
+		txtViewbrank = (TextView) findViewById(R.id.txtViewBank);
 		txtViewBankProvince = (TextView) findViewById(R.id.txtViewBankProvince);
 		txtViewBankCity = (TextView) findViewById(R.id.txtViewBankCity);
+		
+		editName = (EditText) findViewById(R.id.editTextName);
+		editMobile = (EditText) findViewById(R.id.editTextMobile);
+		editBankBranch = (EditText) findViewById(R.id.editTextBankBranch);
+		
+		txtViewbrank.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				
+			}
+		});
 		txtViewBankProvince.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -183,6 +204,10 @@ public class Authenticate2Activity extends BaseActivity implements OnClickListen
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.textView1:
+			if (ValidateUtil.isEmpty(editName, "真实姓名") || ValidateUtil.isEmpty(editMobile, "手机号码"))
+			{
+				return;
+			}
 			Intent it = new Intent(this, Authenticate3Activity.class);
 			startActivity(it);
 			break;
