@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.BC.entertainment.adapter.RegionAdapter;
 import com.BC.entertainmentgravitation.dialog.BankDialog;
+import com.BC.entertainmentgravitation.entity.Authenticate;
 import com.BC.entertainmentgravitation.entity.RegionItem;
 import com.BC.entertainmentgravitation.util.CitydbUtil;
 import com.summer.activity.BaseActivity;
@@ -34,6 +35,7 @@ public class Authenticate2Activity extends BaseActivity implements OnClickListen
 	private EditText editName;
 	private EditText editMobile;
 	private EditText editBankBranch;
+	private EditText editCard;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +56,7 @@ public class Authenticate2Activity extends BaseActivity implements OnClickListen
 		
 		editName = (EditText) findViewById(R.id.editTextName);
 		editMobile = (EditText) findViewById(R.id.editTextMobile);
+		editCard = (EditText) findViewById(R.id.editTextCard);
 		editBankBranch = (EditText) findViewById(R.id.editTextBankBranch);
 		
 		txtViewbrank.setOnClickListener(new OnClickListener() {
@@ -208,7 +211,11 @@ public class Authenticate2Activity extends BaseActivity implements OnClickListen
 			{
 				return;
 			}
+			Authenticate authenticate = createAuthenticate(editName.getText().toString(), editMobile.getText().toString());
 			Intent it = new Intent(this, Authenticate3Activity.class);
+			Bundle b = new Bundle();
+			b.putSerializable("authenticate", authenticate);
+			it.putExtras(b);
 			startActivity(it);
 			break;
 		/**
@@ -217,6 +224,36 @@ public class Authenticate2Activity extends BaseActivity implements OnClickListen
 		case R.id.imageViewBack:
 			finish();
 			break;
+		}
+	}
+	
+	private Authenticate createAuthenticate(String name, String mobile)
+	{
+		Authenticate a = new Authenticate(name, mobile);
+		a.setBankCard(isNullOrEmpty(editCard.getText().toString()) ? "" : editCard.getText().toString());
+		a.setBank(isNullOrEmpty(txtViewbrank.getText().toString()) ? "" : txtViewbrank.getText().toString());
+		a.setBankProvince(isNullOrEmpty(txtViewBankProvince.getText().toString()) ? "" : txtViewBankProvince.getText().toString());
+		a.setBankCity(isNullOrEmpty(txtViewBankCity.getText().toString()) ? "" : txtViewBankCity.getText().toString());
+		a.setBankBranch(isNullOrEmpty(editBankBranch.getText().toString()) ? "" : editBankBranch.getText().toString());
+		return a;
+	}
+	
+	private boolean isNullOrEmpty(String o)
+	{
+		if (o != null)
+		{
+			if (o.length() == 0)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return true;
 		}
 	}
 

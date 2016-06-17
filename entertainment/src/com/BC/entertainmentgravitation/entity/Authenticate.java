@@ -1,6 +1,9 @@
 package com.BC.entertainmentgravitation.entity;
 
-public class Authenticate {
+import java.io.Serializable;
+
+@SuppressWarnings("serial")
+public class Authenticate implements Serializable {
 
 	/**
 	 * 真实姓名
@@ -72,6 +75,12 @@ public class Authenticate {
 	 */
 	private String idCardPhoto;
 
+	public Authenticate(String name, String mobile)
+	{
+		this.name = name;
+		this.mobile = mobile;
+	}
+	
 	public String getName() {
 		return name;
 	}
