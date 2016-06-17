@@ -298,7 +298,7 @@ public class RegisteFragment extends BaseFragment implements OnClickListener{
     }
 
 	@Override
-	public void RequestSuccessful(String jsonString, int taskType) {
+	public void RequestSuccessful(int status, String jsonString, int taskType) {
     	switch (taskType)
     	{
     		

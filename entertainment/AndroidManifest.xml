@@ -369,7 +369,12 @@
             android:name=".Authenticate3Activity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait" >
-        </activity>              
+        </activity>
+        <activity
+            android:name=".AuthenStatusActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" >
+        </activity>                
         <!-- umeng related -->
         <meta-data
             android:name="UMENG_APPKEY"

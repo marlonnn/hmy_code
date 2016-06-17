@@ -428,7 +428,7 @@ public class FocusFragment extends BaseFragment{
                     XLog.i("taskType: " + taskType);
                     if (code == 0)
                     {
-                        RequestSuccessful(jsonString, taskType);
+                        RequestSuccessful(code, jsonString, taskType);
                     }
                     else
                     {
@@ -453,7 +453,7 @@ public class FocusFragment extends BaseFragment{
 	}
 
 	@Override
-	public void RequestSuccessful(String jsonString, int taskType) {
+	public void RequestSuccessful(int status, String jsonString, int taskType) {
 		switch(taskType)
 		{
 		case Config.member_in:

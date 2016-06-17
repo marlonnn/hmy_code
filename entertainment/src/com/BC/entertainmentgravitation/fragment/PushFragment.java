@@ -133,7 +133,7 @@ public class PushFragment extends BaseFragment implements OnClickListener, Modul
 	                    int taskType = (Integer) items.get("taskType");
 	                    if (code == 0)
 	                    {
-	                        RequestSuccessful(jsonString, taskType);
+	                        RequestSuccessful(code, jsonString, taskType);
 	                    }
 	                    else
 	                    {
@@ -696,7 +696,7 @@ public class PushFragment extends BaseFragment implements OnClickListener, Modul
 	}
 
  	@Override
- 	public void RequestSuccessful(String jsonString, int taskType) {
+ 	public void RequestSuccessful(int statu, String jsonString, int taskType) {
  		switch(taskType)
  		{
  		case Config.update_status:

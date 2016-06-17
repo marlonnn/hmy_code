@@ -423,7 +423,7 @@ public class HotFragment extends BaseFragment{
 	}
 	
 	@Override
-	public void RequestSuccessful(String jsonString, int taskType) {
+	public void RequestSuccessful(int status, String jsonString, int taskType) {
 		switch(taskType)
 		{
 		case Config.member_in:

@@ -231,7 +231,7 @@ public class EnvelopeRecordFragment extends BaseFragment{
 	}
 	
 	@Override
-	public void RequestSuccessful(String jsonString, int taskType) {
+	public void RequestSuccessful(int status, String jsonString, int taskType) {
 		switch (taskType) {
 		case Config.a_list:
 			Entity<List<RedAList>> baseEntity = gson.fromJson(jsonString,

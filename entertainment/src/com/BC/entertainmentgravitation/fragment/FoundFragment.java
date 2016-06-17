@@ -267,7 +267,7 @@ public class FoundFragment extends BaseFragment implements OnClickListener{
 	}
 
 	@Override
-	public void RequestSuccessful(String jsonString, int taskType) {
+	public void RequestSuccessful(int status, String jsonString, int taskType) {
 		gson = new Gson();
 		switch (taskType) {
 		case Config.activities:

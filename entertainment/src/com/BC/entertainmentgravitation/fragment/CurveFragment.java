@@ -472,7 +472,7 @@ public class CurveFragment extends BaseFragment implements OnClickListener{
                     XLog.i("taskType: " + taskType);
                     if (code == 0)
                     {
-                        RequestSuccessful(jsonString, taskType);
+                        RequestSuccessful(code, jsonString, taskType);
                     }
                     else
                     {
@@ -484,7 +484,7 @@ public class CurveFragment extends BaseFragment implements OnClickListener{
                     	{
                 			//关注成功
                 			hasFollow = true;
-                    		RequestSuccessful(jsonString, taskType);
+                    		RequestSuccessful(code, jsonString, taskType);
                     	}
                     	else if (taskType == Config.unfollow_attention)
                     	{
@@ -492,7 +492,7 @@ public class CurveFragment extends BaseFragment implements OnClickListener{
                     		{
                     			//取消关注成功
                     			hasFollow = false;
-                    			RequestSuccessful(jsonString, taskType);
+                    			RequestSuccessful(code, jsonString, taskType);
                     		}
                     	}
                     	else
@@ -535,7 +535,7 @@ public class CurveFragment extends BaseFragment implements OnClickListener{
 	}
 
 	@Override
-	public void RequestSuccessful(String jsonString, int taskType) {
+	public void RequestSuccessful(int status, String jsonString, int taskType) {
 		switch(taskType)
 		{
 		case Config.give_applause_booed:

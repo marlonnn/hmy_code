@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.apache.http.NameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -34,6 +36,7 @@ import android.view.Window;
 import android.view.View.OnClickListener;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.BC.entertainment.adapter.PersonalRecycleAdapter;
 import com.BC.entertainment.adapter.PersonalRecycleAdapter.OnItemClickListener;
@@ -41,6 +44,7 @@ import com.BC.entertainment.cache.InfoCache;
 import com.BC.entertainment.cache.PersonalCache;
 import com.BC.entertainmentgravitation.AboutActivity;
 import com.BC.entertainmentgravitation.AlbumActivity;
+import com.BC.entertainmentgravitation.AuthenStatusActivity;
 import com.BC.entertainmentgravitation.Authenticate1Activity;
 import com.BC.entertainmentgravitation.BaseInfoActivity;
 import com.BC.entertainmentgravitation.BrokerActivity;
@@ -165,6 +169,17 @@ public class PersonalFragment extends BaseFragment implements OnClickListener, O
 	public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 		initView();
+	}
+	
+	/**
+	 * 获取认证状态
+	 */
+	private void sendAuthenticateStatusRequest()
+	{
+		HashMap<String, String> entity = new HashMap<String, String>();
+		entity.put("clientID", Config.User.getClientID());
+		List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
+		addToThreadPool(Config.idGet, "send authenticate status request", params);
 	}
 	
 	private void sendBaseInfoRequest()
@@ -526,11 +541,59 @@ public class PersonalFragment extends BaseFragment implements OnClickListener, O
 			}
 		}
 	}
-
+	
+	
 	@Override
-	public void RequestSuccessful(String jsonString, int taskType) {
+	public void RequestFailed(int errorCode, String message, int taskType) {
+		String msg = "";
 		switch(taskType)
 		{
+		case Config.idGet:
+			if (errorCode == 500)
+			{
+				msg = "数据库错误，请与管理员联系";
+			}
+			else if (errorCode == 600)
+			{
+				Intent intent = new Intent(getActivity(), Authenticate1Activity.class);
+				startActivity(intent);
+			}
+			else if (errorCode == 601)
+			{
+				msg = "信息审核中，请耐心等待";
+			}
+			else if (errorCode == 602)
+			{
+				msg= "审核未通过";
+			}
+			Intent it = new Intent(getActivity(), AuthenStatusActivity.class);
+			Bundle b = new Bundle();
+			b.putString("authenStatus", message);
+			b.putInt("status", errorCode);
+			it.putExtras(b);
+			startActivity(it);
+			break;
+			default:
+				Toast.makeText(this.getActivity(), message, Toast.LENGTH_SHORT).show();
+				break;
+		}
+	}
+
+	@Override
+	public void RequestSuccessful(int status, String jsonString, int taskType) {
+		switch(taskType)
+		{
+		/**
+		 * 获取审核信息
+		 */
+		case Config.idGet:
+			Intent it = new Intent(getActivity(), AuthenStatusActivity.class);
+			Bundle b = new Bundle();
+			b.putString("authenStatus", "您已通过审核");
+			b.putInt("status", status);
+			it.putExtras(b);
+			startActivity(it);
+			break;
 		case Config.personal_information:
 			Entity<EditPersonal> baseEntity = gson.fromJson(jsonString,
 					new TypeToken<Entity<EditPersonal>>() {

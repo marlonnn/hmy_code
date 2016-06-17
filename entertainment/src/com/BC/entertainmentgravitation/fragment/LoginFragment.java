@@ -402,7 +402,7 @@ public class LoginFragment extends BaseFragment implements OnClickListener, Call
 	}
 
 	@Override
-	public void RequestSuccessful(String jsonString, int taskType) {
+	public void RequestSuccessful(int status, String jsonString, int taskType) {
 		switch(taskType)
 		{
     	case Config.LOGIN_TYPE:
