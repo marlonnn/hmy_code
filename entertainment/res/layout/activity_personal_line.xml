@@ -116,7 +116,7 @@
             android:layout_marginLeft="10dp"
             android:background="@drawable/home4"
             android:gravity="center"
-            android:text="明星储备指数：0点"
+            android:text="明星指数：0点"
             android:textColor="@color/white"
             android:textSize="15dp" />
 

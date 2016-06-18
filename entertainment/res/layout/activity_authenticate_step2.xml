@@ -237,7 +237,7 @@
 		        android:layout_marginLeft="10dp"
 		        android:layout_toRightOf="@+id/txtCard"
 		        android:ems="10"
-		        android:inputType="numberPassword"
+		        android:inputType="number"
 		        android:layout_weight="1"
 		        android:background="@null"
 		        android:hint="请填写您的银行卡号"

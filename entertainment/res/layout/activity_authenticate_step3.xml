@@ -192,10 +192,11 @@
 				        android:layout_marginLeft="10dp"
 				        android:layout_toRightOf="@+id/txtMobile"
 				        android:ems="10"
-				        android:inputType="phone"
+				        android:inputType="number"
+				        android:singleLine="true"
 				        android:layout_weight="1"
 				        android:background="@null"
-				        android:hint="请填写您的手机号"
+				        android:hint="请填写您的证件号码"
 				        android:textColor="@color/white" >
 				    </EditText>
 		
@@ -221,22 +222,18 @@
 				        android:textColor="@color/white"
 				        android:textSize="18dp" />
 		
-				    <EditText
-				        android:id="@+id/editTextPro"
+				    <TextView
+				        android:id="@+id/txtViewPro"
 				        android:layout_width="wrap_content"
 				        android:layout_height="wrap_content"
 				        android:layout_centerVertical="true"
-				        android:layout_alignBaseline="@+id/txtProfessionalName"
-				        android:layout_alignBottom="@+id/txtProfessionalName"
 				        android:layout_marginLeft="10dp"
 				        android:layout_toRightOf="@+id/txtProfessionalName"
-				        android:ems="10"
-				        android:inputType="numberPassword"
 				        android:layout_weight="1"
-				        android:background="@null"
+				        android:textSize="20dp"
 				        android:hint="请填写您的专业名称"
 				        android:textColor="@color/white" >
-				    </EditText>
+				    </TextView>
 				</RelativeLayout>
 		
 				<LinearLayout
@@ -255,9 +252,8 @@
 						    android:id="@+id/imgViewProfession"
 						    android:layout_width="80dp"
 						    android:layout_height="80dp"
-						    android:layout_gravity="center"
 						    android:visibility="gone"
-						    android:src="@drawable/avatar_def" />
+						    android:layout_gravity="center" />
 						<ImageButton
 						    android:id="@+id/imgBtnProfesson"
 						    android:layout_width="wrap_content"
@@ -285,9 +281,8 @@
 						    android:id="@+id/imgViewShenfenFront"
 						    android:layout_width="80dp"
 						    android:layout_height="80dp"
-						    android:layout_gravity="center"
-						    android:visibility="gone"
-						    android:src="@drawable/avatar_def" />
+						     android:visibility="gone"
+						    android:layout_gravity="center"/>
 						<ImageButton
 						    android:id="@+id/imgBtnShenfenFront"
 						    android:layout_width="wrap_content"
@@ -315,9 +310,8 @@
 						    android:id="@+id/imgViewShenfenBack"
 						    android:layout_width="80dp"
 						    android:layout_height="80dp"
-						    android:layout_gravity="center"
-						    android:visibility="gone"
-						    android:src="@drawable/avatar_def" />
+						     android:visibility="gone"
+						    android:layout_gravity="center"/>
 						<ImageButton
 						    android:id="@+id/imgBtnShenfenBack"
 						    android:layout_width="wrap_content"
@@ -345,9 +339,8 @@
 						    android:id="@+id/imgViewShenfen"
 						    android:layout_width="80dp"
 						    android:layout_height="80dp"
-						    android:layout_gravity="center"
-						    android:visibility="gone"
-						    android:src="@drawable/avatar_def" />
+						     android:visibility="gone"
+						    android:layout_gravity="center"/>
 						<ImageButton
 						    android:id="@+id/imgBtnShenfen"
 						    android:layout_width="wrap_content"

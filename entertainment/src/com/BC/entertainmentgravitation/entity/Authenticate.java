@@ -8,72 +8,72 @@ public class Authenticate implements Serializable {
 	/**
 	 * 真实姓名
 	 */
-	private String name;
+	private String name = "";
 	
 	/**
 	 * 手机号码
 	 */
-	private String mobile;
+	private String mobile = "";
 	
 	/**
 	 * 银行卡号
 	 */
-	private String bankCard;
+	private String bankCard = "";
 	
 	/**
 	 * 开户银行
 	 */
-	private String bank;
+	private String bank = "";
 	
 	/**
 	 * 开户省份
 	 */
-	private String bankProvince;
+	private String bankProvince = "";
 	
 	/**
 	 * 开户城市
 	 */
-	private String bankCity;
+	private String bankCity = "";
 	
 	/**
 	 * 支行名称
 	 */
-	private String bankBranch;
+	private String bankBranch = "";
 	
 	/**
 	 * 证件类型
 	 */
-	private String authType;
+	private String authType = "";
 	
 	/**
 	 * 证件号码
 	 */
-	private String id;
+	private String id = "";
 	
 	/**
 	 * 专业名称
 	 */
-	private String proName;
+	private String proName = "";
 	
 	/**
 	 * 专业证照片
 	 */
-	private String proPhoto;
+	private String proPhoto = "";
 	
 	/**
 	 * 身份证正面
 	 */
-	private String idCardFontPhoto;
+	private String idCardFontPhoto = "";
 	
 	/**
 	 * 身份证反面
 	 */
-	private String idCardBackPhoto;
+	private String idCardBackPhoto = "";
 	
 	/**
 	 * 手持身份证正面
 	 */
-	private String idCardPhoto;
+	private String idCardPhoto = "";
 
 	public Authenticate(String name, String mobile)
 	{

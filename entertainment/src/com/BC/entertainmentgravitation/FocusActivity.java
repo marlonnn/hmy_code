@@ -38,7 +38,7 @@ public class FocusActivity extends BaseActivity implements OnClickListener, Slid
 	private SlideAdapter adapter;
 	private int pageIndex = 1;
 	private SlideListView mSlideListView;
-	private String clientId;
+	private Member member;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -55,8 +55,8 @@ public class FocusActivity extends BaseActivity implements OnClickListener, Slid
 		
 		try {
 			Intent intent = this.getIntent();
-			clientId = (String)intent.getSerializableExtra("clientId");
-			if (clientId != null && clientId.contains(Config.User.getClientID()))
+			member = (Member)intent.getSerializableExtra("member");
+			if (member.getId() != null && member.getId().contains(Config.User.getClientID()))
 			{
 				mSlideListView.setSlideMode(SlideMode.RIGHT);
 			}
@@ -64,7 +64,7 @@ public class FocusActivity extends BaseActivity implements OnClickListener, Slid
 			{
 				mSlideListView.setSlideMode(SlideMode.NONE);
 			}
-			sendFocusStarListRequest(clientId);
+			sendFocusStarListRequest(member.getId());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

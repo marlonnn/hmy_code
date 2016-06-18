@@ -6,6 +6,7 @@ import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.BC.entertainment.cache.InfoCache;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.summer.activity.BaseActivity;
@@ -31,7 +32,10 @@ public class AuthenStatusActivity extends BaseActivity implements OnClickListene
 		cImagePortrait = (CircularImage) findViewById(R.id.cViewPortrait);
 		textViewStatus = (TextView) findViewById(R.id.textViewStatus);
 		imgViewAuthenticated = (ImageView) findViewById(R.id.imgViewAuthenticated);
-		setPortrait();
+		Glide.with(this)
+		.load(InfoCache.getInstance().getPersonalInfo().getHead_portrait())
+		.centerCrop().diskCacheStrategy(DiskCacheStrategy.ALL)
+		.placeholder(R.drawable.avatar_def).into(cImagePortrait);
 		switch(status)
 		{
 		case 0:
@@ -46,14 +50,6 @@ public class AuthenStatusActivity extends BaseActivity implements OnClickListene
 		}
 		textViewStatus.setText("认证状态 : " + message);
 		
-	}
-	
-	private void setPortrait()
-	{
-		Glide.with(this)
-		.load(Config.User.getImage())
-		.centerCrop().diskCacheStrategy(DiskCacheStrategy.ALL)
-		.placeholder(R.drawable.avatar_def).into(cImagePortrait);
 	}
 	
     @Override

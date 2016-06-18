@@ -5,14 +5,25 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import org.apache.http.NameValuePair;
+import kankan.wheel.widget.OnWheelChangedListener;
+import kankan.wheel.widget.WheelView;
 
+import org.apache.http.NameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.DialogFragment;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Bitmap.CompressFormat;
@@ -20,18 +31,22 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Window;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.BC.entertainment.adapter.AuthenPictureAdapter;
+import com.BC.entertainment.adapter.BankAdapter;
+import com.BC.entertainment.cache.AuthenCache;
+import com.BC.entertainmentgravitation.dialog.AuthenDialog;
 import com.BC.entertainmentgravitation.entity.Authenticate;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.BC.entertainmentgravitation.fragment.AuthenPictureFragment;
 import com.summer.activity.BaseActivity;
 import com.summer.config.Config;
 import com.summer.factory.ThreadPoolFactory;
@@ -50,35 +65,105 @@ import com.umeng.analytics.MobclickAgent;
  * @author wen zhong
  *
  */
-public class Authenticate3Activity extends BaseActivity implements OnClickListener{
+public class Authenticate3Activity extends BaseActivity implements OnClickListener, OnWheelChangedListener {
 
-	protected final int NONE = 0;
-	protected boolean canCut = true;// 是否裁剪
-	protected final int PHOTO_GRAPH = 1;// 拍照
-	protected final int PHOTO_ZOOM = 2; // 相册
-	protected final int PHOTO_RESOULT = 3;// 结果
-	protected final String IMAGE_UNSPECIFIED = "image/*";
-	protected String IMAGE_FILE = "";
-	private String fileName = "";
-	private SimpleDateFormat format;
-	
 	private Authenticate authenticate;
 	private TextView txtViewType;
 	private EditText editTextId;
 	
-	private int currentImage = 0;
+	private Bitmap proPhoto;
+	private Bitmap frontPhoto;
+	private Bitmap backPhoto;
+	private Bitmap fullPhoto;
 	
-	private String proPhoto = "";
-	private String frontPhoto = "";
-	private String backPhoto = "";
-	private String fullPhoto = "";
-	private EditText editTextPro;
+	private String pro64Photo = "";
+	private String front64Photo = "";
+	private String back64Photo = "";
+	private String full64Photo = "";
+	private String fileName = "";
 	
+	private TextView txtViewPro;
+	
+	private ImageView imgViewProfession;
+	private ImageView imgViewShenfenFront;
+	private ImageView imgViewShenfenBack;
+	private ImageView imgViewShenfen;
+	private ImageType currentType;
+	private SimpleDateFormat format;
+	
+	private AuthenDialog.Builder builder;
+	private List<Bitmap> getPhotos()
+	{
+		List<Bitmap> photos = new ArrayList<Bitmap>();
+		if (!isNullOrEmpty(proPhoto))
+		{
+			photos.add(proPhoto);
+		}
+		if (!isNullOrEmpty(frontPhoto))
+		{
+			photos.add(frontPhoto);
+		}
+		if (!isNullOrEmpty(backPhoto))
+		{
+			photos.add(backPhoto);
+		}
+		if (!isNullOrEmpty(fullPhoto))
+		{
+			photos.add(fullPhoto);
+		}
+		return photos;
+	}
+	
+	private void showPhotoDialog(final AuthenPictureAdapter adapter, int position)
+	{
+		final AuthenPictureFragment fragment = new AuthenPictureFragment(position);
+		fragment.setStyle(R.style.Dialog, DialogFragment.STYLE_NO_FRAME);
+		fragment.show(getSupportFragmentManager(), "PictureDialog");
+		fragment.setAdapter(adapter);
+		fragment.setPage(position);
+		
+		fragment.setChangeListener(new OnPageChangeListener() {
+
+			@Override
+			public void onPageSelected(int arg0) {
+//				if (adapter.getCount() - 1 == arg0) {
+//					index++;
+//					sendAlbumRequest(index);
+//				}
+			}
+
+			@Override
+			public void onPageScrolled(int arg0, float arg1, int arg2) {
+
+			}
+
+			@Override
+			public void onPageScrollStateChanged(int arg0) {
+
+			}
+		});
+	}
+	
+	public enum ImageType{
+		profession,
+		shenfenFront,
+		shenfenBack,
+		shenfen
+	}
+	
+    public static String getStringToday() {
+        Date currentTime = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmssss");
+        String dateString = formatter.format(currentTime);
+        return dateString;
+    }
+    
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_authenticate_step3);
 		getAuthenticate();
+		initialView();
 		format = new SimpleDateFormat("yyyyMMddHHmmsssss");
 		findViewById(R.id.imageViewBack).setOnClickListener(this);
 		findViewById(R.id.txtViewSubmit).setOnClickListener(this);
@@ -86,27 +171,142 @@ public class Authenticate3Activity extends BaseActivity implements OnClickListen
 		findViewById(R.id.imgBtnShenfenFront).setOnClickListener(this);
 		findViewById(R.id.imgBtnShenfenBack).setOnClickListener(this);
 		findViewById(R.id.imgBtnShenfen).setOnClickListener(this);
+		
+		findViewById(R.id.imgViewProfession).setOnClickListener(this);
+		findViewById(R.id.imgViewShenfenFront).setOnClickListener(this);
+		findViewById(R.id.imgViewShenfenBack).setOnClickListener(this);
+		findViewById(R.id.imgViewShenfen).setOnClickListener(this);
+		
 		txtViewType = (TextView) findViewById(R.id.txtViewType);
-		editTextId = (EditText) findViewById(R.id.editTextMobile);
-		editTextPro = (EditText) findViewById(R.id.editTextPro);
+		editTextId = (EditText) findViewById(R.id.editTextId);
+		txtViewPro = (TextView) findViewById(R.id.txtViewPro);
 		txtViewType.setOnClickListener(new OnClickListener(){
 
 			@Override
 			public void onClick(View v) {
-				
+				showSelectIDType();
 			}
 			
 		});
+		txtViewPro.setOnClickListener(new OnClickListener(){
 
-		
+			@Override
+			public void onClick(View v) {
+				showSelectPro();
+			}
+			
+		});
+	}
+	
+	/**
+	 * 选择证件类型
+	 */
+	private void showSelectIDType()
+	{
+		final String[] IDType = AuthenCache.IDType;
+		if (IDType != null && IDType.length > 0)
+		{
+			BankAdapter adapter = new BankAdapter(this, IDType);
+			builder = new AuthenDialog.Builder(this, adapter);
+			builder.setWheelChangedListener(this);
+			builder.setTitle("证件类型");
+			builder.setPositiveButton(new DialogInterface.OnClickListener(){
+
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					int location = builder.getProvince().getCurrentItem();
+					String type = IDType[location];
+					txtViewType.setText(type);
+					editTextId.setText("");
+					authenticate.setAuthType(type);
+					if (dialog != null)
+					{
+						dialog.dismiss();
+					}
+				}});
+			
+			builder.setNegativeButton(new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					if (dialog != null)
+					{
+						dialog.dismiss();
+					}
+				}
+			});
+			AuthenDialog dialog = builder.Create(3, null);
+			dialog.show();
+		}
+	}
+	
+	/**
+	 * 选择专业名称
+	 */
+	private void showSelectPro()
+	{
+		final String[] pros = AuthenCache.professional;
+		if (pros != null && pros.length > 0)
+		{
+			BankAdapter adapter = new BankAdapter(this, pros);
+			builder = new AuthenDialog.Builder(this, adapter);
+			builder.setWheelChangedListener(this);
+			builder.setTitle("专业名称");
+			builder.setPositiveButton(new DialogInterface.OnClickListener(){
+
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					int location = builder.getProvince().getCurrentItem();
+					String pro = pros[location];
+					authenticate.setProName(pro);
+					txtViewPro.setText(pro);
+					if (dialog != null)
+					{
+						dialog.dismiss();
+					}
+				}});
+			
+			builder.setNegativeButton(new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					if (dialog != null)
+					{
+						dialog.dismiss();
+					}
+				}
+			});
+			AuthenDialog dialog = builder.Create(3, null);
+			dialog.show();
+		}
+	}
+	
+	private void initialView()
+	{
+		imgViewProfession = (ImageView) findViewById(R.id.imgViewProfession);
+		imgViewShenfenFront = (ImageView) findViewById(R.id.imgViewShenfenFront);
+		imgViewShenfenBack = (ImageView) findViewById(R.id.imgViewShenfenBack);
+		imgViewShenfen = (ImageView) findViewById(R.id.imgViewShenfen);
 	}
 	
 	private void getAuthenticate()
 	{
 		try {
-			authenticate = (Authenticate) getIntent().getSerializableExtra("Authenticate");
+			authenticate = (Authenticate) getIntent().getSerializableExtra("authenticate");
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+	
+	private boolean isNullOrEmpty(Bitmap o)
+	{
+		if (o != null)
+		{
+			return false;
+		}
+		else
+		{
+			return true;
 		}
 	}
 	
@@ -143,6 +343,7 @@ public class Authenticate3Activity extends BaseActivity implements OnClickListen
 	 */
 	public void showAlertDialog(int layoutId, int noId, int phoneImageId,
 			int takePictureImageId) {
+		// TODO Auto-generated method stub
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		final AlertDialog ad = builder.create();
 		ad.show();
@@ -154,6 +355,7 @@ public class Authenticate3Activity extends BaseActivity implements OnClickListen
 
 			@Override
 			public void onClick(View v) {
+				// TODO Auto-generated method stub
 				ad.dismiss();
 			}
 		});
@@ -216,12 +418,13 @@ public class Authenticate3Activity extends BaseActivity implements OnClickListen
 		entity.put("bankbranch", authenticate.getBankBranch());
 		entity.put("province", authenticate.getBankProvince());
 		entity.put("city", authenticate.getBankCity());
-		entity.put("pro_imag", authenticate.getProPhoto());
-		entity.put("id_front", authenticate.getIdCardFontPhoto());
-		entity.put("id_back", authenticate.getIdCardBackPhoto());
-		entity.put("id_hold", authenticate.getIdCardPhoto());
+		entity.put("pro_imag", "data:image/jpg;base64," + authenticate.getProPhoto());
+		entity.put("id_front", "data:image/jpg;base64," + authenticate.getIdCardFontPhoto());
+		entity.put("id_back", "data:image/jpg;base64," + authenticate.getIdCardBackPhoto());
+		entity.put("id_hold", "data:image/jpg;base64," + authenticate.getIdCardPhoto());
+		entity.put("cardno", isNullOrEmpty(editTextId.getText().toString()) ? "" : editTextId.getText().toString());
 		entity.put("is_update", isUpdate ? "1" : "0");
-		ShowProgressDialog("正在提交审核信息，请稍等...");		
+		ShowProgressDialog("正在提交，请稍等...");		
 		List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
 		addToThreadPool(Config.idCheck, "send search request", params);
 	}
@@ -235,17 +438,6 @@ public class Authenticate3Activity extends BaseActivity implements OnClickListen
     	ThreadPoolFactory.getThreadPoolManager().addTask(httpTask);
     }
     
-	private String getBtye64String(Bitmap bitmapOrg) {
-		ByteArrayOutputStream bao = new ByteArrayOutputStream();
-
-		bitmapOrg.compress(Bitmap.CompressFormat.PNG, 90, bao);
-
-		byte[] ba = bao.toByteArray();
-
-		String ba1 = Base64.encodeToString(ba, Base64.NO_WRAP);
-		return ba1;
-	}
-	
     @Override
     protected void onPause() {
         super.onPause();
@@ -265,25 +457,58 @@ public class Authenticate3Activity extends BaseActivity implements OnClickListen
 		 * 专业照片
 		 */
 		case R.id.imgBtnProfesson:
-			currentImage = R.id.imgBtnProfesson;
+			currentType = ImageType.profession;
+			showAlertDialog(R.layout.dialog_alert3,
+					R.id.button3, R.id.button1, R.id.button2);
 			break;
 		/**
 		 * 身份证前照
 		 */
 		case R.id.imgBtnShenfenFront:
-			currentImage = R.id.imgBtnShenfenFront;
+			currentType = ImageType.shenfenFront;
+			showAlertDialog(R.layout.dialog_alert3,
+					R.id.button3, R.id.button1, R.id.button2);
 			break;
 		/**
 		 * 身份证后照
 		 */
 		case R.id.imgBtnShenfenBack:
-			currentImage = R.id.imgBtnShenfenBack;
+			currentType = ImageType.shenfenBack;
+			showAlertDialog(R.layout.dialog_alert3,
+					R.id.button3, R.id.button1, R.id.button2);
 			break;
 		/**
 		 * 身份证全照
 		 */
 		case R.id.imgBtnShenfen:
-			currentImage = R.id.imgBtnShenfen;
+			currentType = ImageType.shenfen;
+			showAlertDialog(R.layout.dialog_alert3,
+					R.id.button3, R.id.button1, R.id.button2);
+			break;
+			
+		/**
+		 * imageview 专业照片
+		 */
+		case R.id.imgViewProfession:
+			showPhotoDialog(new AuthenPictureAdapter(getPhotos(), this), 0);
+			break;
+		/**
+		 * imageview 身份证前照
+		 */
+		case R.id.imgViewShenfenFront:
+			showPhotoDialog(new AuthenPictureAdapter(getPhotos(), this), 1);
+			break;
+		/**
+		 * imageview 身份证后照
+		 */
+		case R.id.imgViewShenfenBack:
+			showPhotoDialog(new AuthenPictureAdapter(getPhotos(), this), 2);
+			break;
+		/**
+		 * imageview 身份证全照
+		 */
+		case R.id.imgViewShenfen:
+			showPhotoDialog(new AuthenPictureAdapter(getPhotos(), this), 3);
 			break;
 		/**
 		 * 提交
@@ -306,7 +531,7 @@ public class Authenticate3Activity extends BaseActivity implements OnClickListen
 	
 	private boolean checkValidate()
 	{
-		if (ValidateUtil.isEmpty(txtViewType, "证件类型") ||  ValidateUtil.isEmpty(editTextPro, "专业名称"))
+		if (ValidateUtil.isEmpty(txtViewType, "证件类型") ||  ValidateUtil.isEmpty(txtViewPro, "专业名称"))
 		{
 			return false;
 		}
@@ -335,8 +560,9 @@ public class Authenticate3Activity extends BaseActivity implements OnClickListen
 		}
 	}
 	
-	@Override
+	@SuppressLint("ShowToast") @Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		
 		if (resultCode == NONE)
 			return;
 		// 拍照
@@ -360,9 +586,26 @@ public class Authenticate3Activity extends BaseActivity implements OnClickListen
 
 		// 读取相册缩放图片
 		if (requestCode == PHOTO_ZOOM) {
-			if (canCut) 
-			{
+			if (canCut) {
 				startPhotoZoom(data.getData());
+			} else {
+				try {
+					Uri originalUri = data.getData(); // 获得图片的uri
+					String[] proj = { MediaStore.Images.Media.DATA };
+					// 好像是android多媒体数据库的封装接口，具体的看Android文档
+					@SuppressWarnings("deprecation")
+					Cursor cursor = managedQuery(originalUri, proj, null, null,
+							null);
+					// 按我个人理解 这个是获得用户选择的图片的索引值
+					int column_index = cursor
+							.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+					// 将光标移至开头 ，这个很重要，不小心很容易引起越界
+					cursor.moveToFirst();
+					// 最后根据索引值获取图片路径www.2cto.com
+					String path = cursor.getString(column_index);
+				} catch (Exception e) {
+					XLog.e(e.toString());
+				}
 			}
 		}
 		// 处理结果
@@ -374,97 +617,69 @@ public class Authenticate3Activity extends BaseActivity implements OnClickListen
 				photo.compress(Bitmap.CompressFormat.JPEG, 75, stream);// (0-100)压缩文件
 				// 此处可以把Bitmap保存到sd卡中，具体请看：http://www.cnblogs.com/linjiqin/archive/2011/12/28/2304940.html
 				// imageView.setImageBitmap(photo); //把图片显示在ImageView控件上
-				showPhotoImage(currentImage ,photo);
 				setImage(new File(Environment.getExternalStorageDirectory(),
 						IMAGE_FILE + ".jpg"), photo);
+//				showPhotoImage(currentType ,photo);
 			}
 
 		}
 
-		super.onActivityResult(requestCode, resultCode, data);
 	}
 	
-	private void showPhotoImage(int image, Bitmap photo)
+	private void showPhotoImage(ImageType type, Bitmap photo)
 	{
-		ImageView imageView = null;
-		switch(image)
+		if (type == ImageType.profession)
 		{
-		case R.id.imgViewProfession:
-			imageView = (ImageView) findViewById(R.id.imgViewProfession);
-			imageView.setVisibility(View.VISIBLE);
-			break;
-		case R.id.imgViewShenfenFront:
-			imageView = (ImageView) findViewById(R.id.imgViewShenfenFront);
-			imageView.setVisibility(View.VISIBLE);
-			break;
-		case R.id.imgViewShenfenBack:
-			imageView = (ImageView) findViewById(R.id.imgViewShenfenBack);
-			imageView.setVisibility(View.VISIBLE);
-			break;
-		case R.id.imgViewShenfen:
-			imageView = (ImageView) findViewById(R.id.imgViewShenfen);
-			imageView.setVisibility(View.VISIBLE);
-			break;
+			imgViewProfession.setVisibility(View.VISIBLE);
+			imgViewProfession.setImageBitmap(photo);
+			proPhoto = photo;
+			pro64Photo = getBtye64String(photo);
+			authenticate.setProPhoto(pro64Photo);
 		}
-		if (imageView != null)
+		else if (type == ImageType.shenfenFront)
 		{
-			setPhoto(imageView, photo);	
+			imgViewShenfenFront.setVisibility(View.VISIBLE);
+			imgViewShenfenFront.setImageBitmap(photo);
+			frontPhoto = photo;
+			front64Photo = getBtye64String(photo);
+			authenticate.setIdCardFontPhoto(front64Photo);
 		}
+		else if (type == ImageType.shenfenBack)
+		{
+			imgViewShenfenBack.setVisibility(View.VISIBLE);
+			imgViewShenfenBack.setImageBitmap(photo);
+			backPhoto = photo;
+			back64Photo = getBtye64String(photo);
+			authenticate.setIdCardBackPhoto(back64Photo);
+		}
+		else if (type == ImageType.shenfen)
+		{
+			imgViewShenfen.setVisibility(View.VISIBLE);
+			imgViewShenfen.setImageBitmap(photo);
+			fullPhoto = photo;
+			full64Photo = getBtye64String(photo);
+			authenticate.setIdCardPhoto(full64Photo);
+		}
+
 	}
 	
-	private void getPhoto64String(Bitmap photoBitmap)
-	{
-		switch(currentImage)
-		{
-		case R.id.imgViewProfession:
-			proPhoto = getBtye64String(photoBitmap);
-			authenticate.setProPhoto(proPhoto);
-			break;
-		case R.id.imgViewShenfenFront:
-			frontPhoto = getBtye64String(photoBitmap);
-			authenticate.setIdCardFontPhoto(frontPhoto);
-			break;
-		case R.id.imgViewShenfenBack:
-			backPhoto = getBtye64String(photoBitmap);
-			authenticate.setIdCardBackPhoto(backPhoto);
-			break;
-		case R.id.imgViewShenfen:
-			fullPhoto = getBtye64String(photoBitmap);
-			authenticate.setIdCardPhoto(fullPhoto);
-			break;
-		}
-	}
+	private String getBtye64String(Bitmap bitmapOrg) {
+		ByteArrayOutputStream bao = new ByteArrayOutputStream();
 	
-	private void setPhoto(ImageView view, Bitmap photo)
-	{
-		Glide.with(this).load(photo).centerCrop().diskCacheStrategy(DiskCacheStrategy.ALL)
-		.placeholder(R.drawable.avatar_def).into(view);
-	}
+		bitmapOrg.compress(Bitmap.CompressFormat.PNG, 90, bao);
 	
-	/**
-	 * 收缩图片
-	 * 
-	 * @param uri
-	 */
-	public void startPhotoZoom(Uri uri) {
-		Intent intent = new Intent("com.android.camera.action.CROP");
-		intent.setDataAndType(uri, IMAGE_UNSPECIFIED);
-		intent.putExtra("crop", "true");
-		// aspectX aspectY 是宽高的比例
-		intent.putExtra("aspectX", 4);
-		intent.putExtra("aspectY", 3);
-		// outputX outputY 是裁剪图片宽高
-		intent.putExtra("outputX", 400);
-		intent.putExtra("outputY", 300);
-		intent.putExtra("return-data", true);
-		startActivityForResult(intent, PHOTO_RESOULT);
-	}
+		byte[] ba = bao.toByteArray();
+	
+		String ba1 = Base64.encodeToString(ba, Base64.NO_WRAP);
+		return ba1;
+    }
 	
 	public void ObtainImage(String imagePath) {
+		// TODO Auto-generated method stub
 		fileName = imagePath;
 		File fe = new File(Environment.getExternalStorageDirectory(), imagePath);
 		Bitmap bmp = BitmapFactory.decodeFile(fe.getPath());
-		getPhoto64String(bmp);
+		showPhotoImage(currentType, bmp);
 	}
 	
 	private void setImage(File path, Bitmap bmp) {
@@ -482,6 +697,11 @@ public class Authenticate3Activity extends BaseActivity implements OnClickListen
 			e.printStackTrace();
 			XLog.e(e.toString());
 		}
+	}
+
+	@Override
+	public void onChanged(WheelView wheel, int oldValue, int newValue) {
+		
 	}
 
 }

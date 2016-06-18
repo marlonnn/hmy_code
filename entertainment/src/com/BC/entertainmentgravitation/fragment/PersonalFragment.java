@@ -521,8 +521,9 @@ public class PersonalFragment extends BaseFragment implements OnClickListener, O
 			 * 身份认证
 			 */
 			case R.drawable.activity_authenticate:
-				intent = new Intent(getActivity(), Authenticate1Activity.class);
-				startActivity(intent);
+				sendAuthenticateStatusRequest();
+//				intent = new Intent(getActivity(), Authenticate1Activity.class);
+//				startActivity(intent);
 				break;
 			/**
 			 * 意见反馈
@@ -557,6 +558,7 @@ public class PersonalFragment extends BaseFragment implements OnClickListener, O
 			{
 				Intent intent = new Intent(getActivity(), Authenticate1Activity.class);
 				startActivity(intent);
+				return;
 			}
 			else if (errorCode == 601)
 			{
@@ -568,7 +570,7 @@ public class PersonalFragment extends BaseFragment implements OnClickListener, O
 			}
 			Intent it = new Intent(getActivity(), AuthenStatusActivity.class);
 			Bundle b = new Bundle();
-			b.putString("authenStatus", message);
+			b.putString("authenStatus", msg);
 			b.putInt("status", errorCode);
 			it.putExtras(b);
 			startActivity(it);
@@ -689,8 +691,6 @@ public class PersonalFragment extends BaseFragment implements OnClickListener, O
 			}
 
 		}
-
-		super.onActivityResult(requestCode, resultCode, data);
 	}
 
 	/**

@@ -1,7 +1,5 @@
 package com.BC.entertainmentgravitation;
 
-import java.util.List;
-
 import kankan.wheel.widget.OnWheelChangedListener;
 import kankan.wheel.widget.WheelView;
 import android.content.DialogInterface;
@@ -12,21 +10,16 @@ import android.view.View.OnClickListener;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.BC.entertainment.adapter.RegionAdapter;
-import com.BC.entertainmentgravitation.dialog.BankDialog;
+import com.BC.entertainment.adapter.BankAdapter;
+import com.BC.entertainment.cache.AuthenCache;
+import com.BC.entertainmentgravitation.dialog.AuthenDialog;
 import com.BC.entertainmentgravitation.entity.Authenticate;
-import com.BC.entertainmentgravitation.entity.RegionItem;
-import com.BC.entertainmentgravitation.util.CitydbUtil;
 import com.summer.activity.BaseActivity;
 import com.summer.utils.ValidateUtil;
 import com.umeng.analytics.MobclickAgent;
 
 public class Authenticate2Activity extends BaseActivity implements OnClickListener, OnWheelChangedListener{
-
-	private List<RegionItem> provinceList;
-	private List<RegionItem> cityList;
-	private CitydbUtil citydbUtil;
-	private BankDialog.Builder builder;
+	private AuthenDialog.Builder builder;
 	
 	private TextView txtViewbrank;
 	private TextView txtViewBankProvince;
@@ -36,6 +29,8 @@ public class Authenticate2Activity extends BaseActivity implements OnClickListen
 	private EditText editMobile;
 	private EditText editBankBranch;
 	private EditText editCard;
+	private AuthenCache  authenCache;
+	private String[] cities;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -43,9 +38,8 @@ public class Authenticate2Activity extends BaseActivity implements OnClickListen
 		setContentView(R.layout.activity_authenticate_step2);
 		findViewById(R.id.imageViewBack).setOnClickListener(this);
 		findViewById(R.id.textView1).setOnClickListener(this);
-		citydbUtil = CitydbUtil.structureCitydbUtil(this);
-
 		initView();
+		authenCache = new AuthenCache(this);
 	}
 	
 	private void initView()
@@ -63,36 +57,78 @@ public class Authenticate2Activity extends BaseActivity implements OnClickListen
 			
 			@Override
 			public void onClick(View v) {
-				
+				showSelectBank();
 			}
 		});
 		txtViewBankProvince.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				showSelectBankProvinceDialog();
+//				showSelectBankProvinceDialog();
+				selectBankProvince();
 			}
 		});
 		txtViewBankCity.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				showSelectBankCityDialog();
+//				showSelectBankCityDialog();
+				selectBankCity();
 			}
 		});
 	}
 	
 	/**
-	 * 选择开户省份
+	 * 选择开户银行
 	 */
-	private void showSelectBankProvinceDialog()
+	private void showSelectBank()
 	{
-		provinceList = citydbUtil.selectCountry();
-		if (provinceList != null && provinceList.size() > 0)
+		final String[] banks = AuthenCache.banks;
+		if (banks != null && banks.length > 0)
 		{
+			BankAdapter adapter = new BankAdapter(this, banks);
+			builder = new AuthenDialog.Builder(this, adapter);
+			builder.setWheelChangedListener(this);
+			builder.setTitle("开户银行");
+			builder.setPositiveButton(new DialogInterface.OnClickListener(){
+
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					int location = builder.getProvince().getCurrentItem();
+					String bank = banks[location];
+					txtViewbrank.setText(bank);
+					if (dialog != null)
+					{
+						dialog.dismiss();
+					}
+				}});
 			
-			RegionAdapter adapter = new RegionAdapter(this,provinceList);
-			builder = new BankDialog.Builder(this, adapter);
+			builder.setNegativeButton(new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					if (dialog != null)
+					{
+						dialog.dismiss();
+					}
+				}
+			});
+			AuthenDialog dialog = builder.Create(0, null);
+			dialog.show();
+		}
+
+	}
+	
+	/**
+	 * 选择开户省份
+	 */	
+	private void selectBankProvince()
+	{
+		final String[] province = AuthenCache.mProvinceDatas;
+		if (province != null && province.length > 0)
+		{
+			BankAdapter adapter = new BankAdapter(this, province);
+			builder = new AuthenDialog.Builder(this, adapter);
 			builder.setWheelChangedListener(this);
 			builder.setTitle("开户省份");
 			builder.setPositiveButton(new DialogInterface.OnClickListener(){
@@ -100,9 +136,19 @@ public class Authenticate2Activity extends BaseActivity implements OnClickListen
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					int location = builder.getProvince().getCurrentItem();
-					RegionItem item = provinceList.get(location);
-					cityList = citydbUtil.selectCity(item.getPcode());
-					txtViewBankProvince.setText(item.getName());
+					String p = province[location];
+					txtViewBankProvince.setText(p);
+					txtViewBankCity.setText("");
+					if (p.contains("北京") || p.contains("天津") || p.contains("重庆") || p.contains("上海")
+							|| p.contains("台湾") || 
+							p.contains("澳门") || p.contains("香港") || p.contains("钓鱼岛"))
+					{
+						cities = authenCache.mAreaDatasMap.get(p);
+					}
+					else
+					{
+						cities = authenCache.mCitisDatasMap.get(p);
+					}
 					if (dialog != null)
 					{
 						dialog.dismiss();
@@ -119,7 +165,7 @@ public class Authenticate2Activity extends BaseActivity implements OnClickListen
 					}
 				}
 			});
-			BankDialog dialog = builder.Create(1, null);
+			AuthenDialog dialog = builder.Create(0, null);
 			dialog.show();
 		}
 	}
@@ -127,21 +173,21 @@ public class Authenticate2Activity extends BaseActivity implements OnClickListen
 	/**
 	 * 选择开户城市
 	 */
-	private void showSelectBankCityDialog()
+	private void selectBankCity()
 	{
-		if (cityList != null && cityList.size() > 0)
+		if (cities != null && cities.length > 0)
 		{
-			builder = new BankDialog.Builder(this, new RegionAdapter(this,cityList));
+			BankAdapter adapter = new BankAdapter(this, cities);
+			builder = new AuthenDialog.Builder(this, adapter);
 			builder.setWheelChangedListener(this);
-			builder.setTitle("开户城市");
-
+			builder.setTitle("开户省份");
 			builder.setPositiveButton(new DialogInterface.OnClickListener(){
 
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					int location = builder.getCity().getCurrentItem();
-					RegionItem item = cityList.get(location);
-					txtViewBankCity.setText(item.getName());
+					int location = builder.getProvince().getCurrentItem();
+					String city = cities[location];
+					txtViewBankCity.setText(city);
 					if (dialog != null)
 					{
 						dialog.dismiss();
@@ -158,12 +204,12 @@ public class Authenticate2Activity extends BaseActivity implements OnClickListen
 					}
 				}
 			});
-			BankDialog dialog = builder.Create(2, null);
+			AuthenDialog dialog = builder.Create(0, null);
 			dialog.show();
 		}
 		else
 		{
-			builder = new BankDialog.Builder(this, null);
+			builder = new AuthenDialog.Builder(this, null);
 			builder.setTitle("操作异常");
 
 			builder.setPositiveButton(new DialogInterface.OnClickListener(){
@@ -186,7 +232,7 @@ public class Authenticate2Activity extends BaseActivity implements OnClickListen
 					}
 				}
 			});
-			BankDialog dialog = builder.Create(-1, "请先选择开户银行省份");
+			AuthenDialog dialog = builder.Create(-1, "请先选择开户银行省份");
 			dialog.show();
 		}
 	}
@@ -212,6 +258,10 @@ public class Authenticate2Activity extends BaseActivity implements OnClickListen
 				return;
 			}
 			Authenticate authenticate = createAuthenticate(editName.getText().toString(), editMobile.getText().toString());
+			authenticate.setBank(isNullOrEmpty(txtViewbrank.getText().toString()) ? "" :  txtViewbrank.getText().toString());
+			authenticate.setBankProvince(isNullOrEmpty(txtViewBankProvince.getText().toString()) ? "" :  txtViewBankProvince.getText().toString());
+			authenticate.setBankCity(isNullOrEmpty(txtViewBankCity.getText().toString()) ? "" :  txtViewBankCity.getText().toString());
+			authenticate.setBankBranch(isNullOrEmpty(editBankBranch.getText().toString()) ? "" : editBankBranch.getText().toString());
 			Intent it = new Intent(this, Authenticate3Activity.class);
 			Bundle b = new Bundle();
 			b.putSerializable("authenticate", authenticate);
@@ -274,11 +324,5 @@ public class Authenticate2Activity extends BaseActivity implements OnClickListen
 			break;
 		}
 	}
-	
-//	private void updateCity(int location)
-//	{
-//		RegionItem item = builder.getProvinceList().get(location);
-//		cityList = citydbUtil.selectCity(item.getPcode());
-//	}
 
 }

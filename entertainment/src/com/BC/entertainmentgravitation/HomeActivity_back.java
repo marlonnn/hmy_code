@@ -69,6 +69,8 @@ public class HomeActivity_back extends BaseActivity implements OnClickListener{
 	private FoundFragment_back foundFragment;
 	private FragmentManager fManager;
 	
+	private int lastFragment = 1;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -220,7 +222,7 @@ public class HomeActivity_back extends BaseActivity implements OnClickListener{
 		findViewById(R.id.rLayoutMyself).setOnClickListener(this);
 	}
 	
-    @Override
+	@Override
     protected void onPause() {
         super.onPause();
         MobclickAgent.onPause(this);
@@ -248,6 +250,8 @@ public class HomeActivity_back extends BaseActivity implements OnClickListener{
             } else {  
                 transaction.show(curveFragment);  
             } 
+            lastFragment = 1;
+    		transaction.commit();
 			break;
 		case R.id.rLayoutVideo:
             if (listFragment == null) {  
@@ -256,6 +260,8 @@ public class HomeActivity_back extends BaseActivity implements OnClickListener{
             } else {  
                 transaction.show(listFragment);  
             } 
+            lastFragment = 2;
+    		transaction.commit();
 			break;
 		case R.id.rLayoutLive:
 			if (Config.User.getPermission().equals("2")) 
@@ -267,7 +273,8 @@ public class HomeActivity_back extends BaseActivity implements OnClickListener{
 				intent = new Intent(this,
 						BrowserAcitvity.class);
 				intent.putExtra("url", Config.AthuAddress + Config.User.getClientID());
-				startActivity(intent);
+				intent.putExtra("lastFragment", lastFragment);
+				startActivityForResult(intent, RESULT_OK);
 			}
 			break;
 		case R.id.rLayoutFound:
@@ -277,75 +284,27 @@ public class HomeActivity_back extends BaseActivity implements OnClickListener{
             } else {  
                 transaction.show(foundFragment);  
             } 
+            lastFragment = 3;
+    		transaction.commit();  
 			break;
 		case R.id.rLayoutMyself:
-            if (personalFragment == null) {  
-            	personalFragment = new PersonalFragment();
-                transaction.add(R.id.content, personalFragment);  
-            } else {  
-                transaction.show(personalFragment);  
-            } 
-			break;
-		}
-		transaction.commit();  
-	}
-
-	@Override
-	public void onClick(View v) {
-		setFragmentSelection(v.getId());
-//        FragmentTransaction transaction = fManager.beginTransaction();  
-//        hideFragments(transaction);
-//		touchButton(v.getId());
-//		Intent intent;
-//		switch(v.getId())
-//		{
-//
-//		case R.id.rLayoutLine:
-//            if (curveFragment == null) {  
-//            	curveFragment = new CurveFragment();
-//                transaction.add(R.id.content, curveFragment);  
-//            } else {  
-//                transaction.show(curveFragment);  
-//            } 
-//			break;
-//		case R.id.rLayoutVideo:
-//            if (listFragment == null) {  
-//            	listFragment = new ListFragment();
-//                transaction.add(R.id.content, listFragment);  
-//            } else {  
-//                transaction.show(listFragment);  
-//            } 
-//			break;
-//		case R.id.rLayoutLive:
-//			if (Config.User.getPermission().equals("2")) 
-//			{
-//				createLiveVideoRequest();
-//			}
-//			else
-//			{
-//				intent = new Intent(v.getContext(),
-//						BrowserAcitvity.class);
-//				intent.putExtra("url", Config.AthuAddress + Config.User.getClientID());
-//				startActivity(intent);
-//			}
-//			break;
-//		case R.id.rLayoutFound:
-//            if (foundFragment == null) {  
-//            	foundFragment = new FoundFragment_back();
-//                transaction.add(R.id.content, foundFragment);  
-//            } else {  
-//                transaction.show(curveFragment);  
-//            } 
-//			break;
-//		case R.id.rLayoutMyself:
+			intent = new Intent(this, PersonalCenterActivity.class);
+			intent.putExtra("lastFragment", lastFragment);
+			startActivity(intent);
 //            if (personalFragment == null) {  
 //            	personalFragment = new PersonalFragment();
 //                transaction.add(R.id.content, personalFragment);  
 //            } else {  
 //                transaction.show(personalFragment);  
 //            } 
-//			break;
-//		}
+			break;
+		}
+
+	}
+
+	@Override
+	public void onClick(View v) {
+		setFragmentSelection(v.getId());
 	}
 	
 	private void createLiveVideoRequest()
@@ -384,6 +343,60 @@ public class HomeActivity_back extends BaseActivity implements OnClickListener{
 		List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
 		addToThreadPool(Config.stat_list, "send search request", params);
 	}
+	
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        FragmentTransaction transaction = fManager.beginTransaction();  
+        hideFragments(transaction);
+		switch (resultCode)
+		{
+		case RESULT_OK:
+			 Bundle b = data.getExtras();
+			 int lastFragment = b.getInt("lastFragment");
+			 switch (lastFragment)
+			 {
+				/**
+				 * 
+				 */
+				case 1:
+					touchButton(R.id.rLayoutLine);
+		            if (curveFragment == null) {  
+		            	curveFragment = new CurveFragment();
+		                transaction.add(R.id.content, curveFragment);  
+		            } else {  
+		                transaction.show(curveFragment);  
+		            } 
+					break;
+				/**
+				 * 
+				 */
+				case 2:
+					touchButton(R.id.rLayoutVideo);
+		            if (listFragment == null) {  
+		            	listFragment = new ListFragment();
+		                transaction.add(R.id.content, listFragment);  
+		            } else {  
+		                transaction.show(listFragment);  
+		            } 
+					break;
+				/**
+				 * 
+				 */
+				case 3:
+					touchButton(R.id.rLayoutFound);
+		            if (foundFragment == null) {  
+		            	foundFragment = new FoundFragment_back();
+		                transaction.add(R.id.content, foundFragment);  
+		            } else {  
+		                transaction.show(foundFragment);  
+		            } 
+					break;
+			 }
+			 
+			break;
+
+		}
+	}
     
 	@Override
 	public void RequestSuccessful(String jsonString, int taskType) {
@@ -398,6 +411,7 @@ public class HomeActivity_back extends BaseActivity implements OnClickListener{
 			Bundle b = new Bundle();
 			b.putSerializable("liveInfo", startLiveVideoInfo);
 			intent.putExtras(b);
+			intent.putExtra("lastFragment", lastFragment);
 			startActivity(intent); 
 //			enterChatRoom(startLiveVideoInfo, true);
 			break;

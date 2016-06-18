@@ -522,7 +522,7 @@ public class CurveActivity extends BaseActivity implements OnClickListener{
 					}.getType());
 			KLink kLink = baseEntity3.getData();
 			txtViewChange.setText(isNullOrEmpty(kLink.getDifference()) ? "昨日涨跌0点" : "昨日涨跌"+ kLink.getDifference()+ "点");
-			txtViewIndex.setText(isNullOrEmpty(kLink.getBid())? "明星储备指数：0点" : "明星储备指数：" + kLink.getBid()+  "点");
+			txtViewIndex.setText(isNullOrEmpty(kLink.getBid())? "明星指数：0点" : "明星指数：" + kLink.getBid()+  "点");
 			txtViewHongBao.setText(isNullOrEmpty(kLink.getBonus())? "0" : kLink.getBonus());
 			initPriceCurve(kLink);
 			XLog.i(kLink.toString());
