@@ -21,10 +21,11 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginLeft="15dp"
-        android:textSize="18dp"
+        android:textSize="16dp"
         android:focusable="false"
         android:clickable="false"
         android:layout_toRightOf="@+id/imageViewIcon"
+        android:textColor="@color/white"
         android:text="基本信息" />
 
     <ImageView
@@ -36,6 +37,6 @@
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginRight="16dp"
-        android:src="@drawable/activity_personal_right" />
+        android:src="@drawable/fragment_right" />
 
 </RelativeLayout>

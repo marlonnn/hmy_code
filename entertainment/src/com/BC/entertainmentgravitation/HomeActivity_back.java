@@ -23,7 +23,6 @@ import com.BC.entertainmentgravitation.entity.StarLiveVideoInfo;
 import com.BC.entertainmentgravitation.fragment.CurveFragment;
 import com.BC.entertainmentgravitation.fragment.FoundFragment_back;
 import com.BC.entertainmentgravitation.fragment.ListFragment;
-import com.BC.entertainmentgravitation.fragment.PersonalFragment;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.igexin.sdk.PushConsts;
@@ -68,7 +67,6 @@ public class HomeActivity_back extends BaseActivity implements OnClickListener{
 	
 	private CurveFragment curveFragment;
 	private ListFragment listFragment;
-	private PersonalFragment personalFragment;
 	private FoundFragment_back foundFragment;
 	private FragmentManager fManager;
 	
@@ -95,9 +93,6 @@ public class HomeActivity_back extends BaseActivity implements OnClickListener{
         }  
         if (foundFragment != null) {  
             transaction.hide(foundFragment);  
-        }
-        if (personalFragment != null) {  
-            transaction.hide(personalFragment);  
         }
     } 
 	

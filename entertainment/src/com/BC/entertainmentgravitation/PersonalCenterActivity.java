@@ -110,7 +110,7 @@ public class PersonalCenterActivity extends BaseActivity implements OnClickListe
 		gson = new Gson();
 		format = new SimpleDateFormat("yyyyMMddHHmmsssss");
 		sendBaseInfoRequest();
-		setContentView(R.layout.fragment_personal);
+		setContentView(R.layout.activity_personal_center);
 		findViewById(R.id.imageViewBack).setOnClickListener(this);
 		try {
 			intent = getIntent();
@@ -124,6 +124,8 @@ public class PersonalCenterActivity extends BaseActivity implements OnClickListe
 	{
 		if (member != null)
 		{
+			findViewById(R.id.lLayoutFocus).setOnClickListener(this);
+			findViewById(R.id.lLayoutFans).setOnClickListener(this);
 			personals = PersonalCache.getInstance().GetPersonalInfos();
 			portrait = (CircularImage) findViewById(R.id.cirImagePortrait);
 			portrait.setOnClickListener(this);
@@ -200,6 +202,14 @@ public class PersonalCenterActivity extends BaseActivity implements OnClickListe
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
+		case R.id.lLayoutFocus:
+			if (member != null)
+			{
+				intentToFocus(member);
+			}
+			break;
+		case R.id.lLayoutFans:
+			break;
 		/**
 		 * 修改头像
 		 */

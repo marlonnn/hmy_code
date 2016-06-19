@@ -3,7 +3,6 @@ package com.BC.entertainment.adapter;
 import com.BC.entertainmentgravitation.fragment.CurveFragment;
 import com.BC.entertainmentgravitation.fragment.FoundFragment_back;
 import com.BC.entertainmentgravitation.fragment.ListFragment;
-import com.BC.entertainmentgravitation.fragment.PersonalFragment;
 import com.BC.entertainmentgravitation.fragment.SurfaceEmptyFragment;
 
 import android.support.v4.app.Fragment;
@@ -17,7 +16,6 @@ public class HomeViewPagerAdapter extends FragmentPagerAdapter {
 	
 	private CurveFragment curveFragment;
 	private ListFragment listFragment;
-	private PersonalFragment personalFragment;
 	private FoundFragment_back foundFragment;
 	private SurfaceEmptyFragment emptyFragment;
 
@@ -26,7 +24,6 @@ public class HomeViewPagerAdapter extends FragmentPagerAdapter {
 		curveFragment = new CurveFragment();
 		listFragment = new ListFragment();
 		emptyFragment = new SurfaceEmptyFragment();
-		personalFragment = new PersonalFragment();
 		foundFragment = new FoundFragment_back();
 	}
 
@@ -59,12 +56,6 @@ public class HomeViewPagerAdapter extends FragmentPagerAdapter {
     	case 3:
     		fragment = foundFragment;
     		break;
-		/**
-		 * 我的
-		 */
-    	case 4:
-    		fragment = personalFragment;
-    		break;            		
     	}
         return fragment;
 	}

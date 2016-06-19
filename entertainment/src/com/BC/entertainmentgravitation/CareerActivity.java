@@ -8,7 +8,6 @@ import org.apache.http.NameValuePair;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -36,9 +35,6 @@ public class CareerActivity extends BaseActivity implements OnClickListener{
 
 	private String career;
 	private EditText Describe_the_text;
-
-	private Button editButton, exitEditButton;
-	boolean canEdit = false;
 
 	public String getCareer() {
 		return career;
@@ -70,15 +66,9 @@ public class CareerActivity extends BaseActivity implements OnClickListener{
 	private void initView()
 	{
 		findViewById(R.id.imageViewBack).setOnClickListener(this);
-		
+		findViewById(R.id.imgViewModify).setOnClickListener(this);
 		Describe_the_text = (EditText) findViewById(R.id.Describe_the_text);
-		editButton = (Button) findViewById(R.id.editButton);
-		exitEditButton = (Button)findViewById(R.id.exitEditButton);
-
-		editButton.setOnClickListener(this);
-		exitEditButton.setOnClickListener(this);
-		exitEditButton.setVisibility(View.GONE);
-		canEdit(canEdit);
+		canEdit(true);
 	}
 	
 	public void canEdit(boolean b) {
@@ -86,7 +76,6 @@ public class CareerActivity extends BaseActivity implements OnClickListener{
 	}
 	
 	public void save() {
-		// TODO Auto-generated method stub
 		if (career == null) {
 			career = "暂无描述";
 		}
@@ -160,25 +149,8 @@ public class CareerActivity extends BaseActivity implements OnClickListener{
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		
-		case R.id.editButton:
-			canEdit = !canEdit;
-			canEdit(canEdit);
-			if (!canEdit) {
-				editButton.setText("更改");
-				save();
-				exitEditButton.setVisibility(View.GONE);
-			} else {
-				editButton.setText("确定");
-				exitEditButton.setVisibility(View.VISIBLE);
-			}
-			break;
-
-		case R.id.exitEditButton:
-			canEdit = false;
-			canEdit(canEdit);
-			editButton.setText("更改");
-			exitEditButton.setVisibility(View.GONE);
+		case R.id.imgViewModify:
+			save();
 			break;
 		/**
 		 * 返回键
