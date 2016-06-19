@@ -245,12 +245,6 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait" >
         </activity>
-        <!-- 签到 -->
-        <activity
-            android:name=".SignInActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="landscape" >
-        </activity> 
         <activity
             android:name=".FriendsActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -375,9 +369,15 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait" >
         </activity>   
-        
+        <!-- 首页个人中心 -->
         <activity
             android:name=".PersonalCenterActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" >
+        </activity> 
+        <!-- 我的签到 -->
+        <activity
+            android:name=".SignInActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait" >
         </activity>   

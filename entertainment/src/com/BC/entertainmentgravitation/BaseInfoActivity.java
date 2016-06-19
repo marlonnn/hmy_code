@@ -75,7 +75,6 @@ public class BaseInfoActivity extends BaseActivity implements OnClickListener{
 	private CircularImage Head_portrait;
 	private Bitmap Head_portraitbmp;
 	
-	Button editButton, exitEditButton;
 	boolean canEdit = false;
 	
 	private SimpleDateFormat format;
@@ -92,6 +91,7 @@ public class BaseInfoActivity extends BaseActivity implements OnClickListener{
 	{
 		format = new SimpleDateFormat("yyyyMMddHHmmsssss");
 		findViewById(R.id.imageViewBack).setOnClickListener(this);
+		findViewById(R.id.imgViewModify).setOnClickListener(this);
 		gender = (BaseSelectItem) findViewById(R.id.gender);
 		professional = (BaseSelectItem) findViewById(R.id.professional);
 		nationality = (BaseSelectItem) findViewById(R.id.nationality);
@@ -128,16 +128,11 @@ public class BaseInfoActivity extends BaseActivity implements OnClickListener{
 		In_the_mood = (EditText) findViewById(R.id.In_the_mood);
 		email = (EditText) findViewById(R.id.email);
 		Mobile_phone = (EditText) findViewById(R.id.phone);
-		editButton = (Button) findViewById(R.id.editButton);
-		exitEditButton = (Button) findViewById(R.id.exitEditButton);
 		Head_portrait = (CircularImage)findViewById(R.id.Head_portrait);
 		
 		Head_portrait.setOnClickListener(this);
-		editButton.setOnClickListener(this);
-		exitEditButton.setOnClickListener(this);
 		copy.setOnClickListener(this);
-		exitEditButton.setVisibility(View.GONE);
-		canEdit(canEdit);
+		canEdit(true);
 	}
 	
 	public void canEdit(boolean b) {
@@ -383,27 +378,10 @@ public class BaseInfoActivity extends BaseActivity implements OnClickListener{
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.editButton:
-			canEdit = !canEdit;
-			canEdit(canEdit);
-			if (!canEdit) {
-				editButton.setText("更改");
-				save();
-				exitEditButton.setVisibility(View.GONE);
-			} else {
-				editButton.setText("确定");
-				exitEditButton.setVisibility(View.VISIBLE);
-			}
+		case R.id.imgViewModify:
+			save();
 			break;
-
-		case R.id.exitEditButton:
-			canEdit = false;
-			canEdit(canEdit);
-			editButton.setText("更改");
-			exitEditButton.setVisibility(View.GONE);
-//			save();
-			break;
-
+			
 		case R.id.Head_portrait:
 			showAlertDialog(R.layout.dialog_alert3, R.id.button3, R.id.button1,
 					R.id.button2);
@@ -412,7 +390,6 @@ public class BaseInfoActivity extends BaseActivity implements OnClickListener{
 			copy(Config.User.getShareCode(), this);
 			Toast.makeText(this, "已复制到剪切板，快去分享给好友吧",
 					Toast.LENGTH_LONG).show();
-//			showShare(activity);
 			break;
 		/**
 		 * 返回键

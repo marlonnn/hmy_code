@@ -45,16 +45,27 @@
 		                android:layout_height="wrap_content"
 		                android:layout_gravity="center"
 		                android:textSize="22dp"
+		                android:textColor="@color/white"
 		                android:text="基本信息" />
 		        </LinearLayout>
+
+		        <ImageView
+		            android:id="@+id/imgViewModify"
+		            android:layout_width="28dp"
+		            android:layout_height="28dp"
+		            android:layout_alignParentRight="true"
+		            android:layout_centerVertical="true"
+		            android:layout_marginRight="10dp"
+		            android:background="@drawable/activity_modify" />
 		
 		    </RelativeLayout>
 		<LinearLayout
 		    android:layout_width="match_parent"
-		    android:layout_height="match_parent"
+		    android:layout_height="50dp"
 		    android:layout_weight="1" 
 		    android:gravity="center_vertical"
-		    android:orientation="horizontal" >
+		    android:orientation="horizontal" 
+		    android:background="@drawable/activity_charge_item_bg">
 
 			<com.summer.view.CircularImage
 				android:id="@+id/Head_portrait"
@@ -95,148 +106,185 @@
 				android:text="@string/fragment_base_info_copy"
 				android:textColor="@color/white"/>
 		</LinearLayout>
-		<View
-			android:layout_width="match_parent"
-			android:layout_height="1dp"
-			android:background="@color/gray"/>
-		<com.BC.entertainment.view.BaseSelectItem
-			android:id="@+id/gender"
-			android:layout_weight="1" 
-			android:layout_width="match_parent"
-			android:layout_height="40dp"
-			android:layout_marginLeft="5dp"
-			select:content="@string/fragment_base_info_select"
-			select:dialogContent="@layout/wheel_select"
-			select:mytitle="性别"
-			android:gravity="center"
-			android:text="@string/fragment_base_info_gender" />
-		<View
-			android:layout_width="match_parent"
-			android:layout_height="1dp"
-			android:background="@color/gray" />
-		<com.BC.entertainment.view.BaseSelectItem
-			android:id="@+id/birthday"
-			android:layout_width="match_parent"
-			android:layout_height="40dp"
-			select:content="2015-08-12"
-			android:layout_marginLeft="5dp"
-			android:gravity="center"
-			select:dialogContent="@layout/wheel_date"
-			select:mytitle="生日" />
-		<View
-			android:layout_width="match_parent"
-			android:layout_height="1dp"
-			android:background="@color/gray" />
-		<com.BC.entertainment.view.BaseSelectItem
-			android:id="@+id/professional"
-			android:layout_width="match_parent"
-			android:layout_height="40dp"
-			android:layout_marginLeft="5dp"
-			android:gravity="center"
-			select:content="@string/fragment_base_info_select"
-			select:dialogContent="@layout/wheel_select"
-			select:mytitle="职业" />
-		<View
-			android:layout_width="match_parent"
-			android:layout_height="1dp"
-			android:background="@color/gray" />
-		<com.BC.entertainment.view.BaseSelectItem
-			android:id="@+id/constellation"
-			android:layout_width="match_parent"
-			android:layout_height="40dp"
-			android:gravity="center"
-			android:layout_marginLeft="5dp"
-			select:content="@string/fragment_base_info_select"
-			select:dialogContent="@layout/wheel_select"
-			select:mytitle="星座" />	
-		<View
-			android:layout_width="match_parent"
-			android:layout_height="1dp"
-			android:background="@color/gray" />
-		<com.BC.entertainment.view.BaseSelectItem
-		    android:id="@+id/nationality"
-		    android:layout_width="match_parent"
-		    android:layout_height="40dp"
-		    android:gravity="center"
-		    android:layout_marginLeft="5dp"
-		    select:content="@string/fragment_base_info_select"
-		    select:dialogContent="@layout/wheel_select"
-		    select:mytitle="国籍" />			
-		<View
-			android:layout_width="match_parent"
-			android:layout_height="1dp"
-			android:background="@color/gray" />
-		<com.BC.entertainment.view.BaseSelectItem
-			android:id="@+id/national"
-			android:layout_width="match_parent"
-			android:layout_height="40dp"
-			android:layout_marginLeft="5dp"
-			android:gravity="center"
-			select:content="@string/fragment_base_info_select"
-			select:dialogContent="@layout/wheel_select"
-			select:mytitle="民族" />						
-		<View
-			android:layout_width="match_parent"
-			android:layout_height="1dp"
-			android:background="@color/gray" />
-		<com.BC.entertainment.view.BaseSelectItem
-            android:id="@+id/region"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginLeft="5dp"
-            android:gravity="center"
-            select:content="@string/fragment_base_info_select"
-            select:dialogContent="@layout/wheel_city"
-            select:mytitle="地区" />
-        <View
-			android:layout_width="match_parent"
-			android:layout_height="1dp"
-			android:background="@color/gray" />
-		<com.BC.entertainment.view.BaseSelectItem
-			android:id="@+id/height"
-			android:layout_width="match_parent"
-			android:layout_height="40dp"
-			android:layout_marginLeft="5dp"
-			android:gravity="center"
-			select:content="@string/fragment_base_info_select"
-			select:dialogContent="@layout/wheel_select3"
-			select:mytitle="身高" />       
-        <View
-			android:layout_width="match_parent"
-			android:layout_height="1dp"
-			android:background="@color/gray" />
-		<com.BC.entertainment.view.BaseSelectItem
-			android:id="@+id/language"
-			android:layout_width="match_parent"
-			android:layout_height="40dp"
-			android:gravity="center"
-			android:layout_marginLeft="5dp"
-			select:content="@string/fragment_base_info_select"
-			select:dialogContent="@layout/wheel_select"
-			select:mytitle="语言" />      
-        <View
-			android:layout_width="match_parent"
-			android:layout_height="1dp"
-			android:background="@color/gray" />
- 		<com.BC.entertainment.view.BaseSelectItem
-			android:id="@+id/weight"
-			android:layout_width="match_parent"
-			android:layout_height="40dp"
-			android:layout_marginLeft="5dp"
-			android:gravity="center"
-			select:content="@string/fragment_base_info_select"
-			select:dialogContent="@layout/wheel_select2"
-			select:mytitle="@string/fragment_base_info_weight" />     
-        <View
-			android:layout_width="match_parent"
-			android:layout_height="1dp"
-			android:background="@color/gray" />
 		<LinearLayout
 		    android:layout_width="match_parent"
-			android:layout_height="40dp"
+		    android:layout_height="50dp"
+		    android:layout_weight="1" 
+		    android:gravity="center_vertical"
+		    android:orientation="horizontal" 
+		    android:background="@drawable/activity_charge_item_bg">
+			<com.BC.entertainment.view.BaseSelectItem
+				android:id="@+id/gender"
+				android:layout_weight="1" 
+				android:layout_width="match_parent"
+				android:layout_height="40dp"
+				android:layout_marginLeft="5dp"
+				select:content="@string/fragment_base_info_select"
+				select:dialogContent="@layout/wheel_select"
+				select:mytitle="性别"
+				android:gravity="center"
+				android:text="@string/fragment_base_info_gender" />
+		</LinearLayout>
+		<LinearLayout
+		    android:layout_width="match_parent"
+		    android:layout_height="50dp"
+		    android:layout_weight="1" 
+		    android:gravity="center_vertical"
+		    android:orientation="horizontal" 
+		    android:background="@drawable/activity_charge_item_bg">
+			<com.BC.entertainment.view.BaseSelectItem
+				android:id="@+id/birthday"
+				android:layout_width="match_parent"
+				android:layout_height="40dp"
+				select:content="2015-08-12"
+				android:layout_marginLeft="5dp"
+				android:gravity="center"
+				select:dialogContent="@layout/wheel_date"
+				select:mytitle="生日" />
+		</LinearLayout>
+		<LinearLayout
+		    android:layout_width="match_parent"
+		    android:layout_height="50dp"
+		    android:layout_weight="1" 
+		    android:gravity="center_vertical"
+		    android:orientation="horizontal" 
+		    android:background="@drawable/activity_charge_item_bg">
+			<com.BC.entertainment.view.BaseSelectItem
+				android:id="@+id/professional"
+				android:layout_width="match_parent"
+				android:layout_height="40dp"
+				android:layout_marginLeft="5dp"
+				android:gravity="center"
+				select:content="@string/fragment_base_info_select"
+				select:dialogContent="@layout/wheel_select"
+				select:mytitle="职业" />
+		</LinearLayout>
+		<LinearLayout
+		    android:layout_width="match_parent"
+		    android:layout_height="50dp"
+		    android:layout_weight="1" 
+		    android:gravity="center_vertical"
+		    android:orientation="horizontal" 
+		    android:background="@drawable/activity_charge_item_bg">
+			<com.BC.entertainment.view.BaseSelectItem
+				android:id="@+id/constellation"
+				android:layout_width="match_parent"
+				android:layout_height="40dp"
+				android:gravity="center"
+				android:layout_marginLeft="5dp"
+				select:content="@string/fragment_base_info_select"
+				select:dialogContent="@layout/wheel_select"
+				select:mytitle="星座" />	
+		</LinearLayout>
+		<LinearLayout
+		    android:layout_width="match_parent"
+		    android:layout_height="50dp"
+		    android:layout_weight="1" 
+		    android:gravity="center_vertical"
+		    android:orientation="horizontal" 
+		    android:background="@drawable/activity_charge_item_bg">
+			<com.BC.entertainment.view.BaseSelectItem
+			    android:id="@+id/nationality"
+			    android:layout_width="match_parent"
+			    android:layout_height="40dp"
+			    android:gravity="center"
+			    android:layout_marginLeft="5dp"
+			    select:content="@string/fragment_base_info_select"
+			    select:dialogContent="@layout/wheel_select"
+			    select:mytitle="国籍" />			
+		</LinearLayout>
+		<LinearLayout
+		    android:layout_width="match_parent"
+		    android:layout_height="50dp"
+		    android:layout_weight="1" 
+		    android:gravity="center_vertical"
+		    android:orientation="horizontal" 
+		    android:background="@drawable/activity_charge_item_bg">
+			<com.BC.entertainment.view.BaseSelectItem
+				android:id="@+id/national"
+				android:layout_width="match_parent"
+				android:layout_height="40dp"
+				android:layout_marginLeft="5dp"
+				android:gravity="center"
+				select:content="@string/fragment_base_info_select"
+				select:dialogContent="@layout/wheel_select"
+				select:mytitle="民族" />						
+		</LinearLayout>
+		<LinearLayout
+		    android:layout_width="match_parent"
+		    android:layout_height="50dp"
+		    android:layout_weight="1" 
+		    android:gravity="center_vertical"
+		    android:orientation="horizontal" 
+		    android:background="@drawable/activity_charge_item_bg">
+			<com.BC.entertainment.view.BaseSelectItem
+	            android:id="@+id/region"
+	            android:layout_width="match_parent"
+	            android:layout_height="40dp"
+	            android:layout_marginLeft="5dp"
+	            android:gravity="center"
+	            select:content="@string/fragment_base_info_select"
+	            select:dialogContent="@layout/wheel_city"
+	            select:mytitle="地区" />
+		</LinearLayout>
+		<LinearLayout
+		    android:layout_width="match_parent"
+		    android:layout_height="50dp"
+		    android:layout_weight="1" 
+		    android:gravity="center_vertical"
+		    android:orientation="horizontal" 
+		    android:background="@drawable/activity_charge_item_bg">
+			<com.BC.entertainment.view.BaseSelectItem
+				android:id="@+id/height"
+				android:layout_width="match_parent"
+				android:layout_height="40dp"
+				android:layout_marginLeft="5dp"
+				android:gravity="center"
+				select:content="@string/fragment_base_info_select"
+				select:dialogContent="@layout/wheel_select3"
+				select:mytitle="身高" />
+		</LinearLayout>   
+		<LinearLayout
+		    android:layout_width="match_parent"
+		    android:layout_height="50dp"
+		    android:layout_weight="1" 
+		    android:gravity="center_vertical"
+		    android:orientation="horizontal" 
+		    android:background="@drawable/activity_charge_item_bg">
+			<com.BC.entertainment.view.BaseSelectItem
+				android:id="@+id/language"
+				android:layout_width="match_parent"
+				android:layout_height="40dp"
+				android:gravity="center"
+				android:layout_marginLeft="5dp"
+				select:content="@string/fragment_base_info_select"
+				select:dialogContent="@layout/wheel_select"
+				select:mytitle="语言" />      
+		</LinearLayout>
+		<LinearLayout
+		    android:layout_width="match_parent"
+		    android:layout_height="50dp"
+		    android:layout_weight="1" 
+		    android:gravity="center_vertical"
+		    android:orientation="horizontal" 
+		    android:background="@drawable/activity_charge_item_bg">
+	 		<com.BC.entertainment.view.BaseSelectItem
+				android:id="@+id/weight"
+				android:layout_width="match_parent"
+				android:layout_height="40dp"
+				android:layout_marginLeft="5dp"
+				android:gravity="center"
+				select:content="@string/fragment_base_info_select"
+				select:dialogContent="@layout/wheel_select2"
+				select:mytitle="@string/fragment_base_info_weight" />     
+		</LinearLayout>
+		<LinearLayout
+		    android:layout_width="match_parent"
+			android:layout_height="50dp"
 			android:gravity="center_vertical"
 			android:padding="5dp"
-		    android:layout_weight="1" >
+		    android:layout_weight="1"
+		    android:background="@drawable/activity_charge_item_bg" >
 		
 		    <TextView
 		        android:id="@+id/textView2"
@@ -254,23 +302,21 @@
 		        android:hint="请输入邮箱地址"
 		        android:textColor="@color/white" />
 		</LinearLayout>       
-        <View
-			android:layout_width="match_parent"
-			android:layout_height="1dp"
-			android:background="@color/gray" />
 
 		<LinearLayout
 		    android:layout_width="match_parent"
-		    android:layout_height="40dp"
+		    android:layout_height="50dp"
 		    android:gravity="center_vertical"
 		    android:padding="5dp"
-		    android:layout_weight="1" >
+		    android:layout_weight="1"
+		    android:background="@drawable/activity_charge_item_bg" >
 		
 		    <TextView
 		        android:id="@+id/TextView01"
 		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"
 		        android:text="@string/fragment_base_info_phone"
+		        android:padding="5dp"
 		        android:textColor="@color/white" />
 		
 		    <EditText
@@ -278,47 +324,35 @@
 		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"
 		        android:layout_weight="1"
+		        android:padding="5dp"
 		        android:background="@null"
 		        android:hint="@string/fragment_base_info_phone_hint"
 		        android:textColor="@color/white" />
 		</LinearLayout>       
-        <View
-			android:layout_width="match_parent"
-			android:layout_height="1dp"
-			android:background="@color/gray" />
-		<EditText
-			android:id="@+id/In_the_mood"
-			android:layout_width="wrap_content"
-			android:layout_height="40dp"
-			android:layout_weight="1"
-			android:background="@null"
-			android:hint="留下你的心情"
-			android:textColor="@color/red2" />
-		<View
-			android:layout_width="match_parent"
-			android:layout_height="1dp"
-			android:background="@color/gray" />
-	    <LinearLayout
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content" >
-	
-	        <Button
-	            android:id="@+id/editButton"
-	            android:layout_width="100dip"
-	            android:layout_height="30dip"
-	            android:layout_marginLeft="10dip"
-	            android:background="@color/white"
-	            android:text="@string/fragment_base_info_change"
-	            android:textColor="#e1157f" />
-	
-	        <Button
-	            android:id="@+id/exitEditButton"
-	            android:layout_width="100dip"
-	            android:layout_height="30dip"
-	            android:layout_marginLeft="10dip"
-	            android:background="#e1157f"
-	            android:text="@string/fragment_base_info_exit"
-	            android:textColor="@color/white" />
-	    </LinearLayout>
+		<LinearLayout
+		    android:layout_width="match_parent"
+		    android:layout_height="50dp"
+		    android:layout_weight="1" 
+		    android:gravity="center_vertical"
+		    android:orientation="horizontal" 
+		    android:background="@drawable/activity_charge_item_bg">
+		    <TextView
+		        android:id="@+id/txtView"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:textSize="15dp"
+		        android:padding="5dp"
+		        android:text="心情"
+		        android:textColor="@color/white" />
+			<EditText
+				android:id="@+id/In_the_mood"
+				android:layout_width="wrap_content"
+				android:layout_height="40dp"
+				android:layout_weight="1"
+				android:background="@null"
+				android:hint="发表您的心情"
+				android:padding="5dp"
+				android:textColor="@color/red2" />
+		</LinearLayout>
     </LinearLayout>
 </ScrollView>

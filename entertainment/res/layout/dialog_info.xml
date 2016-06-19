@@ -58,7 +58,7 @@
                     android:id="@+id/txtView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="海绵娱账号:"
+                    android:text="ID:"
                     android:textColor="@color/black" />
 
                 <TextView
@@ -214,12 +214,14 @@
 	        android:layout_height="130dp"
 	        android:layout_alignParentTop="true"
 	        android:layout_centerHorizontal="true" />
+
         <ImageView
             android:id="@+id/imgViewAuthenticated"
-            android:layout_width="20dp"
-            android:layout_height="16dp"
+            android:layout_width="30dp"
+            android:layout_height="25dp"
+            android:layout_alignBottom="@+id/cImageportrait"
             android:layout_alignRight="@+id/cImageportrait"
-            android:layout_marginTop="88dp"
             android:src="@drawable/dialog_info_authenticated" />
+
     </RelativeLayout>
 </LinearLayout>

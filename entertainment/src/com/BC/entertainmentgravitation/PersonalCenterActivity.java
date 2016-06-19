@@ -11,7 +11,6 @@ import java.util.List;
 
 import org.apache.http.NameValuePair;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -29,6 +28,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.View.OnClickListener;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -75,8 +75,8 @@ public class PersonalCenterActivity extends BaseActivity implements OnClickListe
 	private RecyclerView infoList;
 	private TextView txtName;
 	private Gson gson;
-	private Activity ativity;
 	private SimpleDateFormat format;
+	private ImageView imgViewAuthenticated;
 	private TextView txtViewTopFocus;
 	private TextView txtViewTopFans;
 	private String fileName = "";
@@ -122,47 +122,58 @@ public class PersonalCenterActivity extends BaseActivity implements OnClickListe
 	
 	private void initView(Member member)
 	{
-		personals = PersonalCache.getInstance().GetPersonalInfos();
-		portrait = (CircularImage) findViewById(R.id.cirImagePortrait);
-		portrait.setOnClickListener(this);
-		txtName = (TextView) findViewById(R.id.txtName);
-		txtViewTopFocus = (TextView) findViewById(R.id.txtViewTopFocus);
-		txtViewTopFans = (TextView) findViewById(R.id.txtViewTopFans);
-		RelativeLayout r = (RelativeLayout) findViewById(R.id.rLayoutExit);
-		r.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				SharedPreferencesUtils.setParam(PersonalCenterActivity.this, "autoLogin", false);
-				Intent intent = new Intent(PersonalCenterActivity.this, LoginActivity.class);
-				startActivity(intent);
-				if (ativity != null)
-				{
-					ativity.finish();
-				}
+		if (member != null)
+		{
+			personals = PersonalCache.getInstance().GetPersonalInfos();
+			portrait = (CircularImage) findViewById(R.id.cirImagePortrait);
+			portrait.setOnClickListener(this);
+			txtName = (TextView) findViewById(R.id.txtName);
+			txtViewTopFocus = (TextView) findViewById(R.id.txtViewTopFocus);
+			txtViewTopFans = (TextView) findViewById(R.id.txtViewTopFans);
+			imgViewAuthenticated = (ImageView) findViewById(R.id.imgViewAuthenticated);
+			if (member.getIs_validated().contains("1"))
+			{
+				imgViewAuthenticated.setVisibility(View.VISIBLE);
 			}
-		});
-		
-		txtName.setText(isNullOrEmpty(member.getNick()) ? "未知用户" : member.getNick());
-		txtViewTopFocus.setText(isNullOrEmpty(member.getNick()) ? "未知" : member.getFocus());
-		txtViewTopFans.setText(isNullOrEmpty(member.getNick()) ? "未知" : member.getFans());
-		Glide.with(this).load(member.getPortrait())
-		.centerCrop().diskCacheStrategy(DiskCacheStrategy.ALL)
-		.placeholder(R.drawable.avatar_def).into(portrait);
-		portrait.setOnClickListener(this);
-		infoList = (RecyclerView) findViewById(R.id.listViewInfo);
-		
-		adapter = new PersonalRecycleAdapter(PersonalCenterActivity.this, personals);
-		
-        adapter.notifyDataSetChanged();
-        adapter.setmOnItemClickListener(this);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(PersonalCenterActivity.this, LinearLayoutManager.VERTICAL, false);
-        infoList.setVerticalScrollBarEnabled(true);
-        infoList.setLayoutManager(linearLayoutManager);
-        
-        infoList.setItemAnimator(new DefaultItemAnimator());//more的动画效果
-        
-        infoList.setAdapter(adapter);
+			else
+			{
+				imgViewAuthenticated.setVisibility(View.GONE);
+			}
+
+			RelativeLayout r = (RelativeLayout) findViewById(R.id.rLayoutExit);
+			r.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					SharedPreferencesUtils.setParam(PersonalCenterActivity.this, "autoLogin", false);
+					Intent intent = new Intent(PersonalCenterActivity.this, LoginActivity.class);
+					startActivity(intent);
+					finish();
+				}
+			});
+			
+			txtName.setText(isNullOrEmpty(member.getNick()) ? "未知用户" : member.getNick());
+			txtViewTopFocus.setText(isNullOrEmpty(member.getNick()) ? "未知" : member.getFocus());
+			txtViewTopFans.setText(isNullOrEmpty(member.getNick()) ? "未知" : member.getFans());
+			Glide.with(this).load(member.getPortrait())
+			.centerCrop().diskCacheStrategy(DiskCacheStrategy.ALL)
+			.placeholder(R.drawable.avatar_def).into(portrait);
+			portrait.setOnClickListener(this);
+			infoList = (RecyclerView) findViewById(R.id.listViewInfo);
+			
+			adapter = new PersonalRecycleAdapter(PersonalCenterActivity.this, personals);
+			
+	        adapter.notifyDataSetChanged();
+	        adapter.setmOnItemClickListener(this);
+	        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(PersonalCenterActivity.this, LinearLayoutManager.VERTICAL, false);
+	        infoList.setVerticalScrollBarEnabled(true);
+	        infoList.setLayoutManager(linearLayoutManager);
+	        
+	        infoList.setItemAnimator(new DefaultItemAnimator());//more的动画效果
+	        
+	        infoList.setAdapter(adapter);
+		}
+
 		
 	}
 	
@@ -488,6 +499,13 @@ public class PersonalCenterActivity extends BaseActivity implements OnClickListe
 			 */
 			case R.drawable.activity_personal_broker:
 				intent = new Intent(PersonalCenterActivity.this, BrokerActivity.class);
+				startActivity(intent);
+				break;
+			/**
+			 * 我的收益
+			 */
+			case R.drawable.activity_modify:
+				intent = new Intent(PersonalCenterActivity.this, SignInActivity.class);
 				startActivity(intent);
 				break;
 			/**

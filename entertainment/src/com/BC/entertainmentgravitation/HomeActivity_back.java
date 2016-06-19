@@ -49,6 +49,9 @@ import com.umeng.analytics.MobclickAgent;
  */
 public class HomeActivity_back extends BaseActivity implements OnClickListener{
 	
+	private static final int TIME_INTERVAL = 2000;
+	private long mBackPressed;
+	
 	private ImageView imgViewLine;
 	private ImageView imgViewVideo;
 	private ImageView imgViewLive;
@@ -223,6 +226,23 @@ public class HomeActivity_back extends BaseActivity implements OnClickListener{
 	}
 	
 	@Override
+	protected void onRestart() {
+		super.onRestart();
+		switch(lastFragment)
+		{
+		case 1:
+			touchButton(R.id.rLayoutLine);
+			break;
+		case 2:
+			touchButton(R.id.rLayoutVideo);
+			break;
+		case 3:
+			touchButton(R.id.rLayoutFound);
+			break;
+		}
+	}
+
+	@Override
     protected void onPause() {
         super.onPause();
         MobclickAgent.onPause(this);
@@ -240,7 +260,7 @@ public class HomeActivity_back extends BaseActivity implements OnClickListener{
         hideFragments(transaction);
 		touchButton(v );
 		Intent intent;
-		switch(v )
+		switch(v)
 		{
 
 		case R.id.rLayoutLine:
@@ -270,11 +290,8 @@ public class HomeActivity_back extends BaseActivity implements OnClickListener{
 			}
 			else
 			{
-				intent = new Intent(this,
-						BrowserAcitvity.class);
-				intent.putExtra("url", Config.AthuAddress + Config.User.getClientID());
-				intent.putExtra("lastFragment", lastFragment);
-				startActivityForResult(intent, RESULT_OK);
+				intent = new Intent(this, Authenticate1Activity.class);
+				startActivity(intent);
 			}
 			break;
 		case R.id.rLayoutFound:
@@ -498,5 +515,20 @@ public class HomeActivity_back extends BaseActivity implements OnClickListener{
 			break;
 		}
 	}
+	
+	@Override
+	public void onBackPressed()
+	{
+	    if (mBackPressed + TIME_INTERVAL > System.currentTimeMillis()) 
+	    { 
+	        super.onBackPressed(); 
+	        return;
+	    }
+	    else 
+	    { 
+	    	ToastUtil.show(this, "再按一次退出");
+	    }
 
+	    mBackPressed = System.currentTimeMillis();
+	}
 }

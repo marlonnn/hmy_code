@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import android.R.string;
+import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.SpannableString;
@@ -28,17 +28,15 @@ import com.BC.entertainmentgravitation.entity.Day;
 import com.BC.entertainmentgravitation.entity.SignTime;
 import com.BC.entertainmentgravitation.util.TimestampTool;
 
-public class CalendarFragemt extends Fragment{
+@SuppressLint("InflateParams") public class CalendarFragemt extends Fragment{
 
 	View contentView;
 	LayoutInflater inflater;
 
 	private Calendar calendar;
-	private Date selectDate;
 	private Day[] days;
 	private int month = -2;
 	private int year = 2013;
-	private String nowMonth = "";
 
 	int[] ids = { R.id.dayLayout1, R.id.dayLayout2, R.id.dayLayout3,
 			R.id.dayLayout4, R.id.dayLayout5, R.id.dayLayout6, R.id.dayLayout7,
@@ -69,7 +67,6 @@ public class CalendarFragemt extends Fragment{
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		this.inflater = inflater;
 		contentView = inflater.inflate(R.layout.fragment_calender, null);
 		return contentView;
@@ -77,18 +74,14 @@ public class CalendarFragemt extends Fragment{
 
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onViewCreated(view, savedInstanceState);
 		init();
 	}
 
 	private void init() {
-		// TODO Auto-generated method stub
 		calendar = Calendar.getInstance();
 		year = calendar.get(Calendar.YEAR);
 		days = monthData();
-		String[] strings = TimestampTool.getCurrentDate().split("-");
-		nowMonth = strings[1];
 		for (int i = 0; i < ids.length; i++) {
 			View v = newItem(i);
 			LinearLayout layout = (LinearLayout) contentView
@@ -101,8 +94,6 @@ public class CalendarFragemt extends Fragment{
 	public View newItem(int position) {
 		LinearLayout layout = new LinearLayout(getActivity());
 		layout.setOrientation(LinearLayout.VERTICAL);
-		// layout.setBackgroundColor(Color.WHITE);
-		// layout.setPadding(0, 15, 0, 15);
 		layout.setGravity(Gravity.CENTER);
 		layout.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
 				LayoutParams.MATCH_PARENT));
@@ -156,13 +147,11 @@ public class CalendarFragemt extends Fragment{
 			theMonth = calendar.get(Calendar.MONTH);
 			month = theMonth;
 			calendar.set(Calendar.DAY_OF_MONTH, 1);
-			selectDate = calendar.getTime();
 			calendar.setTime(getFirstDayOfWeek(calendar.getTime()));
 		} else {
 			calendar.set(year, month, 1);
 			theDayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
 			theMonth = month;
-			selectDate = calendar.getTime();
 			calendar.setTime(getFirstDayOfWeek(calendar.getTime()));
 		}
 		Calendar calendarNow = Calendar.getInstance();

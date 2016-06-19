@@ -61,8 +61,9 @@
             android:layout_marginTop="5dp" />
         <ImageView
             android:id="@+id/imgViewAuthenticated"
-            android:layout_width="40dp"
-            android:layout_height="25dp"
+            android:layout_width="35dp"
+            android:layout_height="20dp"
+            android:visibility="gone"
             android:layout_alignBottom="@+id/cirImagePortrait"
             android:layout_alignRight="@+id/cirImagePortrait"
             android:src="@drawable/dialog_info_authenticated" />
@@ -130,6 +131,7 @@
         android:layout_centerHorizontal="true"
         android:gravity="bottom"
         android:layout_weight="0.1"
+        android:layout_marginBottom="5dp"
         android:orientation="horizontal" >  
     <RelativeLayout
         android:id="@+id/rLayoutExit"
