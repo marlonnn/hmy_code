@@ -315,8 +315,7 @@
 		        android:id="@+id/TextView01"
 		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"
-		        android:text="@string/fragment_base_info_phone"
-		        android:padding="5dp"
+		        android:text="手机   "
 		        android:textColor="@color/white" />
 		
 		    <EditText
@@ -324,7 +323,6 @@
 		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"
 		        android:layout_weight="1"
-		        android:padding="5dp"
 		        android:background="@null"
 		        android:hint="@string/fragment_base_info_phone_hint"
 		        android:textColor="@color/white" />
@@ -333,6 +331,7 @@
 		    android:layout_width="match_parent"
 		    android:layout_height="50dp"
 		    android:layout_weight="1" 
+		    android:padding="5dp"
 		    android:gravity="center_vertical"
 		    android:orientation="horizontal" 
 		    android:background="@drawable/activity_charge_item_bg">
@@ -341,8 +340,7 @@
 		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"
 		        android:textSize="15dp"
-		        android:padding="5dp"
-		        android:text="心情"
+		        android:text="心情   "
 		        android:textColor="@color/white" />
 			<EditText
 				android:id="@+id/In_the_mood"
@@ -351,7 +349,6 @@
 				android:layout_weight="1"
 				android:background="@null"
 				android:hint="发表您的心情"
-				android:padding="5dp"
 				android:textColor="@color/red2" />
 		</LinearLayout>
     </LinearLayout>

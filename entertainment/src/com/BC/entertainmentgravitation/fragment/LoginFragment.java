@@ -30,8 +30,7 @@ import cn.sharesdk.sina.weibo.SinaWeibo;
 import cn.sharesdk.tencent.qq.QQ;
 import cn.sharesdk.wechat.friends.Wechat;
 
-import com.BC.entertainment.config.Preferences;
-import com.BC.entertainmentgravitation.HomeActivity;
+import com.BC.entertainmentgravitation.HomeActivity_back;
 import com.BC.entertainmentgravitation.R;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -51,7 +50,6 @@ import com.summer.task.HttpBaseTask;
 import com.summer.treadpool.ThreadPoolConst;
 import com.summer.utils.JsonUtil;
 import com.summer.utils.SharedPreferencesUtils;
-import com.summer.utils.ToastUtil;
 import com.summer.utils.UrlUtil;
 import com.summer.utils.ValidateUtil;
 //import com.BC.entertainment.config.Constants;
@@ -360,18 +358,12 @@ public class LoginFragment extends BaseFragment implements OnClickListener, Call
 		    		if (chBoxRememberPassword.isChecked()) {
 		    			Config.setPhoneNum(editName.getText().toString());
 		    			Config.setPassword(editPassword.getText().toString());
-//		    			Config.saveConfig();
 		    		}
 		    		
 		    		Config.saveUser();
-		    		
-					XLog.i("loginInfo: " + loginInfo.getAccount());
-					saveLoginInfo(account, token);
-	        		saveNimAccount(Config.User);
-	    			Intent intent = new Intent(getActivity(), HomeActivity.class);
+	    			Intent intent = new Intent(getActivity(), HomeActivity_back.class);
 	    			startActivity(intent);
 	    			SharedPreferencesUtils.setParam(getActivity(), "autoLogin", true);
-	        		ToastUtil.show(getActivity(), getActivity().getString(R.string.loginSuccess));
 				}
 			});
     	}
@@ -380,26 +372,6 @@ public class LoginFragment extends BaseFragment implements OnClickListener, Call
     		Toast.makeText(getActivity(), "登陆失败", Toast.LENGTH_SHORT).show();
     	}
     }
-    
-    private void saveLoginInfo(final String account, final String token) {
-        Preferences.saveUserAccount(account);
-        Preferences.saveUserToken(token);
-    }
-    
-	private void saveNimAccount(User user)
-	{
-		if (user != null)
-		{
-			if (user.getUserName() != null)
-			{
-				Preferences.saveUserAccount(user.getUserName());
-			}
-			if (user.getToken() != null)
-			{
-				Preferences.saveUserToken(user.getToken());
-			}
-		}
-	}
 
 	@Override
 	public void RequestSuccessful(int status, String jsonString, int taskType) {
