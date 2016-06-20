@@ -43,16 +43,7 @@ public class LoginActivity extends BaseActivity implements iRegister, iLogin{
         MobclickAgent.openActivityDurationTrack(false);
         MobclickAgent.setScenarioType(mContext, EScenarioType.E_UM_NORMAL);
         initView();
-        // SDK初始化，第三方程序启动时，都要进行SDK初始化工作
-        Log.d("GetuiSdkDemo", "initializing sdk...");
-        PushManager.getInstance().initialize(this.getApplicationContext());
-        bindAlias();
     }
-	
-	private void bindAlias()
-	{
-		PushManager.getInstance().bindAlias(mContext, Config.User.getClientID());
-	}
 	
 	private void initView()
 	{

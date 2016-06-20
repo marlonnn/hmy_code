@@ -30,8 +30,13 @@ public class NimApplication extends Application {
 
     private LoginInfo getLoginInfo() {
 		Config.LoadUser();
-        String account = Config.User.getUserName();
-        String token = Config.User.getToken();
+		String account = null;
+		String token = null;
+		if ( Config.User != null)
+		{
+	        account = Config.User.getUserName();
+	        token = Config.User.getToken();
+		}
 
         if (!TextUtils.isEmpty(account) && !TextUtils.isEmpty(token)) {
             return new LoginInfo(account, token);

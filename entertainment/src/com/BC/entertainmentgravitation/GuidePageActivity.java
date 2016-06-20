@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.BC.entertainment.adapter.ViewPagerAdapter;
+import com.summer.config.Config;
 import com.summer.utils.SharedPreferencesUtils;
 
 import java.io.InputStream;
@@ -42,9 +43,17 @@ ViewPager.OnPageChangeListener {
         try {
 			if ((boolean)SharedPreferencesUtils.getParam(this, "autoLogin", false))
 			{
-				Intent intent = new Intent(getApplicationContext(), HomeActivity_back.class);
-				startActivity(intent);
-				finish();
+				if (Config.User != null)
+				{
+					if (Config.User.getUserName() != null && Config.User.getToken() != null)
+					{
+						Intent intent = new Intent(getApplicationContext(), HomeActivity_back.class);
+						startActivity(intent);
+						finish();
+					}
+
+				}
+
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

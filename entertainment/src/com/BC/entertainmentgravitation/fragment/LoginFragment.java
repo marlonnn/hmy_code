@@ -12,6 +12,7 @@ import android.os.Handler;
 import android.os.Handler.Callback;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -34,6 +35,7 @@ import com.BC.entertainmentgravitation.HomeActivity_back;
 import com.BC.entertainmentgravitation.R;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.igexin.sdk.PushManager;
 import com.netease.nimlib.sdk.AbortableFuture;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.RequestCallback;
@@ -93,10 +95,13 @@ public class LoginFragment extends BaseFragment implements OnClickListener, Call
 
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 		gson = new Gson();
 		handler = new Handler(this);
 		ShareSDK.initSDK(getActivity().getApplicationContext());
-		super.onCreate(savedInstanceState);
+        // SDK初始化，第三方程序启动时，都要进行SDK初始化工作
+        Log.d("GetuiSdkDemo", "initializing sdk...");
+        PushManager.getInstance().initialize(getActivity().getApplicationContext());
 	}
 	
 	@Override
@@ -373,6 +378,12 @@ public class LoginFragment extends BaseFragment implements OnClickListener, Call
     	}
     }
 
+	
+	private void bindAlias()
+	{
+		PushManager.getInstance().bindAlias(getActivity(), Config.User.getClientID());
+	}
+	
 	@Override
 	public void RequestSuccessful(int status, String jsonString, int taskType) {
 		switch(taskType)
@@ -382,7 +393,7 @@ public class LoginFragment extends BaseFragment implements OnClickListener, Call
     				new TypeToken<Entity<User>>() {}.getType());
     		Config.User = entity.getData();
 			logingNimServer(Config.User);
-
+			bindAlias();
     		break;
     	case Config.third_regist:
     		Entity<User> entity1 = gson.fromJson(jsonString, 
