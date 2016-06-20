@@ -80,7 +80,7 @@
         android:gravity="right"
         android:layout_marginRight="28dp"
         android:focusable="true"
-        android:src="@drawable/nemediacontroller_scale01" />
+        android:src="@drawable/nemediacontroller_scale02" />
     
 
 </RelativeLayout>

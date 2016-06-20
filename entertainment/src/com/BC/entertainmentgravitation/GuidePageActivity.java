@@ -80,7 +80,8 @@ ViewPager.OnPageChangeListener {
     /**
      * 初始化数据
      */
-    private void initializeData()
+    @SuppressWarnings("deprecation")
+	private void initializeData()
     {
         // 定义一个布局并设置参数
         LinearLayout.LayoutParams mParams = new LinearLayout.LayoutParams(
