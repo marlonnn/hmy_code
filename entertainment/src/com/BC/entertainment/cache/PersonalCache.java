@@ -58,11 +58,14 @@ public class PersonalCache {
 		Personal p11 = new Personal(R.drawable.activity_authenticate, "我的认证");
 		personals.add(p11);
 		
-		Personal p12 = new Personal(R.drawable.activity_personal_feedback, "意见反馈");
+		Personal p12 = new Personal(R.drawable.activity_rights_center, "权益中心");
 		personals.add(p12);
 		
-		Personal p13 = new Personal(R.drawable.activity_personal_about, "关于我们");
+		Personal p13 = new Personal(R.drawable.activity_personal_feedback, "意见反馈");
 		personals.add(p13);
+		
+		Personal p14 = new Personal(R.drawable.activity_personal_about, "关于我们");
+		personals.add(p14);
     	return personals;
     }
     

@@ -13,6 +13,7 @@ import org.apache.http.NameValuePair;
 import android.app.AlertDialog;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -29,8 +30,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.BC.entertainment.cache.AuthenCache;
 import com.BC.entertainment.cache.InfoCache;
 import com.BC.entertainment.view.BaseSelectItem;
+import com.BC.entertainmentgravitation.dialog.RegionDialog;
 import com.BC.entertainmentgravitation.entity.EditPersonal;
 import com.BC.entertainmentgravitation.util.ConstantArrayListsUtil;
 import com.BC.entertainmentgravitation.util.TimestampTool;
@@ -53,9 +56,10 @@ import com.summer.view.CircularImage;
 
 public class BaseInfoActivity extends BaseActivity implements OnClickListener{
 
+	private RegionDialog.Builder builder;
 	private EditText nickname, In_the_mood,email, Mobile_phone;
-	private TextView level, copy;
-	private BaseSelectItem gender, professional, nationality, region, language,
+	private TextView level, copy, txtViewRegion;
+	private BaseSelectItem gender, professional, nationality, language,
 		constellation, national, height, weight, birthday;
 	
 	private List<String> genderList = Arrays.asList(ConstantArrayListsUtil.gender);
@@ -77,6 +81,8 @@ public class BaseInfoActivity extends BaseActivity implements OnClickListener{
 	boolean canEdit = false;
 	
 	private SimpleDateFormat format;
+
+	private AuthenCache authenCache;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +90,7 @@ public class BaseInfoActivity extends BaseActivity implements OnClickListener{
 		setContentView(R.layout.activity_personal_info);
 		initView();
 		initPersonalInformation();
+		authenCache = new AuthenCache(this);
 	}
 	
 	private void initView()
@@ -91,10 +98,12 @@ public class BaseInfoActivity extends BaseActivity implements OnClickListener{
 		format = new SimpleDateFormat("yyyyMMddHHmmsssss");
 		findViewById(R.id.imageViewBack).setOnClickListener(this);
 		findViewById(R.id.imgViewModify).setOnClickListener(this);
+		txtViewRegion = (TextView)findViewById(R.id.txtViewRegion);
+		txtViewRegion.setOnClickListener(this);
 		gender = (BaseSelectItem) findViewById(R.id.gender);
 		professional = (BaseSelectItem) findViewById(R.id.professional);
 		nationality = (BaseSelectItem) findViewById(R.id.nationality);
-		region = (BaseSelectItem) findViewById(R.id.region);
+//		region = (BaseSelectItem) findViewById(R.id.region);
 		language = (BaseSelectItem) findViewById(R.id.language);
 		constellation = (BaseSelectItem) findViewById(R.id.constellation);
 		national = (BaseSelectItem) findViewById(R.id.national);
@@ -144,7 +153,7 @@ public class BaseInfoActivity extends BaseActivity implements OnClickListener{
 		gender.setCanClick(b);
 		professional.setCanClick(b);
 		nationality.setCanClick(b);
-		region.setCanClick(b);
+//		region.setCanClick(b);
 		language.setCanClick(b);
 		constellation.setCanClick(b);
 		national.setCanClick(b);
@@ -169,13 +178,13 @@ public class BaseInfoActivity extends BaseActivity implements OnClickListener{
 		national.setContent(InfoCache.getInstance().getPersonalInfo().getNational());
 		height.setContent(InfoCache.getInstance().getPersonalInfo().getHeight());
 		weight.setContent(InfoCache.getInstance().getPersonalInfo().getWeight());
-		region.setContent(InfoCache.getInstance().getPersonalInfo().getRegion());
-
+//		region.setContent(InfoCache.getInstance().getPersonalInfo().getRegion());
+		txtViewRegion.setText(isNullOrEmpty(InfoCache.getInstance().getPersonalInfo().getRegion()) ? "未知" : InfoCache.getInstance().getPersonalInfo().getRegion());
 		professional.setContent(InfoCache.getInstance().getPersonalInfo()
 				.getProfessional());
 		nationality.setContent(InfoCache.getInstance().getPersonalInfo()
 				.getNationality());
-		region.setContent(InfoCache.getInstance().getPersonalInfo().getRegion());
+//		region.setContent(InfoCache.getInstance().getPersonalInfo().getRegion());
 		language.setContent(InfoCache.getInstance().getPersonalInfo().getLanguage());
 
 		email.setText(InfoCache.getInstance().getPersonalInfo().getEmail());
@@ -187,6 +196,25 @@ public class BaseInfoActivity extends BaseActivity implements OnClickListener{
 		Glide.with(this).load(InfoCache.getInstance().getPersonalInfo().getHead_portrait())
 				.centerCrop().diskCacheStrategy(DiskCacheStrategy.ALL)
 				.placeholder(R.drawable.home_image).into(Head_portrait);
+	}
+	
+	private boolean isNullOrEmpty(String o)
+	{
+		if (o != null)
+		{
+			if (o.length() == 0)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return true;
+		}
 	}
 	
 	public void save() {
@@ -217,7 +245,7 @@ public class BaseInfoActivity extends BaseActivity implements OnClickListener{
 		InfoCache.getInstance().getPersonalInfo().setLanguage(language.getContent());
 		InfoCache.getInstance().getPersonalInfo().setNationality(nationality
 				.getContent());
-		InfoCache.getInstance().getPersonalInfo().setRegion(region.getContent());
+		InfoCache.getInstance().getPersonalInfo().setRegion(txtViewRegion.getText().toString());
 		InfoCache.getInstance().getPersonalInfo().setEmail(email.getText().toString());
 		InfoCache.getInstance().getPersonalInfo().setMobile_phone(Mobile_phone.getText()
 				.toString());
@@ -374,9 +402,53 @@ public class BaseInfoActivity extends BaseActivity implements OnClickListener{
 		startActivityForResult(intent, PHOTO_GRAPH);
 	}
 	
+	/**
+	 * 选择地区
+	 */
+	private void showSelectRegion()
+	{
+		final String[] privinces = authenCache.mProvinceDatas;
+		if (privinces != null && privinces.length > 0)
+		{
+			builder = new RegionDialog.Builder(this, authenCache);
+			builder.setTitle("选择地区");
+			builder.setmProvinceDatas(authenCache.mProvinceDatas);
+			builder.setPositiveButton(new DialogInterface.OnClickListener(){
+
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					String privince = builder.getmCurrentProviceName();
+					String city = builder.getmCurrentCityName();
+					String area = builder.getmCurrentAreaName();
+					txtViewRegion.setText(privince + "-" + city + "-" + area);
+					if (dialog != null)
+					{
+						dialog.dismiss();
+					}
+				}});
+			
+			builder.setNegativeButton(new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					if (dialog != null)
+					{
+						dialog.dismiss();
+					}
+				}
+			});
+			RegionDialog dialog = builder.Create();
+			dialog.show();
+		}
+
+	}
+	
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
+		case R.id.txtViewRegion:
+			showSelectRegion();
+			break;
 		case R.id.imgViewModify:
 			save();
 			break;

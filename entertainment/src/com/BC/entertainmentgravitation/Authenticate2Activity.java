@@ -124,7 +124,7 @@ public class Authenticate2Activity extends BaseActivity implements OnClickListen
 	 */	
 	private void selectBankProvince()
 	{
-		final String[] province = AuthenCache.mProvinceDatas;
+		final String[] province = authenCache.mProvinceDatas;
 		if (province != null && province.length > 0)
 		{
 			BankAdapter adapter = new BankAdapter(this, province);

@@ -380,7 +380,25 @@
             android:name=".SignInActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait" >
-        </activity>   
+        </activity>
+        <!-- 权益中心 -->
+        <activity
+            android:name=".RightsCenterActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" >
+        </activity>
+        <!-- 发布权益 -->
+        <activity
+            android:name=".PublishActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" >
+        </activity>  
+        <!-- 权益卡详情 -->
+        <activity
+            android:name=".RightsCardDetailActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" >
+        </activity>      
         <!-- umeng related -->
         <meta-data
             android:name="UMENG_APPKEY"

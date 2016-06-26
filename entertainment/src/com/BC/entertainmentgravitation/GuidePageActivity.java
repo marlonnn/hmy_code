@@ -11,8 +11,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.BC.entertainment.adapter.ViewPagerAdapter;
+import com.BC.entertainment.config.Preferences;
 import com.summer.config.Config;
-import com.summer.utils.SharedPreferencesUtils;
+import com.summer.entity.User;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -41,26 +42,51 @@ ViewPager.OnPageChangeListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         try {
-			if ((boolean)SharedPreferencesUtils.getParam(this, "autoLogin", false))
-			{
-				if (Config.User != null)
-				{
-					if (Config.User.getUserName() != null && Config.User.getToken() != null)
-					{
-						Intent intent = new Intent(getApplicationContext(), HomeActivity_back.class);
-						startActivity(intent);
-						finish();
-					}
-
-				}
-
-			}
+        	if (Preferences.getUserAutoLogin().contains("true"))
+        	{
+        		if (Preferences.getUserName() != null && Preferences.getUserToken() != null)
+        		{
+        			initUser();
+					Intent intent = new Intent(getApplicationContext(), HomeActivity_back.class);
+					startActivity(intent);
+					finish();
+        		}
+        	}
+//			if ((boolean)SharedPreferencesUtils.getParam(this, "autoLogin", false))
+//			{
+//				if (Config.User != null)
+//				{
+//					if (Config.User.getUserName() != null && Config.User.getToken() != null)
+//					{
+//						Intent intent = new Intent(getApplicationContext(), HomeActivity_back.class);
+//						startActivity(intent);
+//						finish();
+//					}
+//
+//				}
+//
+//			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
         setContentView(R.layout.activity_guide_page);
         initializeView();
         initializeData();
+    }
+    
+    private void initUser()
+    {
+    	User user = new User();
+    	user.setCheckType(Preferences.getUserCheckType());
+    	user.setClientID(Preferences.getUserId());
+    	user.setImage(Preferences.getUserImage());
+    	user.setNickName(Preferences.getUserNickName());
+    	user.setPermission(Preferences.getUserPermission());
+    	user.setPushUrl(Preferences.getUserPushUrl());
+    	user.setShareCode(Preferences.getUserShareCode());
+    	user.setToken(Preferences.getUserToken());
+    	user.setUserName(Preferences.getUserName());
+    	Config.User = user;
     }
     
 	private Bitmap readBitmap(int resId)
@@ -168,7 +194,7 @@ ViewPager.OnPageChangeListener {
         else if (currentIndex == pics.length - 1)
         {
             //已经在最后一页还想往右划
-            if (positionOffsetPixels == 0 && currentPageScrollStatus == 1)
+            if (positionOffsetPixels == 0 && currentPageScrollStatus == 2)
             {
                 Intent intent = new Intent();
                 intent.setClass(this, LoginActivity.class);

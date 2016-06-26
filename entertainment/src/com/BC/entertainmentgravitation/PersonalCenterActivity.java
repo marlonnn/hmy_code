@@ -37,6 +37,7 @@ import com.BC.entertainment.adapter.PersonalRecycleAdapter;
 import com.BC.entertainment.adapter.PersonalRecycleAdapter.OnItemClickListener;
 import com.BC.entertainment.cache.InfoCache;
 import com.BC.entertainment.cache.PersonalCache;
+import com.BC.entertainment.config.Preferences;
 import com.BC.entertainmentgravitation.entity.Album;
 import com.BC.entertainmentgravitation.entity.EditPersonal;
 import com.BC.entertainmentgravitation.entity.Member;
@@ -55,7 +56,6 @@ import com.summer.logger.XLog;
 import com.summer.task.HttpBaseTask;
 import com.summer.treadpool.ThreadPoolConst;
 import com.summer.utils.JsonUtil;
-import com.summer.utils.SharedPreferencesUtils;
 import com.summer.utils.StringUtil;
 import com.summer.utils.ToastUtil;
 import com.summer.utils.UrlUtil;
@@ -147,7 +147,8 @@ public class PersonalCenterActivity extends BaseActivity implements OnClickListe
 				
 				@Override
 				public void onClick(View v) {
-					SharedPreferencesUtils.setParam(PersonalCenterActivity.this, "autoLogin", false);
+//					SharedPreferencesUtils.setParam(PersonalCenterActivity.this, "autoLogin", false);
+					Preferences.saveUserAutoLogin("false");
 					Intent intent = new Intent(PersonalCenterActivity.this, LoginActivity.class);
 					startActivity(intent);
 					finish();
@@ -555,6 +556,13 @@ public class PersonalCenterActivity extends BaseActivity implements OnClickListe
 				sendAuthenticateStatusRequest();
 //				intent = new Intent(PersonalCenterActivity, Authenticate1Activity.class);
 //				startActivity(intent);
+				break;
+			/**
+			 * 权益中心
+			 */
+			case R.drawable.activity_rights_center:
+				intent = new Intent(PersonalCenterActivity.this, RightsCenterActivity.class);
+				startActivity(intent);
 				break;
 			/**
 			 * 意见反馈

@@ -418,11 +418,13 @@ public class Authenticate3Activity extends BaseActivity implements OnClickListen
 		entity.put("bankbranch", authenticate.getBankBranch());
 		entity.put("province", authenticate.getBankProvince());
 		entity.put("city", authenticate.getBankCity());
+		entity.put("pro_type", isNullOrEmpty(txtViewPro.getText().toString()) ? "" : txtViewPro.getText().toString());
 		entity.put("pro_imag", "data:image/jpg;base64," + authenticate.getProPhoto());
 		entity.put("id_front", "data:image/jpg;base64," + authenticate.getIdCardFontPhoto());
 		entity.put("id_back", "data:image/jpg;base64," + authenticate.getIdCardBackPhoto());
 		entity.put("id_hold", "data:image/jpg;base64," + authenticate.getIdCardPhoto());
 		entity.put("cardno", isNullOrEmpty(editTextId.getText().toString()) ? "" : editTextId.getText().toString());
+		entity.put("cardtype", isNullOrEmpty(txtViewType.getText().toString()) ? "" : txtViewType.getText().toString());
 		entity.put("is_update", isUpdate ? "1" : "0");
 		ShowProgressDialog("正在提交，请稍等...");		
 		List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);

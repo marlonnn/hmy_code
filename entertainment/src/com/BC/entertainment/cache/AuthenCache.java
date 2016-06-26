@@ -35,7 +35,7 @@ public class AuthenCache {
 	/**
 	 * 所有省
 	 */
-	public static String[] mProvinceDatas;
+	public String[] mProvinceDatas;
 	
 	/**
 	 * key - 省 value - 市s

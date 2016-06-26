@@ -5,8 +5,8 @@ import java.util.Map;
 
 import kankan.wheel.widget.OnWheelChangedListener;
 import kankan.wheel.widget.WheelView;
-import kankan.wheel.widget.adapters.ArrayWheelAdapter;
 
+import com.BC.entertainment.adapter.BaseInfoRegionAdapter;
 import com.BC.entertainment.cache.AuthenCache;
 import com.BC.entertainmentgravitation.R;
 
@@ -50,7 +50,6 @@ public class RegionDialog extends Dialog {
 		private WheelView area;
 		private View layout;
 		private String title;
-		
 		/**
 		 * 所有省
 		 */
@@ -68,11 +67,11 @@ public class RegionDialog extends Dialog {
 		/**
 		 * 当前省的名称
 		 */
-		private String mCurrentProviceName;
+		private String mCurrentProviceName = "";
 		/**
 		 * 当前市的名称
 		 */
-		private String mCurrentCityName;
+		private String mCurrentCityName = "";
 		/**
 		 * 当前区的名称
 		 */
@@ -83,9 +82,13 @@ public class RegionDialog extends Dialog {
 		private DialogInterface.OnClickListener negativeButtonClickListener;
 
 		
-		public Builder(Context context) {
+		public Builder(Context context, AuthenCache authenCache) {
 			this.context = context;
 			wheelChangedListener = new Listener();
+			
+			mProvinceDatas = authenCache.mProvinceDatas;
+			mCitisDatasMap = authenCache.mCitisDatasMap;
+			mAreaDatasMap = authenCache.mAreaDatasMap;
 		}
 		
 		/**
@@ -145,9 +148,8 @@ public class RegionDialog extends Dialog {
 		 * @return
 		 */
 		@SuppressLint("InflateParams")
-		public RegionDialog Create(String message)
+		public RegionDialog Create()
 		{
-			mProvinceDatas = AuthenCache.mProvinceDatas;
 			LayoutInflater inflater = (LayoutInflater) context
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			final RegionDialog dialog = new RegionDialog(context,
@@ -163,7 +165,7 @@ public class RegionDialog extends Dialog {
 			lLayoutWheel.setVisibility(View.VISIBLE);
 			if (mProvinceDatas != null && mProvinceDatas.length > 0)
 			{
-				province.setViewAdapter(new ArrayWheelAdapter<String>(context, mProvinceDatas));
+				province.setViewAdapter(new BaseInfoRegionAdapter(context, mProvinceDatas));
 				province.setVisibleItems(5);
 				province.setDrawShadows(false);
 				if (wheelChangedListener != null)
@@ -240,7 +242,7 @@ public class RegionDialog extends Dialog {
 			{
 				cities = new String[] { "" };
 			}
-			city.setViewAdapter(new ArrayWheelAdapter<String>(context, cities));
+			city.setViewAdapter(new BaseInfoRegionAdapter(context, cities));
 			city.setCurrentItem(0);
 			updateAreas();
 		}
@@ -258,8 +260,33 @@ public class RegionDialog extends Dialog {
 			{
 				areas = new String[] { "" };
 			}
-			area.setViewAdapter(new ArrayWheelAdapter<String>(context, areas));
+			area.setViewAdapter(new BaseInfoRegionAdapter(context, areas));
 			area.setCurrentItem(0);
+			mCurrentAreaName = mAreaDatasMap.get(mCurrentCityName)[0];
+		}
+
+		public String[] getmProvinceDatas() {
+			return mProvinceDatas;
+		}
+
+		public void setmProvinceDatas(String[] mProvinceDatas) {
+			this.mProvinceDatas = mProvinceDatas;
+		}
+
+		public Map<String, String[]> getmCitisDatasMap() {
+			return mCitisDatasMap;
+		}
+
+		public void setmCitisDatasMap(Map<String, String[]> mCitisDatasMap) {
+			this.mCitisDatasMap = mCitisDatasMap;
+		}
+
+		public Map<String, String[]> getmAreaDatasMap() {
+			return mAreaDatasMap;
+		}
+
+		public void setmAreaDatasMap(Map<String, String[]> mAreaDatasMap) {
+			this.mAreaDatasMap = mAreaDatasMap;
 		}
 
 		public String getmCurrentProviceName() {

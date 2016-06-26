@@ -18,6 +18,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 
+import com.BC.entertainment.config.Preferences;
 import com.BC.entertainmentgravitation.R;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -144,11 +145,11 @@ public class RegisteFragment extends BaseFragment implements OnClickListener{
 			}
 		});
 		
-		if (Config.getPhoneNum() != null) {
-			editName.setText(Config.getPhoneNum());
+		if (Preferences.getUserName() != null) {
+			editName.setText(Preferences.getUserName());
 		}
-		if (Config.getPassword() != null) {
-			editPassword.setText(Config.getPassword());
+		if (Preferences.getUserPassword() != null) {
+			editPassword.setText(Preferences.getUserPassword());
 		}
 	}
 	

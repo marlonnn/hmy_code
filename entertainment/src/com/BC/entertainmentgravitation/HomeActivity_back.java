@@ -17,12 +17,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.BC.entertainment.cache.InfoCache;
+import com.BC.entertainmentgravitation.entity.EditPersonal;
 import com.BC.entertainmentgravitation.entity.FHNEntity;
 import com.BC.entertainmentgravitation.entity.StarInformation;
 import com.BC.entertainmentgravitation.entity.StarLiveVideoInfo;
-import com.BC.entertainmentgravitation.fragment.CurveFragment;
 import com.BC.entertainmentgravitation.fragment.FoundFragment_back;
 import com.BC.entertainmentgravitation.fragment.ListFragment;
+import com.BC.entertainmentgravitation.fragment.RightsCenterFragment;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.igexin.sdk.PushConsts;
@@ -65,7 +66,8 @@ public class HomeActivity_back extends BaseActivity implements OnClickListener{
 	
 	private Gson gson;
 	
-	private CurveFragment curveFragment;
+//	private CurveFragment curveFragment;
+	private RightsCenterFragment rightCardFragment;
 	private ListFragment listFragment;
 	private FoundFragment_back foundFragment;
 	private FragmentManager fManager;
@@ -80,14 +82,18 @@ public class HomeActivity_back extends BaseActivity implements OnClickListener{
 		fManager = getSupportFragmentManager();
 		gson = new Gson();
 		sendFocusStarListRequest();
+		sendPersonalInfoRequest();
 		findViewById();
 		setFragmentSelection(R.id.rLayoutLine);
 	}
 	
     private void hideFragments(FragmentTransaction transaction) {  
-        if (curveFragment != null) {  
-            transaction.hide(curveFragment);  
+        if (rightCardFragment != null) {  
+            transaction.hide(rightCardFragment);  
         }  
+//        if (curveFragment != null) {  
+//            transaction.hide(curveFragment);  
+//        }  
         if (listFragment != null) {  
             transaction.hide(listFragment);  
         }  
@@ -101,7 +107,7 @@ public class HomeActivity_back extends BaseActivity implements OnClickListener{
 		switch(id)
 		{
 		case R.id.rLayoutLine:
-			imgViewLine.setBackgroundResource(R.drawable.activity_main_home_line_1);
+			imgViewLine.setBackgroundResource(R.drawable.activity_rights_center);
 			txtViewLine.setTextColor(getResources().getColor(R.color.hmy_red));
 			
 			imgViewVideo.setBackgroundResource(R.drawable.activity_main_home_video);
@@ -117,7 +123,7 @@ public class HomeActivity_back extends BaseActivity implements OnClickListener{
 			txtViewMyself.setTextColor(getResources().getColor(R.color.white));
 			break;
 		case R.id.rLayoutVideo:
-			imgViewLine.setBackgroundResource(R.drawable.activity_main_home_line);
+			imgViewLine.setBackgroundResource(R.drawable.activity_rights_center_0);
 			txtViewLine.setTextColor(getResources().getColor(R.color.white));
 			
 			imgViewVideo.setBackgroundResource(R.drawable.activity_main_home_video_1);
@@ -133,7 +139,7 @@ public class HomeActivity_back extends BaseActivity implements OnClickListener{
 			txtViewMyself.setTextColor(getResources().getColor(R.color.white));
 			break;
 		case R.id.rLayoutLive:
-			imgViewLine.setBackgroundResource(R.drawable.activity_main_home_line);
+			imgViewLine.setBackgroundResource(R.drawable.activity_rights_center_0);
 			txtViewLine.setTextColor(getResources().getColor(R.color.white));
 			
 			imgViewVideo.setBackgroundResource(R.drawable.activity_main_home_video);
@@ -150,7 +156,7 @@ public class HomeActivity_back extends BaseActivity implements OnClickListener{
 			txtViewMyself.setTextColor(getResources().getColor(R.color.white));
 			break;
 		case R.id.rLayoutFound:
-			imgViewLine.setBackgroundResource(R.drawable.activity_main_home_line);
+			imgViewLine.setBackgroundResource(R.drawable.activity_rights_center_0);
 			txtViewLine.setTextColor(getResources().getColor(R.color.white));
 			
 			imgViewVideo.setBackgroundResource(R.drawable.activity_main_home_video);
@@ -166,7 +172,7 @@ public class HomeActivity_back extends BaseActivity implements OnClickListener{
 			txtViewMyself.setTextColor(getResources().getColor(R.color.white));
 			break;
 		case R.id.rLayoutMyself:
-			imgViewLine.setBackgroundResource(R.drawable.activity_main_home_line);
+			imgViewLine.setBackgroundResource(R.drawable.activity_rights_center_0);
 			txtViewLine.setTextColor(getResources().getColor(R.color.white));
 			
 			imgViewVideo.setBackgroundResource(R.drawable.activity_main_home_video);
@@ -259,11 +265,11 @@ public class HomeActivity_back extends BaseActivity implements OnClickListener{
 		{
 
 		case R.id.rLayoutLine:
-            if (curveFragment == null) {  
-            	curveFragment = new CurveFragment();
-                transaction.add(R.id.content, curveFragment);  
+            if (rightCardFragment == null) {  
+            	rightCardFragment = new RightsCenterFragment();
+                transaction.add(R.id.content, rightCardFragment);  
             } else {  
-                transaction.show(curveFragment);  
+                transaction.show(rightCardFragment);  
             } 
             lastFragment = 1;
     		transaction.commit();
@@ -342,6 +348,17 @@ public class HomeActivity_back extends BaseActivity implements OnClickListener{
     	ThreadPoolFactory.getThreadPoolManager().addTask(httpTask);
     }
     
+    /**
+     * 获取用户信息
+     */
+    private void sendPersonalInfoRequest()
+    {
+    	HashMap<String, String> entity = new HashMap<String, String>();
+    	entity.put("clientID", Config.User.getClientID());
+    	List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
+    	addToThreadPool(Config.personal_information, "get user info", params);
+    }
+    
 	/**
 	 * 获取信息
 	 */
@@ -372,11 +389,11 @@ public class HomeActivity_back extends BaseActivity implements OnClickListener{
 				 */
 				case 1:
 					touchButton(R.id.rLayoutLine);
-		            if (curveFragment == null) {  
-		            	curveFragment = new CurveFragment();
-		                transaction.add(R.id.content, curveFragment);  
+		            if (rightCardFragment == null) {  
+		            	rightCardFragment = new RightsCenterFragment();
+		                transaction.add(R.id.content, rightCardFragment);  
 		            } else {  
-		                transaction.show(curveFragment);  
+		                transaction.show(rightCardFragment);  
 		            } 
 					break;
 				/**
@@ -414,6 +431,16 @@ public class HomeActivity_back extends BaseActivity implements OnClickListener{
 	public void RequestSuccessful(String jsonString, int taskType) {
 		switch(taskType)
 		{
+		case Config.personal_information:
+			Entity<EditPersonal> baseEntity1 = gson.fromJson(jsonString,
+					new TypeToken<Entity<EditPersonal>>() {
+					}.getType());
+			if (baseEntity1.getData() != null)
+			{
+				InfoCache.getInstance().setPersonalInfo(baseEntity1.getData());
+			}
+
+			break;
 		case Config.create_video:
 			Entity<StarLiveVideoInfo> starLiveInfoEntity = gson.fromJson(jsonString,
 					new TypeToken<Entity<StarLiveVideoInfo>>() {

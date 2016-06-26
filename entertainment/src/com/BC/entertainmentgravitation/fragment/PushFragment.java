@@ -2,7 +2,9 @@ package com.BC.entertainmentgravitation.fragment;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 
+import org.apache.http.NameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -41,6 +43,7 @@ import com.BC.entertainment.chatroom.module.Container;
 import com.BC.entertainment.chatroom.module.ModuleProxy;
 import com.BC.entertainment.chatroom.module.PushModulePanel;
 import com.BC.entertainment.inter.MediaCallback;
+import com.BC.entertainment.task.ThreadUtil;
 import com.BC.entertainmentgravitation.ContributionActivity;
 import com.BC.entertainmentgravitation.PersonalHomeActivity;
 import com.BC.entertainmentgravitation.R;
@@ -66,6 +69,7 @@ import com.summer.handler.InfoHandler;
 import com.summer.handler.InfoHandler.InfoReceiver;
 import com.summer.json.Entity;
 import com.summer.logger.XLog;
+import com.summer.utils.JsonUtil;
 import com.summer.utils.ToastUtil;
 import com.summer.view.CircularImage;
 import com.summer.view.Pandamate;
@@ -112,6 +116,8 @@ public class PushFragment extends BaseFragment implements OnClickListener, Modul
 	private InfoDialog dialog;
 	
 	private MediaCallback mediaCallback;
+	
+	private boolean initApplause = false;
     
 	InfoHandler handler = new InfoHandler(new InfoReceiver() {
 		@Override
@@ -171,8 +177,22 @@ public class PushFragment extends BaseFragment implements OnClickListener, Modul
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState) {
 		gson = new Gson();
+		sendMemberRequest();
 		super.onCreate(savedInstanceState);
 	}
+	
+    /**
+     * 游客进入聊天室，发送获取头像信息请求
+     * @param username
+     */
+    private void sendMemberRequest()
+    {
+    	initApplause = true;
+    	HashMap<String, String> entity = new HashMap<String, String>();
+		entity.put("username", Config.User.getUserName());
+    	List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
+    	ThreadUtil.AddToThreadPool(Config.member_in, "get start info", params, handler);
+    }
 	
 	@Override
 	public void onPause() {
@@ -292,14 +312,14 @@ public class PushFragment extends BaseFragment implements OnClickListener, Modul
 		btnInvest.setOnClickListener(this);
 		btnDivest.setOnClickListener(this);
 		
-		/**
-		 * 初始化投资和撤资弹出对话框
-		 */
-		applauseGiveConcern = new ApplauseGiveConcern( container.activity,
-				InfoCache.getInstance().getStartInfo().getStar_ID(), this,
-				InfoCache.getInstance().getStartInfo()
-						.getThe_current_hooted_thumb_up_prices(),
-				InfoCache.getInstance().getStartInfo().getStage_name());
+//		/**
+//		 * 初始化投资和撤资弹出对话框
+//		 */
+//		applauseGiveConcern = new ApplauseGiveConcern( container.activity,
+//				InfoCache.getInstance().getStartInfo().getStar_ID(), this,
+//				InfoCache.getInstance().getStartInfo()
+//						.getThe_current_hooted_thumb_up_prices(),
+//				InfoCache.getInstance().getStartInfo().getStage_name());
 		
 		rootView.setOnTouchListener(new OnTouchListener() {
 			
@@ -313,6 +333,15 @@ public class PushFragment extends BaseFragment implements OnClickListener, Modul
 				return false;
 			}
 		});
+	}
+	
+	private void initApplauseConcern(Member member)
+	{
+		/**
+		 * 初始化投资和撤资弹出对话框
+		 */
+		applauseGiveConcern = new ApplauseGiveConcern( container.activity,
+				member.getId(), this, Integer.parseInt(member.getBid()), member.getNick());
 	}
 	
     /**
@@ -750,20 +779,29 @@ public class PushFragment extends BaseFragment implements OnClickListener, Modul
  				if (memberEntity != null && memberEntity.getData() != null)
  				{
  					Member member = memberEntity.getData();
- 					//进入聊天室
- 					ChatCache.getInstance().AddMember(member);
- 			        recycleAdapter.UpdateData();
- 			        XLog.i("have notifiy data set changed");
- 			        XLog.i("amount people: " + ChatCache.getInstance().getOnlinePeopleitems().size());
- 			        if (onlinePeople != null)
- 			        {
- 			        	onlinePeople.setText(String.valueOf(ChatCache.getInstance().getOnlinePeopleitems() == null ? 0 : ChatCache.getInstance().getOnlinePeopleitems().size()));
- 			        }
- 					//更新聊天室人数到后台
- 					modulePanel.updateRoomMember();
- 					
- 					XLog.i("some one in chat room, username : " + member.getName());
- 					XLog.i("some one in chat room, portrait: " + member.getPortrait());
+ 					if (initApplause)
+ 					{
+ 						initApplauseConcern(member);
+ 						initApplause = false;
+ 					}
+ 					else
+ 					{
+ 	 					//进入聊天室
+ 	 					ChatCache.getInstance().AddMember(member);
+ 	 			        recycleAdapter.UpdateData();
+ 	 			        XLog.i("have notifiy data set changed");
+ 	 			        XLog.i("amount people: " + ChatCache.getInstance().getOnlinePeopleitems().size());
+ 	 			        if (onlinePeople != null)
+ 	 			        {
+ 	 			        	onlinePeople.setText(String.valueOf(ChatCache.getInstance().getOnlinePeopleitems() == null ? 0 : ChatCache.getInstance().getOnlinePeopleitems().size()));
+ 	 			        }
+ 	 					//更新聊天室人数到后台
+ 	 					modulePanel.updateRoomMember();
+ 	 					
+ 	 					XLog.i("some one in chat room, username : " + member.getName());
+ 	 					XLog.i("some one in chat room, portrait: " + member.getPortrait());
+ 					}
+
  				}
  			} catch (JsonSyntaxException e) {
  				e.printStackTrace();

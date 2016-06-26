@@ -27,19 +27,19 @@
             android:orientation="horizontal" >
  		  	<kankan.wheel.widget.WheelView
 			    android:id="@+id/wheelViewPovince"
-			    android:layout_width="0dp"
+			    android:layout_width="100dp"
 			    android:layout_height="wrap_content"
 			    android:layout_weight="1" >
 			</kankan.wheel.widget.WheelView>
 			<kankan.wheel.widget.WheelView
 			    android:id="@+id/wheelViewCity"
-			    android:layout_width="0dp"
+			    android:layout_width="100dp"
 			    android:layout_height="wrap_content"
 			    android:layout_weight="1" >
 			</kankan.wheel.widget.WheelView>
 			<kankan.wheel.widget.WheelView
 			    android:id="@+id/wheelViewArea"
-			    android:layout_width="0dp"
+			    android:layout_width="100dp"
 			    android:layout_height="wrap_content"
 			    android:layout_weight="1" >
 			</kankan.wheel.widget.WheelView>

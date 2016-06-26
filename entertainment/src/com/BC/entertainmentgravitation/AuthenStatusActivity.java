@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.summer.activity.BaseActivity;
 import com.summer.config.Config;
+import com.summer.logger.XLog;
 import com.summer.view.CircularImage;
 import com.umeng.analytics.MobclickAgent;
 
@@ -33,7 +34,7 @@ public class AuthenStatusActivity extends BaseActivity implements OnClickListene
 		textViewStatus = (TextView) findViewById(R.id.textViewStatus);
 		imgViewAuthenticated = (ImageView) findViewById(R.id.imgViewAuthenticated);
 		Glide.with(this)
-		.load(InfoCache.getInstance().getPersonalInfo().getHead_portrait())
+		.load(formatPortrait(Config.User.getImage()))
 		.centerCrop().diskCacheStrategy(DiskCacheStrategy.ALL)
 		.placeholder(R.drawable.avatar_def).into(cImagePortrait);
 		switch(status)
@@ -49,7 +50,27 @@ public class AuthenStatusActivity extends BaseActivity implements OnClickListene
 			break;
 		}
 		textViewStatus.setText("认证状态 : " + message);
-		
+	}
+	
+	private String formatPortrait(String portrait)
+	{
+		String image = null;
+		try {
+			String s[] = portrait.split("/");
+			
+			if (s[2] != null && !s[2].contains("app.haimianyu.cn"))
+			{
+				image = "http://app.haimianyu.cn/" + portrait;
+			}
+			else
+			{
+				image = portrait;
+			}
+		} catch (Exception e) {
+			XLog.e("portrait: " + portrait);
+			e.printStackTrace();
+		}
+		return image;
 	}
 	
     @Override

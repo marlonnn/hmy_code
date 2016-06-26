@@ -231,4 +231,8 @@
 	<item type="id" name="tag_cfocus"></item>
 	<item type="id" name="tag_new"></item>
 	<item type="id" name="tag_found"></item>
+	
+    <item type="id" name="tag_card_root"></item>
+	<item type="id" name="tag_card_portrait"></item>
+	<item type="id" name="tag_card_buy"></item>
 </resources>

@@ -217,7 +217,15 @@
 		    android:gravity="center_vertical"
 		    android:orientation="horizontal" 
 		    android:background="@drawable/activity_charge_item_bg">
-			<com.BC.entertainment.view.BaseSelectItem
+			<TextView 
+			    android:id="@+id/txtViewRegionContent"
+			    android:layout_width="wrap_content"
+			    android:layout_height="50dp"
+			    android:gravity="center"
+			    android:layout_marginLeft="5dp"
+			    android:textColor="@color/white"
+			    android:text="地区"/>
+<!-- 			<com.BC.entertainment.view.BaseSelectItem
 	            android:id="@+id/region"
 	            android:layout_width="match_parent"
 	            android:layout_height="40dp"
@@ -225,7 +233,17 @@
 	            android:gravity="center"
 	            select:content="@string/fragment_base_info_select"
 	            select:dialogContent="@layout/wheel_city"
-	            select:mytitle="地区" />
+	            select:mytitle="地区" /> -->
+
+			<TextView
+			    android:id="@+id/txtViewRegion"
+			    android:layout_width="wrap_content"
+			    android:layout_height="50dp"
+			    android:layout_marginLeft="5dp"
+			    android:gravity="center"
+			    android:textColor="@color/white"
+			    android:text="请点击选择" />
+
 		</LinearLayout>
 		<LinearLayout
 		    android:layout_width="match_parent"

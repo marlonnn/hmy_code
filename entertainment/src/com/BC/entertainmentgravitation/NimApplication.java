@@ -5,6 +5,7 @@ import android.os.Environment;
 import android.text.TextUtils;
 
 import com.BC.entertainment.chatroom.extension.CustomAttachParser;
+import com.BC.entertainment.config.Preferences;
 import com.BC.entertainmentgravitation.util.SystemUtil;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.SDKOptions;
@@ -18,7 +19,8 @@ public class NimApplication extends Application {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		Config.maincontext = this.getApplicationContext();
+//		Config.maincontext = this.getApplicationContext();
+		Preferences.setContext(this.getApplicationContext());
 		NIMClient.init(this, getLoginInfo(), getOptions());
 
 //		XLog.allowI = XLog.allowD = XLog.allowE = XLog.allowV = XLog.allowW = false;
@@ -29,13 +31,15 @@ public class NimApplication extends Application {
 	}
 
     private LoginInfo getLoginInfo() {
-		Config.LoadUser();
+//		Config.LoadUser();
 		String account = null;
 		String token = null;
-		if ( Config.User != null)
+		if ( Preferences.getUserName() != null && Preferences.getUserToken() != null)
 		{
-	        account = Config.User.getUserName();
-	        token = Config.User.getToken();
+			account = Preferences.getUserName();
+			token = Preferences.getUserToken();
+//	        account = Config.User.getUserName();
+//	        token = Config.User.getToken();
 		}
 
         if (!TextUtils.isEmpty(account) && !TextUtils.isEmpty(token)) {

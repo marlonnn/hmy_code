@@ -31,6 +31,7 @@ import cn.sharesdk.sina.weibo.SinaWeibo;
 import cn.sharesdk.tencent.qq.QQ;
 import cn.sharesdk.wechat.friends.Wechat;
 
+import com.BC.entertainment.config.Preferences;
 import com.BC.entertainmentgravitation.HomeActivity_back;
 import com.BC.entertainmentgravitation.R;
 import com.google.gson.Gson;
@@ -51,7 +52,6 @@ import com.summer.logger.XLog;
 import com.summer.task.HttpBaseTask;
 import com.summer.treadpool.ThreadPoolConst;
 import com.summer.utils.JsonUtil;
-import com.summer.utils.SharedPreferencesUtils;
 import com.summer.utils.UrlUtil;
 import com.summer.utils.ValidateUtil;
 //import com.BC.entertainment.config.Constants;
@@ -164,11 +164,11 @@ public class LoginFragment extends BaseFragment implements OnClickListener, Call
 			}
 		});
 		
-		if (Config.getPhoneNum() != null) {
-			editName.setText(Config.getPhoneNum());
+		if (Preferences.getUserName() != null) {
+			editName.setText(Preferences.getUserName());
 		}
-		if (Config.getPassword() != null) {
-			editPassword.setText(Config.getPassword());
+		if (Preferences.getUserPassword() != null) {
+			editPassword.setText(Preferences.getUserPassword());
 		}
 	}
 	
@@ -334,7 +334,7 @@ public class LoginFragment extends BaseFragment implements OnClickListener, Call
     }
     
     @SuppressWarnings("unchecked")
-	private void logingNimServer(User user)
+	private void logingNimServer(final User user)
     {
     	final String account = user.getUserName();
     	final String token = user.getToken();
@@ -365,10 +365,11 @@ public class LoginFragment extends BaseFragment implements OnClickListener, Call
 		    			Config.setPassword(editPassword.getText().toString());
 		    		}
 		    		
-		    		Config.saveUser();
+//		    		Config.saveUser();
+		    		saveUser(user);
 	    			Intent intent = new Intent(getActivity(), HomeActivity_back.class);
 	    			startActivity(intent);
-	    			SharedPreferencesUtils.setParam(getActivity(), "autoLogin", true);
+//	    			SharedPreferencesUtils.setParam(getActivity(), "autoLogin", true);
 				}
 			});
     	}
@@ -402,6 +403,21 @@ public class LoginFragment extends BaseFragment implements OnClickListener, Call
 			logingNimServer(Config.User);
     		break;
 		}
+	}
+	
+	public void saveUser(User user)
+	{
+		Preferences.saveUserId(user.getClientID());
+		Preferences.saveUserAutoLogin("true");
+		Preferences.saveUserCheckType(user.getCheckType());
+		Preferences.saveUserImage(user.getImage());
+		Preferences.saveUserName(user.getUserName());
+		Preferences.saveUserPassword(editPassword.getText().toString());
+		Preferences.saveUserNickName(user.getNickName());
+		Preferences.saveUserPermission(user.getPermission());
+		Preferences.saveUserPushUrl(user.getPushUrl());
+		Preferences.saveUserToken(user.getToken());
+		Preferences.saveUserShareCode(user.getShareCode());
 	}
 	
     @Override

@@ -6,8 +6,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
 
-import com.BC.entertainment.cache.InfoCache;
-import com.BC.entertainmentgravitation.entity.Member;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.summer.activity.BaseActivity;
