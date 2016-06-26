@@ -205,6 +205,11 @@ public class RightsCenterFragment extends BaseFragment implements OnClickListene
 						public void onClick(View v) {
 							RightCard card = (RightCard) v.getTag(R.id.tag_card_buy);
 							XLog.i("----buy--------" + card.getNick_name());
+							if (card != null)
+							{
+								sendBuyRighCardReuest(card, 1);
+							}
+
 						}
 					});
 				}
@@ -309,6 +314,18 @@ public class RightsCenterFragment extends BaseFragment implements OnClickListene
 		}
 	};
 	
+	private void sendBuyRighCardReuest(RightCard card, int number)
+	{
+		HashMap<String, String> entity = new HashMap<String, String>();
+
+		entity.put("clientID", Config.User.getClientID());
+		entity.put("cardid", card.getCard_id());
+		entity.put("star_id", card.getStar_id());
+		entity.put("number", String.valueOf(number));
+    	List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
+    	addToThreadPool(Config.profitOrder, "get start right card", params);
+	}
+	
 	private void sendGetRighCardReuest(int pageIndex)
 	{
 		HashMap<String, String> entity = new HashMap<String, String>();
@@ -366,6 +383,9 @@ public class RightsCenterFragment extends BaseFragment implements OnClickListene
 	public void RequestSuccessful(int status, String jsonString, int taskType) {
 		switch(taskType)
 		{
+		case Config.profitOrder:
+			ToastUtil.show(getActivity(), "购买成功");
+		    break;
 		case Config.getProfit:
 			Entity<List<RightCard>> entity = gson.fromJson(jsonString,
 					new TypeToken<Entity<List<RightCard>>>() {

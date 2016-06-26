@@ -139,6 +139,18 @@ public class RightsCardDetailActivity extends BaseActivity implements OnClickLis
 				member.getId(), this, Integer.parseInt(member.getBid()), member.getNick());
 	}
 	
+	private void sendBuyRighCardReuest(RightCard card, int number)
+	{
+		HashMap<String, String> entity = new HashMap<String, String>();
+
+		entity.put("clientID", Config.User.getClientID());
+		entity.put("cardid", card.getCard_id());
+		entity.put("star_id", card.getStar_id());
+		entity.put("number", String.valueOf(number));
+    	List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
+    	addToThreadPool(Config.profitOrder, "get start right card", params);
+	}
+	
     /**
      * 游客进入聊天室，发送获取头像信息请求
      * @param username
@@ -329,6 +341,7 @@ public class RightsCardDetailActivity extends BaseActivity implements OnClickLis
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.btnBuy:
+			sendBuyRighCardReuest(card, 1);
 			break;
 			
 		case R.id.focus:
@@ -370,6 +383,9 @@ public class RightsCardDetailActivity extends BaseActivity implements OnClickLis
 	public void RequestSuccessful(String jsonString, int taskType) {
 		switch (taskType)
 		{
+		case Config.profitOrder:
+			ToastUtil.show(this, "购买成功");
+		    break;
  		case Config.member_in:
  			try {
  				Entity<Member> memberEntity = gson.fromJson(jsonString,
