@@ -1,5 +1,6 @@
 package com.BC.entertainmentgravitation;
 
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.List;
 
@@ -11,13 +12,13 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.BC.entertainment.cache.InfoCache;
 import com.BC.entertainment.view.CoordinateSystemView;
 import com.BC.entertainmentgravitation.dialog.ApplauseGiveConcern;
 import com.BC.entertainmentgravitation.entity.KLink;
-import com.BC.entertainmentgravitation.entity.Member;
 import com.BC.entertainmentgravitation.entity.Point;
 import com.BC.entertainmentgravitation.entity.RightCard;
 import com.bumptech.glide.Glide;
@@ -61,7 +62,13 @@ public class RightsCardDetailActivity extends BaseActivity implements OnClickLis
 	private LineChart lineChart;
 	private ApplauseGiveConcern applauseGiveConcern;
 	private boolean hasFollow = false;
-	private Member member;
+	
+	private boolean show = false;
+	
+	private LinearLayout lLayoutContent;
+	private ImageView imgViewUp;
+	private TextView txtContent;
+//	private Member member;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +85,10 @@ public class RightsCardDetailActivity extends BaseActivity implements OnClickLis
 	
 	private void initView(RightCard card)
 	{
+		lLayoutContent = (LinearLayout) findViewById(R.id.lLayoutIntroductionContent);
+		imgViewUp = (ImageView) findViewById(R.id.imgViewUp);
+		txtContent = (TextView) findViewById(R.id.txtViewIntroduction);
+		imgViewUp.setOnClickListener(this);
 		coordinateSystemView = (CoordinateSystemView) findViewById(R.id.coordinateSystemView);
 		cImagePortrait = (CircularImage) findViewById(R.id.cImagePortrait);
 		txtLocation = (TextView) findViewById(R.id.txtViewLocation);
@@ -108,10 +119,10 @@ public class RightsCardDetailActivity extends BaseActivity implements OnClickLis
 			txtName.setText(isNullOrEmpty(card.getNick_name()) ? "未知" : card.getNick_name());
 			txtCardName.setText(isNullOrEmpty(card.getLabel()) ? "未知" : card.getLabel());
 			
-			txtValue.setText(isNullOrEmpty(card.getTotal()) ? "未知" : card.getTotal());
+			txtValue.setText(isNullOrEmpty(calculateCurrentValue(card.getBid(), card.getPrice())) ? "未知" : calculateCurrentValue(card.getBid(), card.getPrice()));
 			txtEnvelopes.setText(isNullOrEmpty(card.getPrice()) ? "未知" : card.getPrice());
 			txtTime.setText(isNullOrEmpty(formatTime(card.getTime())) ? "未知" : formatTime(card.getTime()));
-			
+			calculateChange(txtChange, card.getBid(), card.getDifference());
 			switch(card.getLabel())
 			{
 			case "戏约卡":
@@ -131,21 +142,69 @@ public class RightsCardDetailActivity extends BaseActivity implements OnClickLis
 					btnBuy.setBackgroundColor(Color.parseColor(this.getString(R.color.card_blue)));
 					break;
 			}
+			initApplauseConcern(card);
 		}
 	}
 	
-	private void initApplauseConcern(Member member)
+	private String calculateCurrentValue(String bid, String price)
+	{
+		int sum = 0;
+		try {
+			int iBid = Integer.parseInt(bid);
+			int iPrice = Integer.parseInt(price);
+			int sPrice = iBid - iPrice + 1;
+			for ( int start = sPrice; start <= iBid; start ++ )
+			{
+				sum += start;
+			}
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		}
+		return String.valueOf(sum);
+	}
+	
+	private void calculateChange(TextView txtView, String bid, float difference)
+	{
+		String p = "0.00%";
+		try {
+			int iBid = Integer.parseInt(bid);
+			int last = (int) (iBid - difference);
+			float diff = (difference / last ) * 100;
+			DecimalFormat decimalFormat=new DecimalFormat(".00");
+			p= decimalFormat.format(diff);
+			if (difference > 0)
+			{
+				p = "+" + p + "%";
+				txtView.setBackgroundColor(getResources().getColor(R.color.card_change_red));
+			}
+			else if (difference < 0)
+			{
+				p = "-" + p + "%";
+				txtView.setBackgroundColor(getResources().getColor(R.color.card_change_green));
+			}
+			else if (difference == 0)
+			{
+				p = "+0.00%";
+				txtView.setBackgroundColor(getResources().getColor(R.color.card_change_red));
+			}
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		}
+		txtView.setText(p);
+	}
+	
+	private void initApplauseConcern(RightCard rightCard)
 	{
 		/**
 		 * 初始化投资和撤资弹出对话框
 		 */
 		applauseGiveConcern = new ApplauseGiveConcern( this,
-				member.getId(), this, Integer.parseInt(member.getBid()), member.getNick());
-		if (member.getGender().contains("男"))
+				rightCard.getStar_id(), this, Integer.parseInt(rightCard.getBid()), rightCard.getNick_name());
+		if (rightCard.getGender().contains("男"))
 		{
 			imgViewGender.setBackgroundResource(R.drawable.activity_rights_card_nan);
 		}
-		else if (member.getGender().contains("女"))
+		else if (rightCard.getGender().contains("女"))
 		{
 			imgViewGender.setBackgroundResource(R.drawable.activity_rights_card_nv);
 		}
@@ -352,6 +411,32 @@ public class RightsCardDetailActivity extends BaseActivity implements OnClickLis
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
+		case R.id.imgViewUp:
+			if (!show)
+			{
+				imgViewUp.setBackgroundResource(R.drawable.activity_publish_up);
+				lLayoutContent.setVisibility(View.VISIBLE);
+				switch(card.getLabel())
+				{
+				case "戏约卡":
+					txtContent.setText(getString(R.string.xiyue_desc));
+					break;
+				case "演出卡":
+					txtContent.setText(getString(R.string.yanchu_desc));
+					break;
+				case "商务卡":
+					txtContent.setText(getString(R.string.shangwu_desc));
+					break;
+				}
+				show = true;
+			}
+			else
+			{
+				imgViewUp.setBackgroundResource(R.drawable.fragment_right);
+				lLayoutContent.setVisibility(View.GONE);
+				show = false;
+			}
+			break;
 		case R.id.btnBuy:
 			sendBuyRighCardReuest(card, 1);
 			break;
@@ -398,22 +483,22 @@ public class RightsCardDetailActivity extends BaseActivity implements OnClickLis
 		case Config.profitOrder:
 			ToastUtil.show(this, "购买成功");
 		    break;
- 		case Config.member_in:
- 			try {
- 				Entity<Member> memberEntity = gson.fromJson(jsonString,
- 						new TypeToken<Entity<Member>>() {
- 						}.getType());
- 				
- 				if (memberEntity != null && memberEntity.getData() != null)
- 				{
- 					member = memberEntity.getData();
- 					initApplauseConcern(member);
- 				}
- 			} catch (JsonSyntaxException e) {
- 				e.printStackTrace();
- 				XLog.e("exception: " + e.getMessage());
- 			}
- 			break;
+// 		case Config.member_in:
+// 			try {
+// 				Entity<Member> memberEntity = gson.fromJson(jsonString,
+// 						new TypeToken<Entity<Member>>() {
+// 						}.getType());
+// 				
+// 				if (memberEntity != null && memberEntity.getData() != null)
+// 				{
+// 					member = memberEntity.getData();
+// 					initApplauseConcern(member);
+// 				}
+// 			} catch (JsonSyntaxException e) {
+// 				e.printStackTrace();
+// 				XLog.e("exception: " + e.getMessage());
+// 			}
+// 			break;
 		case Config.give_applause_booed:
 			ToastUtil.show(this, "提交成功");
 			sendStarInfoRequest(card.getStar_id());

@@ -1,11 +1,5 @@
 package com.BC.entertainmentgravitation;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
-import org.apache.http.NameValuePair;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -17,33 +11,20 @@ import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.TextView;
 
-import com.BC.entertainmentgravitation.entity.CardOrder;
 import com.BC.entertainmentgravitation.fragment.CardBuyFragment;
 import com.BC.entertainmentgravitation.fragment.CardPublishFragment;
 import com.BC.entertainmentgravitation.fragment.CardSellFragment;
-import com.BC.entertainmentgravitation.fragment.FoundFragment_back;
-import com.BC.entertainmentgravitation.fragment.ListFragment;
-import com.BC.entertainmentgravitation.fragment.RightsCenterFragment;
 import com.summer.activity.BaseActivity;
 import com.summer.config.Config;
-import com.summer.factory.ThreadPoolFactory;
-import com.summer.handler.InfoHandler;
-import com.summer.task.HttpBaseTask;
-import com.summer.treadpool.ThreadPoolConst;
-import com.summer.utils.JsonUtil;
-import com.summer.utils.UrlUtil;
 import com.umeng.analytics.MobclickAgent;
 
 public class RightsCenterActivity extends BaseActivity implements OnClickListener{
 
-	private int pageIndex = 1;
 	private RadioGroup radio;
 	private RadioButton rbtnBuy;
 	private RadioButton rbtnSell;
 	private TextView txtPublish;
 	
-	private List<CardOrder> publishCards = new ArrayList<>();
-
 	private CardPublishFragment cardPublishFragment;
 	private CardBuyFragment cardBuyFragment;
 	private CardSellFragment cardSellFragment;
@@ -56,7 +37,6 @@ public class RightsCenterActivity extends BaseActivity implements OnClickListene
 		fManager = getSupportFragmentManager();
 		findViewById(R.id.imageViewBack).setOnClickListener(this);
 		initView();
-		sendCardOrderListRequest();
 	}
 	
     private void hideFragments(FragmentTransaction transaction) {  
@@ -140,24 +120,6 @@ public class RightsCenterActivity extends BaseActivity implements OnClickListene
 			txtPublish.setVisibility(View.GONE);
 		}
 	}
-	
-	private void sendCardOrderListRequest()
-	{
-    	HashMap<String, String> entity = new HashMap<String, String>();
-		entity.put("clientID", Config.User.getClientID());
-		entity.put("page", String.valueOf(pageIndex));
-    	List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
-    	addToThreadPool(Config.member_in, "get start info", params);	
-	}
-	
-    private void addToThreadPool(int taskType, String tag, List<NameValuePair> params)
-    {
-    	HttpBaseTask httpTask = new HttpBaseTask(ThreadPoolConst.THREAD_TYPE_FILE_HTTP, tag, params, UrlUtil.GetUrl(taskType));
-    	httpTask.setTaskType(taskType);
-    	InfoHandler handler = new InfoHandler(this);
-    	httpTask.setInfoHandler(handler);
-    	ThreadPoolFactory.getThreadPoolManager().addTask(httpTask);
-    }
 	
     @Override
     protected void onPause() {

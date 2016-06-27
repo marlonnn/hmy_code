@@ -1,5 +1,6 @@
 package com.BC.entertainmentgravitation.fragment;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -140,6 +141,7 @@ public class RightsCenterFragment extends BaseFragment implements OnClickListene
 				TextView txtChange = (TextView) viewHolder.getView(R.id.txtViewChangeValue);
 				TextView txtTime = (TextView) viewHolder.getView(R.id.txtViewTime);
 				ImageView imagBuy = (ImageView) viewHolder.getView(R.id.imgViewBuy);
+				ImageView imagBack = (ImageView) viewHolder.getView(R.id.imgViewBack);
 				if (item != null)
 				{
 					viewHolder.getConvertView().setOnClickListener(new OnClickListener() {
@@ -155,6 +157,7 @@ public class RightsCenterFragment extends BaseFragment implements OnClickListene
 					.placeholder(R.drawable.avatar_def).into(cPortrait);
 					txtName.setText(isNullOrEmpty(item.getNick_name()) ? "未知" : item.getNick_name());
 					txtCardName.setText(isNullOrEmpty(item.getLabel()) ? "未知" : item.getLabel());
+					calculateChange(txtChange, item.getBid(), item.getDifference());
 					if (!isNullOrEmpty(item.getLabel()))
 					{
 						switch(item.getLabel())
@@ -163,25 +166,29 @@ public class RightsCenterFragment extends BaseFragment implements OnClickListene
 							txtCardName.setTextColor(Color.parseColor(getActivity().getString(R.color.card_blue)));
 							imagName.setImageResource(R.drawable.activity_xiyue_name_bg);
 							imagBuy.setImageResource(R.drawable.activity_card_xiyue_buy);
+							imagBack.setImageResource(R.drawable.activity_card_xiyue_bg);
 							break;
 						case "演出卡":
 							txtCardName.setTextColor(Color.parseColor(getActivity().getString(R.color.card_red)));
 							imagName.setImageResource(R.drawable.activity_yanchu_bg);
 							imagBuy.setImageResource(R.drawable.activity_card_yanchu_buy);
+							imagBack.setImageResource(R.drawable.activity_card_yanchu_bg);
 							break;
 						case "商务卡":
 							txtCardName.setTextColor(Color.parseColor(getActivity().getString(R.color.card_yellow)));
 							imagName.setImageResource(R.drawable.activity_shangwu_bg);
 							imagBuy.setImageResource(R.drawable.activity_card_shangwu_buy);
+							imagBack.setImageResource(R.drawable.activity_card_shangwu_bg);
 							break;
 							default:
 								txtCardName.setTextColor(Color.parseColor(getActivity().getString(R.color.card_blue)));
 								imagName.setImageResource(R.drawable.activity_xiyue_name_bg);
 								imagBuy.setImageResource(R.drawable.activity_card_xiyue_buy);
+								imagBack.setImageResource(R.drawable.activity_card_xiyue_bg);
 								break;
 						}
 					}
-					txtValue.setText(isNullOrEmpty(item.getTotal()) ? "未知" : item.getTotal());
+					txtValue.setText(isNullOrEmpty(calculateCurrentValue(item.getBid(), item.getPrice())) ? "未知" : calculateCurrentValue(item.getBid(), item.getPrice()));
 					txtEnvelopes.setText(isNullOrEmpty(item.getPrice()) ? "未知" : item.getPrice());
 					txtTime.setText(isNullOrEmpty(formatTime(item.getTime())) ? "未知" : formatTime(item.getTime()));
 					root.setOnClickListener(new OnClickListener() {
@@ -216,6 +223,53 @@ public class RightsCenterFragment extends BaseFragment implements OnClickListene
 			}
 			
 		};
+	}
+	
+	private String calculateCurrentValue(String bid, String price)
+	{
+		int sum = 0;
+		try {
+			int iBid = Integer.parseInt(bid);
+			int iPrice = Integer.parseInt(price);
+			int sPrice = iBid - iPrice + 1;
+			for ( int start = sPrice; start <= iBid; start ++ )
+			{
+				sum += start;
+			}
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		}
+		return String.valueOf(sum);
+	}
+	
+	private void calculateChange(TextView txtView, String bid, float difference)
+	{
+		String p = "0.00%";
+		try {
+			int iBid = Integer.parseInt(bid);
+			int last = (int) (iBid - difference);
+			float diff = (difference / last ) * 100;
+			DecimalFormat decimalFormat=new DecimalFormat(".00");
+			p= decimalFormat.format(diff);
+			if (difference > 0)
+			{
+				p = "+" + p + "%";
+				txtView.setBackgroundColor(getResources().getColor(R.color.card_change_red));
+			}
+			else if (difference < 0)
+			{
+				p = "-" + p + "%";
+				txtView.setBackgroundColor(getResources().getColor(R.color.card_change_green));
+			}
+			else if (difference == 0)
+			{
+				p = "+0.00%";
+				txtView.setBackgroundColor(getResources().getColor(R.color.card_change_red));
+			}
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		}
+		txtView.setText(p);
 	}
 	
 	private String formatTime(String originalTime)

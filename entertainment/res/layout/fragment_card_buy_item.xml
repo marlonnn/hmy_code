@@ -10,13 +10,9 @@
         android:id="@+id/rLayoutCardTop"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:layout_marginTop="35dp">
-        <ImageView
-            android:id="@+id/imgViewBack"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"/>
+        android:layout_marginTop="35dp"
+        android:background="@drawable/activity_card_xiyue_bg" >
+
     </RelativeLayout>
 
     <RelativeLayout
@@ -105,6 +101,7 @@
 	                    android:id="@+id/txtViewCurrentValue"
 	                    android:layout_width="wrap_content"
 	                    android:layout_height="wrap_content"
+	                    android:text="12000"
 	                    android:textColor="@color/white"
 	                    android:textSize="10dp" />
                 </LinearLayout>
@@ -124,6 +121,7 @@
 	                    android:id="@+id/txtViewEnvelopesValue"
 	                    android:layout_width="wrap_content"
 	                    android:layout_height="wrap_content"
+	                    android:text="200"
 	                    android:textColor="@color/white"
 	                    android:textSize="10dp" />
                 </LinearLayout>
@@ -172,6 +170,7 @@
 	                    android:id="@+id/txtViewTime"
 	                    android:layout_width="wrap_content"
 	                    android:layout_height="wrap_content"
+	                    android:text="06-21"
 	                    android:textColor="@color/white"
 	                    android:textSize="10dp" />
                 </LinearLayout>

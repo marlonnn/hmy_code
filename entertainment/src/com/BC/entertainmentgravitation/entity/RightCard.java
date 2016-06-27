@@ -32,6 +32,12 @@ public class RightCard implements Serializable{
 	
 	private String head;
 
+	private String bid;
+	
+	private String gender;
+	
+	private float difference;
+	
 	public String getCard_id() {
 		return card_id;
 	}
@@ -119,4 +125,29 @@ public class RightCard implements Serializable{
 	public void setHead(String head) {
 		this.head = head;
 	}
+
+	public String getBid() {
+		return bid;
+	}
+
+	public void setBid(String bid) {
+		this.bid = bid;
+	}
+
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
+	public float getDifference() {
+		return difference;
+	}
+
+	public void setDifference(float difference) {
+		this.difference = difference;
+	}
+	
 }

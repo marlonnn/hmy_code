@@ -37,15 +37,6 @@
                 android:text="详情" />
         </LinearLayout>
 
-        <ImageView
-            android:id="@+id/imgViewDelete"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="10dp"
-            android:src="@drawable/activity_rights_card_detail_delete" />
-
     </RelativeLayout>
 
     <ScrollView
@@ -100,9 +91,9 @@
 	                    android:layout_width="80dp"
 	                    android:layout_height="30dp"
 	                    android:textColor="@color/white"
+	                    android:gravity="center"
 	                    android:singleLine="true"
-	                    android:ellipsize="end"
-	                    android:gravity="center"/>
+	                    android:ellipsize="end" />
 
 	                <ImageView
 	                    android:id="@+id/imgViewGender"
@@ -277,34 +268,62 @@
 			<RelativeLayout
 		        android:id="@+id/rLayoutIntroduction"
 			    android:layout_width="match_parent"
-			    android:background="@drawable/activity_charge_item_bg"
 			    android:descendantFocusability="blocksDescendants"
 			    android:layout_marginTop="5dp"
 			    android:layout_marginLeft="5dp"
 			    android:layout_marginRight="5dp"
-			    android:layout_height="50dp">
-			    <TextView
-			        android:id="@+id/txtRightsName"
-			        android:layout_width="wrap_content"
+			    android:layout_height="wrap_content">
+		        
+			    <RelativeLayout
+			        android:id="@+id/lLayoutIntroduction"
+			        android:layout_width="match_parent"
+			        android:layout_height="50dp"
+			        android:layout_alignParentTop="true"
+			        android:layout_centerHorizontal="true"
+			        android:layout_marginTop="5dp"
+			        android:layout_marginLeft="5dp"
+			        android:layout_marginRight="5dp"
+			        android:background="@drawable/activity_charge_item_bg" >
+				    <TextView
+				        android:id="@+id/txtRightsName"
+				        android:layout_width="wrap_content"
+				        android:layout_height="wrap_content"
+				        android:layout_centerVertical="true"
+				        android:layout_marginLeft="15dp"
+				        android:textSize="18dp"
+				        android:focusable="false"
+				        android:clickable="false"
+				        android:textColor="@color/white"
+				        android:text="权益卡使用说明" />
+			
+				    <ImageView
+				        android:id="@+id/imgViewUp"
+				        android:layout_width="25dp"
+				        android:layout_height="25dp"
+				        android:focusable="false"
+				        android:clickable="false"
+				        android:layout_alignParentRight="true"
+				        android:layout_centerVertical="true"
+				        android:layout_marginRight="16dp"
+				        android:background="@drawable/fragment_right" />		            
+			    </RelativeLayout>
+			    <LinearLayout
+			        android:id="@+id/lLayoutIntroductionContent"
+			        android:layout_width="match_parent"
 			        android:layout_height="wrap_content"
-			        android:layout_centerVertical="true"
-			        android:layout_marginLeft="15dp"
-			        android:textSize="18dp"
-			        android:focusable="false"
-			        android:clickable="false"
-			        android:textColor="@color/white"
-			        android:text="权益卡使用说明" />
-		
-			    <ImageView
-			        android:id="@+id/imgViewUp"
-			        android:layout_width="25dp"
-			        android:layout_height="25dp"
-			        android:focusable="false"
-			        android:clickable="false"
-			        android:layout_alignParentRight="true"
-			        android:layout_centerVertical="true"
-			        android:layout_marginRight="16dp"
-			        android:src="@drawable/activity_publish_up" />
+			        android:layout_below="@id/lLayoutIntroduction"
+			        android:layout_centerHorizontal="true"
+			        android:visibility="gone"
+			        android:orientation="vertical" >
+				    <TextView
+				        android:id="@+id/txtViewIntroduction"
+				        android:layout_width="match_parent"
+				        android:layout_height="wrap_content"
+				        android:layout_marginTop="10dp"
+				        android:layout_marginLeft="20dp"
+				        android:layout_marginRight="20dp"/>				    
+			    </LinearLayout>
+			    
 		    </RelativeLayout>
 		    <RelativeLayout
 		        android:id="@+id/rLayoutHongBao"

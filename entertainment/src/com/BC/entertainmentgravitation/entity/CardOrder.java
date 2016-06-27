@@ -41,6 +41,8 @@ public class CardOrder {
 	private String head;
 	
 	private String region;
+	
+	private String label;
 
 	public String getOrder_id() {
 		return order_id;
@@ -177,4 +179,13 @@ public class CardOrder {
 	public void setRegion(String region) {
 		this.region = region;
 	}
+
+	public String getLabel() {
+		return label;
+	}
+
+	public void setLabel(String label) {
+		this.label = label;
+	}
+	
 }
