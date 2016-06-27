@@ -28,7 +28,7 @@ import com.BC.entertainmentgravitation.entity.Day;
 import com.BC.entertainmentgravitation.entity.SignTime;
 import com.BC.entertainmentgravitation.util.TimestampTool;
 
-@SuppressLint("InflateParams") public class CalendarFragemt extends Fragment{
+@SuppressLint("InflateParams") public class CalendarFragment extends Fragment{
 
 	View contentView;
 	LayoutInflater inflater;

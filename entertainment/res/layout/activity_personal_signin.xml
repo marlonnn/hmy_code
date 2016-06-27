@@ -133,7 +133,7 @@
         <fragment
             android:id="@+id/fragmentCalendar"
             android:layout_below="@id/lLayoutTop"
-            android:name="com.BC.entertainmentgravitation.fragment.CalendarFragemt"
+            android:name="com.BC.entertainmentgravitation.fragment.CalendarFragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
     </RelativeLayout>

@@ -84,6 +84,10 @@
             android:text="被购买"
             android:textSize="10dip" />
     </RadioGroup>
-    
+    <FrameLayout
+        android:id="@+id/fLayoutContent"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </LinearLayout>

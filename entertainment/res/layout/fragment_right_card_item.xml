@@ -142,7 +142,7 @@
 	                    android:id="@+id/txtViewChangeContent"
 	                    android:layout_width="wrap_content"
 	                    android:layout_height="wrap_content"
-	                    android:text="涨跌幅："
+	                    android:text="昨    日："
 	                    android:textColor="@color/card_value_red"
 	                    android:textSize="10dp" />
 	                <TextView

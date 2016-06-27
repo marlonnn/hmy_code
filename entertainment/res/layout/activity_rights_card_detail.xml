@@ -102,15 +102,13 @@
 	                    android:textColor="@color/white"
 	                    android:singleLine="true"
 	                    android:ellipsize="end"
-	                    android:gravity="center"
-	                    android:text="滚滚长江流" />
+	                    android:gravity="center"/>
 
 	                <ImageView
 	                    android:id="@+id/imgViewGender"
-	                    android:layout_width="30dp"
-	                    android:layout_height="30dp"
-	                    android:layout_marginLeft="10dp"
-	                    android:src="@drawable/activity_rights_card_nan" />
+	                    android:layout_width="25dp"
+	                    android:layout_height="25dp"
+	                    android:layout_marginLeft="10dp" />
 
 	            </LinearLayout>
 
@@ -121,8 +119,7 @@
 	                android:layout_below="@+id/lLayoutName"
 	                android:layout_centerHorizontal="true"
 	                android:layout_marginTop="10dp"
-	                android:textSize="15dp"
-	                android:text="商务卡" />
+	                android:textSize="15dp"/>
 
 		        <LinearLayout
 		            android:id="@+id/lLayoutDetailContent"
@@ -158,7 +155,6 @@
 		                        android:id="@+id/txtViewCurrentValue"
 		                        android:layout_width="wrap_content"
 		                        android:layout_height="wrap_content"
-		                        android:text="12000"
 		                        android:textColor="@color/white"
 		                        android:textSize="15dp" />
 		                </LinearLayout>
@@ -184,7 +180,6 @@
 		                        android:layout_width="match_parent"
 		                        android:layout_height="wrap_content"
 		                        android:layout_gravity="left"
-		                        android:text="200"
 		                        android:textColor="@color/white"
 		                        android:textSize="15dp" />
 		                </LinearLayout>
@@ -207,7 +202,7 @@
 		                        android:id="@+id/txtViewChangeContent"
 		                        android:layout_width="wrap_content"
 		                        android:layout_height="wrap_content"
-		                        android:text="涨跌幅："
+		                        android:text="昨    日："
 		                        android:textColor="@color/card_value_red"
 		                        android:textSize="15dp" />
 
@@ -239,7 +234,6 @@
 		                        android:id="@+id/txtViewTime"
 		                        android:layout_width="match_parent"
 		                        android:layout_height="wrap_content"
-		                        android:text="06-21"
 		                        android:textColor="@color/white"
 		                        android:textSize="15dp" />
 		                </LinearLayout>

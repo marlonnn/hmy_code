@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.BC.entertainment.cache.InfoCache;
@@ -54,6 +55,7 @@ public class RightsCardDetailActivity extends BaseActivity implements OnClickLis
 	private TextView txtViewHongBao;
 	private TextView txtViewChange;
 	private TextView txtViewIndex;
+	private ImageView imgViewGender;
 	private Gson gson;
 	private CoordinateSystemView coordinateSystemView;
 	private LineChart lineChart;
@@ -85,6 +87,8 @@ public class RightsCardDetailActivity extends BaseActivity implements OnClickLis
 		txtEnvelopes = (TextView) findViewById(R.id.txtViewEnvelopesValue);
 		txtChange = (TextView) findViewById(R.id.txtViewChangeValue);
 		txtTime = (TextView) findViewById(R.id.txtViewTime);
+		imgViewGender = (ImageView) findViewById(R.id.imgViewGender);
+		
 		btnBuy = (Button) findViewById(R.id.btnBuy);
 		
 		txtViewHongBao = (TextView) findViewById(R.id.txtViewHongBao);
@@ -137,6 +141,14 @@ public class RightsCardDetailActivity extends BaseActivity implements OnClickLis
 		 */
 		applauseGiveConcern = new ApplauseGiveConcern( this,
 				member.getId(), this, Integer.parseInt(member.getBid()), member.getNick());
+		if (member.getGender().contains("男"))
+		{
+			imgViewGender.setBackgroundResource(R.drawable.activity_rights_card_nan);
+		}
+		else if (member.getGender().contains("女"))
+		{
+			imgViewGender.setBackgroundResource(R.drawable.activity_rights_card_nv);
+		}
 	}
 	
 	private void sendBuyRighCardReuest(RightCard card, int number)

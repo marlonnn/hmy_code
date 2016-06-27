@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?><LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:select="http://schemas.android.com/apk/res/com.BC.entertainmentgravitation"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/activity_charge_bg"
+    android:orientation="vertical" >
+
+    <com.summer.ptr.PullToRefreshGridView
+        android:id="@+id/pGridViewSell"
+        android:gravity="center"
+        android:scrollbarSize="4dp"
+	    android:scrollbarThumbVertical="@drawable/scrollbar_thumb"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+    </com.summer.ptr.PullToRefreshGridView> 
+    
+
+</LinearLayout>

@@ -12,7 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.BC.entertainmentgravitation.entity.Continuous;
-import com.BC.entertainmentgravitation.fragment.CalendarFragemt;
+import com.BC.entertainmentgravitation.fragment.CalendarFragment;
 import com.BC.entertainmentgravitation.util.TimestampTool;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -30,7 +30,7 @@ import com.umeng.analytics.MobclickAgent;
 
 public class SignInActivity extends BaseActivity implements OnClickListener{
 
-	private CalendarFragemt calendarFragemt;
+	private CalendarFragment calendarFragemt;
 	
 	private TextView txtContinue;
 	private TextView txtWithGet;
@@ -48,7 +48,7 @@ public class SignInActivity extends BaseActivity implements OnClickListener{
 	
 	private void initView()
 	{
-		calendarFragemt = (CalendarFragemt) getSupportFragmentManager()
+		calendarFragemt = (CalendarFragment) getSupportFragmentManager()
 				.findFragmentById(R.id.fragmentCalendar);
 		txtContinue = (TextView) findViewById(R.id.txtContinue);
 		txtWithGet = (TextView) findViewById(R.id.txtWithGet);
