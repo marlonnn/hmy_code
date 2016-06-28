@@ -249,7 +249,7 @@ public class RightsCenterFragment extends BaseFragment implements OnClickListene
 			int iBid = Integer.parseInt(bid);
 			int last = (int) (iBid - difference);
 			float diff = (difference / last ) * 100;
-			DecimalFormat decimalFormat=new DecimalFormat(".00");
+			DecimalFormat decimalFormat=new DecimalFormat("0.00");
 			p= decimalFormat.format(diff);
 			if (difference > 0)
 			{

@@ -1,5 +1,6 @@
 package com.BC.entertainmentgravitation.fragment;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,6 +26,7 @@ import android.widget.AdapterView.OnItemClickListener;
 
 import com.BC.entertainmentgravitation.R;
 import com.BC.entertainmentgravitation.entity.CardOrder;
+import com.BC.entertainmentgravitation.entity.RightCard;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.Gson;
@@ -86,7 +88,7 @@ public class CardBuyFragment extends BaseFragment implements OnClickListener{
 	private void initAdapter()
 	{
 		adapter = new CommonAdapter<CardOrder>(getActivity(), R.layout.fragment_card_buy_item, buyCards){
-
+			
 			@Override
 			public void convert(
 					ViewHolder viewHolder,
@@ -102,7 +104,7 @@ public class CardBuyFragment extends BaseFragment implements OnClickListener{
 				TextView txtTime = (TextView) viewHolder.getView(R.id.txtViewTime);
 				ImageView imagBuy = (ImageView) viewHolder.getView(R.id.imgViewBuy);
 				ImageView imagBack = (ImageView) viewHolder.getView(R.id.imgViewBack);
-				if (item != null && !isNullOrEmpty(item.getState()) && item.getState().contains("1"))
+				if (item != null)
 				{
 					Glide.with(getActivity()).load(formatPortrait(item.getHead()))
 					.centerCrop()
@@ -110,7 +112,9 @@ public class CardBuyFragment extends BaseFragment implements OnClickListener{
 					.placeholder(R.drawable.avatar_def).into(cPortrait);
 					txtName.setText(isNullOrEmpty(item.getNick_name()) ? "未知" : item.getNick_name());
 					txtCardName.setText(isNullOrEmpty(item.getLabel()) ? "未知" : item.getLabel());
-					if (!isNullOrEmpty(item.getLabel()))
+//					calculateChange(txtChange, item.getBid(), item.getDifference());
+					if (item.getLabel() != null)
+//					if (!isNullOrEmpty(item.getLabel()))
 					{
 						switch(item.getLabel())
 						{
@@ -140,7 +144,7 @@ public class CardBuyFragment extends BaseFragment implements OnClickListener{
 								break;
 						}
 					}
-//					txtValue.setText(isNullOrEmpty(item.getTotal()) ? "未知" : item.getTotal());
+					txtValue.setText(isNullOrEmpty(calculateCurrentValue(item.getPrice_index(), item.getPrice())) ? "未知" : calculateCurrentValue(item.getPrice_index(), item.getPrice()));
 					txtEnvelopes.setText(isNullOrEmpty(item.getPrice()) ? "未知" : item.getPrice());
 					txtTime.setText(isNullOrEmpty(formatTime(item.getOrder_time())) ? "未知" : formatTime(item.getOrder_time()));
 				}
@@ -148,6 +152,54 @@ public class CardBuyFragment extends BaseFragment implements OnClickListener{
 			
 		};
 	}
+	
+	private String calculateCurrentValue(String bid, String price)
+	{
+		int sum = 0;
+		try {
+			int iBid = Integer.parseInt(bid);
+			int iPrice = Integer.parseInt(price);
+			int sPrice = iBid - iPrice + 1;
+			for ( int start = sPrice; start <= iBid; start ++ )
+			{
+				sum += start;
+			}
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		}
+		return String.valueOf(sum);
+	}
+	
+	private void calculateChange(TextView txtView, String bid, float difference)
+	{
+		String p = "0.00%";
+		try {
+			int iBid = Integer.parseInt(bid);
+			int last = (int) (iBid - difference);
+			float diff = (difference / last ) * 100;
+			DecimalFormat decimalFormat=new DecimalFormat("0.00");
+			p= decimalFormat.format(diff);
+			if (difference > 0)
+			{
+				p = "+" + p + "%";
+				txtView.setBackgroundColor(getResources().getColor(R.color.card_change_red));
+			}
+			else if (difference < 0)
+			{
+				p = "-" + p + "%";
+				txtView.setBackgroundColor(getResources().getColor(R.color.card_change_green));
+			}
+			else if (difference == 0)
+			{
+				p = "+0.00%";
+				txtView.setBackgroundColor(getResources().getColor(R.color.card_change_red));
+			}
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		}
+		txtView.setText(p);
+	}
+	
 	
 	private void initView()
 	{
@@ -258,22 +310,19 @@ public class CardBuyFragment extends BaseFragment implements OnClickListener{
     	ThreadPoolFactory.getThreadPoolManager().addTask(httpTask);
     }
     
-	private void addBuyCards()
-	{
-		if (buyCards == null) {
-			return;
-		}
-		if (pageIndex == 1) {// 第一页时，先清空数据集
-			adapter.clearAll();
-		}
-		pageIndex++;
-		adapter.add(buyCards);
-	}
-	
 	private String formatTime(String originalTime)
 	{
-		String[] time = originalTime.split(" ")[0].split("-");
-		String formatTime = time[1] + "-" + time[2];
+		String formatTime = "";
+		try {
+			if (originalTime != null)
+			{
+				String[] time = originalTime.split(" ")[0].split("-");
+				formatTime = time[1] + "-" + time[2];
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 		return formatTime;
 	}
 	
@@ -336,14 +385,46 @@ public class CardBuyFragment extends BaseFragment implements OnClickListener{
 			Entity<List<CardOrder>> entity = gson.fromJson(jsonString,
 					new TypeToken<Entity<List<CardOrder>>>() {
 					}.getType());
-			buyCards = entity.getData();
-			if (buyCards != null && buyCards.size() > 0) {
-				addBuyCards();
+//			buyCards = entity.getData();
+			if (entity.getData() != null && entity.getData().size() > 0) {
+				filter(entity.getData());
 			} else {
 				ToastUtil.show(getActivity(), "没有更多数据了");
 			}
+
 			break;
 		}
+	}
+	
+//	private void addBuyCards()
+//	{
+//		if (buyCards == null) {
+//			return;
+//		}
+//		if (pageIndex == 1) {// 第一页时，先清空数据集
+//			adapter.clearAll();
+//		}
+//		pageIndex++;
+//		adapter.add(buyCards);
+//	}
+	
+	private void filter(List<CardOrder> listCard)
+	{
+		if (pageIndex == 1) {// 第一页时，先清空数据集
+			adapter.clearAll();
+		}
+		for (CardOrder c : listCard)
+		{
+			if (c != null && c.getState() != null && c.getState().contains("1"))
+			{
+				buyCards.add(c);
+			}
+		}
+		if (buyCards == null) {
+			return;
+		}
+		pageIndex++;
+		adapter.add(buyCards);
 	}
 
 }

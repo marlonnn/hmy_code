@@ -1,5 +1,6 @@
 package com.BC.entertainmentgravitation.fragment;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -102,7 +103,7 @@ public class CardSellFragment extends BaseFragment implements OnClickListener {
 				TextView txtTime = (TextView) viewHolder.getView(R.id.txtViewTime);
 				ImageView imagBuy = (ImageView) viewHolder.getView(R.id.imgViewBuy);
 				ImageView imagBack = (ImageView) viewHolder.getView(R.id.imgViewBack);
-				if (item != null && !isNullOrEmpty(item.getState()) && item.getState().contains("2"))
+				if (item != null)
 				{
 					Glide.with(getActivity()).load(formatPortrait(item.getHead()))
 					.centerCrop()
@@ -110,7 +111,8 @@ public class CardSellFragment extends BaseFragment implements OnClickListener {
 					.placeholder(R.drawable.avatar_def).into(cPortrait);
 					txtName.setText(isNullOrEmpty(item.getNick_name()) ? "未知" : item.getNick_name());
 					txtCardName.setText(isNullOrEmpty(item.getLabel()) ? "未知" : item.getLabel());
-					if (!isNullOrEmpty(item.getLabel()))
+					if (item.getLabel() != null)
+//					if (!isNullOrEmpty(item.getLabel()))
 					{
 						switch(item.getLabel())
 						{
@@ -140,13 +142,60 @@ public class CardSellFragment extends BaseFragment implements OnClickListener {
 								break;
 						}
 					}
-//					txtValue.setText(isNullOrEmpty(item.getTotal()) ? "未知" : item.getTotal());
+					txtValue.setText(isNullOrEmpty(calculateCurrentValue(item.getPrice_index(), item.getPrice())) ? "未知" : calculateCurrentValue(item.getPrice_index(), item.getPrice()));
 					txtEnvelopes.setText(isNullOrEmpty(item.getPrice()) ? "未知" : item.getPrice());
 					txtTime.setText(isNullOrEmpty(formatTime(item.getOrder_time())) ? "未知" : formatTime(item.getOrder_time()));
 				}
 			}
 			
 		};
+	}
+	
+	private String calculateCurrentValue(String bid, String price)
+	{
+		int sum = 0;
+		try {
+			int iBid = Integer.parseInt(bid);
+			int iPrice = Integer.parseInt(price);
+			int sPrice = iBid - iPrice + 1;
+			for ( int start = sPrice; start <= iBid; start ++ )
+			{
+				sum += start;
+			}
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		}
+		return String.valueOf(sum);
+	}
+	
+	private void calculateChange(TextView txtView, String bid, float difference)
+	{
+		String p = "0.00%";
+		try {
+			int iBid = Integer.parseInt(bid);
+			int last = (int) (iBid - difference);
+			float diff = (difference / last ) * 100;
+			DecimalFormat decimalFormat=new DecimalFormat("0.00");
+			p= decimalFormat.format(diff);
+			if (difference > 0)
+			{
+				p = "+" + p + "%";
+				txtView.setBackgroundColor(getResources().getColor(R.color.card_change_red));
+			}
+			else if (difference < 0)
+			{
+				p = "-" + p + "%";
+				txtView.setBackgroundColor(getResources().getColor(R.color.card_change_green));
+			}
+			else if (difference == 0)
+			{
+				p = "+0.00%";
+				txtView.setBackgroundColor(getResources().getColor(R.color.card_change_red));
+			}
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		}
+		txtView.setText(p);
 	}
 	
 	private void initView()
@@ -247,7 +296,7 @@ public class CardSellFragment extends BaseFragment implements OnClickListener {
 		entity.put("clientID", Config.User.getClientID());
 		entity.put("page", String.valueOf(pageIndex));
     	List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
-    	addToThreadPool(Config.member_in, "get start info", params);	
+    	addToThreadPool(Config.orderList, "get start info", params);	
 	}
 	
     private void addToThreadPool(int taskType, String tag, List<NameValuePair> params)
@@ -259,22 +308,19 @@ public class CardSellFragment extends BaseFragment implements OnClickListener {
     	ThreadPoolFactory.getThreadPoolManager().addTask(httpTask);
     }
     
-	private void addSellCards()
-	{
-		if (sellCards == null) {
-			return;
-		}
-		if (pageIndex == 1) {// 第一页时，先清空数据集
-			adapter.clearAll();
-		}
-		pageIndex++;
-		adapter.add(sellCards);
-	}
-	
 	private String formatTime(String originalTime)
 	{
-		String[] time = originalTime.split(" ")[0].split("-");
-		String formatTime = time[1] + "-" + time[2];
+		String formatTime = "";
+		try {
+			if (originalTime != null)
+			{
+				String[] time = originalTime.split(" ")[0].split("-");
+				formatTime = time[1] + "-" + time[2];
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 		return formatTime;
 	}
 	
@@ -334,18 +380,48 @@ public class CardSellFragment extends BaseFragment implements OnClickListener {
 	public void RequestSuccessful(int status, String jsonString, int taskType) {
 		switch (taskType)
 		{
-		case Config.member_in:
+		case Config.orderList:
 			Entity<List<CardOrder>> entity = gson.fromJson(jsonString,
 					new TypeToken<Entity<List<CardOrder>>>() {
 					}.getType());
-			sellCards = entity.getData();
-			if (sellCards != null && sellCards.size() > 0) {
-				addSellCards();
+			if (entity.getData() != null && entity.getData().size() > 0) {
+				filter(entity.getData());
 			} else {
 				ToastUtil.show(getActivity(), "没有更多数据了");
 			}
 			break;
 		}
+	}
+	
+	private void addSellCards()
+	{
+		if (sellCards == null) {
+			return;
+		}
+		if (pageIndex == 1) {// 第一页时，先清空数据集
+			adapter.clearAll();
+		}
+		pageIndex++;
+		adapter.add(sellCards);
+	}
+	
+	private void filter(List<CardOrder> listCard)
+	{
+		if (pageIndex == 1) {// 第一页时，先清空数据集
+			adapter.clearAll();
+		}
+		for (CardOrder c : listCard)
+		{
+			if (c != null && c.getState() != null && c.getState().contains("2"))
+			{
+				sellCards.add(c);
+			}
+		}
+		if (sellCards == null) {
+			return;
+		}
+		pageIndex++;
+		adapter.add(sellCards);
 	}
 
 }

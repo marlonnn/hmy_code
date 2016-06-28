@@ -1,5 +1,6 @@
 package com.BC.entertainmentgravitation.fragment;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -8,6 +9,7 @@ import org.apache.http.NameValuePair;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -24,13 +26,14 @@ import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
 import com.BC.entertainmentgravitation.R;
-import com.BC.entertainmentgravitation.entity.CardOrder;
-import com.BC.entertainmentgravitation.entity.FHNEntity;
+import com.BC.entertainmentgravitation.RightsCardDetailActivity;
+import com.BC.entertainmentgravitation.entity.RightCard;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.summer.adapter.CommonAdapter;
+import com.summer.adapter.CommonAdapter.ViewHolder;
 import com.summer.config.Config;
 import com.summer.factory.ThreadPoolFactory;
 import com.summer.fragment.BaseFragment;
@@ -49,8 +52,8 @@ import com.summer.view.CircularImage;
 
 public class CardPublishFragment extends BaseFragment implements OnClickListener {
 
-	private List<CardOrder> publishCards = new ArrayList<>();
-	private CommonAdapter<CardOrder> adapter;
+	private List<RightCard> publishCards = new ArrayList<>();
+	private CommonAdapter<RightCard> adapter;
 	private int pageIndex = 1;
 	private Gson gson;
 	private View rootView;
@@ -85,12 +88,19 @@ public class CardPublishFragment extends BaseFragment implements OnClickListener
 	
 	private void initAdapter()
 	{
-		adapter = new CommonAdapter<CardOrder>(getActivity(), R.layout.fragment_card_publish_item, publishCards){
+		adapter = new CommonAdapter<RightCard>(getActivity(), R.layout.fragment_card_publish_item, publishCards){
 
+			public void setTag(ViewHolder viewHolder, final RightCard item)
+			{
+				viewHolder.getView(R.id.lLayoutContent).setTag(R.id.tag_card_root, item);
+				viewHolder.getView(R.id.cImagePortrait).setTag(R.id.tag_card_portrait, item);
+				viewHolder.getView(R.id.imgViewBuy).setTag(R.id.tag_card_buy, item);
+			}
+			
 			@Override
 			public void convert(
 					ViewHolder viewHolder,
-					CardOrder item, int position) {
+					RightCard item, int position) {
 				LinearLayout root = (LinearLayout) viewHolder.getView(R.id.lLayoutContent);
 				CircularImage cPortrait = (CircularImage) viewHolder.getView(R.id.cImagePortrait);
 				TextView txtName = (TextView) viewHolder.getView(R.id.txtViewName);
@@ -102,7 +112,7 @@ public class CardPublishFragment extends BaseFragment implements OnClickListener
 				TextView txtTime = (TextView) viewHolder.getView(R.id.txtViewTime);
 				ImageView imagBuy = (ImageView) viewHolder.getView(R.id.imgViewBuy);
 				ImageView imagBack = (ImageView) viewHolder.getView(R.id.imgViewBack);
-				if (item != null && !isNullOrEmpty(item.getState()) && item.getState().contains("0"))
+				if (item != null)
 				{
 					Glide.with(getActivity()).load(formatPortrait(item.getHead()))
 					.centerCrop()
@@ -110,7 +120,9 @@ public class CardPublishFragment extends BaseFragment implements OnClickListener
 					.placeholder(R.drawable.avatar_def).into(cPortrait);
 					txtName.setText(isNullOrEmpty(item.getNick_name()) ? "未知" : item.getNick_name());
 					txtCardName.setText(isNullOrEmpty(item.getLabel()) ? "未知" : item.getLabel());
-					if (!isNullOrEmpty(item.getLabel()))
+					calculateChange(txtChange, item.getBid(), item.getDifference());
+//					if (!isNullOrEmpty(item.getLabel()))
+					if (item.getLabel() != null)
 					{
 						switch(item.getLabel())
 						{
@@ -140,15 +152,75 @@ public class CardPublishFragment extends BaseFragment implements OnClickListener
 								break;
 						}
 					}
-//					txtValue.setText(isNullOrEmpty(item.get) ? "未知" : item.getTotal());
+					txtValue.setText(isNullOrEmpty(calculateCurrentValue(item.getBid(), item.getPrice())) ? "未知" : calculateCurrentValue(item.getBid(), item.getPrice()));
 					txtEnvelopes.setText(isNullOrEmpty(item.getPrice()) ? "未知" : item.getPrice());
-					txtTime.setText(isNullOrEmpty(formatTime(item.getOrder_time())) ? "未知" : formatTime(item.getOrder_time()));
+					txtTime.setText(isNullOrEmpty(formatTime(item.getTime())) ? "未知" : formatTime(item.getTime()));
+					root.setOnClickListener(new OnClickListener() {
+						
+						@Override
+						public void onClick(View v) {
+							// TODO Auto-generated method stub
+							RightCard card = (RightCard) v.getTag(R.id.tag_card_root);
+							XLog.i("----name--------" + card.getNick_name());
+							Intent i = new Intent(getActivity(), RightsCardDetailActivity.class);
+							Bundle b = new Bundle();
+							b.putSerializable("card", card);
+							i.putExtras(b);
+							startActivity(i);
+						}
+					});
 				}
 			}
 			
 		};
 	}
 	
+	private String calculateCurrentValue(String bid, String price)
+	{
+		int sum = 0;
+		try {
+			int iBid = Integer.parseInt(bid);
+			int iPrice = Integer.parseInt(price);
+			int sPrice = iBid - iPrice + 1;
+			for ( int start = sPrice; start <= iBid; start ++ )
+			{
+				sum += start;
+			}
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		}
+		return String.valueOf(sum);
+	}
+	
+	private void calculateChange(TextView txtView, String bid, float difference)
+	{
+		String p = "0.00%";
+		try {
+			int iBid = Integer.parseInt(bid);
+			int last = (int) (iBid - difference);
+			float diff = (difference / last ) * 100;
+			DecimalFormat decimalFormat=new DecimalFormat("0.00");
+			p= decimalFormat.format(diff);
+			if (difference > 0)
+			{
+				p = "+" + p + "%";
+				txtView.setBackgroundColor(getResources().getColor(R.color.card_change_red));
+			}
+			else if (difference < 0)
+			{
+				p = "-" + p + "%";
+				txtView.setBackgroundColor(getResources().getColor(R.color.card_change_green));
+			}
+			else if (difference == 0)
+			{
+				p = "+0.00%";
+				txtView.setBackgroundColor(getResources().getColor(R.color.card_change_red));
+			}
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		}
+		txtView.setText(p);
+	}
 	private void initView()
 	{
 		pGridViewPublish = (PullToRefreshGridView) rootView.findViewById(R.id.pGridViewPublish);
@@ -162,7 +234,7 @@ public class CardPublishFragment extends BaseFragment implements OnClickListener
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				try {
-					CardOrder entity = (CardOrder)view.getTag();
+					RightCard entity = (RightCard)view.getTag();
 					if (entity != null)
 					{
 					}
@@ -335,8 +407,8 @@ public class CardPublishFragment extends BaseFragment implements OnClickListener
 		switch (taskType)
 		{
 		case Config.getProfit:
-			Entity<List<CardOrder>> entity = gson.fromJson(jsonString,
-					new TypeToken<Entity<List<CardOrder>>>() {
+			Entity<List<RightCard>> entity = gson.fromJson(jsonString,
+					new TypeToken<Entity<List<RightCard>>>() {
 					}.getType());
 			publishCards = entity.getData();
 			if (publishCards != null && publishCards.size() > 0) {

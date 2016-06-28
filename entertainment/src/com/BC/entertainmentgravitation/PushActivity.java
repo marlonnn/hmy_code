@@ -48,8 +48,6 @@ public class PushActivity extends BaseActivity implements lsMessageHandler, Medi
     private TopPushFragment topFragment;
 	private RelativeLayout rlayoutLoading;
 	private AbortableFuture<EnterChatRoomResultData> enterRequest;//聊天室
-	private int lastFragment = 1;
-	private Intent intent;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -62,12 +60,6 @@ public class PushActivity extends BaseActivity implements lsMessageHandler, Medi
         rlayoutLoading = (RelativeLayout) findViewById(R.id.rLayoutPushLoading);
         Intent intent = this.getIntent();
         StarLiveVideoInfo startLiveVideoInfo = (StarLiveVideoInfo)intent.getSerializableExtra("liveInfo");
-		try {
-			intent = getIntent();
-			lastFragment = intent.getIntExtra("lastFragment", 1);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
         enterChatRoom(startLiveVideoInfo, true);
 	}
 	
@@ -475,10 +467,6 @@ public class PushActivity extends BaseActivity implements lsMessageHandler, Medi
 			if(m_liveStreamingOn) {
 			    m_liveStreamingOn = false;
 			}
-			intent.putExtra("lastFragment", lastFragment);
-			setResult(RESULT_OK, intent);
-			intent.putExtra("lastFragment", lastFragment);
-			setResult(RESULT_OK, intent);
 			finish();
 		}
 	}

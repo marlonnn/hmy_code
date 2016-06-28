@@ -66,8 +66,7 @@
                     android:layout_marginTop="60dp"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/activity_rights_card_xiyue" />
+                    android:scaleType="fitXY" />
 	            <com.summer.view.CircularImage
 	                android:id="@+id/cImagePortrait"
 	                android:layout_width="80dp"

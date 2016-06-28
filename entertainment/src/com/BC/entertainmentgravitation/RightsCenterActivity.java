@@ -37,6 +37,7 @@ public class RightsCenterActivity extends BaseActivity implements OnClickListene
 		fManager = getSupportFragmentManager();
 		findViewById(R.id.imageViewBack).setOnClickListener(this);
 		initView();
+		setFragmentSelection(R.id.radio0);
 	}
 	
     private void hideFragments(FragmentTransaction transaction) {  

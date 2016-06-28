@@ -10,9 +10,13 @@
         android:id="@+id/rLayoutCardTop"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:layout_marginTop="35dp"
-        android:background="@drawable/activity_card_xiyue_bg" >
-
+        android:layout_marginTop="35dp">
+        <ImageView
+            android:id="@+id/imgViewBack"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"/>
     </RelativeLayout>
 
     <RelativeLayout

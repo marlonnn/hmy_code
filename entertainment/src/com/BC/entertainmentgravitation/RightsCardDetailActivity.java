@@ -67,6 +67,7 @@ public class RightsCardDetailActivity extends BaseActivity implements OnClickLis
 	
 	private LinearLayout lLayoutContent;
 	private ImageView imgViewUp;
+	private ImageView imgViewRightsCard;
 	private TextView txtContent;
 //	private Member member;
 	
@@ -87,6 +88,7 @@ public class RightsCardDetailActivity extends BaseActivity implements OnClickLis
 	{
 		lLayoutContent = (LinearLayout) findViewById(R.id.lLayoutIntroductionContent);
 		imgViewUp = (ImageView) findViewById(R.id.imgViewUp);
+		imgViewRightsCard = (ImageView) findViewById(R.id.imgViewRightsCard);
 		txtContent = (TextView) findViewById(R.id.txtViewIntroduction);
 		imgViewUp.setOnClickListener(this);
 		coordinateSystemView = (CoordinateSystemView) findViewById(R.id.coordinateSystemView);
@@ -128,18 +130,22 @@ public class RightsCardDetailActivity extends BaseActivity implements OnClickLis
 			case "戏约卡":
 				txtCardName.setTextColor(Color.parseColor(this.getString(R.color.card_blue)));
 				btnBuy.setBackgroundColor(Color.parseColor(this.getString(R.color.card_blue)));
+				imgViewRightsCard.setBackgroundResource(R.drawable.activity_rights_card_xiyue);
 				break;
 			case "演出卡":
 				txtCardName.setTextColor(Color.parseColor(getString(R.color.card_red)));
 				btnBuy.setBackgroundColor(Color.parseColor(this.getString(R.color.card_red)));
+				imgViewRightsCard.setBackgroundResource(R.drawable.activity_rights_card_yanchu);
 				break;
 			case "商务卡":
 				txtCardName.setTextColor(Color.parseColor(getString(R.color.card_yellow)));
 				btnBuy.setBackgroundColor(Color.parseColor(this.getString(R.color.card_yellow)));
+				imgViewRightsCard.setBackgroundResource(R.drawable.activity_rights_card_shangwu);
 				break;
 				default:
 					txtCardName.setTextColor(Color.parseColor(getString(R.color.card_blue)));
 					btnBuy.setBackgroundColor(Color.parseColor(this.getString(R.color.card_blue)));
+					imgViewRightsCard.setBackgroundResource(R.drawable.activity_rights_card_xiyue);
 					break;
 			}
 			initApplauseConcern(card);
@@ -170,7 +176,7 @@ public class RightsCardDetailActivity extends BaseActivity implements OnClickLis
 			int iBid = Integer.parseInt(bid);
 			int last = (int) (iBid - difference);
 			float diff = (difference / last ) * 100;
-			DecimalFormat decimalFormat=new DecimalFormat(".00");
+			DecimalFormat decimalFormat=new DecimalFormat("0.00");
 			p= decimalFormat.format(diff);
 			if (difference > 0)
 			{
