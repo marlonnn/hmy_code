@@ -244,9 +244,10 @@ public class CardPublishFragment extends BaseFragment implements OnClickListener
 	{
     	HashMap<String, String> entity = new HashMap<String, String>();
 		entity.put("clientID", Config.User.getClientID());
+		entity.put("is_mine", "1");
 		entity.put("page", String.valueOf(pageIndex));
     	List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
-    	addToThreadPool(Config.orderList, "get start info", params);	
+    	addToThreadPool(Config.getProfit, "get start info", params);	
 	}
 	
     private void addToThreadPool(int taskType, String tag, List<NameValuePair> params)
@@ -333,7 +334,7 @@ public class CardPublishFragment extends BaseFragment implements OnClickListener
 	public void RequestSuccessful(int status, String jsonString, int taskType) {
 		switch (taskType)
 		{
-		case Config.orderList:
+		case Config.getProfit:
 			Entity<List<CardOrder>> entity = gson.fromJson(jsonString,
 					new TypeToken<Entity<List<CardOrder>>>() {
 					}.getType());

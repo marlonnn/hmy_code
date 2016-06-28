@@ -385,6 +385,7 @@ public class RightsCenterFragment extends BaseFragment implements OnClickListene
 		HashMap<String, String> entity = new HashMap<String, String>();
 
 		entity.put("clientID", Config.User.getClientID());
+		entity.put("is_mine", "0");
 		entity.put("page", String.valueOf(pageIndex));
     	List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
     	addToThreadPool(Config.getProfit, "get start right card", params);
