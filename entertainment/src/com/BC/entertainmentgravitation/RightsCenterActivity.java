@@ -114,7 +114,13 @@ public class RightsCenterActivity extends BaseActivity implements OnClickListene
 		
 		txtPublish = (TextView) findViewById(R.id.txtViewPublish);
 		txtPublish.setOnClickListener(this);
-		if (!Config.User.getPermission().contains("2") && Config.User.getCheckType().contains("1"))
+		if (Config.User.getPermission().contains("2") && Config.User.getCheckType().contains("1"))
+		{
+			rbtnBuy.setVisibility(View.VISIBLE);
+			rbtnSell.setVisibility(View.VISIBLE);
+			txtPublish.setVisibility(View.VISIBLE);
+		}
+		else
 		{
 			rbtnBuy.setVisibility(View.GONE);
 			rbtnSell.setVisibility(View.GONE);

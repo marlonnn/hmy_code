@@ -22,9 +22,12 @@ public class CardOrder {
 	
 	private String price;
 	
+	//状态： 0、退回  1、预购、  2、预约  3、同意  4、完成
 	private String state;
 	
 	private String price_index;
+	
+	private String bid;
 	
 	private String order_time;
 	
@@ -186,6 +189,14 @@ public class CardOrder {
 
 	public void setLabel(String label) {
 		this.label = label;
+	}
+
+	public String getBid() {
+		return bid;
+	}
+
+	public void setBid(String bid) {
+		this.bid = bid;
 	}
 	
 }

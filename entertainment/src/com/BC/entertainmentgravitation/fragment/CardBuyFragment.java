@@ -112,9 +112,8 @@ public class CardBuyFragment extends BaseFragment implements OnClickListener{
 					.placeholder(R.drawable.avatar_def).into(cPortrait);
 					txtName.setText(isNullOrEmpty(item.getNick_name()) ? "未知" : item.getNick_name());
 					txtCardName.setText(isNullOrEmpty(item.getLabel()) ? "未知" : item.getLabel());
-//					calculateChange(txtChange, item.getBid(), item.getDifference());
+					calculateChange(txtChange, item.getPrice_index(), item.getBid());
 					if (item.getLabel() != null)
-//					if (!isNullOrEmpty(item.getLabel()))
 					{
 						switch(item.getLabel())
 						{
@@ -170,26 +169,27 @@ public class CardBuyFragment extends BaseFragment implements OnClickListener{
 		return String.valueOf(sum);
 	}
 	
-	private void calculateChange(TextView txtView, String bid, float difference)
+	private void calculateChange(TextView txtView, String price_index, String bid)
 	{
 		String p = "0.00%";
 		try {
 			int iBid = Integer.parseInt(bid);
-			int last = (int) (iBid - difference);
-			float diff = (difference / last ) * 100;
+			int iPriceIndex = Integer.parseInt(price_index);
+			float last = (float) (iBid - iPriceIndex);
+			float diff = (last / iPriceIndex ) * 100;
 			DecimalFormat decimalFormat=new DecimalFormat("0.00");
 			p= decimalFormat.format(diff);
-			if (difference > 0)
+			if (last > 0)
 			{
 				p = "+" + p + "%";
 				txtView.setBackgroundColor(getResources().getColor(R.color.card_change_red));
 			}
-			else if (difference < 0)
+			else if (last < 0)
 			{
 				p = "-" + p + "%";
 				txtView.setBackgroundColor(getResources().getColor(R.color.card_change_green));
 			}
-			else if (difference == 0)
+			else if (last == 0)
 			{
 				p = "+0.00%";
 				txtView.setBackgroundColor(getResources().getColor(R.color.card_change_red));
@@ -199,7 +199,6 @@ public class CardBuyFragment extends BaseFragment implements OnClickListener{
 		}
 		txtView.setText(p);
 	}
-	
 	
 	private void initView()
 	{
@@ -297,6 +296,7 @@ public class CardBuyFragment extends BaseFragment implements OnClickListener{
     	HashMap<String, String> entity = new HashMap<String, String>();
 		entity.put("clientID", Config.User.getClientID());
 		entity.put("page", String.valueOf(pageIndex));
+		entity.put("ordertype", "0");
     	List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
     	addToThreadPool(Config.orderList, "get start info", params);	
 	}
@@ -385,9 +385,9 @@ public class CardBuyFragment extends BaseFragment implements OnClickListener{
 			Entity<List<CardOrder>> entity = gson.fromJson(jsonString,
 					new TypeToken<Entity<List<CardOrder>>>() {
 					}.getType());
-//			buyCards = entity.getData();
+			buyCards = entity.getData();
 			if (entity.getData() != null && entity.getData().size() > 0) {
-				filter(entity.getData());
+				addBuyCards();
 			} else {
 				ToastUtil.show(getActivity(), "没有更多数据了");
 			}
@@ -396,35 +396,35 @@ public class CardBuyFragment extends BaseFragment implements OnClickListener{
 		}
 	}
 	
-//	private void addBuyCards()
-//	{
-//		if (buyCards == null) {
-//			return;
-//		}
-//		if (pageIndex == 1) {// 第一页时，先清空数据集
-//			adapter.clearAll();
-//		}
-//		pageIndex++;
-//		adapter.add(buyCards);
-//	}
-	
-	private void filter(List<CardOrder> listCard)
+	private void addBuyCards()
 	{
-		if (pageIndex == 1) {// 第一页时，先清空数据集
-			adapter.clearAll();
-		}
-		for (CardOrder c : listCard)
-		{
-			if (c != null && c.getState() != null && c.getState().contains("1"))
-			{
-				buyCards.add(c);
-			}
-		}
 		if (buyCards == null) {
 			return;
+		}
+		if (pageIndex == 1) {// 第一页时，先清空数据集
+			adapter.clearAll();
 		}
 		pageIndex++;
 		adapter.add(buyCards);
 	}
+	
+//	private void filter(List<CardOrder> listCard)
+//	{
+//		if (pageIndex == 1) {// 第一页时，先清空数据集
+//			adapter.clearAll();
+//		}
+//		for (CardOrder c : listCard)
+//		{
+//			if (c != null && c.getState() != null && c.getState().contains("1"))
+//			{
+//				buyCards.add(c);
+//			}
+//		}
+//		if (buyCards == null) {
+//			return;
+//		}
+//		pageIndex++;
+//		adapter.add(buyCards);
+//	}
 
 }
