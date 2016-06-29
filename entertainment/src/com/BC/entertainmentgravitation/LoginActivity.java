@@ -5,19 +5,14 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.util.Log;
 
 import com.BC.entertainment.view.CustomViewPager;
 import com.BC.entertainmentgravitation.fragment.LoginFragment;
 import com.BC.entertainmentgravitation.fragment.LoginFragment.iLogin;
 import com.BC.entertainmentgravitation.fragment.RegisteFragment;
 import com.BC.entertainmentgravitation.fragment.RegisteFragment.iRegister;
-import com.igexin.sdk.PushManager;
 import com.summer.activity.BaseActivity;
-import com.summer.config.Config;
-import com.summer.factory.ThreadPoolFactory;
 import com.umeng.analytics.MobclickAgent;
-import com.umeng.analytics.MobclickAgent.EScenarioType;
 
 public class LoginActivity extends BaseActivity implements iRegister, iLogin{
 	
@@ -37,11 +32,6 @@ public class LoginActivity extends BaseActivity implements iRegister, iLogin{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_back);
         mContext = this;
-        MobclickAgent.setDebugMode(true);
-        // SDK在统计Fragment时，需要关闭Activity自带的页面统计，
-        // 然后在每个页面中重新集成页面统计的代码(包括调用了 onResume 和 onPause 的Activity)。
-        MobclickAgent.openActivityDurationTrack(false);
-        MobclickAgent.setScenarioType(mContext, EScenarioType.E_UM_NORMAL);
         initView();
     }
 	
@@ -99,12 +89,8 @@ public class LoginActivity extends BaseActivity implements iRegister, iLogin{
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		try {
-			ThreadPoolFactory.getThreadPoolManager().stopAllTask();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
+	
 	@Override
 	public void RequestSuccessful(String jsonString, int taskType) {
 	}

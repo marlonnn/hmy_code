@@ -1,6 +1,5 @@
 package com.BC.entertainmentgravitation;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -9,18 +8,46 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
+
+import cn.sharesdk.framework.ShareSDK;
 
 import com.BC.entertainment.adapter.ViewPagerAdapter;
 import com.BC.entertainment.config.Preferences;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.igexin.sdk.PushManager;
+import com.netease.nimlib.sdk.AbortableFuture;
+import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.RequestCallback;
+import com.netease.nimlib.sdk.auth.AuthService;
+import com.netease.nimlib.sdk.auth.LoginInfo;
+import com.summer.activity.BaseActivity;
 import com.summer.config.Config;
 import com.summer.entity.User;
+import com.summer.factory.ThreadPoolFactory;
+import com.summer.handler.InfoHandler;
+import com.summer.json.Entity;
+import com.summer.logger.XLog;
+import com.summer.task.HttpBaseTask;
+import com.summer.treadpool.ThreadPoolConst;
+import com.summer.utils.JsonUtil;
+import com.summer.utils.UrlUtil;
+import com.umeng.analytics.MobclickAgent;
+import com.umeng.analytics.MobclickAgent.EScenarioType;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
-public class GuidePageActivity extends Activity implements View.OnClickListener,
-ViewPager.OnPageChangeListener {
+import org.apache.http.NameValuePair;
 
+public class GuidePageActivity extends BaseActivity implements View.OnClickListener, ViewPager.OnPageChangeListener {
+
+	private Gson gson;
+	
+	private AbortableFuture<LoginInfo> loginRequest;
     // 定义ViewPager对象
     private ViewPager viewPager;
     // 定义ViewPager适配器
@@ -41,54 +68,146 @@ ViewPager.OnPageChangeListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        initSDKConfig();
         try {
         	if (Preferences.getUserAutoLogin().contains("true"))
         	{
         		if (Preferences.getUserName() != null && Preferences.getUserToken() != null)
         		{
-        			initUser();
-					Intent intent = new Intent(getApplicationContext(), HomeActivity_back.class);
-					startActivity(intent);
-					finish();
+        	    	gson = new Gson();
+        			sendLoginRequest();
+//        			initUser();
+//					Intent intent = new Intent(getApplicationContext(), HomeActivity_back.class);
+//					startActivity(intent);
+//					finish();
         		}
         	}
-//			if ((boolean)SharedPreferencesUtils.getParam(this, "autoLogin", false))
-//			{
-//				if (Config.User != null)
-//				{
-//					if (Config.User.getUserName() != null && Config.User.getToken() != null)
-//					{
-//						Intent intent = new Intent(getApplicationContext(), HomeActivity_back.class);
-//						startActivity(intent);
-//						finish();
-//					}
-//
-//				}
-//
-//			}
+        	else
+        	{
+                setContentView(R.layout.activity_guide_page);
+                initializeView();
+                initializeData();
+        	}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-        setContentView(R.layout.activity_guide_page);
-        initializeView();
-        initializeData();
+
     }
     
-    private void initUser()
+    /**
+     * send login to server request
+     */
+    private void sendLoginRequest()
     {
-    	User user = new User();
-    	user.setCheckType(Preferences.getUserCheckType());
-    	user.setClientID(Preferences.getUserId());
-    	user.setImage(Preferences.getUserImage());
-    	user.setNickName(Preferences.getUserNickName());
-    	user.setPermission(Preferences.getUserPermission());
-    	user.setPushUrl(Preferences.getUserPushUrl());
-    	user.setShareCode(Preferences.getUserShareCode());
-    	user.setToken(Preferences.getUserToken());
-    	user.setUserName(Preferences.getUserName());
-    	Config.User = user;
+    	HashMap<String, String> entity = new HashMap<String, String>();
+		entity.put("pos", "1");
+		entity.put("name", Preferences.getUserName());
+		entity.put("passWord", Preferences.getUserPassword());
+		ShowProgressDialog(getResources().getString(R.string.loginIsLogining));
+		List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
+		addToThreadPool(Config.LOGIN_TYPE, "loginTask", params);
     }
     
+    private void addToThreadPool(int taskType, String Tag, List<NameValuePair> params)
+    {
+    	HttpBaseTask httpTask = new HttpBaseTask(ThreadPoolConst.THREAD_TYPE_FILE_HTTP, Tag, params, UrlUtil.GetUrl(taskType));
+    	httpTask.setTaskType(taskType);
+    	InfoHandler handler = new InfoHandler(this);
+    	httpTask.setInfoHandler(handler);
+    	ThreadPoolFactory.getThreadPoolManager().addTask(httpTask);
+    }
+    
+    private void initSDKConfig()
+    {
+    	//1.umeng sdk
+        MobclickAgent.setDebugMode(true);
+        // SDK在统计Fragment时，需要关闭Activity自带的页面统计，
+        // 然后在每个页面中重新集成页面统计的代码(包括调用了 onResume 和 onPause 的Activity)。
+        MobclickAgent.openActivityDurationTrack(false);
+        MobclickAgent.setScenarioType(this, EScenarioType.E_UM_NORMAL);
+        
+        //2.share sdk
+		ShareSDK.initSDK(this);
+		
+		//3.ge tui sdk
+        PushManager.getInstance().initialize(this);
+    }
+    
+    /**
+     * Ge tui
+     */
+	private void bindGeTuiAlias()
+	{
+		try {
+			PushManager.getInstance().bindAlias(this, Config.User.getClientID());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+    
+//    private void initUser()
+//    {
+//    	User user = new User();
+//    	user.setCheckType(Preferences.getUserCheckType());
+//    	user.setClientID(Preferences.getUserId());
+//    	user.setImage(Preferences.getUserImage());
+//    	user.setNickName(Preferences.getUserNickName());
+//    	user.setPermission(Preferences.getUserPermission());
+//    	user.setPushUrl(Preferences.getUserPushUrl());
+//    	user.setShareCode(Preferences.getUserShareCode());
+//    	user.setToken(Preferences.getUserToken());
+//    	user.setUserName(Preferences.getUserName());
+//    	Config.User = user;
+//    }
+    
+    @SuppressWarnings("unchecked")
+	private void logingNimServer(final User user)
+    {
+    	final String account = user.getUserName();
+    	final String token = user.getToken();
+    	if (account != null && token != null)
+    	{
+        	loginRequest = NIMClient.getService(AuthService.class).login(new LoginInfo(account, token));
+        	loginRequest.setCallback(new RequestCallback<LoginInfo>() {
+				@Override
+				public void onException(Throwable arg0) {
+					XLog.e("login to Nim server exception: " + arg0);
+					Toast.makeText(GuidePageActivity.this, "登陆异常", Toast.LENGTH_SHORT).show();
+	    			Intent intent = new Intent(GuidePageActivity.this, LoginActivity.class);
+	    			startActivity(intent);
+	    			finish();
+				}
+
+				@Override
+				public void onFailed(int arg0) {
+					XLog.e("login to Nim server failed: " + arg0);
+	                if (arg0 == 302 || arg0 == 404) {
+	                    Toast.makeText(GuidePageActivity.this, "登陆失败", Toast.LENGTH_SHORT).show();
+	                } else {
+	                    Toast.makeText(GuidePageActivity.this, "登录失败: " + arg0, Toast.LENGTH_SHORT).show();
+	                }
+	    			Intent intent = new Intent(GuidePageActivity.this, LoginActivity.class);
+	    			startActivity(intent);
+	    			finish();
+				}
+
+				@Override
+				public void onSuccess(LoginInfo loginInfo) {
+	    			Intent intent = new Intent(GuidePageActivity.this, HomeActivity_back.class);
+	    			startActivity(intent);
+	    			finish();
+				}
+			});
+    	}
+    	else
+    	{
+    		Toast.makeText(GuidePageActivity.this, "登陆失败", Toast.LENGTH_SHORT).show();
+			Intent intent = new Intent(GuidePageActivity.this, LoginActivity.class);
+			startActivity(intent);
+			finish();
+    	}
+    }
+
 	private Bitmap readBitmap(int resId)
 	{
 		BitmapFactory.Options opt = new BitmapFactory.Options();
@@ -259,6 +378,24 @@ ViewPager.OnPageChangeListener {
 					System.gc();
 				}
 			}
+		}
+	}
+
+	@Override
+	public void RequestSuccessful(String jsonString, int taskType) {
+		switch (taskType)
+		{
+		case Config.LOGIN_TYPE:
+    		Entity<User> entity = gson.fromJson(jsonString, 
+    				new TypeToken<Entity<User>>() {}.getType());
+    		if (entity != null && entity.getData() != null)
+    		{
+        		Config.User = entity.getData();
+        		bindGeTuiAlias();
+        		logingNimServer(entity.getData());
+    		}
+
+			break;
 		}
 	}
 }

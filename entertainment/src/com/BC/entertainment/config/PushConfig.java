@@ -14,6 +14,7 @@ public class PushConfig {
 	public static final int LS_AUDIO_STREAMING_LOW_QUALITY = 0;
 	public static final int LS_AUDIO_STREAMING_HIGH_QUALITY = 1;
 	public static final int LS_AUDIO_CODEC_AAC = 0;
+	public static final int LS_VIDEO_CODEC_AVC = 0;
 	public static final int LS_AUDIO_CODEC_SPEEX = 1;
 	public static final int LS_AUDIO_CODEC_MP3 = 2;
 	public static final int LS_AUDIO_CODEC_G711A = 3;

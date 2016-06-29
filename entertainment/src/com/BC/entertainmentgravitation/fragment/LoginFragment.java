@@ -365,11 +365,10 @@ public class LoginFragment extends BaseFragment implements OnClickListener, Call
 		    			Config.setPassword(editPassword.getText().toString());
 		    		}
 		    		
-//		    		Config.saveUser();
 		    		saveUser(user);
 	    			Intent intent = new Intent(getActivity(), HomeActivity_back.class);
 	    			startActivity(intent);
-//	    			SharedPreferencesUtils.setParam(getActivity(), "autoLogin", true);
+	    			getActivity().finish();
 				}
 			});
     	}

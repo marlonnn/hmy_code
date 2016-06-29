@@ -243,6 +243,12 @@ public class HomeActivity_back extends BaseActivity implements OnClickListener{
 		}
 	}
 
+	
+	@Override
+	protected void onStart() {
+		super.onStart();
+	}
+
 	@Override
     protected void onPause() {
         super.onPause();
@@ -253,6 +259,16 @@ public class HomeActivity_back extends BaseActivity implements OnClickListener{
 	protected void onResume() {
 		super.onResume();
         MobclickAgent.onResume(this);
+	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		try {
+			ThreadPoolFactory.getThreadPoolManager().stopAllTask();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	private void setFragmentSelection(int v)
