@@ -1,12 +1,15 @@
 package com.BC.entertainmentgravitation.entity;
 
+import java.io.Serializable;
+
 /**
  * 权益卡订单
  * 订单类型 state 0：我发布 1：我购买  2：被购买
  * @author wen zhong
  *
  */
-public class CardOrder {
+@SuppressWarnings("serial")
+public class CardOrder implements Serializable{
 	
 	private String order_id;
 	

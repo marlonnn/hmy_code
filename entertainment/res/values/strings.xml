@@ -292,4 +292,16 @@
     <item type="id" name="tag_card_root"></item>
 	<item type="id" name="tag_card_portrait"></item>
 	<item type="id" name="tag_card_buy"></item>
+	
+	<item type="id" name="tag_card_buy_yuyue"></item>
+	<item type="id" name="tag_card_buy_appeal"></item>
+	<item type="id" name="tag_card_buy_communicate"></item>
+	<item type="id" name="tag_card_buy_return"></item>
+	<item type="id" name="tag_card_buy_wancheng"></item>
+	
+	<item type="id" name="tag_card_sell_yuyue"></item>
+	<item type="id" name="tag_card_sell_appeal"></item>
+	<item type="id" name="tag_card_sell_communicate"></item>
+	<item type="id" name="tag_card_sell_agree"></item>
+	<item type="id" name="tag_card_sell_wancheng"></item>
 </resources>

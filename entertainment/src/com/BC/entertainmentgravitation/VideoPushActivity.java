@@ -129,18 +129,23 @@ public class VideoPushActivity extends BaseActivity implements OnClickListener, 
 	@Override
 	protected void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_video_push);
+		setContentView(R.layout.activity_push_video);
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);   //应用运行时，保持屏幕高亮，不锁屏
 		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 		registerObservers(true);
 		gson = new Gson();
 		mVideoView = (LiveSurfaceView) findViewById(R.id.videoview);
 		rootView = (RelativeLayout) findViewById(R.id.layout_root);
+        initListView();
+        initializeView();
+
 		rlayoutLoading = (RelativeLayout) findViewById(R.id.rLayoutPushLoading);
         Intent intent = this.getIntent();
         startLiveVideoInfo = (StarLiveVideoInfo)intent.getSerializableExtra("liveInfo");
         chatRoom = new ChatRoom(this);
         chatRoom.EnterChatRoom(startLiveVideoInfo);
+
+
 	}
 	
 	private void initializeView()
@@ -195,6 +200,19 @@ public class VideoPushActivity extends BaseActivity implements OnClickListener, 
 		});
 	}
 	
+    /**
+     * 初始化和处理聊天室消息列表
+     */
+    private void initListView(){
+    	items = new LinkedList<>();
+    	
+    	messageListView = (ListView)rootView.findViewById(R.id.messageListView);
+    	
+//    	imageViewAnimation = (ImageView)rootView.findViewById(R.id.imageViewAnimation);
+//    	adapter = new PushAdapter(container, context, items);
+//		messageListView.setAdapter(adapter);
+    }
+    
     /**
      * 游客进入聊天室，发送获取头像信息请求
      * @param username

@@ -151,7 +151,7 @@ public class LivePlayer implements lsMessageHandler{
             mLSMediaCapture.stopVideoPreview();
             mLSMediaCapture.destroyVideoPreview();
             //反初始化推流实例
-            mLSMediaCapture.uninitLsMediaCapture(false);
+//            mLSMediaCapture.uninitLsMediaCapture(false);
             mLSMediaCapture = null;
 
             m_liveStreamingInitFinished = false;
@@ -160,7 +160,7 @@ public class LivePlayer implements lsMessageHandler{
             m_tryToStopLiveStreaming = false;
         } else if (mLSMediaCapture !=null && !m_liveStreamingInitFinished) {
             //反初始化推流实例
-            mLSMediaCapture.uninitLsMediaCapture(true);
+//            mLSMediaCapture.uninitLsMediaCapture(true);
         }
 
         if (m_liveStreamingInit) {
@@ -240,7 +240,7 @@ public class LivePlayer implements lsMessageHandler{
                 mLogPath = Environment.getExternalStorageDirectory() + "/log/";
             }
             if(mLSMediaCapture != null) {
-                mLSMediaCapture.setTraceLevel(PushConfig.LS_LOG_ERROR, mLogPath);
+//                mLSMediaCapture.setTraceLevel(PushConfig.LS_LOG_ERROR, mLogPath);
             }
         } catch (Exception e) {
             XLog.e(e.getMessage());
@@ -299,9 +299,9 @@ public class LivePlayer implements lsMessageHandler{
 	      case lsMessageHandler.MSG_SEND_STATICS_LOG_ERROR://发送统计信息出错
 //	    	  toastAndExit("发送统计信息出错");
 	    	  break;
-	      case lsMessageHandler.MSG_SEND_HEARTBEAT_LOG_ERROR://发送心跳信息出错
-//	    	  toastAndExit("发送心跳信息出错");
-	    	  break;
+//	      case lsMessageHandler.MSG_SEND_HEARTBEAT_LOG_ERROR://发送心跳信息出错
+////	    	  toastAndExit("发送心跳信息出错");
+//	    	  break;
 	      case lsMessageHandler.MSG_AUDIO_SAMPLE_RATE_NOT_SUPPORT_ERROR://音频采集参数不支持
 //	    	  toastAndExit("音频采集参数不支持");
 	    	  break;
@@ -322,9 +322,9 @@ public class LivePlayer implements lsMessageHandler{
 	      case lsMessageHandler.MSG_HW_VIDEO_PACKET_ERROR://视频硬件编码出错
 //	    	  toastAndExit("视频硬件编码出错");
 	    	  break;
-	      case lsMessageHandler.MSG_CAMERA_PREVIEW_SIZE_NOT_SUPPORT_ERROR://camera采集分辨率不支持
-//	    	  toastAndExit("采集分辨率不支持");
-	    	  break;
+//	      case lsMessageHandler.MSG_CAMERA_PREVIEW_SIZE_NOT_SUPPORT_ERROR://camera采集分辨率不支持
+////	    	  toastAndExit("采集分辨率不支持");
+//	    	  break;
 	      case lsMessageHandler.MSG_START_LIVESTREAMING_FINISHED://开始直播完成
 	    	  activityCallback.onLiveStart();
 	    	  break;

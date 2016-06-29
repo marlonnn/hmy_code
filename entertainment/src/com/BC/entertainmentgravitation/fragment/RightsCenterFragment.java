@@ -429,7 +429,6 @@ public class RightsCenterFragment extends BaseFragment implements OnClickListene
 	
 	@Override
 	public void onInfoReceived(int errcode, HashMap<String, Object> items) {
-		// TODO Auto-generated method stub
 		super.onInfoReceived(errcode, items);
 		pGridViewRights.onRefreshComplete();
 	}

@@ -146,7 +146,7 @@
 	                    android:id="@+id/txtViewChangeContent"
 	                    android:layout_width="wrap_content"
 	                    android:layout_height="wrap_content"
-	                    android:text="昨    日："
+	                    android:text="涨跌幅："
 	                    android:textColor="@color/card_value_red"
 	                    android:textSize="10dp" />
 	                <TextView
@@ -181,21 +181,97 @@
             </LinearLayout>
         </LinearLayout>
 
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/lLayoutFunction"
             android:layout_width="75dp"
             android:layout_height="100dp"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
             android:layout_marginTop="35dp"
+            android:gravity="center" 
             android:orientation="vertical" >
-            <ImageView
-                android:id="@+id/imgViewBuy"
-                android:layout_width="50dp"
-                android:layout_height="20dp"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"/>
-        </RelativeLayout>
+            <LinearLayout
+                android:id="@+id/lLayoutCancel"
+                android:layout_width="75dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center" >
+	            <include
+	                android:layout_width="50dp"
+	                android:layout_height="20dp"
+	                layout="@layout/item_cancel" />             
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/lLayoutBook"
+                android:layout_width="75dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center" >
+	            <include
+	                android:layout_width="50dp"
+	                android:layout_height="20dp"
+	                layout="@layout/item_book" />             
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/lLayoutCommunicate"
+                android:layout_width="75dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center" >
+	            <include
+	                android:layout_width="50dp"
+	                android:layout_height="20dp"
+	                layout="@layout/item_communicate" />             
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/lLayoutAppeal"
+                android:layout_width="75dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center" >
+
+	            <include
+	                android:layout_width="50dp"
+	                android:layout_height="20dp"
+	                layout="@layout/item_appeal" />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/lLayoutAgree"
+                android:layout_width="75dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center" >
+
+	            <include
+	                android:layout_width="50dp"
+	                android:layout_height="20dp"
+	                layout="@layout/item_agree" />
+            </LinearLayout> 
+            <LinearLayout
+                android:id="@+id/lLayoutWancheng"
+                android:layout_width="75dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center" >
+
+	            <include
+	                android:layout_width="50dp"
+	                android:layout_height="20dp"
+	                layout="@layout/item_wancheng" />
+            </LinearLayout>             
+            <LinearLayout
+                android:id="@+id/lLayoutComplete"
+                android:layout_width="60dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:visibility="gone" >            
+	            <include
+	                android:layout_width="match_parent"
+	                android:layout_height="match_parent"
+	                layout="@layout/item_complete"
+	                android:gravity="center" />
+	        </LinearLayout>
+        </LinearLayout>
 
     </RelativeLayout>
 

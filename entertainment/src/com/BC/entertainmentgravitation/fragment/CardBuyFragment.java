@@ -9,6 +9,7 @@ import org.apache.http.NameValuePair;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -21,10 +22,13 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
+import com.BC.entertainmentgravitation.AppealActivity;
 import com.BC.entertainmentgravitation.R;
+import com.BC.entertainmentgravitation.RightsCardDetailActivity;
 import com.BC.entertainmentgravitation.entity.CardOrder;
 import com.BC.entertainmentgravitation.entity.RightCard;
 import com.bumptech.glide.Glide;
@@ -89,11 +93,88 @@ public class CardBuyFragment extends BaseFragment implements OnClickListener{
 	{
 		adapter = new CommonAdapter<CardOrder>(getActivity(), R.layout.fragment_card_buy_item, buyCards){
 			
+			private LinearLayout lLayoutBook;
+			private LinearLayout lLayoutCommunicate;
+			private LinearLayout lLayoutAppeal;
+			private LinearLayout lLayoutReturn;
+			private LinearLayout lLayoutComplete;
+			private LinearLayout lLayoutWancheng;
+			private LinearLayout lLayoutCancel;
+
+			public void setTag(ViewHolder viewHolder, final CardOrder item)
+			{
+				viewHolder.getView(R.id.rLayoutAppeal).setTag(R.id.tag_card_buy_appeal, item);
+				viewHolder.getView(R.id.rLayoutCommunicate).setTag(R.id.tag_card_buy_communicate, item);
+				viewHolder.getView(R.id.rLayoutReturn).setTag(R.id.tag_card_buy_return, item);
+				viewHolder.getView(R.id.rLayoutYuyue).setTag(R.id.tag_card_buy_yuyue, item);
+				viewHolder.getView(R.id.rLayoutWancheng).setTag(R.id.tag_card_buy_wancheng, item);
+			}
+			
+			private void hide(String state)
+			{
+				//状态： 0、退回  1、预购、  2、预约  3、同意  4、完成
+				switch(state)
+				{
+				case "0":
+					lLayoutBook.setVisibility(View.GONE);
+					lLayoutCommunicate.setVisibility(View.GONE);
+					lLayoutAppeal.setVisibility(View.GONE);
+					lLayoutReturn.setVisibility(View.GONE);
+					lLayoutComplete.setVisibility(View.GONE);
+					lLayoutWancheng.setVisibility(View.GONE);
+					lLayoutCancel.setVisibility(View.VISIBLE);
+					break;
+				case "1":
+					lLayoutCancel.setVisibility(View.GONE);
+					lLayoutBook.setVisibility(View.VISIBLE);
+					lLayoutCommunicate.setVisibility(View.VISIBLE);
+					lLayoutAppeal.setVisibility(View.GONE);
+					lLayoutReturn.setVisibility(View.VISIBLE);
+					lLayoutComplete.setVisibility(View.GONE);
+					lLayoutWancheng.setVisibility(View.GONE);
+					break;
+				case "2":
+					lLayoutCancel.setVisibility(View.GONE);
+					lLayoutBook.setVisibility(View.GONE);
+					lLayoutCommunicate.setVisibility(View.VISIBLE);
+					lLayoutAppeal.setVisibility(View.VISIBLE);
+					lLayoutReturn.setVisibility(View.GONE);
+					lLayoutComplete.setVisibility(View.GONE);
+					lLayoutWancheng.setVisibility(View.GONE);
+					break;
+				case "3":
+					lLayoutCancel.setVisibility(View.GONE);
+					lLayoutBook.setVisibility(View.GONE);
+					lLayoutCommunicate.setVisibility(View.VISIBLE);
+					lLayoutAppeal.setVisibility(View.VISIBLE);
+					lLayoutReturn.setVisibility(View.GONE);
+					lLayoutComplete.setVisibility(View.GONE);
+					lLayoutWancheng.setVisibility(View.VISIBLE);
+					break;
+				case "4":
+					lLayoutCancel.setVisibility(View.GONE);
+					lLayoutBook.setVisibility(View.GONE);
+					lLayoutCommunicate.setVisibility(View.GONE);
+					lLayoutAppeal.setVisibility(View.GONE);
+					lLayoutReturn.setVisibility(View.GONE);
+					lLayoutComplete.setVisibility(View.VISIBLE);
+					lLayoutWancheng.setVisibility(View.GONE);
+					break;
+				}
+			}
+			
 			@Override
 			public void convert(
 					ViewHolder viewHolder,
 					CardOrder item, int position) {
 				LinearLayout root = (LinearLayout) viewHolder.getView(R.id.lLayoutContent);
+				lLayoutBook = (LinearLayout) viewHolder.getView(R.id.lLayoutBook);
+				lLayoutCommunicate = (LinearLayout) viewHolder.getView(R.id.lLayoutCommunicate);
+				lLayoutAppeal = (LinearLayout) viewHolder.getView(R.id.lLayoutAppeal);
+				lLayoutReturn = (LinearLayout) viewHolder.getView(R.id.lLayoutReturn);
+				lLayoutComplete = (LinearLayout) viewHolder.getView(R.id.lLayoutComplete);
+				lLayoutWancheng = (LinearLayout) viewHolder.getView(R.id.lLayoutBuyWancheng);
+				lLayoutCancel = (LinearLayout) viewHolder.getView(R.id.lLayoutCancel);
 				CircularImage cPortrait = (CircularImage) viewHolder.getView(R.id.cImagePortrait);
 				TextView txtName = (TextView) viewHolder.getView(R.id.txtViewName);
 				TextView txtCardName = (TextView) viewHolder.getView(R.id.txtViewCardName);
@@ -102,8 +183,17 @@ public class CardBuyFragment extends BaseFragment implements OnClickListener{
 				TextView txtEnvelopes = (TextView) viewHolder.getView(R.id.txtViewEnvelopesValue);
 				TextView txtChange = (TextView) viewHolder.getView(R.id.txtViewChangeValue);
 				TextView txtTime = (TextView) viewHolder.getView(R.id.txtViewTime);
-				ImageView imagBuy = (ImageView) viewHolder.getView(R.id.imgViewBuy);
 				ImageView imagBack = (ImageView) viewHolder.getView(R.id.imgViewBack);
+				RelativeLayout rLayoutAppeal = (RelativeLayout) viewHolder.getView(R.id.rLayoutAppeal);
+				RelativeLayout rLayoutCommunicate = (RelativeLayout) viewHolder.getView(R.id.rLayoutCommunicate);
+				RelativeLayout rLayoutReturn = (RelativeLayout) viewHolder.getView(R.id.rLayoutReturn);
+				RelativeLayout rLayoutYuyue = (RelativeLayout) viewHolder.getView(R.id.rLayoutYuyue);
+				RelativeLayout rLayoutWancheng = (RelativeLayout) viewHolder.getView(R.id.rLayoutWancheng);
+				ImageView imgYuyueBg = (ImageView) viewHolder.getView(R.id.imgViewYuyueBg);
+				ImageView imgViewWanchengBg = (ImageView) viewHolder.getView(R.id.imgViewWanchengBg);
+				ImageView imgAppealBg = (ImageView) viewHolder.getView(R.id.imgViewAppealBg);
+				ImageView imgCommunicateBg = (ImageView) viewHolder.getView(R.id.imgViewCommunicateBg); 
+				ImageView imgViewReturnBg = (ImageView) viewHolder.getView(R.id.imgViewReturnBg); 
 				if (item != null)
 				{
 					Glide.with(getActivity()).load(formatPortrait(item.getHead()))
@@ -113,6 +203,7 @@ public class CardBuyFragment extends BaseFragment implements OnClickListener{
 					txtName.setText(isNullOrEmpty(item.getNick_name()) ? "未知" : item.getNick_name());
 					txtCardName.setText(isNullOrEmpty(item.getLabel()) ? "未知" : item.getLabel());
 					calculateChange(txtChange, item.getPrice_index(), item.getBid());
+					hide(item.getState());
 					if (item.getLabel() != null)
 					{
 						switch(item.getLabel())
@@ -120,25 +211,41 @@ public class CardBuyFragment extends BaseFragment implements OnClickListener{
 						case "戏约卡":
 							txtCardName.setTextColor(Color.parseColor(getActivity().getString(R.color.card_blue)));
 							imagName.setImageResource(R.drawable.activity_xiyue_name_bg);
-							imagBuy.setImageResource(R.drawable.activity_card_xiyue_buy);
+							imgAppealBg.setImageResource(R.drawable.item_xiyue_bg);
+							imgViewWanchengBg.setImageResource(R.drawable.item_xiyue_bg);
+							imgYuyueBg.setImageResource(R.drawable.item_xiyue_bg);
+							imgCommunicateBg.setImageResource(R.drawable.item_xiyue_bg);
+							imgViewReturnBg.setImageResource(R.drawable.item_xiyue_bg);
 							imagBack.setImageResource(R.drawable.activity_card_xiyue_bg);
 							break;
 						case "演出卡":
 							txtCardName.setTextColor(Color.parseColor(getActivity().getString(R.color.card_red)));
 							imagName.setImageResource(R.drawable.activity_yanchu_bg);
-							imagBuy.setImageResource(R.drawable.activity_card_yanchu_buy);
+							imgAppealBg.setImageResource(R.drawable.item_yanchu_bg);
+							imgViewWanchengBg.setImageResource(R.drawable.item_yanchu_bg);
+							imgYuyueBg.setImageResource(R.drawable.item_yanchu_bg);
+							imgCommunicateBg.setImageResource(R.drawable.item_yanchu_bg);
+							imgViewReturnBg.setImageResource(R.drawable.item_yanchu_bg);
 							imagBack.setImageResource(R.drawable.activity_card_yanchu_bg);
 							break;
 						case "商务卡":
 							txtCardName.setTextColor(Color.parseColor(getActivity().getString(R.color.card_yellow)));
 							imagName.setImageResource(R.drawable.activity_shangwu_bg);
-							imagBuy.setImageResource(R.drawable.activity_card_shangwu_buy);
+							imgAppealBg.setImageResource(R.drawable.item_shangwu_bg);
+							imgViewWanchengBg.setImageResource(R.drawable.item_shangwu_bg);
+							imgYuyueBg.setImageResource(R.drawable.item_shangwu_bg);
+							imgCommunicateBg.setImageResource(R.drawable.item_shangwu_bg);
+							imgViewReturnBg.setImageResource(R.drawable.item_shangwu_bg);
 							imagBack.setImageResource(R.drawable.activity_card_shangwu_bg);
 							break;
 							default:
 								txtCardName.setTextColor(Color.parseColor(getActivity().getString(R.color.card_blue)));
 								imagName.setImageResource(R.drawable.activity_xiyue_name_bg);
-								imagBuy.setImageResource(R.drawable.activity_card_xiyue_buy);
+								imgAppealBg.setImageResource(R.drawable.item_xiyue_bg);
+								imgViewWanchengBg.setImageResource(R.drawable.item_xiyue_bg);
+								imgYuyueBg.setImageResource(R.drawable.item_xiyue_bg);
+								imgViewReturnBg.setImageResource(R.drawable.item_xiyue_bg);
+								imgCommunicateBg.setImageResource(R.drawable.item_xiyue_bg);
 								imagBack.setImageResource(R.drawable.activity_card_xiyue_bg);
 								break;
 						}
@@ -146,11 +253,61 @@ public class CardBuyFragment extends BaseFragment implements OnClickListener{
 					txtValue.setText(isNullOrEmpty(calculateCurrentValue(item.getPrice_index(), item.getPrice())) ? "未知" : calculateCurrentValue(item.getPrice_index(), item.getPrice()));
 					txtEnvelopes.setText(isNullOrEmpty(item.getPrice()) ? "未知" : item.getPrice());
 					txtTime.setText(isNullOrEmpty(formatTime(item.getOrder_time())) ? "未知" : formatTime(item.getOrder_time()));
+					rLayoutAppeal.setOnClickListener(new OnClickListener() {
+						
+						@Override
+						public void onClick(View v) {
+							try {
+								CardOrder cardOrder = (CardOrder) v.getTag(R.id.tag_card_buy_appeal);
+								XLog.i("----name--------" + cardOrder.getNick_name());
+								Intent i = new Intent(getActivity(), AppealActivity.class);
+								Bundle b = new Bundle();
+								b.putSerializable("cardOrder", cardOrder);
+								i.putExtras(b);
+								startActivity(i);
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+						}
+					});
+					
+					rLayoutCommunicate.setOnClickListener(new OnClickListener() {
+						
+						@Override
+						public void onClick(View v) {
+							
+						}
+					});
+					rLayoutReturn.setOnClickListener(new OnClickListener() {
+						
+						@Override
+						public void onClick(View v) {
+							CardOrder cardOrder = (CardOrder) v.getTag(R.id.tag_card_buy_return);
+							sendChangeOrderStatusRequest(cardOrder, "0");
+						}
+					});
+					rLayoutYuyue.setOnClickListener(new OnClickListener() {
+						
+						@Override
+						public void onClick(View v) {
+							CardOrder cardOrder = (CardOrder) v.getTag(R.id.tag_card_buy_yuyue);
+							sendChangeOrderStatusRequest(cardOrder, "2");
+						}
+					});
+					rLayoutWancheng.setOnClickListener(new OnClickListener() {
+						
+						@Override
+						public void onClick(View v) {
+							CardOrder cardOrder = (CardOrder) v.getTag(R.id.tag_card_buy_wancheng);
+							sendChangeOrderStatusRequest(cardOrder, "4");
+						}
+					});
 				}
 			}
 			
 		};
 	}
+	
 	
 	private String calculateCurrentValue(String bid, String price)
 	{
@@ -291,6 +448,21 @@ public class CardBuyFragment extends BaseFragment implements OnClickListener{
 		super.onDestroy();
 	}
 	
+	private void sendChangeOrderStatusRequest(CardOrder order, String status)
+	{
+		if (order != null)
+		{
+	    	HashMap<String, String> entity = new HashMap<String, String>();
+			entity.put("clientID", Config.User.getClientID());
+			entity.put("orderid", order.getOrder_id());
+			entity.put("status", status);
+	    	List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
+	    	ShowProgressDialog("提交中...");
+	    	addToThreadPool(Config.orderStatus, "get start info", params);	
+		}
+
+	}
+	
 	private void sendCardOrderListRequest()
 	{
     	HashMap<String, String> entity = new HashMap<String, String>();
@@ -381,6 +553,9 @@ public class CardBuyFragment extends BaseFragment implements OnClickListener{
 	public void RequestSuccessful(int status, String jsonString, int taskType) {
 		switch (taskType)
 		{
+		case Config.orderStatus:
+			ToastUtil.show(getActivity(), "提交成功");
+			break;
 		case Config.orderList:
 			Entity<List<CardOrder>> entity = gson.fromJson(jsonString,
 					new TypeToken<Entity<List<CardOrder>>>() {

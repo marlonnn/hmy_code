@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.AudioFormat;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
@@ -222,7 +223,7 @@ public class PushActivity extends BaseActivity implements lsMessageHandler, Medi
             //配置音视频和camera参数
             paraSet();
             //设置日志级别
-        	mLSMediaCapture.setTraceLevel(PushConfig.LS_LOG_INFO, null);
+        	mLSMediaCapture.setTraceLevel(PushConfig.LS_LOG_INFO);
             //初始化直播推流
 	        ret = mLSMediaCapture.initLiveStream(ChatCache.getInstance().getChatRoom().getPushUrl(),
 	        		mLSLiveStreamingParaCtx);
@@ -312,9 +313,9 @@ public class PushActivity extends BaseActivity implements lsMessageHandler, Medi
 	      case lsMessageHandler.MSG_SEND_STATICS_LOG_ERROR://发送统计信息出错
 	    	  toastAndExit("发送统计信息出错");
 	    	  break;
-	      case lsMessageHandler.MSG_SEND_HEARTBEAT_LOG_ERROR://发送心跳信息出错
-	    	  toastAndExit("发送心跳信息出错");
-	    	  break;
+//	      case lsMessageHandler.MSG_SEND_HEARTBEAT_LOG_ERROR://发送心跳信息出错
+//	    	  toastAndExit("发送心跳信息出错");
+//	    	  break;
 	      case lsMessageHandler.MSG_AUDIO_SAMPLE_RATE_NOT_SUPPORT_ERROR://音频采集参数不支持
 	    	  toastAndExit("音频采集参数不支持");
 	    	  break;
@@ -335,9 +336,9 @@ public class PushActivity extends BaseActivity implements lsMessageHandler, Medi
 	      case lsMessageHandler.MSG_HW_VIDEO_PACKET_ERROR://视频硬件编码出错
 	    	  toastAndExit("视频硬件编码出错");
 	    	  break;
-	      case lsMessageHandler.MSG_CAMERA_PREVIEW_SIZE_NOT_SUPPORT_ERROR://camera采集分辨率不支持
-	    	  toastAndExit("采集分辨率不支持");
-	    	  break;
+//	      case lsMessageHandler.MSG_CAMERA_PREVIEW_SIZE_NOT_SUPPORT_ERROR://camera采集分辨率不支持
+//	    	  toastAndExit("采集分辨率不支持");
+//	    	  break;
 	      case lsMessageHandler.MSG_START_LIVESTREAMING_FINISHED://开始直播完成
 	    	  break;
 	      case lsMessageHandler.MSG_STOP_LIVESTREAMING_FINISHED://停止直播完成

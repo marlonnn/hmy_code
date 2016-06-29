@@ -94,7 +94,6 @@ public class CardPublishFragment extends BaseFragment implements OnClickListener
 			{
 				viewHolder.getView(R.id.lLayoutContent).setTag(R.id.tag_card_root, item);
 				viewHolder.getView(R.id.cImagePortrait).setTag(R.id.tag_card_portrait, item);
-				viewHolder.getView(R.id.imgViewBuy).setTag(R.id.tag_card_buy, item);
 			}
 			
 			@Override
@@ -110,7 +109,7 @@ public class CardPublishFragment extends BaseFragment implements OnClickListener
 				TextView txtEnvelopes = (TextView) viewHolder.getView(R.id.txtViewEnvelopesValue);
 				TextView txtChange = (TextView) viewHolder.getView(R.id.txtViewChangeValue);
 				TextView txtTime = (TextView) viewHolder.getView(R.id.txtViewTime);
-				ImageView imagBuy = (ImageView) viewHolder.getView(R.id.imgViewBuy);
+				TextView txtViewValue = (TextView) viewHolder.getView(R.id.txtViewCardValue);
 				ImageView imagBack = (ImageView) viewHolder.getView(R.id.imgViewBack);
 				if (item != null)
 				{
@@ -129,29 +128,28 @@ public class CardPublishFragment extends BaseFragment implements OnClickListener
 						case "戏约卡":
 							txtCardName.setTextColor(Color.parseColor(getActivity().getString(R.color.card_blue)));
 							imagName.setImageResource(R.drawable.activity_xiyue_name_bg);
-							imagBuy.setImageResource(R.drawable.activity_card_xiyue_buy);
 							imagBack.setImageResource(R.drawable.activity_card_xiyue_bg);
 							break;
 						case "演出卡":
 							txtCardName.setTextColor(Color.parseColor(getActivity().getString(R.color.card_red)));
 							imagName.setImageResource(R.drawable.activity_yanchu_bg);
-							imagBuy.setImageResource(R.drawable.activity_card_yanchu_buy);
 							imagBack.setImageResource(R.drawable.activity_card_yanchu_bg);
 							break;
 						case "商务卡":
 							txtCardName.setTextColor(Color.parseColor(getActivity().getString(R.color.card_yellow)));
 							imagName.setImageResource(R.drawable.activity_shangwu_bg);
-							imagBuy.setImageResource(R.drawable.activity_card_shangwu_buy);
 							imagBack.setImageResource(R.drawable.activity_card_shangwu_bg);
 							break;
 							default:
 								txtCardName.setTextColor(Color.parseColor(getActivity().getString(R.color.card_blue)));
 								imagName.setImageResource(R.drawable.activity_xiyue_name_bg);
-								imagBuy.setImageResource(R.drawable.activity_card_xiyue_buy);
 								imagBack.setImageResource(R.drawable.activity_card_xiyue_bg);
 								break;
 						}
 					}
+					String value = (isNullOrEmpty(item.getSurplus()) ? "0" : item.getSurplus()) + "/"
+							+ (isNullOrEmpty(item.getTotal()) ? "0" : item.getTotal());
+					txtViewValue.setText(value);
 					txtValue.setText(isNullOrEmpty(calculateCurrentValue(item.getBid(), item.getPrice())) ? "未知" : calculateCurrentValue(item.getBid(), item.getPrice()));
 					txtEnvelopes.setText(isNullOrEmpty(item.getPrice()) ? "未知" : item.getPrice());
 					txtTime.setText(isNullOrEmpty(formatTime(item.getTime())) ? "未知" : formatTime(item.getTime()));
