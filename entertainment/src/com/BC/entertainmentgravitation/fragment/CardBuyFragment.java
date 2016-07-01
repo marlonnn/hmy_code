@@ -27,6 +27,7 @@ import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
 import com.BC.entertainmentgravitation.AppealActivity;
+import com.BC.entertainmentgravitation.ChatActivity;
 import com.BC.entertainmentgravitation.R;
 import com.BC.entertainmentgravitation.RightsCardDetailActivity;
 import com.BC.entertainmentgravitation.entity.CardOrder;
@@ -275,7 +276,12 @@ public class CardBuyFragment extends BaseFragment implements OnClickListener{
 						
 						@Override
 						public void onClick(View v) {
-							
+							CardOrder cardOrder = (CardOrder) v.getTag(R.id.tag_card_buy_communicate);
+							Intent i = new Intent(getActivity(), ChatActivity.class);
+							Bundle b = new Bundle();
+							b.putSerializable("cardOrder", cardOrder);
+							i.putExtras(b);
+							startActivity(i);
 						}
 					});
 					rLayoutReturn.setOnClickListener(new OnClickListener() {

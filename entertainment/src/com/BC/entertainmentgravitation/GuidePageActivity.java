@@ -70,7 +70,7 @@ public class GuidePageActivity extends BaseActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         initSDKConfig();
         try {
-        	if (Preferences.getUserAutoLogin().contains("true"))
+        	if (Preferences.getUserAutoLogin() != null && Preferences.getUserAutoLogin().contains("true"))
         	{
         		if (Preferences.getUserName() != null && Preferences.getUserToken() != null)
         		{

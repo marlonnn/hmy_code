@@ -408,7 +408,12 @@
             android:name=".AppealActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait" >
-        </activity>         
+        </activity>
+        <activity
+            android:name=".ChatActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" >
+        </activity>       
         <!-- umeng related -->
         <meta-data
             android:name="UMENG_APPKEY"
