@@ -27,6 +27,7 @@ import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
 import com.BC.entertainmentgravitation.AppealActivity;
+import com.BC.entertainmentgravitation.ChatActivity;
 import com.BC.entertainmentgravitation.R;
 import com.BC.entertainmentgravitation.entity.CardOrder;
 import com.bumptech.glide.Glide;
@@ -210,7 +211,7 @@ public class CardSellFragment extends BaseFragment implements OnClickListener {
 						case "戏约卡":
 							txtCardName.setTextColor(Color.parseColor(getActivity().getString(R.color.card_blue)));
 							imagName.setImageResource(R.drawable.activity_xiyue_name_bg);
-							imagBack.setImageResource(R.drawable.activity_card_xiyue_bg);
+							imagBack.setBackgroundResource(R.drawable.activity_card_xiyue_bg);
 							imgAppealBg.setImageResource(R.drawable.item_xiyue_bg);
 							imgViewWanchengBg.setImageResource(R.drawable.item_xiyue_bg);
 							imgYuyueBg.setImageResource(R.drawable.item_xiyue_bg);
@@ -220,7 +221,7 @@ public class CardSellFragment extends BaseFragment implements OnClickListener {
 						case "演出卡":
 							txtCardName.setTextColor(Color.parseColor(getActivity().getString(R.color.card_red)));
 							imagName.setImageResource(R.drawable.activity_yanchu_bg);
-							imagBack.setImageResource(R.drawable.activity_card_yanchu_bg);
+							imagBack.setBackgroundResource(R.drawable.activity_card_yanchu_bg);
 							imgAppealBg.setImageResource(R.drawable.item_yanchu_bg);
 							imgViewWanchengBg.setImageResource(R.drawable.item_yanchu_bg);
 							imgYuyueBg.setImageResource(R.drawable.item_yanchu_bg);
@@ -230,7 +231,7 @@ public class CardSellFragment extends BaseFragment implements OnClickListener {
 						case "商务卡":
 							txtCardName.setTextColor(Color.parseColor(getActivity().getString(R.color.card_yellow)));
 							imagName.setImageResource(R.drawable.activity_shangwu_bg);
-							imagBack.setImageResource(R.drawable.activity_card_shangwu_bg);
+							imagBack.setBackgroundResource(R.drawable.activity_card_shangwu_bg);
 							imgAppealBg.setImageResource(R.drawable.item_shangwu_bg);
 							imgViewWanchengBg.setImageResource(R.drawable.item_shangwu_bg);
 							imgYuyueBg.setImageResource(R.drawable.item_shangwu_bg);
@@ -240,7 +241,7 @@ public class CardSellFragment extends BaseFragment implements OnClickListener {
 							default:
 								txtCardName.setTextColor(Color.parseColor(getActivity().getString(R.color.card_blue)));
 								imagName.setImageResource(R.drawable.activity_xiyue_name_bg);
-								imagBack.setImageResource(R.drawable.activity_card_xiyue_bg);
+								imagBack.setBackgroundResource(R.drawable.activity_card_xiyue_bg);
 								imgAppealBg.setImageResource(R.drawable.item_xiyue_bg);
 								imgViewWanchengBg.setImageResource(R.drawable.item_xiyue_bg);
 								imgYuyueBg.setImageResource(R.drawable.item_xiyue_bg);
@@ -275,7 +276,12 @@ public class CardSellFragment extends BaseFragment implements OnClickListener {
 						
 						@Override
 						public void onClick(View v) {
-							
+							CardOrder cardOrder = (CardOrder) v.getTag(R.id.tag_card_sell_communicate);
+							Intent i = new Intent(getActivity(), ChatActivity.class);
+							Bundle b = new Bundle();
+							b.putString("username", cardOrder.getUser_name());
+							i.putExtras(b);
+							startActivity(i);
 						}
 					});
 					rLayoutAgree.setOnClickListener(new OnClickListener() {

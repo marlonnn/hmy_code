@@ -166,25 +166,25 @@ public class RightsCenterFragment extends BaseFragment implements OnClickListene
 							txtCardName.setTextColor(Color.parseColor(getActivity().getString(R.color.card_blue)));
 							imagName.setImageResource(R.drawable.activity_xiyue_name_bg);
 							imagBuy.setImageResource(R.drawable.activity_card_xiyue_buy);
-							imagBack.setImageResource(R.drawable.activity_card_xiyue_bg);
+							imagBack.setBackgroundResource(R.drawable.activity_card_xiyue_bg);
 							break;
 						case "演出卡":
 							txtCardName.setTextColor(Color.parseColor(getActivity().getString(R.color.card_red)));
 							imagName.setImageResource(R.drawable.activity_yanchu_bg);
 							imagBuy.setImageResource(R.drawable.activity_card_yanchu_buy);
-							imagBack.setImageResource(R.drawable.activity_card_yanchu_bg);
+							imagBack.setBackgroundResource(R.drawable.activity_card_yanchu_bg);
 							break;
 						case "商务卡":
 							txtCardName.setTextColor(Color.parseColor(getActivity().getString(R.color.card_yellow)));
 							imagName.setImageResource(R.drawable.activity_shangwu_bg);
 							imagBuy.setImageResource(R.drawable.activity_card_shangwu_buy);
-							imagBack.setImageResource(R.drawable.activity_card_shangwu_bg);
+							imagBack.setBackgroundResource(R.drawable.activity_card_shangwu_bg);
 							break;
 							default:
 								txtCardName.setTextColor(Color.parseColor(getActivity().getString(R.color.card_blue)));
 								imagName.setImageResource(R.drawable.activity_xiyue_name_bg);
 								imagBuy.setImageResource(R.drawable.activity_card_xiyue_buy);
-								imagBack.setImageResource(R.drawable.activity_card_xiyue_bg);
+								imagBack.setBackgroundResource(R.drawable.activity_card_xiyue_bg);
 								break;
 						}
 					}
@@ -251,17 +251,17 @@ public class RightsCenterFragment extends BaseFragment implements OnClickListene
 			float diff = (difference / last ) * 100;
 			DecimalFormat decimalFormat=new DecimalFormat("0.00");
 			p= decimalFormat.format(diff);
-			if (difference > 0)
+			if (last > 0)
 			{
 				p = "+" + p + "%";
 				txtView.setBackgroundColor(getResources().getColor(R.color.card_change_red));
 			}
-			else if (difference < 0)
+			else if (last < 0)
 			{
 				p = "-" + p + "%";
 				txtView.setBackgroundColor(getResources().getColor(R.color.card_change_green));
 			}
-			else if (difference == 0)
+			else if (last == 0)
 			{
 				p = "+0.00%";
 				txtView.setBackgroundColor(getResources().getColor(R.color.card_change_red));

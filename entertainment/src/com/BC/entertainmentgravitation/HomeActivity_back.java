@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.BC.entertainment.cache.InfoCache;
+import com.BC.entertainment.service.MessageService;
 import com.BC.entertainmentgravitation.entity.EditPersonal;
 import com.BC.entertainmentgravitation.entity.FHNEntity;
 import com.BC.entertainmentgravitation.entity.StarInformation;
@@ -85,6 +86,19 @@ public class HomeActivity_back extends BaseActivity implements OnClickListener{
 		sendPersonalInfoRequest();
 		findViewById();
 		setFragmentSelection(R.id.rLayoutLine);
+		startMessgeService();
+	}
+	
+	private void startMessgeService()
+	{
+        Intent startIntent = new Intent(this, MessageService.class);  
+        startService(startIntent);  
+	}
+	
+	private void stopMessgeService()
+	{
+        Intent startIntent = new Intent(this, MessageService.class);  
+        stopService(startIntent);  
 	}
 	
     private void hideFragments(FragmentTransaction transaction) {  
@@ -265,6 +279,7 @@ public class HomeActivity_back extends BaseActivity implements OnClickListener{
 	protected void onDestroy() {
 		super.onDestroy();
 		try {
+			stopMessgeService();
 			ThreadPoolFactory.getThreadPoolManager().stopAllTask();
 		} catch (Exception e) {
 			e.printStackTrace();

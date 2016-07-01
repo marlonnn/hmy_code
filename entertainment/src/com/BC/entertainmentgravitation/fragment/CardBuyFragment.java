@@ -217,7 +217,8 @@ public class CardBuyFragment extends BaseFragment implements OnClickListener{
 							imgYuyueBg.setImageResource(R.drawable.item_xiyue_bg);
 							imgCommunicateBg.setImageResource(R.drawable.item_xiyue_bg);
 							imgViewReturnBg.setImageResource(R.drawable.item_xiyue_bg);
-							imagBack.setImageResource(R.drawable.activity_card_xiyue_bg);
+//							imagBack.setImageResource(R.drawable.activity_card_xiyue_bg);
+							imagBack.setBackgroundResource(R.drawable.activity_card_xiyue_bg);
 							break;
 						case "演出卡":
 							txtCardName.setTextColor(Color.parseColor(getActivity().getString(R.color.card_red)));
@@ -227,7 +228,7 @@ public class CardBuyFragment extends BaseFragment implements OnClickListener{
 							imgYuyueBg.setImageResource(R.drawable.item_yanchu_bg);
 							imgCommunicateBg.setImageResource(R.drawable.item_yanchu_bg);
 							imgViewReturnBg.setImageResource(R.drawable.item_yanchu_bg);
-							imagBack.setImageResource(R.drawable.activity_card_yanchu_bg);
+							imagBack.setBackgroundResource(R.drawable.activity_card_yanchu_bg);
 							break;
 						case "商务卡":
 							txtCardName.setTextColor(Color.parseColor(getActivity().getString(R.color.card_yellow)));
@@ -237,7 +238,7 @@ public class CardBuyFragment extends BaseFragment implements OnClickListener{
 							imgYuyueBg.setImageResource(R.drawable.item_shangwu_bg);
 							imgCommunicateBg.setImageResource(R.drawable.item_shangwu_bg);
 							imgViewReturnBg.setImageResource(R.drawable.item_shangwu_bg);
-							imagBack.setImageResource(R.drawable.activity_card_shangwu_bg);
+							imagBack.setBackgroundResource(R.drawable.activity_card_shangwu_bg);
 							break;
 							default:
 								txtCardName.setTextColor(Color.parseColor(getActivity().getString(R.color.card_blue)));
@@ -247,7 +248,8 @@ public class CardBuyFragment extends BaseFragment implements OnClickListener{
 								imgYuyueBg.setImageResource(R.drawable.item_xiyue_bg);
 								imgViewReturnBg.setImageResource(R.drawable.item_xiyue_bg);
 								imgCommunicateBg.setImageResource(R.drawable.item_xiyue_bg);
-								imagBack.setImageResource(R.drawable.activity_card_xiyue_bg);
+//								imagBack.setImageResource(R.drawable.activity_card_xiyue_bg);
+								imagBack.setBackgroundResource(R.drawable.activity_card_xiyue_bg);
 								break;
 						}
 					}
@@ -279,7 +281,7 @@ public class CardBuyFragment extends BaseFragment implements OnClickListener{
 							CardOrder cardOrder = (CardOrder) v.getTag(R.id.tag_card_buy_communicate);
 							Intent i = new Intent(getActivity(), ChatActivity.class);
 							Bundle b = new Bundle();
-							b.putSerializable("cardOrder", cardOrder);
+							b.putString("username", cardOrder.getUser_name());
 							i.putExtras(b);
 							startActivity(i);
 						}

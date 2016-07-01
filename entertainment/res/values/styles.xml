@@ -1,5 +1,10 @@
 <resources>
-
+   <style name="startactivitytheme" parent="android:Theme.Light.NoTitleBar">
+       <item name="android:windowFullscreen">true</item>
+       <item name="android:windowNoTitle">true</item>
+       <item name="android:windowBackground">@drawable/activity_guide_start</item>
+       <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+   </style>
     <!--
         Base application theme, dependent on API level. This theme is replaced
         by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
@@ -15,10 +20,6 @@
     <!-- Application theme. -->
     <style name="AppTheme" parent="AppBaseTheme">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
-    </style>
-    <style name="list_view" parent="@android:style/Widget.ListView">
-        <item name="android:scrollbarThumbVertical">@drawable/nim_scrollbar_handle_holo_dark</item>
-        <item name="android:scrollbarThumbHorizontal">@drawable/nim_scrollbar_handle_holo_dark</item>
     </style>
     <!-- 网易直播 -->
     <style name="MediaController_SeekBar" parent="android:Widget.SeekBar">

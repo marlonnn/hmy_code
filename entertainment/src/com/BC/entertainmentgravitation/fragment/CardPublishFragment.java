@@ -128,22 +128,22 @@ public class CardPublishFragment extends BaseFragment implements OnClickListener
 						case "戏约卡":
 							txtCardName.setTextColor(Color.parseColor(getActivity().getString(R.color.card_blue)));
 							imagName.setImageResource(R.drawable.activity_xiyue_name_bg);
-							imagBack.setImageResource(R.drawable.activity_card_xiyue_bg);
+							imagBack.setBackgroundResource(R.drawable.activity_card_xiyue_bg);
 							break;
 						case "演出卡":
 							txtCardName.setTextColor(Color.parseColor(getActivity().getString(R.color.card_red)));
 							imagName.setImageResource(R.drawable.activity_yanchu_bg);
-							imagBack.setImageResource(R.drawable.activity_card_yanchu_bg);
+							imagBack.setBackgroundResource(R.drawable.activity_card_yanchu_bg);
 							break;
 						case "商务卡":
 							txtCardName.setTextColor(Color.parseColor(getActivity().getString(R.color.card_yellow)));
 							imagName.setImageResource(R.drawable.activity_shangwu_bg);
-							imagBack.setImageResource(R.drawable.activity_card_shangwu_bg);
+							imagBack.setBackgroundResource(R.drawable.activity_card_shangwu_bg);
 							break;
 							default:
 								txtCardName.setTextColor(Color.parseColor(getActivity().getString(R.color.card_blue)));
 								imagName.setImageResource(R.drawable.activity_xiyue_name_bg);
-								imagBack.setImageResource(R.drawable.activity_card_xiyue_bg);
+								imagBack.setBackgroundResource(R.drawable.activity_card_xiyue_bg);
 								break;
 						}
 					}

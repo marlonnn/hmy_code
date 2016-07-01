@@ -223,7 +223,7 @@ public class PushActivity extends BaseActivity implements lsMessageHandler, Medi
             //配置音视频和camera参数
             paraSet();
             //设置日志级别
-        	mLSMediaCapture.setTraceLevel(PushConfig.LS_LOG_INFO);
+        	mLSMediaCapture.setTraceLevel(PushConfig.LS_LOG_QUIET);
             //初始化直播推流
 	        ret = mLSMediaCapture.initLiveStream(ChatCache.getInstance().getChatRoom().getPushUrl(),
 	        		mLSLiveStreamingParaCtx);

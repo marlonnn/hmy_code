@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,9 +19,9 @@ import android.view.ViewGroup;
 import com.BC.entertainment.adapter.FoundRecycleAdapter;
 import com.BC.entertainment.adapter.FoundRecycleAdapter.OnItemClickListener;
 import com.BC.entertainment.cache.FoundCache;
-import com.BC.entertainmentgravitation.CrewActivity;
 import com.BC.entertainmentgravitation.MessageActivity;
 import com.BC.entertainmentgravitation.R;
+import com.BC.entertainmentgravitation.RightsCenterActivity;
 import com.BC.entertainmentgravitation.entity.Found;
 import com.summer.fragment.BaseFragment;
 import com.summer.utils.ToastUtil;
@@ -144,10 +145,10 @@ public class FoundFragment_back extends BaseFragment implements OnClickListener,
 			/**
 			 * 权益中心
 			 */
-			case R.drawable.activity_personal_career:
-				ToastUtil.show(getActivity(), "此功能正在完善中，尽情期待...");
-//				intent = new Intent(getActivity(), CareerActivity.class);
-//				startActivity(intent);
+			case R.drawable.activity_rights_center:
+//				ToastUtil.show(getActivity(), "此功能正在完善中，尽情期待...");
+				intent = new Intent(getActivity(), RightsCenterActivity.class);
+				startActivity(intent);
 				break;
 
 			}
