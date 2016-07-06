@@ -110,6 +110,7 @@ public class PersonalHomeActivity extends BaseActivity implements OnClickListene
 			lLayoutLine = (LinearLayout) findViewById(R.id.lLayoutLine);
 			lLayoutYupiao = (LinearLayout) findViewById(R.id.lLayoutYupiao);
 			
+			findViewById(R.id.lLauoutFans).setOnClickListener(this);			
 			findViewById(R.id.imageViewAlbum).setOnClickListener(this);
 			focus.setOnClickListener(this);
 			findViewById(R.id.txtViewFocusContent).setOnClickListener(this);
@@ -213,10 +214,26 @@ public class PersonalHomeActivity extends BaseActivity implements OnClickListene
         MobclickAgent.onResume(this);
 	}
 	
+	private void intentToFans (Member member)
+	{
+		Intent intent = new Intent(this, FollowActivity.class);
+		Bundle b = new Bundle();
+		b.putString("starId", member.getId());
+		intent.putExtras(b);
+		startActivity(intent);
+	}
+	
 	@Override
 	public void onClick(View v) {
 		Intent intent;
 		switch (v.getId()) {
+		
+		case R.id.lLauoutFans:
+			if (member != null)
+			{
+				intentToFans(member);
+			}
+			break;
 		/**
 		 * 用户头像 
 		 */

@@ -210,6 +210,10 @@ public class PersonalCenterActivity extends BaseActivity implements OnClickListe
 			}
 			break;
 		case R.id.lLayoutFans:
+			if (member != null)
+			{
+				intentToFans(member);
+			}
 			break;
 		/**
 		 * 修改头像
@@ -588,6 +592,15 @@ public class PersonalCenterActivity extends BaseActivity implements OnClickListe
 		Bundle b2 = new Bundle();
 		b2.putSerializable("member", member);
 		intent.putExtras(b2);
+		startActivity(intent);
+	}
+	
+	private void intentToFans (Member member)
+	{
+		Intent intent = new Intent(this, FollowActivity.class);
+		Bundle b = new Bundle();
+		b.putString("starId", member.getId());
+		intent.putExtras(b);
 		startActivity(intent);
 	}
 

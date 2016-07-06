@@ -414,6 +414,11 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait" >
         </activity> 
+        <activity
+            android:name=".FollowActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" >
+        </activity> 
         <service 
             android:enabled="true" 
             android:name="com.BC.entertainment.service.MessageService"/> 

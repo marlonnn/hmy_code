@@ -1,5 +1,6 @@
 package com.BC.entertainmentgravitation;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -11,21 +12,29 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
 import com.BC.entertainmentgravitation.entity.Follow;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.summer.activity.BaseActivity;
 import com.summer.adapter.CommonAdapter;
 import com.summer.config.Config;
 import com.summer.factory.ThreadPoolFactory;
 import com.summer.handler.InfoHandler;
+import com.summer.json.Entity;
 import com.summer.ptr.PullToRefreshBase;
 import com.summer.ptr.PullToRefreshGridView;
 import com.summer.ptr.PullToRefreshBase.OnRefreshListener2;
 import com.summer.task.HttpBaseTask;
 import com.summer.treadpool.ThreadPoolConst;
 import com.summer.utils.JsonUtil;
+import com.summer.utils.ToastUtil;
 import com.summer.utils.UrlUtil;
+import com.summer.view.CircularImage;
 import com.umeng.analytics.MobclickAgent;
 
 /**
@@ -38,6 +47,9 @@ public class FollowActivity extends BaseActivity implements OnClickListener{
 	private PullToRefreshGridView pGridViewFollow;
 	private CommonAdapter<Follow> adapter;
 	private int pageIndex = 1;
+	private List<Follow> followList;
+	private Gson gson;
+	private String starId;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -47,10 +59,55 @@ public class FollowActivity extends BaseActivity implements OnClickListener{
 		initAdapter();
 		initView();
 		
+		followList = new ArrayList<Follow>();
+		gson = new Gson();
+		
+		starId = (String) getIntent().getStringExtra("starId");
 	}
+	
+	private boolean isNullOrEmpty(String o)
+	{
+		if (o != null)
+		{
+			if (o.length() == 0)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return true;
+		}
+	}
+	
 	private void initAdapter()
 	{
-		
+		adapter = new CommonAdapter<Follow> (FollowActivity.this, R.layout.activity_follow_item, followList) {
+
+			@Override
+			public void convert(
+					ViewHolder viewHolder,
+					Follow item, int position) {
+//				LinearLayout lLayout = (LinearLayout) viewHolder.getView(R.id.lLayout);
+				CircularImage portrait = (CircularImage) viewHolder.getView(R.id.cImagePortrait);
+				TextView txtViewName = (TextView) viewHolder.getView(R.id.txtViewName);
+				TextView txtViewMood = (TextView) viewHolder.getView(R.id.txtViewMood);
+				if (item != null)
+				{
+					Glide.with(FollowActivity.this).load(item.getStar())
+					.centerCrop()
+					.diskCacheStrategy(DiskCacheStrategy.ALL)
+					.placeholder(R.drawable.avatar_def).into(portrait);
+					txtViewName.setText(isNullOrEmpty(item.getStar_names()) ? "" : item.getStar_names());
+					txtViewMood.setText(isNullOrEmpty(item.getMood()) ? "" : item.getMood());
+				}
+			}
+			
+		};
 	}
 	
 	private void initView()
@@ -153,11 +210,11 @@ public class FollowActivity extends BaseActivity implements OnClickListener{
 	private void sendFollowRequest()
 	{
 		HashMap<String, String> entity = new HashMap<String, String>();
-		entity.put("clientID", Config.User.getClientID());
+		entity.put("clientID", starId);
 		entity.put("The_page_number", "" + pageIndex);
 		ShowProgressDialog("正在获取数据...");		
 		List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
-		addToThreadPool(Config.member_in, "send search request", params);
+		addToThreadPool(Config.follow, "send search request", params);
 	}
 	
     private void addToThreadPool(int taskType, String Tag, List<NameValuePair> params)
@@ -169,9 +226,34 @@ public class FollowActivity extends BaseActivity implements OnClickListener{
     	ThreadPoolFactory.getThreadPoolManager().addTask(httpTask);
     }
 
+	private void addFollow() {
+		if (followList == null) {
+			return;
+		}
+		if (pageIndex == 1) {// 第一页时，先清空数据集
+			adapter.clearAll();
+		}
+		pageIndex++;
+		adapter.add(followList);
+	}
+	
 	@Override
 	public void RequestSuccessful(String jsonString, int taskType) {
-		
+		switch (taskType)
+		{
+		case Config.follow:
+			Entity<List<Follow>> baseEntity = gson.fromJson(jsonString,
+					new TypeToken<Entity<List<Follow>>>() {
+					}.getType());
+			followList = baseEntity.getData();
+			if (followList != null && followList.size() > 0)
+			{
+				addFollow();
+			} else {
+				ToastUtil.show(this, "没有更多数据了");
+			}
+			break;
+		}
 	}
 
 }
