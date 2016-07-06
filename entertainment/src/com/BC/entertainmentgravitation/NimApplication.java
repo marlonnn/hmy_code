@@ -23,7 +23,7 @@ public class NimApplication extends Application {
 		Preferences.setContext(this.getApplicationContext());
 		NIMClient.init(this, getLoginInfo(), getOptions());
 
-		XLog.allowI = XLog.allowD = XLog.allowV = XLog.allowW = false;
+//		XLog.allowI = XLog.allowD = XLog.allowV = XLog.allowW = false;
 		if (inMainProcess())
 		{
             NIMClient.getService(MsgService.class).registerCustomAttachmentParser(new CustomAttachParser());

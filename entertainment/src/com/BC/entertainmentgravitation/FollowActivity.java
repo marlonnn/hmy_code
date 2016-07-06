@@ -47,7 +47,7 @@ public class FollowActivity extends BaseActivity implements OnClickListener{
 	private PullToRefreshGridView pGridViewFollow;
 	private CommonAdapter<Follow> adapter;
 	private int pageIndex = 1;
-	private List<Follow> followList;
+	private List<Follow> followList = new ArrayList<Follow>();;
 	private Gson gson;
 	private String starId;
 	
@@ -59,10 +59,10 @@ public class FollowActivity extends BaseActivity implements OnClickListener{
 		initAdapter();
 		initView();
 		
-		followList = new ArrayList<Follow>();
 		gson = new Gson();
 		
 		starId = (String) getIntent().getStringExtra("starId");
+		sendFollowRequest();
 	}
 	
 	private boolean isNullOrEmpty(String o)
@@ -235,6 +235,12 @@ public class FollowActivity extends BaseActivity implements OnClickListener{
 		}
 		pageIndex++;
 		adapter.add(followList);
+	}
+	
+	@Override
+	public void onInfoReceived(int errcode, HashMap<String, Object> items) {
+		super.onInfoReceived(errcode, items);
+		pGridViewFollow.onRefreshComplete();
 	}
 	
 	@Override

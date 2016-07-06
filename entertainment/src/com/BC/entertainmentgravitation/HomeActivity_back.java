@@ -337,15 +337,13 @@ public class HomeActivity_back extends BaseActivity implements OnClickListener{
     		transaction.commit();  
 			break;
 		case R.id.rLayoutMyself:
-			intent = new Intent(this, PersonalCenterActivity.class);
-			intent.putExtra("lastFragment", lastFragment);
-			startActivity(intent);
-//            if (personalFragment == null) {  
-//            	personalFragment = new PersonalFragment();
-//                transaction.add(R.id.content, personalFragment);  
-//            } else {  
-//                transaction.show(personalFragment);  
-//            } 
+			try {
+				intent = new Intent(this, PersonalCenterActivity.class);
+				intent.putExtra("lastFragment", lastFragment);
+				startActivity(intent);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			break;
 		}
 
