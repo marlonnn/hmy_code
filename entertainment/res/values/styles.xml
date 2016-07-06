@@ -1,5 +1,6 @@
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
    <style name="startactivitytheme" parent="android:Theme.Light.NoTitleBar">
+       <item name="android:textColor">@color/white</item>r
        <item name="android:windowFullscreen">true</item>
        <item name="android:windowNoTitle">true</item>
        <item name="android:windowBackground">@drawable/activity_guide_start</item>
