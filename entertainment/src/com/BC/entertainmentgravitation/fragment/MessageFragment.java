@@ -1,5 +1,6 @@
 package com.BC.entertainmentgravitation.fragment;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.annotation.SuppressLint;
@@ -13,8 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 
-import com.BC.entertainment.adapter.MessageRecycleAdapter;
-import com.BC.entertainment.adapter.MessageRecycleAdapter.OnItemClickListener;
+import com.BC.entertainment.adapter.MessageSysRecycleAdapter;
+import com.BC.entertainment.adapter.MessageSysRecycleAdapter.OnItemClickListener;
 import com.BC.entertainmentgravitation.R;
 import com.BC.entertainmentgravitation.entity.GeTui;
 import com.BC.entertainmentgravitation.entity.GeTuiDao;
@@ -26,9 +27,9 @@ public class MessageFragment extends BaseFragment implements OnClickListener, On
 	
 	private RecyclerView messageList;
 	
-	private List<GeTui> geTuis;
+	private List<GeTui> geTuis = new ArrayList<>();;
 	
-	private MessageRecycleAdapter adapter;
+	private MessageSysRecycleAdapter adapter;
 	
 	@SuppressLint("InflateParams") @Override
 	@Nullable
@@ -48,7 +49,7 @@ public class MessageFragment extends BaseFragment implements OnClickListener, On
 	{
 		messageList = (RecyclerView) rootView.findViewById(R.id.listViewMessage);
 		geTuis = new GeTuiDao(getActivity()).Query("messagetype", "3");
-		adapter =  new MessageRecycleAdapter(getActivity(), geTuis);
+		adapter =  new MessageSysRecycleAdapter(getActivity(), geTuis);
         adapter.notifyDataSetChanged();
         adapter.setmOnItemClickListener(this);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);

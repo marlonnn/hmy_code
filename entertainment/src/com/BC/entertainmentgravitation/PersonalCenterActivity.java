@@ -109,9 +109,9 @@ public class PersonalCenterActivity extends BaseActivity implements OnClickListe
 		super.onCreate(savedInstanceState);
 		gson = new Gson();
 		format = new SimpleDateFormat("yyyyMMddHHmmsssss");
-		initViewAtFirst();
 		sendBaseInfoRequest();
 		setContentView(R.layout.activity_personal_center);
+		initViewAtFirst();
 		findViewById(R.id.imageViewBack).setOnClickListener(this);
 		try {
 			intent = getIntent();

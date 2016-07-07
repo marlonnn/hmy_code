@@ -2,19 +2,14 @@ package com.BC.entertainmentgravitation.getui;
 
 import org.json.JSONObject;
 
-import com.BC.entertainmentgravitation.HomeActivity;
+import com.BC.entertainmentgravitation.MessageCenterActivity;
 import com.BC.entertainmentgravitation.R;
 import com.BC.entertainmentgravitation.entity.GeTui;
 import com.BC.entertainmentgravitation.entity.GeTuiDao;
 import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
-import com.google.gson.reflect.TypeToken;
 import com.igexin.sdk.PushConsts;
 import com.igexin.sdk.PushManager;
-import com.summer.entity.User;
-import com.summer.json.Entity;
 import com.summer.logger.XLog;
-import com.summer.utils.JsonUtil;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -23,7 +18,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.content.LocalBroadcastManager;
 
 public class PushReceiver extends BroadcastReceiver{
 	
@@ -109,7 +103,7 @@ public class PushReceiver extends BroadcastReceiver{
 	        notification.defaults |= Notification.DEFAULT_SOUND; 
 	        notification.flags = Notification.FLAG_AUTO_CANCEL;
 	        //Set ContentView using setLatestEvenInfo   
-	        Intent notificationIntent = new Intent(ctx, HomeActivity.class); 
+	        Intent notificationIntent = new Intent(ctx, MessageCenterActivity.class); 
 	        PendingIntent contentIntent = PendingIntent.getActivity(ctx, 0, notificationIntent, 0);  
 	        notification.setLatestEventInfo(ctx, geTui.getMessagetitle(), geTui.getMessagecontent(), contentIntent);           
 	        //Send notification   

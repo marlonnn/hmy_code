@@ -162,7 +162,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-         <activity
+        <activity
             android:name=".HomeActivity_back"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait" >
@@ -422,6 +422,7 @@
         <activity
             android:name=".MessageCenterActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait" >
         </activity> 
         <service 

@@ -297,14 +297,16 @@ public class PersonalHomeActivity extends BaseActivity implements OnClickListene
 		case R.id.txtViewFocusContent:
 			intent = new Intent(this, FocusActivity.class);
 			Bundle b1 = new Bundle();
-			b1.putSerializable("clientId", member.getId());
+			b1.putSerializable("member", member);
+//			b1.putSerializable("clientId", member.getId());
 			intent.putExtras(b1);
 			startActivity(intent);
 			break;
 		case R.id.txtViewTopFocus:
 			intent = new Intent(this, FocusActivity.class);
 			Bundle b2 = new Bundle();
-			b2.putSerializable("clientId", member.getId());
+			b2.putSerializable("member", member);
+//			b2.putSerializable("clientId", member.getId());
 			intent.putExtras(b2);
 			startActivity(intent);
 			break;
