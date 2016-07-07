@@ -109,6 +109,7 @@ public class PersonalCenterActivity extends BaseActivity implements OnClickListe
 		super.onCreate(savedInstanceState);
 		gson = new Gson();
 		format = new SimpleDateFormat("yyyyMMddHHmmsssss");
+		initViewAtFirst();
 		sendBaseInfoRequest();
 		setContentView(R.layout.activity_personal_center);
 		findViewById(R.id.imageViewBack).setOnClickListener(this);
@@ -120,13 +121,31 @@ public class PersonalCenterActivity extends BaseActivity implements OnClickListe
 		}
 	}
 	
+	private void initViewAtFirst()
+	{
+		personals = PersonalCache.getInstance().GetPersonalInfos();
+		infoList = (RecyclerView) findViewById(R.id.listViewInfo);
+		
+		adapter = new PersonalRecycleAdapter(PersonalCenterActivity.this, personals);
+		
+        adapter.notifyDataSetChanged();
+        adapter.setmOnItemClickListener(this);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(PersonalCenterActivity.this, LinearLayoutManager.VERTICAL, false);
+        infoList.setVerticalScrollBarEnabled(true);
+        infoList.setLayoutManager(linearLayoutManager);
+        
+        infoList.setItemAnimator(new DefaultItemAnimator());//more的动画效果
+        
+        infoList.setAdapter(adapter);
+	}
+	
 	private void initView(Member member)
 	{
 		if (member != null)
 		{
 			findViewById(R.id.lLayoutFocus).setOnClickListener(this);
 			findViewById(R.id.lLayoutFans).setOnClickListener(this);
-			personals = PersonalCache.getInstance().GetPersonalInfos();
+//			personals = PersonalCache.getInstance().GetPersonalInfos();
 			portrait = (CircularImage) findViewById(R.id.cirImagePortrait);
 			portrait.setOnClickListener(this);
 			txtName = (TextView) findViewById(R.id.txtName);
@@ -162,19 +181,19 @@ public class PersonalCenterActivity extends BaseActivity implements OnClickListe
 			.centerCrop().diskCacheStrategy(DiskCacheStrategy.ALL)
 			.placeholder(R.drawable.avatar_def).into(portrait);
 			portrait.setOnClickListener(this);
-			infoList = (RecyclerView) findViewById(R.id.listViewInfo);
-			
-			adapter = new PersonalRecycleAdapter(PersonalCenterActivity.this, personals);
-			
-	        adapter.notifyDataSetChanged();
-	        adapter.setmOnItemClickListener(this);
-	        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(PersonalCenterActivity.this, LinearLayoutManager.VERTICAL, false);
-	        infoList.setVerticalScrollBarEnabled(true);
-	        infoList.setLayoutManager(linearLayoutManager);
-	        
-	        infoList.setItemAnimator(new DefaultItemAnimator());//more的动画效果
-	        
-	        infoList.setAdapter(adapter);
+//			infoList = (RecyclerView) findViewById(R.id.listViewInfo);
+//			
+//			adapter = new PersonalRecycleAdapter(PersonalCenterActivity.this, personals);
+//			
+//	        adapter.notifyDataSetChanged();
+//	        adapter.setmOnItemClickListener(this);
+//	        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(PersonalCenterActivity.this, LinearLayoutManager.VERTICAL, false);
+//	        infoList.setVerticalScrollBarEnabled(true);
+//	        infoList.setLayoutManager(linearLayoutManager);
+//	        
+//	        infoList.setItemAnimator(new DefaultItemAnimator());//more的动画效果
+//	        
+//	        infoList.setAdapter(adapter);
 		}
 
 		
@@ -685,18 +704,6 @@ public class PersonalCenterActivity extends BaseActivity implements OnClickListe
 			}
 
 		}
-	}
-	
-	private void setPortrait(Bitmap bmp)
-	{
-		if (bmp != null)
-		{
-			Glide.with(this)
-			.load(bmp)
-			.centerCrop().diskCacheStrategy(DiskCacheStrategy.ALL)
-			.placeholder(R.drawable.avatar_def).into(portrait);
-		}
-
 	}
 	
 	public void ObtainImage(String imagePath) {

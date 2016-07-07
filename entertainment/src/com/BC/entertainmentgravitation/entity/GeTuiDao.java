@@ -5,17 +5,19 @@ import java.util.List;
 
 import com.BC.entertainmentgravitation.util.DatabaseHelper;
 import com.j256.ormlite.dao.Dao;
-import com.j256.ormlite.stmt.UpdateBuilder;
+import com.j256.ormlite.stmt.QueryBuilder;
 
 import android.content.Context;
 
 public class GeTuiDao {
 
+	@SuppressWarnings("unused")
 	private Context context;  
 	private Dao<GeTui, Integer> geTuiDaoOpe; 
 	
 	private DatabaseHelper helper; 
 	
+	@SuppressWarnings("unchecked")
 	public GeTuiDao(Context context)
 	{
 		this.context = context;
@@ -89,10 +91,41 @@ public class GeTuiDao {
 		}
 	}
 	
+	public void update(String columnName, String value)
+	{
+		try {
+			List<GeTui> data = Query(columnName, value);
+			for (GeTui g : data)
+			{
+				if (!g.isHasRead())
+				{
+					g.setHasRead(true);
+					geTuiDaoOpe.update(g);
+				}
+
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public List<GeTui> GetAll()
 	{
 		try {
 			return geTuiDaoOpe.queryForAll();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public List<GeTui> Query(String columnName, String value)
+	{
+		try {
+			QueryBuilder<GeTui, Integer> builder = geTuiDaoOpe.queryBuilder();
+			builder.where().eq(columnName, value);
+			builder.query();
+			return builder.query();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

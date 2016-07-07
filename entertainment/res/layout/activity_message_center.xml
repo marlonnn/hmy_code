@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/activity_charge_bg"
+    android:orientation="vertical" >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp" >
+
+        <ImageView
+            android:id="@+id/imageViewBack"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:src="@drawable/activity_charge_back" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true" >
+
+            <TextView
+                android:id="@+id/textViewCharge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textSize="22dp"
+                android:textColor="@color/white"
+                android:text="消息中心 " />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/txtViewIgnore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="14dp"
+            android:textColor="@color/white"
+            android:text="忽略未读" />
+
+    </RelativeLayout>
+    <RadioGroup
+        android:id="@+id/rGroup"
+        android:layout_width="match_parent"
+        android:layout_height="40dip"
+        android:background="#4c0528"
+        android:gravity="center_vertical"
+        android:orientation="horizontal" >
+
+        <RadioButton
+            android:id="@+id/tbtnSysMessage"
+            style="@style/routine_select_btn_style"
+            android:layout_width="60dip"
+            android:layout_height="40dip"
+            android:layout_weight="1"
+            android:checked="true"
+            android:text="系统消息"
+            android:textSize="10dip" />
+
+        <RadioButton
+            android:id="@+id/rbtnPrivateMessage"
+            style="@style/routine_select_btn_style"
+            android:layout_width="60dip"
+            android:layout_height="40dip"
+            android:layout_weight="1"
+            android:text="私信"
+            android:textSize="10dip" />
+    </RadioGroup>
+    <com.BC.entertainment.view.CustomViewPager
+        android:id="@+id/customoViewPager"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+<!--      <android.support.v7.widget.RecyclerView     
+        android:id="@+id/listViewMessage"
+        android:layout_marginTop="5dp"
+        android:scrollbarSize="4dp"
+        android:scrollbars="vertical"
+        android:scrollbarThumbVertical="@drawable/scrollbar_thumb"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+    </android.support.v7.widget.RecyclerView> -->
+
+</LinearLayout>

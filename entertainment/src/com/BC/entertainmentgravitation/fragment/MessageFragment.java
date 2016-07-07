@@ -34,7 +34,7 @@ public class MessageFragment extends BaseFragment implements OnClickListener, On
 	@Nullable
 	public View onCreateView(LayoutInflater inflater,
 			@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-		rootView = inflater.inflate(R.layout.fragment_message, null);
+		rootView = inflater.inflate(R.layout.fragment_message_system, null);
 		return rootView;
 	}
 	
@@ -47,7 +47,7 @@ public class MessageFragment extends BaseFragment implements OnClickListener, On
 	private void initView()
 	{
 		messageList = (RecyclerView) rootView.findViewById(R.id.listViewMessage);
-		geTuis = new GeTuiDao(getActivity()).GetAll();
+		geTuis = new GeTuiDao(getActivity()).Query("messagetype", "3");
 		adapter =  new MessageRecycleAdapter(getActivity(), geTuis);
         adapter.notifyDataSetChanged();
         adapter.setmOnItemClickListener(this);
@@ -80,7 +80,7 @@ public class MessageFragment extends BaseFragment implements OnClickListener, On
 	 */	
 	public void ignoreMessage()
 	{
-		new GeTuiDao(getActivity()).update();
+		new GeTuiDao(getActivity()).update("messagetype", "3");
 		if (geTuis != null)
 		{
 			for (int i=0; i<geTuis.size(); i++)
@@ -94,26 +94,6 @@ public class MessageFragment extends BaseFragment implements OnClickListener, On
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		/**
-		 * 忽略未读
-		 */
-		case R.id.txtViewIgnore:
-			new GeTuiDao(getActivity()).update();
-			if (geTuis != null)
-			{
-				for (int i=0; i<geTuis.size(); i++)
-				{
-					geTuis.get(i).setHasRead(true);
-				}
-			}
-			adapter.notifyDataSetChanged();
-			break;
-		/**
-		 * 返回键
-		 */
-		case R.id.imageViewBack:
-//			finish();
-			break;
 		}
 	}
 
