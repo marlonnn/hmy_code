@@ -9,6 +9,7 @@ import org.apache.http.NameValuePair;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -27,6 +28,8 @@ import android.widget.TextView;
 
 import com.BC.entertainmentgravitation.R;
 import com.BC.entertainmentgravitation.RightsCardDetailActivity;
+import com.BC.entertainmentgravitation.dialog.QuantityDialog;
+import com.BC.entertainmentgravitation.dialog.RegionDialog;
 import com.BC.entertainmentgravitation.entity.RightCard;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -62,7 +65,8 @@ public class RightsCenterFragment extends BaseFragment implements OnClickListene
 	private PullToRefreshGridView pGridViewRights;
 	private List<RightCard> cards = new ArrayList<>();
 	private CommonAdapter<RightCard> adapter;
-	
+	private QuantityDialog.Builder builder;
+	private String quantity;
 	
 	@Override
 	public void onAttach(Activity activity) {
@@ -212,17 +216,51 @@ public class RightsCenterFragment extends BaseFragment implements OnClickListene
 						public void onClick(View v) {
 							RightCard card = (RightCard) v.getTag(R.id.tag_card_buy);
 							XLog.i("----buy--------" + card.getNick_name());
-							if (card != null)
-							{
-								sendBuyRighCardReuest(card, 1);
-							}
-
+//							if (card != null)
+//							{
+//								sendBuyRighCardReuest(card, 1);
+//							}
+							showQuantityDialog(card);
 						}
 					});
 				}
 			}
 			
 		};
+	}
+	
+	private void showQuantityDialog(final RightCard card)
+	{
+		if (card != null)
+		{
+			builder = new QuantityDialog.Builder(getActivity());
+			builder.setTitle("选择购买数量");
+			builder.setPositiveButton(new DialogInterface.OnClickListener(){
+
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					quantity = String.valueOf(builder.GetQuantity());
+					sendBuyRighCardReuest(card, quantity);
+					if (dialog != null)
+					{
+						dialog.dismiss();
+					}
+				}});
+			
+			builder.setNegativeButton(new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					if (dialog != null)
+					{
+						dialog.dismiss();
+					}
+				}
+			});
+			QuantityDialog dialog = builder.Create();
+			dialog.show();
+		}
+
 	}
 	
 	private String calculateCurrentValue(String bid, String price)
@@ -376,6 +414,18 @@ public class RightsCenterFragment extends BaseFragment implements OnClickListene
 		entity.put("cardid", card.getCard_id());
 		entity.put("star_id", card.getStar_id());
 		entity.put("number", String.valueOf(number));
+    	List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
+    	addToThreadPool(Config.profitOrder, "get start right card", params);
+	}
+	
+	private void sendBuyRighCardReuest(RightCard card, String number)
+	{
+		HashMap<String, String> entity = new HashMap<String, String>();
+
+		entity.put("clientID", Config.User.getClientID());
+		entity.put("cardid", card.getCard_id());
+		entity.put("star_id", card.getStar_id());
+		entity.put("number", number);
     	List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
     	addToThreadPool(Config.profitOrder, "get start right card", params);
 	}

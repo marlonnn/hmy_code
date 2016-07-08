@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/hmy_red"
+        android:layout_gravity="center"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:orientation="vertical" >
+        <TextView
+	        android:id="@+id/txtViewTitle"
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:layout_centerInParent="true"
+	        android:gravity="center"
+	        android:textColor="@color/white"
+	        android:textSize="16dp" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/lLayoutWheel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="1dp"    
+            android:orientation="horizontal" >
+            <LinearLayout
+                android:id="@+id/rLayoutBai"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_weight="1" >
+
+                <TextView
+                    android:id="@+id/txtBai"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/hmy_red"
+                    android:textColor="@color/white"
+                    android:gravity="center"
+                    android:text="百" />
+	  		  	<kankan.wheel.widget.WheelView
+				    android:id="@+id/wheelBai"
+				    android:layout_width="match_parent"
+				    android:layout_height="wrap_content"
+				    android:gravity="center" />                
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/rLayoutShi"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_weight="1" >
+
+                <TextView
+                    android:id="@+id/txtShi"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/hmy_red"
+                    android:textColor="@color/white"
+                    android:gravity="center"
+                    android:text="十" />
+ 	  		  	<kankan.wheel.widget.WheelView
+				    android:id="@+id/wheelShi"
+				    android:layout_width="match_parent"
+				    android:layout_height="wrap_content"
+				    android:gravity="center" />                
+            </LinearLayout>            
+            <LinearLayout
+                android:id="@+id/rLayoutGe"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_weight="1" >
+
+                <TextView
+                    android:id="@+id/txtGe"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/hmy_red"
+                    android:textColor="@color/white"
+                    android:gravity="center"
+                    android:text="个" />
+	  		  	<kankan.wheel.widget.WheelView
+				    android:id="@+id/wheelGe"
+				    android:layout_width="match_parent"
+				    android:layout_height="wrap_content"
+				    android:gravity="center" />                 
+            </LinearLayout>
+        </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/selectContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingBottom="5dip" >
+
+        <Button
+            android:id="@+id/positiveButton"
+            android:layout_width="match_parent"
+            android:layout_height="30dip"
+            android:layout_marginBottom="3dip"
+            android:layout_marginTop="3dip"
+            android:layout_marginRight="5dp"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:text="@string/dialog_warning_ok"
+            android:textColor="@color/red2"
+            android:textSize="12dip" />
+
+        <Button
+            android:id="@+id/negativeButton"
+            android:layout_width="match_parent"
+            android:layout_height="30dip"
+            android:layout_marginBottom="3dip"
+            android:layout_marginTop="3dip"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="1"
+            android:background="@color/hmy_red"
+            android:text="@string/dialog_warning_cancel"
+            android:textColor="@color/white"
+            android:textSize="12dip" />
+    </LinearLayout>
+</LinearLayout>
