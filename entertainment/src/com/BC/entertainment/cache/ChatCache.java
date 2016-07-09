@@ -9,7 +9,9 @@ import android.text.TextUtils;
 
 import com.BC.entertainmentgravitation.entity.ChatRoom;
 import com.BC.entertainmentgravitation.entity.Member;
+import com.BC.entertainmentgravitation.entity.StarInformation;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomMember;
+import com.summer.config.Config;
 
 public class ChatCache {
 	
@@ -72,7 +74,42 @@ public class ChatCache {
     	{
         	if (member != null && !TextUtils.isEmpty(member.getAccount()))
         	{
-        		if (!memberCache.containsKey(member.getAccount()))
+        		if (!memberCache.containsKey(member.getAccount()) && !member.getAccount().contains(Config.User.getUserName()))
+        		{
+        			Member m = new Member();
+        			m.setName(member.getAccount());
+        			m.setNick(member.getNick());
+        			if (member.getAvatar() != null)
+        			{
+            			try {
+							String s[] = member.getAvatar().split("/");
+							if (s[2] != null && !s[2].contains("app.haimianyu.cn"))
+							{
+								m.setPortrait("http://app.haimianyu.cn/" + member.getAvatar());
+							}
+							else
+							{
+								m.setPortrait(member.getAvatar());
+							}
+						} catch (Exception e) {
+							e.printStackTrace();
+						}	
+        			}
+            		memberCache.put(member.getAccount(), m);
+            		onlinePeopleitems.add(m);
+        		}
+
+        	}
+    	}
+    }
+    
+    public void AddMember(List<ChatRoomMember> chatRoomMembers, StarInformation information)
+    {
+    	for (ChatRoomMember member : chatRoomMembers)
+    	{
+        	if (member != null && !TextUtils.isEmpty(member.getAccount()))
+        	{
+        		if (!memberCache.containsKey(member.getAccount()) && !member.getAccount().contains(information.getUser_name()))
         		{
         			Member m = new Member();
         			m.setName(member.getAccount());

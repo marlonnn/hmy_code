@@ -327,8 +327,8 @@ public class PullModulePanel {
         }
         else if(attachment.getType() == NotificationType.ChatRoomMemberExit)
         {
-        	Member member = ChatCache.getInstance().getMember(account);
-        	if (member != null && member.getName().contains(InfoCache.getInstance().getLiveStar().getUser_name()))
+
+        	if (account != null && account.contains(InfoCache.getInstance().getLiveStar().getUser_name()))
         	{
 	   			Intent intent = new Intent(container.activity, FinishActivity.class);
 	   			intent.putExtra("totalPeople", ChatCache.getInstance().getOnlinePeopleitems().size());
@@ -339,7 +339,23 @@ public class PullModulePanel {
 	   				pullFragment.mediaCallback.finishPullMedia();
 	   			}
         	}
-        	pullFragment.removeMembers(member);
+        	else
+        	{
+            	Member member = ChatCache.getInstance().getMember(account);
+            	pullFragment.removeMembers(member);
+        	}
+//        	if (member != null && member.getName().contains(InfoCache.getInstance().getLiveStar().getUser_name()))
+//        	{
+//	   			Intent intent = new Intent(container.activity, FinishActivity.class);
+//	   			intent.putExtra("totalPeople", ChatCache.getInstance().getOnlinePeopleitems().size());
+//	   			container.activity.startActivity(intent);
+//	   			if (pullFragment.mediaCallback != null)
+//	   			{
+//	   				pullFragment.Destroy();
+//	   				pullFragment.mediaCallback.finishPullMedia();
+//	   			}
+//        	}
+
         }
     }
     

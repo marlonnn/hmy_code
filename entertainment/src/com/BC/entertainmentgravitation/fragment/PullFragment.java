@@ -294,7 +294,7 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
             public void onResult(boolean success, List<ChatRoomMember> result) {
                 if (success) {
 
-                    ChatCache.getInstance().AddMember(result);
+                    ChatCache.getInstance().AddMember(result, InfoCache.getInstance().getLiveStar());
                     if (memberQueryType == MemberQueryType.ONLINE_NORMAL && result.size() < LIMIT) {
                         isNormalEmpty = true; // 固定成员已经拉完
                         getMembers(MemberQueryType.GUEST, enterTime, result.size());
@@ -331,7 +331,7 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
 
 								if (success) {
 									XLog.i("fetch members success : " + result.size());
-									ChatCache.getInstance().AddMember(result);
+									ChatCache.getInstance().AddMember(result, InfoCache.getInstance().getLiveStar());
 								} else {
 									XLog.i("fetch members by page failed, code:"+ code);
 								}

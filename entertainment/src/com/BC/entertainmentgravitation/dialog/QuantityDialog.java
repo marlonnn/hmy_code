@@ -112,7 +112,7 @@ public class QuantityDialog extends Dialog {
 					R.style.Dialog);
 			layout = inflater.inflate(R.layout.dialog_wheel_quantity, null);
 			dialog.addContentView(layout, new LayoutParams(
-					LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+					LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 			((TextView) layout.findViewById(R.id.txtViewTitle)).setText(title);
 			lLayoutBai = (LinearLayout) layout.findViewById(R.id.rLayoutBai);
 			wheelBai = (WheelView) layout.findViewById(R.id.wheelBai);
@@ -173,7 +173,7 @@ public class QuantityDialog extends Dialog {
 			public void onChanged(WheelView wheel, int oldValue, int newValue) {
 				switch(wheel.getId())
 				{
-				case R.id.rLayoutBai:
+				case R.id.wheelBai:
 					try {
 						index = wheelBai.getCurrentItem();
 						String bai = mDatas[index];
@@ -182,7 +182,7 @@ public class QuantityDialog extends Dialog {
 						e.printStackTrace();
 					}
 					break;
-				case R.id.rLayoutShi:
+				case R.id.wheelShi:
 					try {
 						index = wheelShi.getCurrentItem();
 						String shi = mDatas[index];
@@ -191,7 +191,7 @@ public class QuantityDialog extends Dialog {
 						e.printStackTrace();
 					}
 					break;
-				case R.id.rLayoutGe:
+				case R.id.wheelGe:
 					try {
 						index = wheelGe.getCurrentItem();
 						String ge = mDatas[index];

@@ -5,12 +5,14 @@ import android.content.Intent;
 import android.media.AudioFormat;
 import android.os.Bundle;
 import android.os.Environment;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.BC.entertainment.cache.ChatCache;
+import com.BC.entertainment.config.Preferences;
 import com.BC.entertainment.config.PushConfig;
 import com.BC.entertainment.inter.MediaCallback;
 import com.BC.entertainment.view.LiveSurfaceView;
@@ -24,6 +26,9 @@ import com.netease.nimlib.sdk.AbortableFuture;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.ResponseCode;
+import com.netease.nimlib.sdk.SDKOptions;
+import com.netease.nimlib.sdk.StatusCode;
+import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.netease.nimlib.sdk.chatroom.ChatRoomService;
 import com.netease.nimlib.sdk.chatroom.model.EnterChatRoomData;
 import com.netease.nimlib.sdk.chatroom.model.EnterChatRoomResultData;
@@ -61,8 +66,49 @@ public class PushActivity extends BaseActivity implements lsMessageHandler, Medi
         rlayoutLoading = (RelativeLayout) findViewById(R.id.rLayoutPushLoading);
         Intent intent = this.getIntent();
         StarLiveVideoInfo startLiveVideoInfo = (StarLiveVideoInfo)intent.getSerializableExtra("liveInfo");
+        if (!getIMStatus())
+        {
+        	NIMClient.init(this, getLoginInfo(), getOptions());
+        }
         enterChatRoom(startLiveVideoInfo, true);
 	}
+	
+	private boolean getIMStatus()
+	{
+		StatusCode status = NIMClient.getStatus();
+		if (status == StatusCode.LOGINED)
+		{
+			return true;
+			//NIMClient.init(this, getLoginInfo(), getOptions());
+		}
+		return false;
+	}
+	
+    private LoginInfo getLoginInfo() {
+		String account = null;
+		String token = null;
+		if ( Preferences.getUserName() != null && Preferences.getUserToken() != null)
+		{
+			account = Preferences.getUserName();
+			token = Preferences.getUserToken();
+		}
+
+        if (!TextUtils.isEmpty(account) && !TextUtils.isEmpty(token)) {
+            return new LoginInfo(account, token);
+        } else {
+            return null;
+        }
+    }
+    
+    private SDKOptions getOptions() {
+        SDKOptions options = new SDKOptions();
+
+        // 配置保存图片，文件，log等数据的目录
+        String sdkPath = Environment.getExternalStorageDirectory() + "/" + getPackageName() + "/nim";
+        options.sdkStorageRootPath = sdkPath;
+
+        return options;
+    }
 	
     @SuppressWarnings("unchecked")
 	private void enterChatRoom(final StarLiveVideoInfo startLiveVideoInfo, final boolean isPush)

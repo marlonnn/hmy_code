@@ -406,17 +406,17 @@ public class RightsCenterFragment extends BaseFragment implements OnClickListene
 		}
 	};
 	
-	private void sendBuyRighCardReuest(RightCard card, int number)
-	{
-		HashMap<String, String> entity = new HashMap<String, String>();
-
-		entity.put("clientID", Config.User.getClientID());
-		entity.put("cardid", card.getCard_id());
-		entity.put("star_id", card.getStar_id());
-		entity.put("number", String.valueOf(number));
-    	List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
-    	addToThreadPool(Config.profitOrder, "get start right card", params);
-	}
+//	private void sendBuyRighCardReuest(RightCard card, int number)
+//	{
+//		HashMap<String, String> entity = new HashMap<String, String>();
+//
+//		entity.put("clientID", Config.User.getClientID());
+//		entity.put("cardid", card.getCard_id());
+//		entity.put("star_id", card.getStar_id());
+//		entity.put("number", String.valueOf(number));
+//    	List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
+//    	addToThreadPool(Config.profitOrder, "get start right card", params);
+//	}
 	
 	private void sendBuyRighCardReuest(RightCard card, String number)
 	{
@@ -488,7 +488,7 @@ public class RightsCenterFragment extends BaseFragment implements OnClickListene
 		switch(taskType)
 		{
 		case Config.profitOrder:
-			ToastUtil.show(getActivity(), "购买成功");
+			ToastUtil.show(getActivity(), "您成功购买 " + quantity + " 个权益卡，请进入权益中心查看");
 		    break;
 		case Config.getProfit:
 			Entity<List<RightCard>> entity = gson.fromJson(jsonString,
