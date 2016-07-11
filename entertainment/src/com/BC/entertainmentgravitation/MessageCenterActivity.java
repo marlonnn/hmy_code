@@ -191,7 +191,7 @@ public class MessageCenterActivity extends BaseActivity implements OnClickListen
 				try {
 					if (privateFragment != null)
 					{
-						privateFragment.ignoreMessage();
+//						privateFragment.ignoreMessage();
 					}
 				} catch (Exception e) {
 					e.printStackTrace();

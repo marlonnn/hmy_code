@@ -1,5 +1,6 @@
 package com.BC.entertainment.adapter;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import android.content.Context;
@@ -11,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.BC.entertainment.cache.InfoCache;
 import com.BC.entertainmentgravitation.R;
 import com.BC.entertainmentgravitation.entity.Huodong;
 import com.bumptech.glide.Glide;
@@ -70,9 +70,9 @@ public class HuodongAdapter extends RecyclerView.Adapter<HuodongViewHolder> {
 			if (huodong != null)
 			{
 				viewGroup.title.setText(huodong.getName());
-				viewGroup.time.setText(huodong.getAdd_time());
+				viewGroup.time.setText(getStrTime(huodong.getAdd_time()));
 				Glide.with(mContext)
-				.load(InfoCache.getInstance().getPersonalInfo().getHead_portrait())
+				.load("http://app.haimianyu.cn" + huodong.getImage())
 				.centerCrop().diskCacheStrategy(DiskCacheStrategy.ALL)
 				.placeholder(R.drawable.avatar_def).into(viewGroup.logo);
 				viewGroup.itemView.setTag(huodong);
@@ -83,6 +83,14 @@ public class HuodongAdapter extends RecyclerView.Adapter<HuodongViewHolder> {
 		
 		setUpitemEvent(viewGroup);
 	
+	}
+	
+	public String getStrTime(String cc_time) { 
+		 String re_StrTime = null; 
+		 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
+		 Long lcc_time = Long.valueOf(cc_time); 
+		 re_StrTime = sdf.format(lcc_time);  
+		 return re_StrTime; 
 	}
 
 	protected void setUpitemEvent(final HuodongViewHolder myViewHolder) {

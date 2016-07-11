@@ -425,7 +425,17 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".HuodongActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" >
         </activity> 
+        <activity
+            android:name=".HuodongDetailActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" >
+        </activity>
         <service 
             android:enabled="true" 
             android:name="com.BC.entertainment.service.MessageService"/> 

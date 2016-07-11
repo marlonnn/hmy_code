@@ -47,13 +47,13 @@ public class HuodongActivity extends BaseActivity implements OnClickListener, On
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_huodong);
 		findViewById(R.id.imageViewBack).setOnClickListener(this);
-		initView();
+		gson = new Gson();
+//		initView();
 		sendActivityRequest();
 	}
 	
 	private void initView()
 	{
-		gson = new Gson();
 		messageList = (RecyclerView) findViewById(R.id.listViewHuodong);
 		adapter = new HuodongAdapter(this, huodongs);
         adapter.notifyDataSetChanged();
@@ -109,7 +109,7 @@ public class HuodongActivity extends BaseActivity implements OnClickListener, On
     	httpTask.setInfoHandler(handler);
     	ThreadPoolFactory.getThreadPoolManager().addTask(httpTask);
     }
-
+    
 	@Override
 	public void RequestSuccessful(String jsonString, int taskType) {
 		switch(taskType)
@@ -122,7 +122,8 @@ public class HuodongActivity extends BaseActivity implements OnClickListener, On
 			if (baseEntity.getData() != null)
 			{
 				huodongs = baseEntity.getData();
-				adapter.notifyDataSetChanged();
+				initView();
+//				adapter.notifyDataSetChanged();
 			}
 			break;
 		}

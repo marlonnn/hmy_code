@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import com.BC.entertainment.adapter.FoundRecycleAdapter;
 import com.BC.entertainment.adapter.FoundRecycleAdapter.OnItemClickListener;
 import com.BC.entertainment.cache.FoundCache;
+import com.BC.entertainmentgravitation.HuodongActivity;
 import com.BC.entertainmentgravitation.MessageCenterActivity;
 import com.BC.entertainmentgravitation.R;
 import com.BC.entertainmentgravitation.RightsCenterActivity;
@@ -130,9 +131,9 @@ public class FoundFragment_back extends BaseFragment implements OnClickListener,
 			 * 剧组信息
 			 */
 			case R.drawable.activity_found_live:
-//				intent = new Intent(getActivity(), CrewActivity.class);
-//				startActivity(intent);
-				ToastUtil.show(getActivity(), "此功能正在完善中，尽情期待...");
+				intent = new Intent(getActivity(), HuodongActivity.class);
+				startActivity(intent);
+//				ToastUtil.show(getActivity(), "此功能正在完善中，尽情期待...");
 				break;
 			/**
 			 * 消息中心
