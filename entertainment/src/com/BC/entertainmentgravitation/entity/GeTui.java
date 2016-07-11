@@ -12,11 +12,17 @@ public class GeTui {
 	@DatabaseField(columnName = "messagetype")
 	private String messagetype;
 	
+	@DatabaseField(columnName = "messageid")
+	private String messageid;
+	
 	@DatabaseField(columnName = "messagetitle")
 	private String messagetitle;
 	
 	@DatabaseField(columnName = "messagecontent")
 	private String messagecontent;
+	
+	@DatabaseField(columnName = "time")
+	private String time;
 	
 	@DatabaseField(columnName = "hasRead")
 	private boolean hasRead = false;
@@ -27,6 +33,14 @@ public class GeTui {
 
 	public void setMessagetype(String messagetype) {
 		this.messagetype = messagetype;
+	}
+
+	public String getMessageid() {
+		return messageid;
+	}
+
+	public void setMessageid(String messageid) {
+		this.messageid = messageid;
 	}
 
 	public String getMessagetitle() {

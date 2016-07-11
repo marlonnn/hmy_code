@@ -35,6 +35,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.j256.ormlite.stmt.query.IsNotNull;
 import com.summer.adapter.CommonAdapter;
 import com.summer.config.Config;
 import com.summer.factory.ThreadPoolFactory;
@@ -240,11 +241,15 @@ public class RightsCenterFragment extends BaseFragment implements OnClickListene
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					quantity = String.valueOf(builder.GetQuantity());
-					sendBuyRighCardReuest(card, quantity);
-					if (dialog != null)
+					if(isNullOrEmpty(quantity))
 					{
-						dialog.dismiss();
+						sendBuyRighCardReuest(card, quantity);
+						if (dialog != null)
+						{
+							dialog.dismiss();
+						}
 					}
+
 				}});
 			
 			builder.setNegativeButton(new DialogInterface.OnClickListener() {
