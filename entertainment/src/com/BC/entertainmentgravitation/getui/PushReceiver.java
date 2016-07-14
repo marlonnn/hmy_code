@@ -54,6 +54,11 @@ public class PushReceiver extends BroadcastReceiver{
          			g.setMessagecontent(jsonObject.getString("messagecontent"));
          			g.setMessagetitle(jsonObject.getString("messagetitle"));
          			g.setMessagetype(jsonObject.getString("messagetype"));
+         			if (g.getMessagetype() != null && g.getMessagetype().contains("3"))
+         			{
+             			g.setMessageid(jsonObject.getString("messageid"));
+         			}
+
          			sendNotification(context, g);
          			new GeTuiDao(context).add(g);
 				} catch (Exception e) {

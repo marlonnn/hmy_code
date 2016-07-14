@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -16,6 +17,9 @@ import android.view.View.OnClickListener;
 
 import com.BC.entertainment.adapter.MessageSysRecycleAdapter;
 import com.BC.entertainment.adapter.MessageSysRecycleAdapter.OnItemClickListener;
+import com.BC.entertainmentgravitation.HuodongActivity;
+import com.BC.entertainmentgravitation.HuodongDetailActivity;
+import com.BC.entertainmentgravitation.MessageSysDetailActivity;
 import com.BC.entertainmentgravitation.R;
 import com.BC.entertainmentgravitation.entity.GeTui;
 import com.BC.entertainmentgravitation.entity.GeTuiDao;
@@ -73,6 +77,15 @@ public class MessageFragment extends BaseFragment implements OnClickListener, On
 			g.setHasRead(true);
 			new GeTuiDao(getActivity()).update(g);
 			adapter.notifyDataSetChanged();
+			if (g.getMessagetype().contains("3") && g.getMessageid() != null)
+			{
+				Intent intent = new Intent(getActivity(), MessageSysDetailActivity.class);
+				Bundle b = new Bundle();
+				b.putString("id", g.getMessageid());
+				intent.putExtras(b);
+				startActivity(intent);
+			}
+
 		}
 	}
 	

@@ -241,7 +241,7 @@ public class RightsCenterFragment extends BaseFragment implements OnClickListene
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					quantity = String.valueOf(builder.GetQuantity());
-					if(isNullOrEmpty(quantity))
+					if(quantity != null && !quantity.contains("0"))
 					{
 						sendBuyRighCardReuest(card, quantity);
 						if (dialog != null)

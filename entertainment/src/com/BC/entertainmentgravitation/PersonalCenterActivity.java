@@ -35,6 +35,7 @@ import android.widget.Toast;
 
 import com.BC.entertainment.adapter.PersonalRecycleAdapter;
 import com.BC.entertainment.adapter.PersonalRecycleAdapter.OnItemClickListener;
+import com.BC.entertainment.cache.ChatCache;
 import com.BC.entertainment.cache.InfoCache;
 import com.BC.entertainment.cache.PersonalCache;
 import com.BC.entertainment.config.Preferences;
@@ -47,6 +48,8 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
+import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.auth.AuthService;
 import com.summer.activity.BaseActivity;
 import com.summer.config.Config;
 import com.summer.factory.ThreadPoolFactory;
@@ -139,6 +142,11 @@ public class PersonalCenterActivity extends BaseActivity implements OnClickListe
         infoList.setAdapter(adapter);
 	}
 	
+	private void clearData()
+	{
+		ChatCache.getInstance().ClearMember();
+		InfoCache.getInstance().ClearAllData();
+	}
 	private void initView(Member member)
 	{
 		if (member != null)
@@ -168,6 +176,8 @@ public class PersonalCenterActivity extends BaseActivity implements OnClickListe
 				public void onClick(View v) {
 //					SharedPreferencesUtils.setParam(PersonalCenterActivity.this, "autoLogin", false);
 					Preferences.saveUserAutoLogin("false");
+					NIMClient.getService(AuthService.class).openLocalCache(Config.User.getUserName());
+					clearData();
 					Intent intent = new Intent(PersonalCenterActivity.this, LoginActivity.class);
 					startActivity(intent);
 					finish();

@@ -156,6 +156,7 @@ public class PrivateFragment extends BaseFragment implements OnClickListener, On
 //			    		   myContacts.add(reContact);
 			    		   updateContacts(reContact);
 			    	   }
+
 			  		 adapter.notifyDataSetChanged();
 		        }
 		};

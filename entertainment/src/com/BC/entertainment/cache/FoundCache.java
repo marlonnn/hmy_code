@@ -28,8 +28,8 @@ public class FoundCache {
 		Found p2 = new Found(R.drawable.activity_found_message, "消息中心");
 		founds.add(p2);
 		
-		Found p3 = new Found(R.drawable.activity_rights_center, "权益中心");
-		founds.add(p3);
+//		Found p3 = new Found(R.drawable.activity_rights_center, "权益中心");
+//		founds.add(p3);
 		
     	return founds;
     }
