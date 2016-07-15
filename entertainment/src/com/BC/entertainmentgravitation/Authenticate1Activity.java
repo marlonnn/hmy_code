@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 
 import com.summer.activity.BaseActivity;
+import com.summer.factory.ThreadPoolFactory;
 import com.umeng.analytics.MobclickAgent;
 
 public class Authenticate1Activity extends BaseActivity implements OnClickListener{
@@ -17,6 +18,7 @@ public class Authenticate1Activity extends BaseActivity implements OnClickListen
 		setContentView(R.layout.activity_authenticate_step1);
 		findViewById(R.id.imageViewBack).setOnClickListener(this);
 		findViewById(R.id.btnAgree).setOnClickListener(this);
+		ScreenManager.getScreenManager1().pushActivity(this);
 	}
 	
     @Override
@@ -29,6 +31,12 @@ public class Authenticate1Activity extends BaseActivity implements OnClickListen
 	protected void onResume() {
 		super.onResume();
         MobclickAgent.onResume(this);
+	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		ScreenManager.getScreenManager1().popActivity(this);
 	}
 	
 	@Override

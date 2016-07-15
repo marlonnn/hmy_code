@@ -87,6 +87,7 @@ public class HomeActivity_back extends BaseActivity implements OnClickListener{
 		findViewById();
 		setFragmentSelection(R.id.rLayoutLine);
 		startMessgeService();
+	    ScreenManager.getScreenManager1().pushActivity(this);  
 	}
 	
 	private void startMessgeService()
@@ -281,6 +282,7 @@ public class HomeActivity_back extends BaseActivity implements OnClickListener{
 		try {
 			stopMessgeService();
 			ThreadPoolFactory.getThreadPoolManager().stopAllTask();
+			ScreenManager.getScreenManager1().popActivity(this);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

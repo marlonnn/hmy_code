@@ -33,6 +33,7 @@ public class LoginActivity extends BaseActivity implements iRegister, iLogin{
         setContentView(R.layout.activity_login_back);
         mContext = this;
         initView();
+        ScreenManager.getScreenManager1().pushActivity(this);
     }
 	
 	private void initView()
@@ -88,6 +89,7 @@ public class LoginActivity extends BaseActivity implements iRegister, iLogin{
 
 	@Override
 	protected void onDestroy() {
+		ScreenManager.getScreenManager1().popActivity(this);
 		super.onDestroy();
 	}
 	

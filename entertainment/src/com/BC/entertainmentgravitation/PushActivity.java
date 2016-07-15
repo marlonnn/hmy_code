@@ -54,6 +54,7 @@ public class PushActivity extends BaseActivity implements lsMessageHandler, Medi
     private TopPushFragment topFragment;
 	private RelativeLayout rlayoutLoading;
 	private AbortableFuture<EnterChatRoomResultData> enterRequest;//聊天室
+	private StarLiveVideoInfo startLiveVideoInfo;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -65,12 +66,12 @@ public class PushActivity extends BaseActivity implements lsMessageHandler, Medi
         mVideoView = (LiveSurfaceView) findViewById(R.id.videoview);
         rlayoutLoading = (RelativeLayout) findViewById(R.id.rLayoutPushLoading);
         Intent intent = this.getIntent();
-        StarLiveVideoInfo startLiveVideoInfo = (StarLiveVideoInfo)intent.getSerializableExtra("liveInfo");
+        startLiveVideoInfo = (StarLiveVideoInfo)intent.getSerializableExtra("liveInfo");
         if (!getIMStatus())
         {
         	NIMClient.init(this, getLoginInfo(), getOptions());
         }
-        enterChatRoom(startLiveVideoInfo, true);
+        enterChatRoom(true);
 	}
 	
 	private boolean getIMStatus()
@@ -109,9 +110,14 @@ public class PushActivity extends BaseActivity implements lsMessageHandler, Medi
 
         return options;
     }
+    
+	private void exitChatRoom()
+	{
+		NIMClient.getService(ChatRoomService.class).exitChatRoom(startLiveVideoInfo.getChatroomid());
+	}
 	
     @SuppressWarnings("unchecked")
-	private void enterChatRoom(final StarLiveVideoInfo startLiveVideoInfo, final boolean isPush)
+	private void enterChatRoom(final boolean isPush)
     {
         EnterChatRoomData data = new EnterChatRoomData(startLiveVideoInfo.getChatroomid());
         enterRequest = NIMClient.getService(ChatRoomService.class).enterChatRoom(data);
@@ -447,6 +453,10 @@ public class PushActivity extends BaseActivity implements lsMessageHandler, Medi
 		if(m_liveStreamingOn) {
 		    m_liveStreamingOn = false;
 		}
+		if (startLiveVideoInfo != null)
+		{
+			exitChatRoom();
+		}
 		this.finish();
 		super.onBackPressed();
 	}
@@ -466,6 +476,11 @@ public class PushActivity extends BaseActivity implements lsMessageHandler, Medi
 
 	@Override
 	public void finishPushMedia() {
+		if (topFragment != null)
+		{
+			topFragment.Destroy();
+		}
+		
 		if(m_liveStreamingInit) {
 			m_liveStreamingInit = false;
 		}
@@ -486,6 +501,11 @@ public class PushActivity extends BaseActivity implements lsMessageHandler, Medi
 		if(m_liveStreamingOn) {
 		    m_liveStreamingOn = false;
 		}
+		if (startLiveVideoInfo != null)
+		{
+			exitChatRoom();
+		}
+		finish();
 	}
 
 	@Override
@@ -513,6 +533,10 @@ public class PushActivity extends BaseActivity implements lsMessageHandler, Medi
 			}
 			if(m_liveStreamingOn) {
 			    m_liveStreamingOn = false;
+			}
+			if (startLiveVideoInfo != null)
+			{
+				exitChatRoom();
 			}
 			finish();
 		}

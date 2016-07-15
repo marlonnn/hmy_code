@@ -434,7 +434,7 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
 		.load(InfoCache.getInstance().getLiveStar().getHead_portrait())
 		.centerCrop().diskCacheStrategy(DiskCacheStrategy.ALL)
 		.placeholder(R.drawable.avatar_def).into(headPortrait);
-		XLog.i("custom portrait: " + InfoCache.getInstance().getPersonalInfo().getHead_portrait());
+//		XLog.i("custom portrait: " + InfoCache.getInstance().getPersonalInfo().getHead_portrait());
     }
     
     /**
@@ -950,16 +950,15 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
 	private Member CreateMember()
 	{
 		Member m = new Member();
-		m.setId(InfoCache.getInstance().getPersonalInfo().getClientID());
-		m.setNick(InfoCache.getInstance().getPersonalInfo().getNickname());
-		m.setPortrait(InfoCache.getInstance().getPersonalInfo().getHead_portrait());
-		m.setGender(InfoCache.getInstance().getPersonalInfo().getGender());
-		m.setRegion(InfoCache.getInstance().getPersonalInfo().getRegion());
-		m.setConstellation(InfoCache.getInstance().getPersonalInfo().getThe_constellation());
-		m.setNationality(InfoCache.getInstance().getPersonalInfo().getNationality());
-		m.setId(InfoCache.getInstance().getPersonalInfo().getClientID());
-		m.setPiao(InfoCache.getInstance().getPersonalInfo().getPiao());
-//		m.setMood(InfoCache.getInstance().getPersonalInfo().get)
+		m.setId(InfoCache.getInstance().getLiveStar().getStar_ID());
+		m.setNick(InfoCache.getInstance().getLiveStar().getStage_name());
+		m.setPortrait(InfoCache.getInstance().getLiveStar().getHead_portrait());
+		m.setGender(InfoCache.getInstance().getLiveStar().getGender());
+		m.setRegion(InfoCache.getInstance().getLiveStar().getRegion());
+		m.setConstellation(InfoCache.getInstance().getLiveStar().getThe_constellation());
+		m.setNationality(InfoCache.getInstance().getLiveStar().getNationality());
+		m.setPiao(InfoCache.getInstance().getLiveStar().getPiao());
+//		m.setMood(InfoCache.getInstance().getLiveStar().get)
 		return m;
 	}
 	

@@ -40,6 +40,7 @@ public class Authenticate2Activity extends BaseActivity implements OnClickListen
 		findViewById(R.id.textView1).setOnClickListener(this);
 		initView();
 		authenCache = new AuthenCache(this);
+		ScreenManager.getScreenManager1().pushActivity(this);
 	}
 	
 	private void initView()
@@ -247,6 +248,12 @@ public class Authenticate2Activity extends BaseActivity implements OnClickListen
 	protected void onResume() {
 		super.onResume();
         MobclickAgent.onResume(this);
+	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		ScreenManager.getScreenManager1().popActivity(this);
 	}
 	
 	@Override

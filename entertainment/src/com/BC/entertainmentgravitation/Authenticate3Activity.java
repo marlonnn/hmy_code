@@ -15,8 +15,6 @@ import kankan.wheel.widget.OnWheelChangedListener;
 import kankan.wheel.widget.WheelView;
 
 import org.apache.http.NameValuePair;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -196,6 +194,7 @@ public class Authenticate3Activity extends BaseActivity implements OnClickListen
 			}
 			
 		});
+		ScreenManager.getScreenManager1().pushActivity(this);
 	}
 	
 	/**
@@ -450,6 +449,12 @@ public class Authenticate3Activity extends BaseActivity implements OnClickListen
 	protected void onResume() {
 		super.onResume();
         MobclickAgent.onResume(this);
+	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		ScreenManager.getScreenManager1().popActivity(this);
 	}
 	
 	@Override

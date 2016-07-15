@@ -89,7 +89,7 @@ public class HuodongAdapter extends RecyclerView.Adapter<HuodongViewHolder> {
 		 String re_StrTime = null; 
 		 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
 		 Long lcc_time = Long.valueOf(cc_time); 
-		 re_StrTime = sdf.format(lcc_time);  
+		 re_StrTime = sdf.format(lcc_time * 1000L);  
 		 return re_StrTime; 
 	}
 

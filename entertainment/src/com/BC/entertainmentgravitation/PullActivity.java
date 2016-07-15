@@ -40,6 +40,7 @@ public class PullActivity extends BaseActivity implements OnClickListener, Media
 	private TopPullFragment topFragment;
 	
 	private AbortableFuture<EnterChatRoomResultData> enterRequest;//聊天室
+	private StarLiveVideoInfo startLiveVideoInfo;
 
 	@Override
 	protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,8 +50,8 @@ public class PullActivity extends BaseActivity implements OnClickListener, Media
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);   //应用运行时，保持屏幕高亮，不锁屏
 		
 		Intent intent = this.getIntent();
-		StarLiveVideoInfo startLiveVideoInfo = (StarLiveVideoInfo)intent.getSerializableExtra("liveInfo");
-        enterChatRoom(startLiveVideoInfo, false);
+		startLiveVideoInfo = (StarLiveVideoInfo)intent.getSerializableExtra("liveInfo");
+        enterChatRoom(false);
 		
 	}
 	
@@ -73,8 +74,13 @@ public class PullActivity extends BaseActivity implements OnClickListener, Media
         topFragment.show(getSupportFragmentManager(), "push video");
 	}
 	
+	private void exitChatRoom()
+	{
+		NIMClient.getService(ChatRoomService.class).exitChatRoom(startLiveVideoInfo.getChatroomid());
+	}
+	
     @SuppressWarnings("unchecked")
-	private void enterChatRoom(final StarLiveVideoInfo startLiveVideoInfo, final boolean isPush)
+	private void enterChatRoom(final boolean isPush)
     {
         EnterChatRoomData data = new EnterChatRoomData(startLiveVideoInfo.getChatroomid());
         Map<String, Object> extention = new HashMap<>();
@@ -182,7 +188,14 @@ public class PullActivity extends BaseActivity implements OnClickListener, Media
 	
 	private void close()
 	{
-
+		if (mVideoView != null)
+		{
+			mVideoView.release_resource();
+		}
+		if (startLiveVideoInfo != null)
+		{
+			exitChatRoom();
+		}
 		this.finish();
 	}
 
@@ -210,6 +223,10 @@ public class PullActivity extends BaseActivity implements OnClickListener, Media
 		if (mVideoView != null)
 		{
 			mVideoView.release_resource();
+		}
+		if (startLiveVideoInfo != null)
+		{
+			exitChatRoom();
 		}
 		finish();
 		

@@ -51,7 +51,7 @@ public class FoundRecycleAdapter extends RecyclerView.Adapter<FoundViewHolder>{
 	*/
 	@Override
 	public FoundViewHolder onCreateViewHolder(ViewGroup viewGroup, int arg1) {
-        View view = mInflater.inflate(R.layout.activity_personal_item, viewGroup, false);
+        View view = mInflater.inflate(R.layout.activity_personal_found_item, viewGroup, false);
         FoundViewHolder myViewHolder = new FoundViewHolder(view);
         return myViewHolder;
 	}

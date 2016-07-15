@@ -1,5 +1,6 @@
 package com.BC.entertainment.adapter;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import com.BC.entertainmentgravitation.R;
@@ -83,6 +84,7 @@ public class MessageSysRecycleAdapter extends RecyclerView.Adapter<MessageSysVie
 					viewGroup.title.setTextColor(Color.parseColor("#FFFFFF"));
 					viewGroup.content.setTextColor(Color.parseColor("#FFFFFF"));
 				}
+				viewGroup.time.setText(getStrTime(geTui.getTime()));
 				viewGroup.itemView.setTag(geTui);
 			}
 		} catch (Exception e) {
@@ -91,6 +93,27 @@ public class MessageSysRecycleAdapter extends RecyclerView.Adapter<MessageSysVie
 		
 		setUpitemEvent(viewGroup);
 	
+	}
+	
+	public static String getStrTime(String cc_time) { 
+		 String re_StrTime = ""; 
+		 Long lcc_time = 0L;
+		 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
+		 if ( cc_time != null && cc_time.length() == 13)
+		 {
+			 if (cc_time.length() == 13)//秒 
+			 {
+				 lcc_time = Long.valueOf(cc_time); 
+			 }
+			 else if (cc_time.length() == 10)//毫秒 
+			 {
+				 lcc_time = Long.valueOf(cc_time) * 1000L;
+			 }
+
+			 re_StrTime = sdf.format(lcc_time);  
+		 }
+
+		 return re_StrTime; 
 	}
 
 	protected void setUpitemEvent(final MessageSysViewHolder myViewHolder) {
@@ -121,10 +144,12 @@ class MessageSysViewHolder extends ViewHolder {
 
     TextView title;
     TextView content;
-
+    TextView time;
+    
     public MessageSysViewHolder(View v) {
         super(v);
         title = (TextView) v.findViewById(R.id.txtTitle);
         content = (TextView) v.findViewById(R.id.txtContent);
+        time = (TextView) v.findViewById(R.id.txtViewTime);
     }
 }

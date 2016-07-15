@@ -122,6 +122,7 @@ public class PersonalCenterActivity extends BaseActivity implements OnClickListe
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		ScreenManager.getScreenManager1().pushActivity(this);
 	}
 	
 	private void initViewAtFirst()
@@ -180,7 +181,8 @@ public class PersonalCenterActivity extends BaseActivity implements OnClickListe
 					clearData();
 					Intent intent = new Intent(PersonalCenterActivity.this, LoginActivity.class);
 					startActivity(intent);
-					finish();
+					ScreenManager.getScreenManager1().popAllActivityExceptMain(LoginActivity.class);
+//					finish();
 				}
 			});
 			
@@ -227,6 +229,12 @@ public class PersonalCenterActivity extends BaseActivity implements OnClickListe
 	protected void onResume() {
 		super.onResume();
         MobclickAgent.onResume(this);
+	}
+	
+	@Override
+	protected void onDestroy() {
+		ScreenManager.getScreenManager1().popActivity(this);
+		super.onDestroy();
 	}
 	
 	@Override

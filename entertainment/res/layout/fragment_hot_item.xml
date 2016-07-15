@@ -30,8 +30,7 @@
             android:layout_marginLeft="14dp"
             android:layout_toRightOf="@+id/cImagePortrait"
             android:textColor="@color/white"
-            android:textSize="20dp"
-            android:text="范冰冰" />
+            android:textSize="20dp"/>
 
         <LinearLayout 
             android:id="@+id/lLayoutLocation"
@@ -49,8 +48,7 @@
             <TextView
 	            android:id="@+id/txtViewLocation"
 	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:text="北京" />
+	            android:layout_height="wrap_content"/>
         </LinearLayout>
 
         <LinearLayout 
@@ -66,8 +64,7 @@
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
 	            android:textColor="#FF34B3"
-	            android:textSize="20dp"
-	            android:text="0" />
+	            android:textSize="20dp"/>
 	        <TextView
 	            android:id="@+id/txtViewDescription"
 	            android:layout_width="wrap_content"

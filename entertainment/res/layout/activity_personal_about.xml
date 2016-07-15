@@ -84,6 +84,14 @@
             android:layout_marginTop="15dp"
             android:text="    以精准读到的市场眼光、完美的整合宣传营销策略和真诚热情的工作团队为您量身制定最贴心服务。" />
 
+        <TextView
+            android:id="@+id/txtView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/txtCopyRight"
+            android:layout_centerHorizontal="true"
+            android:text="V 2.2.2" />
+
     </RelativeLayout>
 
     
