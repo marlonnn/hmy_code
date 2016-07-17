@@ -118,6 +118,7 @@ public class PushFragment extends BaseFragment implements OnClickListener, Modul
 	private MediaCallback mediaCallback;
 	
 	private boolean initApplause = false;
+	private Member member;
     
 	InfoHandler handler = new InfoHandler(new InfoReceiver() {
 		@Override
@@ -650,17 +651,25 @@ public class PushFragment extends BaseFragment implements OnClickListener, Modul
 		 */
 		case R.id.imageView3:
 //			ToastUtil.show(container.activity, "此功能正在努力开发中，敬请期待...");
-			Intent intent = new Intent(getActivity(), ContributionActivity.class);
-			Bundle b = new Bundle();
-			b.putSerializable("member", CreateMember());
-			intent.putExtras(b);
-			startActivity(intent);
+			if (member != null)
+			{
+				Intent intent = new Intent(getActivity(), ContributionActivity.class);
+				Bundle b = new Bundle();
+				b.putSerializable("member", member);
+				intent.putExtras(b);
+				startActivity(intent);
+			}
+
 			break;
 		/**
 		 * 点击主播头像
 		 */
 		case R.id.portrait:
-			showInfoDialog(CreateMember());
+			if (member != null)
+			{
+				showInfoDialog(member);
+			}
+//			showInfoDialog(CreateMember());
 			break;
 		}
 	}
@@ -782,6 +791,7 @@ public class PushFragment extends BaseFragment implements OnClickListener, Modul
  					if (initApplause)
  					{
  						initApplauseConcern(member);
+ 						this.member = member;
  						initApplause = false;
  					}
  					else

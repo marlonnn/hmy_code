@@ -46,6 +46,7 @@ public class ChatCache {
     {
     	if (member != null && !TextUtils.isEmpty(member.getName()))
     	{
+    		//  && !member.getName().contains(InfoCache.getInstance().getLiveStar().getUser_name())
     		if (!memberCache.containsKey(member.getName()))
     		{
     			try {

@@ -59,8 +59,9 @@ public class PushReceiver extends BroadcastReceiver{
              			g.setMessageid(jsonObject.getString("messageid"));
          			}
          			g.setTime(String.valueOf(System.currentTimeMillis()));//毫秒
-         			sendNotification(context, g);
          			new GeTuiDao(context).add(g);
+         			sendNotification(context, g);
+
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

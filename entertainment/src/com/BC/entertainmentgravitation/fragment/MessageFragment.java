@@ -52,7 +52,8 @@ public class MessageFragment extends BaseFragment implements OnClickListener, On
 	private void initView()
 	{
 		messageList = (RecyclerView) rootView.findViewById(R.id.listViewMessage);
-		geTuis = new GeTuiDao(getActivity()).Query("messagetype", "3");
+		geTuis = new GeTuiDao(getActivity()).GetAll();
+//		geTuis = new GeTuiDao(getActivity()).Query("messagetype", "3");
 		adapter =  new MessageSysRecycleAdapter(getActivity(), geTuis);
         adapter.notifyDataSetChanged();
         adapter.setmOnItemClickListener(this);

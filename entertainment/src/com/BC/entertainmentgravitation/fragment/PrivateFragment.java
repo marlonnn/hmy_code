@@ -60,7 +60,7 @@ public class PrivateFragment extends BaseFragment implements OnClickListener, On
 	public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 		getRecentContacts();
-		ObserChange(true);
+//		ObserChange(true);
 	}
 	
 	private void initView()

@@ -149,7 +149,7 @@ public class FinishActivity extends BaseActivity implements OnClickListener, Pla
 			break;
 			
 		case R.id.imageViewBack:
-			intent = new Intent(this, HomeActivity.class);
+			intent = new Intent(this, HomeActivity_back.class);
 			startActivity(intent);
 			this.finish();
 			break;

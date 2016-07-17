@@ -23,7 +23,6 @@ import android.widget.ListView;
 import com.BC.entertainment.adapter.P2PAdapter;
 import com.BC.entertainment.chatroom.gift.Gift;
 import com.BC.entertainment.chatroom.module.ModuleProxy;
-import com.BC.entertainmentgravitation.entity.CardOrder;
 import com.BC.entertainmentgravitation.util.ListViewUtil;
 import com.BC.entertainmentgravitation.util.StringUtil;
 import com.netease.nimlib.sdk.NIMClient;

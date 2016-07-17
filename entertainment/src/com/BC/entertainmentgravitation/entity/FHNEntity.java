@@ -22,7 +22,7 @@ public class FHNEntity {
 	
 	private String region;
 	
-	private String peoples;
+	private String pepoles;
 	
 	private String portrait;//写真照片
 	
@@ -104,11 +104,11 @@ public class FHNEntity {
 	}
 
 	public String getPeoples() {
-		return peoples;
+		return pepoles;
 	}
 
-	public void setPeoples(String peoples) {
-		this.peoples = peoples;
+	public void setPeoples(String pepoles) {
+		this.pepoles = pepoles;
 	}
 
 	public String getPortrait() {

@@ -119,12 +119,25 @@ public class GeTuiDao {
 		return null;
 	}
 	
+	public int GetUnReadMessage()
+	{
+		int count = 0;
+		QueryBuilder<GeTui, Integer> builder = geTuiDaoOpe.queryBuilder();
+		try {
+			builder.where().eq("hasRead", false);
+			count = builder.query().size();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return count;
+	}
 	public List<GeTui> Query(String columnName, String value)
 	{
 		try {
 			QueryBuilder<GeTui, Integer> builder = geTuiDaoOpe.queryBuilder();
 			builder.where().eq(columnName, value);
-			builder.query();
+//			builder.query();
 			return builder.query();
 		} catch (Exception e) {
 			e.printStackTrace();

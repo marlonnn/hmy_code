@@ -1,5 +1,12 @@
 package com.BC.entertainmentgravitation;
 
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import org.apache.http.NameValuePair;
+
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -9,7 +16,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
-
 import cn.sharesdk.framework.ShareSDK;
 
 import com.BC.entertainment.adapter.ViewPagerAdapter;
@@ -35,13 +41,6 @@ import com.summer.utils.JsonUtil;
 import com.summer.utils.UrlUtil;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.analytics.MobclickAgent.EScenarioType;
-
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
-import org.apache.http.NameValuePair;
 
 public class GuidePageActivity extends BaseActivity implements View.OnClickListener, ViewPager.OnPageChangeListener {
 
@@ -88,6 +87,7 @@ public class GuidePageActivity extends BaseActivity implements View.OnClickListe
                 initializeView();
                 initializeData();
         	}
+        	ScreenManager.getScreenManager1().pushActivity(this);  
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -207,7 +207,7 @@ public class GuidePageActivity extends BaseActivity implements View.OnClickListe
 			finish();
     	}
     }
-
+    
 	private Bitmap readBitmap(int resId)
 	{
 		BitmapFactory.Options opt = new BitmapFactory.Options();
@@ -379,6 +379,7 @@ public class GuidePageActivity extends BaseActivity implements View.OnClickListe
 				}
 			}
 		}
+		ScreenManager.getScreenManager1().popActivity(this);
 	}
 
 	@Override

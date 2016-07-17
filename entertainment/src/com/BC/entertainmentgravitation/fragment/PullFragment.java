@@ -84,6 +84,7 @@ import com.summer.handler.InfoHandler;
 import com.summer.handler.InfoHandler.InfoReceiver;
 import com.summer.json.Entity;
 import com.summer.logger.XLog;
+import com.summer.task.HttpBaseTask;
 import com.summer.task.HttpTask;
 import com.summer.treadpool.ThreadPoolConst;
 import com.summer.utils.JsonUtil;
@@ -136,6 +137,7 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
     private boolean isNormalEmpty = false; // 固定成员是否拉取完
     
     private InfoDialog dialog;
+    private Member member;
     
 	InfoHandler handler = new InfoHandler(new InfoReceiver() {
 		
@@ -190,6 +192,7 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
 	public void onCreate(@Nullable Bundle savedInstanceState) {
 		registerObservers(true);
 		gson = new Gson();
+		sendBaseInfoRequest();
 		super.onCreate(savedInstanceState);
 	}
 	
@@ -617,6 +620,23 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
 		}
 	}
 	
+	private void sendBaseInfoRequest()
+	{
+		HashMap<String, String> entity = new HashMap<String, String>();
+		entity.put("username", InfoCache.getInstance().getLiveStar().getUser_name());
+		List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
+		addToThreadPool(Config.member_in, "send search request", params);
+	}
+	
+    private void addToThreadPool(int taskType, String Tag, List<NameValuePair> params)
+    {
+    	HttpBaseTask httpTask = new HttpBaseTask(ThreadPoolConst.THREAD_TYPE_FILE_HTTP, Tag, params, UrlUtil.GetUrl(taskType));
+    	httpTask.setTaskType(taskType);
+    	InfoHandler handler = new InfoHandler(this);
+    	httpTask.setInfoHandler(handler);
+    	ThreadPoolFactory.getThreadPoolManager().addTask(httpTask);
+    }
+	
 	@Override
 	public void RequestSuccessful(int statu, String jsonString, int taskType) {
 		switch(taskType)
@@ -684,6 +704,10 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
 				if (memberEntity != null && memberEntity.getData() != null)
 				{
 					Member member = memberEntity.getData();
+					if (member.getName().contains(InfoCache.getInstance().getLiveStar().getUser_name()))
+					{
+						this.member = member;
+					}
 					//进入聊天室
 					ChatCache.getInstance().AddMember(member);
 			        recycleAdapter.UpdateData();
@@ -932,17 +956,25 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
 		 * 查看直播间娱票详情	
 		 */
 		case R.id.imgViewMoneyDetail:
-			Intent intent = new Intent(getActivity(), ContributionActivity.class);
-			Bundle b = new Bundle();
-			b.putSerializable("member", CreateMember());
-			intent.putExtras(b);
-			startActivity(intent);
+			if (member != null)
+			{
+				Intent intent = new Intent(getActivity(), ContributionActivity.class);
+				Bundle b = new Bundle();
+				b.putSerializable("member", member);
+//				b.putSerializable("member", CreateMember());
+				intent.putExtras(b);
+				startActivity(intent);
+			}
 			break;
 		/**
 		 * 点击主播头像
 		 */
 		case R.id.portrait:
-			showInfoDialog(CreateMember());
+			if (member != null)
+			{
+				showInfoDialog(member);
+			}
+//			showInfoDialog(CreateMember());
 			break;
 		}
 	}
@@ -958,6 +990,7 @@ public class PullFragment extends BaseFragment implements OnClickListener, Modul
 		m.setConstellation(InfoCache.getInstance().getLiveStar().getThe_constellation());
 		m.setNationality(InfoCache.getInstance().getLiveStar().getNationality());
 		m.setPiao(InfoCache.getInstance().getLiveStar().getPiao());
+		m.setName(InfoCache.getInstance().getLiveStar().getUser_name());
 //		m.setMood(InfoCache.getInstance().getLiveStar().get)
 		return m;
 	}

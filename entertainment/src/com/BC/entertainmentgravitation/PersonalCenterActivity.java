@@ -177,7 +177,7 @@ public class PersonalCenterActivity extends BaseActivity implements OnClickListe
 				public void onClick(View v) {
 //					SharedPreferencesUtils.setParam(PersonalCenterActivity.this, "autoLogin", false);
 					Preferences.saveUserAutoLogin("false");
-					NIMClient.getService(AuthService.class).openLocalCache(Config.User.getUserName());
+					NIMClient.getService(AuthService.class).logout();
 					clearData();
 					Intent intent = new Intent(PersonalCenterActivity.this, LoginActivity.class);
 					startActivity(intent);

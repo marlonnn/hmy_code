@@ -2,6 +2,7 @@ package com.BC.entertainmentgravitation.fragment;
 
 import java.util.HashMap;
 import java.util.List;
+
 import org.apache.http.NameValuePair;
 
 import android.annotation.SuppressLint;
@@ -23,7 +24,6 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.PlatformActionListener;
 import cn.sharesdk.framework.ShareSDK;
@@ -377,7 +377,6 @@ public class LoginFragment extends BaseFragment implements OnClickListener, Call
     		Toast.makeText(getActivity(), "登陆失败", Toast.LENGTH_SHORT).show();
     	}
     }
-
 	
 	private void bindAlias()
 	{
