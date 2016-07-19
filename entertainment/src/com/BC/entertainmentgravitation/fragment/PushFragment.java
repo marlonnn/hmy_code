@@ -262,6 +262,8 @@ public class PushFragment extends BaseFragment implements OnClickListener, Modul
 		modulePanel.RegisterObservers(true);
         modulePanel.updateVideoStatus(false);//更新聊天室状态
 		modulePanel.startGetYuPiao();//开始更新娱票
+		
+		modulePanel.updateRoomMember();
 	}
 	
 	private void initChatView()

@@ -490,7 +490,7 @@ public class PersonalCenterActivity extends BaseActivity implements OnClickListe
 			sendPersonalInfoRequest();
 			break;
 		case Config.edit_photo_albums:
-			ToastUtil.show(this, "保存成功");
+//			ToastUtil.show(this, "保存成功");
 			sendAlbumRequest();
 			break;
 		case Config.photo_album_management:

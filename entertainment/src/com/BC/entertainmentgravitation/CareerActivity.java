@@ -80,9 +80,35 @@ public class CareerActivity extends BaseActivity implements OnClickListener{
 			career = "暂无描述";
 		}
 		career = Describe_the_text.getText().toString();
-		sendReqSaveUndergo();
+		if (!isNullOrEmpty(Describe_the_text.getText().toString()))
+		{
+			sendReqSaveUndergo();
+		}
+		else
+		{
+			ToastUtil.show(this, "请输入您的演艺经历");
+		}
+
 	}
 	
+	private boolean isNullOrEmpty(String o)
+	{
+		if (o != null)
+		{
+			if (o.length() == 0)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return true;
+		}
+	}
 	public void initPersonalInformation() {
 		if (career == null) {
 			ToastUtil.show(this, "获取数据失败");

@@ -76,6 +76,22 @@ public class AuthenDialog extends Dialog {
 			return province;
 		}
 
+		public WheelView getIDType() {
+			return IDType;
+		}
+
+		public void setIDType(WheelView iDType) {
+			IDType = iDType;
+		}
+
+		public WheelView getProfession() {
+			return profession;
+		}
+
+		public void setProfession(WheelView profession) {
+			this.profession = profession;
+		}
+
 		public void setProvince(WheelView province) {
 			this.province = province;
 		}

@@ -213,7 +213,7 @@ public class Authenticate3Activity extends BaseActivity implements OnClickListen
 
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					int location = builder.getProvince().getCurrentItem();
+					int location = builder.getIDType().getCurrentItem();
 					String type = IDType[location];
 					txtViewType.setText(type);
 					editTextId.setText("");
@@ -255,7 +255,7 @@ public class Authenticate3Activity extends BaseActivity implements OnClickListen
 
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					int location = builder.getProvince().getCurrentItem();
+					int location = builder.getProfession().getCurrentItem();
 					String pro = pros[location];
 					authenticate.setProName(pro);
 					txtViewPro.setText(pro);
@@ -275,7 +275,7 @@ public class Authenticate3Activity extends BaseActivity implements OnClickListen
 					}
 				}
 			});
-			AuthenDialog dialog = builder.Create(3, null);
+			AuthenDialog dialog = builder.Create(4, null);
 			dialog.show();
 		}
 	}
@@ -708,7 +708,15 @@ public class Authenticate3Activity extends BaseActivity implements OnClickListen
 
 	@Override
 	public void onChanged(WheelView wheel, int oldValue, int newValue) {
-		
+		switch(wheel.getId())
+		{
+		case R.id.wheelViewIDType:
+//			int currentItem = builder.getProvince().getCurrentItem();
+			
+			break;
+		case R.id.wheelViewProfession:
+			break;
+		}
 	}
 
 }

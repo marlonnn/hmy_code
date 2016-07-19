@@ -33,7 +33,7 @@ import com.umeng.analytics.MobclickAgent;
 public class BrokerActivity extends BaseActivity implements OnClickListener{
 	
 	private Broker broker;
-	private EditText Agent_name, The_phone, QQ, WeChat, email, address;
+	private EditText Agent_name, The_phone, QQ, WeChat, email, address, mobile;
 	
 	protected Broker getBroker() {
 		return broker;
@@ -73,6 +73,7 @@ public class BrokerActivity extends BaseActivity implements OnClickListener{
 		WeChat = (EditText) findViewById(R.id.WeChat);
 		email = (EditText) findViewById(R.id.email);
 		address = (EditText) findViewById(R.id.address);
+		mobile = (EditText) findViewById(R.id.phone);
 		canEdit(true);
 	}
 	
@@ -86,6 +87,7 @@ public class BrokerActivity extends BaseActivity implements OnClickListener{
 		WeChat.setText(broker.getWeChat());
 		email.setText(broker.getEmail());
 		address.setText(broker.getAddress());
+		mobile.setText(broker.getThe_phone());
 	}
 	
 	public void save() {
@@ -98,7 +100,15 @@ public class BrokerActivity extends BaseActivity implements OnClickListener{
 		broker.setWeChat(WeChat.getText().toString());
 		broker.setEmail(email.getText().toString());
 		broker.setAddress(address.getText().toString());
-		sendReqSaveBroker();
+		if (checkInputOK())
+		{
+			sendReqSaveBroker();
+		}
+		else
+		{
+			ToastUtil.show(this, "请先完善您经纪人信息再提交");
+		}
+
 	}
 	
 	public void canEdit(boolean b) {
@@ -108,6 +118,7 @@ public class BrokerActivity extends BaseActivity implements OnClickListener{
 		WeChat.setEnabled(b);
 		email.setEnabled(b);
 		address.setEnabled(b);
+		mobile.setEnabled(b);
 	}
 	
 	/**
@@ -125,6 +136,41 @@ public class BrokerActivity extends BaseActivity implements OnClickListener{
 		ShowProgressDialog("获取经纪人信息...");		
 		List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
 		addToThreadPool(Config.business_information, "send album request", params);
+	}
+	
+	private boolean checkInputOK()
+	{
+		if (isNullOrEmpty(Agent_name.getText().toString()) && isNullOrEmpty(The_phone.getText().toString()) 
+				&& isNullOrEmpty(QQ.getText().toString()) && isNullOrEmpty(WeChat.getText().toString())
+				&& isNullOrEmpty(email.getText().toString()) && isNullOrEmpty(address.getText().toString()) 
+				&& isNullOrEmpty(mobile.getText().toString()))
+		{
+			return false;
+		}
+		else
+		{
+			return true;
+		}
+		
+	}
+	
+	private boolean isNullOrEmpty(String o)
+	{
+		if (o != null)
+		{
+			if (o.length() == 0)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return true;
+		}
 	}
 
 	/**

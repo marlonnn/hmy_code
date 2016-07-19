@@ -47,6 +47,55 @@ public class ChatCache {
     	if (member != null && !TextUtils.isEmpty(member.getName()))
     	{
     		//  && !member.getName().contains(InfoCache.getInstance().getLiveStar().getUser_name())
+    		if (InfoCache.getInstance().getLiveStar().getUser_name() != null)
+    		{
+    			if (!memberCache.containsKey(member.getName()) && !member.getName().contains(InfoCache.getInstance().getLiveStar().getUser_name()))
+    			{
+        			try {
+        				if (member.getPortrait() != null)
+        				{
+        					String s[] = member.getPortrait().split("/");
+        					
+        					if (s[2] != null && !s[2].contains("app.haimianyu.cn"))
+        					{
+        						member.setPortrait("http://app.haimianyu.cn/" + member.getPortrait());
+        					}
+        				}
+
+    				} catch (Exception e) {
+    					e.printStackTrace();
+    				}
+            		memberCache.put(member.getName(), member);
+            		onlinePeopleitems.add(member);
+    			}
+    		}
+    		else  if (!memberCache.containsKey(member.getName()))
+    		{
+    			try {
+    				if (member.getPortrait() != null)
+    				{
+    					String s[] = member.getPortrait().split("/");
+    					
+    					if (s[2] != null && !s[2].contains("app.haimianyu.cn"))
+    					{
+    						member.setPortrait("http://app.haimianyu.cn/" + member.getPortrait());
+    					}
+    				}
+
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+        		memberCache.put(member.getName(), member);
+        		onlinePeopleitems.add(member);
+    		}
+    	}
+    }
+    
+    public void AddMember(Member member, boolean isMaster)
+    {
+    	if (member != null && !TextUtils.isEmpty(member.getName()))
+    	{
+    		//  && !member.getName().contains(InfoCache.getInstance().getLiveStar().getUser_name())
     		if (!memberCache.containsKey(member.getName()) && !member.getName().contains(InfoCache.getInstance().getLiveStar().getUser_name()))
     		{
     			try {

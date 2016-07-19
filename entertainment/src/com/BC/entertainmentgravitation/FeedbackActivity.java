@@ -67,7 +67,34 @@ public class FeedbackActivity extends BaseActivity implements OnClickListener{
 	}
 	
 	public void save() {
-		sendReqSaveUndergo();
+		if (!isNullOrEmpty(Describe_the_text.getText().toString()))
+		{
+			sendReqSaveUndergo();
+		}
+		else
+		{
+			ToastUtil.show(this, "请输入您的宝贵意见");
+		}
+
+	}
+	
+	private boolean isNullOrEmpty(String o)
+	{
+		if (o != null)
+		{
+			if (o.length() == 0)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return true;
+		}
 	}
 	
 	/**
