@@ -49,6 +49,7 @@ public class CareerActivity extends BaseActivity implements OnClickListener{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_personal_career);
 		initView();
+		sendReqUndergo();
 	}
 	
     @Override

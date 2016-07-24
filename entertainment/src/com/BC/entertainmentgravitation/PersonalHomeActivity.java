@@ -131,7 +131,8 @@ public class PersonalHomeActivity extends BaseActivity implements OnClickListene
 			age.setText(isNullOrEmpty(member.getAge()) ? "未知": member.getAge());
 			nationality.setText(isNullOrEmpty(member.getNationality()) ? "中国": member.getNationality());
 			constellation.setText(isNullOrEmpty(member.getConstellation()) ? "未知": member.getConstellation());
-			body.setText("未知");
+//			body.setText("未知");
+			setBody(member);
 			regin.setText(isNullOrEmpty(member.getRegion()) ? "未知": member.getRegion());
 			wx.setText("保密");
 			qq.setText("保密");
@@ -149,6 +150,29 @@ public class PersonalHomeActivity extends BaseActivity implements OnClickListene
 			}
 		}
 
+	}
+	
+	private void setBody(Member member)
+	{
+		if (member != null)
+		{
+			if (member.getHeight() != null && member.getWeight() != null)
+			{
+				body.setText(member.getHeight() + "cm" + " | " + member.getWeight() + "kg");
+			}
+			else if (member.getHeight() != null)
+			{
+				body.setText(member.getHeight() + "cm");
+			}
+			else if (member.getWeight() != null)
+			{
+				body.setText(member.getWeight() + "kg");
+			}
+			else 
+			{
+				body.setText("未知");
+			}
+		}
 	}
 	
 	private boolean isNullOrEmpty(String o)

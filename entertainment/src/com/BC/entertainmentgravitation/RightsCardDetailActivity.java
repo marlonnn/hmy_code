@@ -244,18 +244,18 @@ public class RightsCardDetailActivity extends BaseActivity implements OnClickLis
     	}
     }
 	
-    /**
-     * 获取明星信息
-     */
-    private void sendStarInfoRequest(String starID)
-    {
-    	HashMap<String, String> entity = new HashMap<String, String>();
-    	entity.put("clientID", Config.User.getClientID());
-		entity.put("Star_ID", starID);
-    	List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
-    	ShowProgressDialog(this.getString(R.string.mainactivity_get_start_info));
-    	addToThreadPool(Config.star_information, "get start info", params);
-    }
+//    /**
+//     * 获取明星信息
+//     */
+//    private void sendStarInfoRequest(String starID)
+//    {
+//    	HashMap<String, String> entity = new HashMap<String, String>();
+//    	entity.put("clientID", Config.User.getClientID());
+//		entity.put("Star_ID", starID);
+//    	List<NameValuePair> params = JsonUtil.requestForNameValuePair(entity);
+//    	ShowProgressDialog(this.getString(R.string.mainactivity_get_start_info));
+//    	addToThreadPool(Config.star_information, "get start info", params);
+//    }
 	
 	/**
 	 * 获取价格曲线
@@ -507,7 +507,7 @@ public class RightsCardDetailActivity extends BaseActivity implements OnClickLis
 // 			break;
 		case Config.give_applause_booed:
 			ToastUtil.show(this, "提交成功");
-			sendStarInfoRequest(card.getStar_id());
+//			sendStarInfoRequest(card.getStar_id());
 			switch (applauseGiveConcern.getType()) {
 			case 1:
 				applauseGiveConcern.showAnimationDialog(R.drawable.circle4,
@@ -528,7 +528,7 @@ public class RightsCardDetailActivity extends BaseActivity implements OnClickLis
 			hasFollow = true;
 			applauseGiveConcern.showAnimationDialog(R.drawable.circle6,
 					R.raw.concern);
-			sendStarInfoRequest(InfoCache.getInstance().getStartInfo().getStar_ID());
+//			sendStarInfoRequest(InfoCache.getInstance().getStartInfo().getStar_ID());
 			break;
 		case Config.unfollow_attention:
 			//取消关注成功
